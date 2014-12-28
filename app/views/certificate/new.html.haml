@@ -1,0 +1,15 @@
+.cert-type
+  %h2 Sign with Existing Private Key
+  %p Choose a certificate
+.cert-type
+  %h2 Certificate Request
+  = form_tag controller: :csr, action: :new do
+    = label_tag :common_name, 'Domain Name'
+    = text_field_tag :common_name
+    = label_tag :org_name, 'Organization Name'
+    = text_field_tag :org_name
+    = label_tag :country, 'Country'
+    = text_field_tag :country
+    = label_tag :email_address, 'Email Address'
+    = text_field_tag :email_address
+    = submit_tag 'Submit'

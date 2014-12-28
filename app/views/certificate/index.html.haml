@@ -1,0 +1,18 @@
+= link_to 'New', action: :new
+= link_to 'Import', action: :import
+%table
+  %thead
+    %tr
+      %td Id
+      %td Common Name
+      %td Status
+      %td Has Private Key
+      %td Has Certificate
+  %tbody
+    - @certs.each do |cert|
+      %tr
+        %td= link_to cert.id, cert
+        %td= link_to cert.common_name, cert
+        %td Unknown
+        %td= cert.private_key_data.present?.to_s
+        %td= cert.public_key_data.present?

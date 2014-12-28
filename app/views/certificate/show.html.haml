@@ -1,0 +1,24 @@
+%h1= @cert.common_name
+- if @cert.issuer.present?
+  %p= link_to @cert.issuer
+- else
+  %p Issuer unknown. Import certificate to see chain
+- if @cert.not_before.present?
+  %p
+    %span Not Before:
+    %span= @cert.not_before
+    %p
+    %span Not After:
+    %span= @cert.not_after
+    %span= "(#{time_ago_in_words(@cert.not_after)})"
+- if @cert.private_key_data.nil?
+  %h3 No private key yet, can't use for encryption
+- if @cert.public_key_data.nil? and @cert.certificate_request.present? # CSR
+  %h3 No public key yet, upload one now
+  = text_area_tag :csr, @cert.certificate_request.body, class: 'cert-body', readonly: true
+  = form_tag action: :do_import do
+    = label_tag :key, 'Certificate'
+    = text_area_tag :key
+    = submit_tag 'Upload certificate'
+%p= @cert.inspect
+= link_to 'CSR', action: :csr
