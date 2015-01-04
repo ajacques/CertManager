@@ -14,3 +14,10 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+document.addEventListener('DOMContentLoaded', function() {
+	'use strict'
+	var page = document.body.getAttribute('data-page');
+	if ("object" === typeof window[page])
+		window[page].init();
+});

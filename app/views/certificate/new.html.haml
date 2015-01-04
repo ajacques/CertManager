@@ -1,15 +1,17 @@
-.cert-type
-  %h2 Sign with Existing Private Key
-  %p Choose a certificate
-.cert-type
-  %h2 Certificate Request
-  = form_tag controller: :csr, action: :new do
-    = label_tag :common_name, 'Domain Name'
-    = text_field_tag :common_name
-    = label_tag :org_name, 'Organization Name'
-    = text_field_tag :org_name
-    = label_tag :country, 'Country'
-    = text_field_tag :country
-    = label_tag :email_address, 'Email Address'
-    = text_field_tag :email_address
-    = submit_tag 'Submit'
+= bootstrap_form_tag url: url_for(controller: :csr, action: :new) do |f|
+  = f.text_field :common_name, placeholder: 'example.com or user@example.com'
+  = f.text_field :org_name, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
+  = f.text_field :department_name, label: 'Department Name', placeholder: 'Accounting'
+  = f.text_field :country, placeholder: 'US or UK'
+  = f.email_field :email_address, placeholder: 'user@example.com'
+  = f.form_group :bit_length, label: { text: 'Bit length' } do
+    = f.radio_button :bit_length, '1024', label: '1024 bit (insecure)', class: 'bg-danger'
+    = f.radio_button :bit_length, '2048', label: '2048 bit', checked: true
+    = f.radio_button :bit_length, '4096', label: '4096 bit'
+  = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
+    = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger'
+    = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning'
+    = f.radio_button :hash_algorithm, 'sha256', label: 'SHA-256', checked: true
+    = f.radio_button :hash_algorithm, 'sha384', label: 'SHA-384'
+    = f.radio_button :hash_algorithm, 'sha512', label: 'SHA-512'
+  = f.submit "Create CSR", class: 'btn btn-primary'

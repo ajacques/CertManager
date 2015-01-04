@@ -3,15 +3,24 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2'
 
+# User Interface Gems
 gem 'haml'
 gem 'haml-rails'
+gem 'bootstrap_form'
 
-gem 'r509'
+gem 'redis'
+
+gem 'r509' # SSL certificate utilities
+
+gem 'resque' # Background job execution
+gem 'resque-scheduler'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+
+gem 'bootstrap-sass'
 
 group :assets do
   # Use SCSS for stylesheets

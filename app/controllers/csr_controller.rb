@@ -3,16 +3,14 @@ class CsrController < ApplicationController
     subject = R509::Subject.new
     subject.CN = params[:common_name]
     subject.O = params[:org_name]
+    subject.OU = params[:department_name]
     subject.C = params[:country]
-    csr_x = R509::CSR.new(subject: subject)
-    csr = CertificateRequest.from_r509 csr_x
-    cert = Certificate.new
-    cert.subject = subject.to_s
-    cert.common_name = subject.CN
-    cert.certificate_request = csr
-    cert.private_key_data = csr.key
+
+    private_key = R509::PrivateKey.new
+    csr = CertificateRequest.from_subject subject
+    cert = Certificate.from_subject subject
+    cert.private_key_data = private_key.to_pem
     cert.save!
-    csr.save!
     redirect_to cert
   end
 end

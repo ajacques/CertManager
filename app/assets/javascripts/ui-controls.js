@@ -8,4 +8,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	for (var i = 0; i < elems.length; i++) {
 		elems[i].addEventListener('click', selectAll);
 	};
+	Turbolinks.enableProgressBar();
 });

@@ -5,5 +5,14 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
-  %body
-    = yield
+  %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
+    %header.navbar.navbar-static-top
+      .container
+        .navbar-header
+          = link_to 'Certificates', root_path, class: 'navbar-brand'
+        %nav
+          %ul.nav.navbar-nav
+            %li= link_to 'New', action: :new
+            %li= link_to 'Import', action: :import
+    .container
+      = yield

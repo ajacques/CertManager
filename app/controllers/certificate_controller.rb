@@ -1,4 +1,7 @@
+require 'app/ocsp'
+
 include CertificateHelper
+include CrlHelper
 
 class CertificateController < ApplicationController
   def index
@@ -14,21 +17,32 @@ class CertificateController < ApplicationController
 
   def csr
     @cert = Certificate.find(params[:id])
-    @csr = @cert.certificate_request
+    @csr = R509::CSR.new key: @cert.private_key, subject: @cert.subject
+  end
+
+  def revocation_check
+    cert = Certificate.find(params[:id])
+    result = CrlHelper.check_status(cert)
+    result << OcspFetcher.fetch_ocsp('http://ocsp.comodoca.com/', cert)
+
+    respond_to do |format|
+      format.json {
+        render plain: result.to_json
+      }
+    end
   end
 
   def do_import
-    keys = CertificateHelper.extract_certificates(params[:key])
+    certs = CertificateHelper.extract_certificates(params[:key])
+    keys = CertificateHelper.extract_private_keys(params[:key])
 
-    certs = keys.map { |key|
+    certs = certs.map { |key|
+      # This should be moved to a Certificate.merge! method
       cert = Certificate.from_r509(key)
       cert.issuer_subject = key.issuer
-      puts "TEST #{key.issuer.inspect}"
-      tmp = Certificate.where(common_name: key.subject.CN).first
+      tmp = Certificate.joins(:public_key).where(public_keys: { common_name: key.subject.CN }).first
       if tmp.present?
-        tmp.public_key_data = key.to_pem
-        tmp.not_before = key.not_before
-        tmp.not_after = key.not_after
+        tmp.public_key = key
         tmp.save!
         tmp.issuer_subject = cert.issuer_subject
       else
@@ -38,13 +52,20 @@ class CertificateController < ApplicationController
     }
     certs.each { |cert|
       if cert.issuer.nil?
-        cert.issuer = Certificate.where(subject: cert.issuer_subject.to_s).first
+        cert.issuer = Certificate.joins(:public_key).where(public_keys: { subject: cert.issuer_subject.to_s }).first
         if cert.issuer.nil?
-          issuer = Certificate.new subject: cert.issuer_subject.to_s, common_name: cert.issuer_subject.CN
+          issuer = Certificate.new_stub cert.issuer_subject
           issuer.save!
           cert.issuer = issuer
         end
         cert.save! if cert.issuer.present?
+      end
+    }
+    keys.each { |key|
+      cert = Certificate.with_modulus(key.key.params['n'])
+      if cert.present?
+        cert.private_key_data = key.to_pem
+        cert.save!
       end
     }
     render plain: certs.inspect

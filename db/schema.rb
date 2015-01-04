@@ -11,27 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141228002406) do
-
-  create_table "certificate_requests", force: :cascade do |t|
-    t.string   "subject",        null: false
-    t.string   "body",           null: false
-    t.string   "key",            null: false
-    t.integer  "certificate_id", null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
+ActiveRecord::Schema.define(version: 20141230225126) do
 
   create_table "certificates", force: :cascade do |t|
-    t.string   "subject"
-    t.string   "common_name"
-    t.string   "public_key_data"
     t.string   "private_key_data"
+    t.integer  "public_key_id"
     t.integer  "issuer_id"
-    t.datetime "not_before"
-    t.datetime "not_after"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "public_keys", force: :cascade do |t|
+    t.string   "subject",      null: false
+    t.string   "common_name",  null: false
+    t.string   "body",         null: false
+    t.string   "modulus_hash", null: false
+    t.datetime "not_before",   null: false
+    t.datetime "not_after",    null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|

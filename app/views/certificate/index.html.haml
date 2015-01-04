@@ -1,6 +1,5 @@
-= link_to 'New', action: :new
-= link_to 'Import', action: :import
-%table
+%h2 Your certificates
+%table.table.table-striped
   %thead
     %tr
       %td Id
@@ -13,6 +12,6 @@
       %tr
         %td= link_to cert.id, cert
         %td= link_to cert.common_name, cert
-        %td Unknown
-        %td= cert.private_key_data.present?.to_s
-        %td= cert.public_key_data.present?
+        %td= cert.status
+        %td= cert.private_key_data.present?
+        %td= cert.public_key.present?
