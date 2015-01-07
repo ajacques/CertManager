@@ -1,0 +1,16 @@
+%h3 Have that bitchin' CA sign yo' shit
+%div
+  %h4 Step 1. Verify your request
+  %h5 Inspect the follow to ensure that everything looks correct. This is what your CA will be signing so it's important to be correct.
+  - if validate_csr(@csr).size > 0
+    .bg-warning Unrecommended parameters detected. Please check carefully
+  = explain_csr @csr
+  %h4 Step 2. Submit your request
+  %p Submit this to your signing authority
+  = text_area_tag :csr_body, @csr.to_pem, class: 'certificate cert-body', readonly: true
+  %h4 Step 3. Import the signed chain
+  %p Here's where you'd upload the signed chain
+  = bootstrap_form_tag url: url_for(action: :import) do |f|
+    = f.hidden_field :return_url, { value: url_for(action: :show) }
+    = f.text_area :key, label: 'Certificate chain', class: 'certificate'
+    = f.submit 'Submit dat shit'

@@ -5,13 +5,13 @@ class Certificate < ActiveRecord::Base
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :subject_alternate_names
-  has_one :certificate_request
   belongs_to :public_key
+  belongs_to :subject
 
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where("public_keys.not_after < ?", Time.now + time) if time.present? }
   scope :owned, -> { where('public_key_id IS NOT NULL AND private_key_data IS NOT NULL') }
-  scope :leaf, -> { where(sub_certificates: nil) }
+  scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
 
   @issuer_subject = nil
   def issuer_subject=(t)
@@ -31,6 +31,9 @@ class Certificate < ActiveRecord::Base
       'Stub'
     end
   end
+  def expires_in
+    self.public_key.not_after - Time.now
+  end
   def crl_endpoints
     return nil if self.public_key.nil?
     self.public_key.crl_distribution_points.uris
@@ -41,30 +44,24 @@ class Certificate < ActiveRecord::Base
       obj.value
     }
   end
+  def expires?
+    public_key.present?
+  end
+  def expired?
+    expires? and Time.now < self.public_key.not_after
+  end
 
   def to_s
-    common_name
+    subject.CN
   end
 
   def private_key
     R509::PrivateKey.new key: self.private_key_data if self.private_key_data.present?
   end
-  def public_key
-    pub = PublicKey.find(self.public_key_id) if self.public_key_id
-    return nil if pub.nil?
-    R509::Cert.new cert: pub.body
-  end
   def public_key=(key)
     pub = PublicKey.from_r509 key
     pub.save!
     self.public_key_id = pub.id
-  end
-  def subject
-    return nil if self.public_key_id.nil?
-    self.public_key.subject
-  end
-  def common_name
-    self.subject.CN if self.subject.present?
   end
 
   def self.with_modulus(modulus)
@@ -73,6 +70,7 @@ class Certificate < ActiveRecord::Base
   end
   def self.new_stub(subject)
     cert = Certificate.new
+    cert.subject = Subject.from_r509(subject)
     public_key = PublicKey.new subject: subject.to_s, common_name: subject.CN
     public_key.save!
     cert.public_key_id = public_key.id
@@ -81,6 +79,7 @@ class Certificate < ActiveRecord::Base
   def self.from_r509(crt)
     cert = Certificate.new
     cert.public_key = crt
+    cert.subject = Subject.from_r509(crt.subject)
     cert
   end
 end

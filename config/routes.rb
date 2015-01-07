@@ -1,9 +1,11 @@
+require 'resque/server'
+
 Rails.application.routes.draw do
   root 'certificate#index'
   get 'new' => 'certificate#new'
+  post 'new' => 'certificate#create'
   get 'import' => 'certificate#import'
   post 'import' => 'certificate#do_import'
-  post 'csr' => 'csr#new'
   scope 'certificate' do
     get 'new' => 'new', as: :certificates
     get ':id' => 'certificate#show', as: :certificate, constraints: {

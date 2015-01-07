@@ -1,0 +1,12 @@
+default:
+  secret_key: c962d7be3a3a72aa9ffefcff4aea8f4821430aa59739f5770b8d1c78ab7539c38f8fca13d66bccc8e831b9259622207534c1a4659a6dd3c33dbfc174035e7511
+  redis:
+    host: 172.17.42.1
+  resque: 172.17.42.1:6379/resque
+
+development:
+  email_delivery:
+    delivery_method: :smtp
+    smtp_settings:
+      address: 172.17.42.1
+      port: 587

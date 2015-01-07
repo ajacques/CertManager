@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230225126) do
+ActiveRecord::Schema.define(version: 20150106052553) do
+
+  create_table "certificate_requests", force: :cascade do |t|
+    t.integer  "subject_id"
+    t.string   "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "certificates", force: :cascade do |t|
     t.string   "private_key_data"
+    t.string   "subject_id",       null: false
     t.integer  "public_key_id"
     t.integer  "issuer_id"
     t.datetime "created_at"
@@ -24,17 +32,32 @@ ActiveRecord::Schema.define(version: 20141230225126) do
   create_table "public_keys", force: :cascade do |t|
     t.string   "subject",      null: false
     t.string   "common_name",  null: false
-    t.string   "body",         null: false
-    t.string   "modulus_hash", null: false
-    t.datetime "not_before",   null: false
-    t.datetime "not_after",    null: false
+    t.string   "body"
+    t.string   "modulus_hash"
+    t.datetime "not_before"
+    t.datetime "not_after"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "revocation_endpoints", force: :cascade do |t|
+    t.integer "public_key_id", null: false
+    t.string  "endpoint",      null: false
+    t.string  "uri_type",      null: false
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|
     t.integer "certificate_"
     t.string  "name"
+  end
+
+  create_table "subjects", force: :cascade do |t|
+    t.string "CN"
+    t.string "O"
+    t.string "OU"
+    t.string "C"
+    t.string "ST"
+    t.string "L"
   end
 
 end

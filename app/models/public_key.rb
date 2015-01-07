@@ -1,5 +1,12 @@
 class PublicKey < ActiveRecord::Base
   has_one :certificate
+  has_many :revocation_endpoints
+
+  def method_missing(meth, *args, &blk)
+    return nil if self.body.nil?
+    cert = R509::Cert.new cert: self.body
+    cert.send(meth, *args)
+  end
 
   def self.from_r509(crt)
     pub = PublicKey.new

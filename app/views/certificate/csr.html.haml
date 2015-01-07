@@ -1,8 +1,0 @@
-%p Here's your CSR. Submit this to your signing authority
-= text_area_tag :csr_body, @csr.to_s, class: 'cert-body', readonly: true, style: "font-family: monospace; width: 512px; height: 330px"
-= form_tag action: :import do
-  = label_tag :key, 'Certificates'
-  %br
-  = text_area_tag :key, '', placeholder: '-----BEGIN CERTIFICATE-----', style: "font-family: monospace; width: 512px; height: 330px"
-  %br
-  = submit_tag 'Upload certificate'

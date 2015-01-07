@@ -17,6 +17,6 @@ if secret_key
 end
 
 if resque
-  resque.symbolize_keys!
-  Resque.redis = Redis.new(resque)
+  resque.symbolize_keys! if resque.respond_to?(:symbolize_keys!)
+  Resque.redis = resque
 end

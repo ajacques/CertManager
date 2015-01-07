@@ -1,0 +1,11 @@
+hash_algorithms:
+  type: array
+  secure:
+    - sha256
+    - sha384
+  insecure:
+    - md5
+
+bit_lengths:
+  type: integer
+  min_secure: 2048

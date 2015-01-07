@@ -1,0 +1,12 @@
+%h1= @cert.subject.CN
+%p Unsigned certificate. This certificate has no issuer.
+%h4 Sign this certificate
+%ul
+  %li
+    %h5 Use external certificate authority
+    %p Create a certificate signing request that can be submitted to an external party to be signed
+    = link_to 'Generate CSR', action: :csr
+  %li
+    %h5 Sign with existing private key
+    %p If you already have a certificate capable of signing other certificates, you can sign this certificate without going to an external party
+    .text-danger No capable certificates found
