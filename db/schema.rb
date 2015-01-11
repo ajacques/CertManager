@@ -30,8 +30,7 @@ ActiveRecord::Schema.define(version: 20150106052553) do
   end
 
   create_table "public_keys", force: :cascade do |t|
-    t.string   "subject",      null: false
-    t.string   "common_name",  null: false
+    t.integer  "subject_id",   null: false
     t.string   "body"
     t.string   "modulus_hash"
     t.datetime "not_before"

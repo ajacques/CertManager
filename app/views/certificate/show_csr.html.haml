@@ -10,3 +10,7 @@
     %h5 Sign with existing private key
     %p If you already have a certificate capable of signing other certificates, you can sign this certificate without going to an external party
     .text-danger No capable certificates found
+  %li
+    %h5 Self sign
+    %p This certificate won't be trusted by any clients by default. Use this if you want a basic certificate or a custom certificate authority
+    = link_to 'Self Sign', controller: :signing, action: :configure, another_id: @cert.id

@@ -1,0 +1,37 @@
+%ul
+  %li
+    Certificate:
+    %ul
+      %li
+        Data:
+        %ul
+          %li Version: 3 (0x2)
+          %li
+            Serial Number:
+            %ul
+              %li [Generated on submission]
+      %li
+        Signature Algorithm: #{@hash_algorithm}WithRSAEncryption
+        %ul
+          %li Issuer: #{@signer.subject}
+          %li
+            Validity:
+            %ul
+              %li Not Before: #{Time.now.utc}
+              %li Not After : #{Time.now.utc + 1.year}
+          %li Subject: #{@signee.subject}
+          %li
+            Subject Public Key Info:
+            %ul
+              Public Key Algorithm: #{'rsa' if @signer.private_key.rsa?}Encryption
+              %ul
+                %li Public Key: (#{@signee.private_key.bit_length} bits)
+                %li
+                  Modulus:
+                  %ul
+                    - @signee.private_key.key.params['n'].to_s(16).rjust(@signee.private_key.bit_length/4, '0').scan(/.{2}/).join(':').scan(/.{45}/).each do |line|
+                      %li= line
+      %li
+        Signature Algorithm [WHAT?!]
+        %ul
+          %li [Generated on submission]

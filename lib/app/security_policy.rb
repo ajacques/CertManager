@@ -20,26 +20,25 @@ module CertManager
       end
     end
     private
-    class ArrayPolicyChecker
+    class PolicyChecker
       def initialize(policy_set)
         @set = policy_set
       end
-      def secure?(method)
-        @set['secure'].include?(method)
+      def default
+        @set['default']
       end
       def insecure?(method)
         not secure? method
       end
     end
-    class IntegerPolicyChecker
-      def initialize(policy_set)
-        @set = policy_set
+    class ArrayPolicyChecker < PolicyChecker
+      def secure?(method)
+        @set['secure'].include?(method)
       end
+    end
+    class IntegerPolicyChecker < PolicyChecker
       def secure?(method)
         method <= @set['min_secure'].to_i - 1
-      end
-      def insecure?(method)
-        not secure? method
       end
     end
   end

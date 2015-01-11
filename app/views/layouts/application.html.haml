@@ -12,7 +12,7 @@
           = link_to 'Certificates', root_path, class: 'navbar-brand'
         %nav
           %ul.nav.navbar-nav
-            %li= link_to 'New', action: :new
-            %li= link_to 'Import', action: :import
+            %li= link_to 'New', controller: :certificate, action: :new
+            %li= link_to 'Import', controller: :certificate, action: :import
     .container
       = yield

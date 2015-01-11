@@ -1,23 +1,23 @@
 %h1= @cert.subject.CN
 - if @cert.issuer.present?
   Signer: #{link_to @cert.issuer, @cert.issuer}
-- if @cert.public_key
-  %table{class: 'table'}
-    %thead
-      %tr
-        %td Name
-        %td Type
-    %tbody
-      - if @cert.public_key.extended_key_usage
-        - @cert.public_key.extended_key_usage.allowed_uses.each do |use|
-          %tr
-            %td= use.to_s
-            %td Extended
-      - if @cert.public_key.key_usage
-        - @cert.public_key.key_usage.allowed_uses.each do |use|
-          %tr
-            %td= use.to_s
-            %td Basic
+%table{class: 'table'}
+  %thead
+    %tr
+      %td Name
+      %td Type
+  %tbody
+    - if @cert.public_key.extended_key_usage
+      - @cert.public_key.extended_key_usage.allowed_uses.each do |use|
+        %tr
+          %td= use.to_s
+          %td Extended
+    - if @cert.public_key.key_usage
+      - @cert.public_key.key_usage.allowed_uses.each do |use|
+        %tr
+          %td= use.to_s
+          %td Basic
+= link_to 'Show certificate', format: :pem
 %p
   %div Not Before: #{@cert.public_key.not_before}
   %div Not After: #{@cert.public_key.not_after} #{time_ago_in_words(@cert.public_key.not_after)}

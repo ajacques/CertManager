@@ -1,10 +1,10 @@
 hash_algorithms:
   type: array
+  default: sha1
   secure:
     - sha256
     - sha384
-  insecure:
-    - md5
+    - sha512
 
 bit_lengths:
   type: integer

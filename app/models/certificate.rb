@@ -10,7 +10,7 @@ class Certificate < ActiveRecord::Base
 
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where("public_keys.not_after < ?", Time.now + time) if time.present? }
-  scope :owned, -> { where('public_key_id IS NOT NULL AND private_key_data IS NOT NULL') }
+  scope :owned, -> { where('private_key_data IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
 
   @issuer_subject = nil
@@ -50,6 +50,16 @@ class Certificate < ActiveRecord::Base
   def expired?
     expires? and Time.now < self.public_key.not_after
   end
+  def signed?
+    issuer_id.present?
+  end
+  def full_chain(include_private=false)
+    chain = ''
+    chain += private_key.to_pem if include_private and private_key
+    chain += public_key.to_pem
+    chain += issuer.full_chain(false) if issuer_id.present? and issuer_id != self.id
+    chain
+  end
 
   def to_s
     subject.CN
@@ -59,9 +69,13 @@ class Certificate < ActiveRecord::Base
     R509::PrivateKey.new key: self.private_key_data if self.private_key_data.present?
   end
   def public_key=(key)
-    pub = PublicKey.from_r509 key
-    pub.save!
-    self.public_key_id = pub.id
+    if key.is_a?(R509::Cert)
+      pub = PublicKey.from_r509 key
+      pub.save!
+      self.public_key_id = pub.id
+    else
+      super
+    end
   end
 
   def self.with_modulus(modulus)
@@ -71,7 +85,7 @@ class Certificate < ActiveRecord::Base
   def self.new_stub(subject)
     cert = Certificate.new
     cert.subject = Subject.from_r509(subject)
-    public_key = PublicKey.new subject: subject.to_s, common_name: subject.CN
+    public_key = PublicKey.new subject: cert.subject
     public_key.save!
     cert.public_key_id = public_key.id
     cert

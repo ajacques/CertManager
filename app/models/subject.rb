@@ -1,4 +1,7 @@
 class Subject < ActiveRecord::Base
+  def to_s
+    to_r509.to_s
+  end
   def to_r509
     subj = R509::Subject.new
     Subject.attribute_names.each do |k,v|

@@ -16,4 +16,12 @@ div.certificate {
 	span {
 		padding: 0.5em;
 	}
+
+	ul {
+		list-style-type: none
+	}
+
+	> ul {
+		padding-left: 0;
+	}
 }

@@ -7,7 +7,6 @@ resque = CertManager::Configuration.resque
 
 if email_delivery
   email_delivery.each do |key, value|
-    value.symbolize_keys! if value.respond_to?(:symbolize_keys)
     ActionMailer::Base.send("#{key}=", value)
   end
 end
@@ -17,6 +16,5 @@ if secret_key
 end
 
 if resque
-  resque.symbolize_keys! if resque.respond_to?(:symbolize_keys!)
   Resque.redis = resque
 end

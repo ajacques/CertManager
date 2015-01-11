@@ -5,11 +5,6 @@ module CertManager
     @config = nil
     public
     class << self
-      def [](name)
-        load unless @config
-        @config[name]
-      end
-
       def load
         yaml = YAML.load_file("#{Rails.root}/config/configuration.yml")
         @config = {}
@@ -22,11 +17,10 @@ module CertManager
           end
         end
 
-        @config = OpenStruct.new(@config)
+        @config = HashWithIndifferentAccess.new(@config)
 
-        if @config.email_delivery
-          @config.email_delivery.each do |key, value|
-            value.symbolize_keys! if value.respond_to?(:symbolize_keys)
+        if email_delivery
+          email_delivery.each do |key, value|
             ActionMailer::Base.send("#{key}=", value)
           end
         end
@@ -34,7 +28,7 @@ module CertManager
 
       def method_missing(method, *args, &block)
         load unless @config
-        @config.send(method, *args)
+        @config[method]
       end
     end
   end
