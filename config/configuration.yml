@@ -5,7 +5,7 @@ default:
   resque: 172.17.42.1:6379/resque
   session:
     - :redis_session_store
-    - 
+    -
       key: _CertManager_session
       redis:
         <<: *redis_config

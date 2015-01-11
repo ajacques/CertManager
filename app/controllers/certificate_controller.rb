@@ -7,7 +7,6 @@ class CertificateController < ApplicationController
   def index
     @certs = Certificate.owned
     @expiring = Certificate.expiring_in(7.days)
-    DeployCertificateJob.new.perform(Certificate.find(7))
   end
 
   def show
