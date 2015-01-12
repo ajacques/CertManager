@@ -56,3 +56,7 @@
   bits
 - if @cert.private_key.present? and @cert.public_key.present?
   %p Certificate is ready for deployment
+%h2 Services
+%ul
+  - @cert.services.each do |service|
+    %li= link_to service, service

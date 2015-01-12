@@ -9,6 +9,11 @@ default:
       key: _CertManager_session
       redis:
         <<: *redis_config
+  salt_stack:
+    user: saltdev
+    pass: saltdev
+    eauth: auto
+    host: http://salt:8000
 
 development:
   email_delivery:

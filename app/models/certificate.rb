@@ -5,6 +5,7 @@ class Certificate < ActiveRecord::Base
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :subject_alternate_names
+  has_many :services
   belongs_to :public_key
   belongs_to :subject
 

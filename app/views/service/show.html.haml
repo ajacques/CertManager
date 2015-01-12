@@ -1,0 +1,6 @@
+%h1= @service.certificate
+= link_to 'Deploy certificate', action: :deploy
+%h5 Certificate path
+%pre= @service.cert_path
+%h5 Post deployment script:
+%pre= @service.after_rotate

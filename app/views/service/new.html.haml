@@ -1,0 +1,5 @@
+= bootstrap_form_tag url: url_for(action: :create) do |f|
+  = f.select :certificate, Certificate.owned.map {|c| [c, c.id]}
+  = f.text_field :cert_path, label: 'Certificate path', placeholder: '/etc/nginx/certs/example.com.pem'
+  = f.text_field :after_rotate, label: 'After Rotate Script', placeholder: 'service nginx reload'
+  = f.submit "Create service", class: 'btn btn-primary'
