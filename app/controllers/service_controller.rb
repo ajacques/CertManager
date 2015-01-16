@@ -12,8 +12,8 @@ class ServiceController < ApplicationController
 
   def deploy
     service = Service.find(params[:id])
-    DeployCertificateJob.new(service).enqueue
-    redirect_to service
+    job = DeployServiceJob.perform_later service
+    redirect_to deployment_service_index_path(id: job.job_id)
   end
 
   def create
