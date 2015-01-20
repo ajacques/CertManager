@@ -1,5 +1,8 @@
 %h1= @service.certificate
-= link_to 'Deploy certificate', action: :deploy
+- if @service.deployable?
+  = link_to 'Deploy certificate', action: :deploy
+- else
+  Can't be deployed until the #{link_to 'certificate', @service.certificate} has been signed
 %h5 Certificate path
 %pre= @service.cert_path
 %h5 Post deployment script:

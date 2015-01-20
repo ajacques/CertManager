@@ -1,9 +1,10 @@
 class CreateServices < ActiveRecord::Migration
   def change
     create_table :services do |t|
-      t.integer :certificate_id
-      t.string :cert_path
-      t.string :after_rotate
+      t.integer :certificate_id, null: false
+      t.string :cert_path, null: false
+      t.string :after_rotate, null: false
+      t.timestamp :last_deployed
 
       t.timestamps null: false
     end

@@ -3,6 +3,7 @@ class SigningController < ApplicationController
     @signee = Certificate.find(params[:another_id])
     @signer = Certificate.find(params[:id])
     @allow_subject_changes = @signer != @signee
+    @self_signing = @signer == @signee
     @subject = @signee.subject
     @hash_algorithm = CertManager::SecurityPolicy.hash_algorithms.default
   end
@@ -35,6 +36,7 @@ class SigningController < ApplicationController
     pub_key.save!
     signee.public_key = pub_key
     signee.save!
+    DeployCertificateJob.perform_later signee if params[:auto_deploy]
     redirect_to signee
   end
 end

@@ -1,5 +1,3 @@
-puts 'SaltClient'
-
 class SaltClient
   def initialize
     @user = CertManager::Configuration.salt_stack['user']
@@ -8,13 +6,13 @@ class SaltClient
     @host = CertManager::Configuration.salt_stack['host']
   end
   def delete_file(file)
-    logger.info execute('file.remove', file)
+    execute('file.remove', file)
   end
   def shell_execute(cmd)
-    logger.info execute('cmd.run', cmd)
+    execute('cmd.run', cmd)
   end
   def append_file(file, body)
-    logger.info execute('file.append',file, body)
+    execute('file.append',file, body)
   end
   def execute(cmd, *args)
     uri = URI("#{@host}/run")
@@ -36,6 +34,6 @@ class SaltClient
   end
   def map_response(resp)
     raise "Salt returned error" if resp.has_key?('status')
-    resp['return']
+    Hash[*resp['return'].map{ |h| h.to_a }.flatten]
   end
 end

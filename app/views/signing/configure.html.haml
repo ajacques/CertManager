@@ -9,10 +9,10 @@
   - if not @allow_subject_changes
     .bg-info These values can't be changed because you're self signing
   = f.hidden_field 'redirect_to', value: url_for()
-  = f.text_field 'subject[CN]', value: @subject.CN, label: 'Common Name', placeholder: 'example.com or user@example.com', readonly: (not @allow_subject_changes)
-  = f.text_field 'subject[O]', value: @subject.O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.', readonly: (not @allow_subject_changes)
-  = f.text_field 'subject[OU]', value: @subject.OU, label: 'Department Name', placeholder: 'Accounting', readonly: (not @allow_subject_changes)
-  = f.text_field 'subject[C]', value: @subject.C, label: 'Country', placeholder: 'US or UK', readonly: (not @allow_subject_changes)
+  = f.text_field 'subject[CN]', value: @subject.CN, label: 'Common Name', placeholder: 'example.com or user@example.com', readonly: @self_signing
+  = f.text_field 'subject[O]', value: @subject.O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.', readonly: @self_signing
+  = f.text_field 'subject[OU]', value: @subject.OU, label: 'Department Name', placeholder: 'Accounting', readonly: @self_signing
+  = f.text_field 'subject[C]', value: @subject.C, label: 'Country', placeholder: 'US or UK', readonly: @self_signing
   = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
     = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger', checked: @hash_algorithm == 'md5'
     = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning', checked: @hash_algorithm == 'sha1'
@@ -24,5 +24,12 @@
   = f.form_group :lifetime, label: { text: 'Certificate lifetime' } do
     = f.text_field :not_before, value: Time.now.utc.to_s, readonly: true
     = f.text_field :lifetime, value: '1', label: 'Expires in n years'
-  = f.text_field :ocsp_endpoint, label: 'OCSP Responder', placeholder: 'A url: http://example.com/ocsp_responder'
+  = f.text_field :ocsp_endpoint, label: 'OCSP Responder', placeholder: 'A url: http://example.com/ocsp_responder', readonly: @self_signing
+  - if @signee.services.any?
+    = f.check_box :auto_deploy, label: "Deploy to #{pluralize @signee.services.count, 'service'}"
+    %p Push the certificate to all assigned hosts after signing
+    %h5 Services:
+    %ul
+      - @signee.services.each do |service|
+        %li= link_to service, service
   = f.submit 'Sign this certificate', class: 'btn btn-danger center-block'

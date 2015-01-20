@@ -23,4 +23,10 @@ class ServiceController < ApplicationController
     service.save!
     redirect_to service
   end
+
+  def deployment
+    redis = CertManager::Configuration.redis_client
+    service_id = redis.get("job_#{params[:id]}_service").to_i
+    @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
+  end
 end

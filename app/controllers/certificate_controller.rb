@@ -1,5 +1,3 @@
-require 'app/ocsp'
-
 include CertificateHelper
 include CrlHelper
 

@@ -3,15 +3,8 @@
   = f.text_field 'subject[O]', label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
   = f.text_field 'subject[OU]', label: 'Department Name', placeholder: 'Accounting'
   = f.text_field 'subject[C]', label: 'Country', placeholder: 'US or UK'
-  = f.email_field :email_address, placeholder: 'user@example.com'
   = f.form_group :bit_length, label: { text: 'Bit length' } do
     = f.radio_button :bit_length, '1024', label: '1024 bit (insecure)', class: 'bg-danger'
     = f.radio_button :bit_length, '2048', label: '2048 bit', checked: true
     = f.radio_button :bit_length, '4096', label: '4096 bit'
-  = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
-    = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger'
-    = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning'
-    = f.radio_button :hash_algorithm, 'sha256', label: 'SHA-256', checked: true
-    = f.radio_button :hash_algorithm, 'sha384', label: 'SHA-384'
-    = f.radio_button :hash_algorithm, 'sha512', label: 'SHA-512'
   = f.submit "Create Certificate", class: 'btn btn-primary'

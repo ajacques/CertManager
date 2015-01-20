@@ -54,7 +54,7 @@
   Public Key Bit Length:
   = @cert.public_key.bit_length
   bits
-- if @cert.private_key.present? and @cert.public_key.present?
+- if @cert.private_key.present? and @cert.signed?
   %p Certificate is ready for deployment
 %h2 Services
 %ul

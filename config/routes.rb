@@ -17,6 +17,9 @@ Rails.application.routes.draw do
     member do
       get 'deploy'
     end
+    collection do
+      get 'deployment'
+    end
   end
 
   mount Resque::Server.new, at: '/resque'

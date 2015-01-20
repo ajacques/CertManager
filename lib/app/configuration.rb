@@ -25,6 +25,9 @@ module CertManager
           end
         end
       end
+      def redis_client
+        Redis.new redis
+      end
 
       def method_missing(method, *args, &block)
         load unless @config
