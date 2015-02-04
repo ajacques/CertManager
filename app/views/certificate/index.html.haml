@@ -5,22 +5,4 @@
       - @expiring.each do |cert|
         %li= link_to cert.subject.CN, cert
 %h2 Your certificates
-%table.table
-  %thead
-    %tr
-      %td Id
-      %td Common Name
-      %td Status
-      %td Has Private Key
-      %td Has Certificate
-  %tbody
-    - @certs.each do |cert|
-      %tr{class: ('bg-danger' if cert.expires? and cert.expires_in < 7.days)}
-        %td= link_to cert.id, cert
-        %td
-          = link_to cert.subject.CN, cert
-          - if cert.expires? and cert.expires_in < 7.days
-            %span (expires in #{time_ago_in_words(cert.public_key.not_after)})
-        %td= cert.status
-        %td= cert.private_key_data.present?
-        %td= cert.public_key.present?
+= render partial: 'certificate_list'

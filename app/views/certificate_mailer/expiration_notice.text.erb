@@ -1,0 +1,10 @@
+You currently have <%= pluralize @certificates.count, 'certificate' %> expiring in the next 7 days.
+
+<% @certificates.each do |cert| %>
+* <%= cert.subject.CN %>
+<% end %>
+
+View online: [link]
+
+This is an automated notification email
+Copyright <%= Time.now.year %> Techno Wizardry

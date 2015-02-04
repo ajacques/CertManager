@@ -5,35 +5,86 @@ class SaltClient
     @eauth = CertManager::Configuration.salt_stack['eauth']
     @host = CertManager::Configuration.salt_stack['host']
   end
-  def delete_file(file)
-    execute('file.remove', file)
-  end
-  def shell_execute(cmd)
-    execute('cmd.run', cmd)
-  end
-  def append_file(file, body)
-    execute('file.append',file, body)
-  end
-  def execute(cmd, *args)
-    uri = URI("#{@host}/run")
+  def login
+    uri = URI("#{@host}/login")
     body = {
       username: @user,
       password: @pass,
-      eauth: @eauth,
-      client: 'local',
-      tgt: '*',
-      fun: cmd,
-      arg: args
+      eauth: @eauth
     }
     Net::HTTP.start(uri.host, uri.port) do |http|
       req = Net::HTTP::Post.new(uri.request_uri)
       req['Accept'] = 'application/x-yaml'
       req.set_form_data(body)
+      res = http.request(req) # Check HTTP Status code here
+      @auth_token = res['X-Auth-Token']
+    end
+  end
+  def get_hash(target, file)
+    execute(target, 'file.get_hash', file)
+  end
+  def delete_file(target, file)
+    execute(target, 'file.remove', file)
+  end
+  def create_file(target, file)
+    execute(target, 'file.touch', file)
+  end
+  def file_exists?(target, file)
+    execute(target, 'file.access', file, 'f')
+  end
+  def truncate_file(target, file)
+    execute(target, 'file.truncate', file, 0)
+  end
+  def shell_execute(target, cmd)
+    execute(target, 'cmd.run', cmd)
+  end
+  def append_file(target, file, body)
+    execute(target, 'file.append', file, *body.split(/\r?\n/))
+  end
+  def stat_file(target, file)
+    Hash[execute(target, 'file.lstat', file).map {|key, value|
+      val = {
+        created: Time.at(value["st_ctime"]),
+        accessed: Time.at(value["st_atime"]),
+        modified: Time.at(value["st_mtime"]),
+        size: value["st_size"],
+        uid: value["st_uid"],
+        gid: value["st_gid"],
+        perms: value["st_mode"]
+      } if value.has_key?("st_ctime")
+      [key, val]
+    }]
+  end
+  def get_minions(filter='*')
+    uri = URI("#{@host}/minions/#{filter}")
+    Net::HTTP.start(uri.host, uri.port) do |http|
+      req = Net::HTTP::Get.new(uri.request_uri)
+      req['Accept'] = 'application/x-yaml'
+      req['X-Auth-Token'] = @auth_token
+      YAML.load(http.request(req).body)
+    end
+  end
+  def execute(target, cmd, *args)
+    uri = URI("#{@host}/run")
+    body = {
+      username: @user,
+      password: @pass,
+      eauth: @eauth,
+      fun: cmd,
+      client: 'local',
+      tgt: target,
+      arg: args
+    }
+    Net::HTTP.start(uri.host, uri.port) do |http|
+      req = Net::HTTP::Post.new(uri.request_uri)
+      req['Accept'] = 'application/x-yaml'
+      #req['X-Auth-Token'] = @auth_token
+      req.set_form_data(body)
       map_response(YAML.load(http.request(req).body))
     end
   end
   def map_response(resp)
-    raise "Salt returned error" if resp.has_key?('status')
+    raise "Salt returned error: #{resp.inspect}"  if resp.has_key?('status')
     Hash[*resp['return'].map{ |h| h.to_a }.flatten]
   end
 end

@@ -8,9 +8,19 @@ class Service < ActiveRecord::Base
     chain = certificate.full_chain(true)
     salt = SaltClient.new
 
-    handle_result(salt.delete_file(self.cert_path), 'delete file')
-    handle_result(salt.append_file(self.cert_path, chain), 'append_file')
-    handle_result(salt.shell_execute(self.after_rotate), 'execute script')
+    salt.stat_file(self.node_group, self.cert_path).each do |minion, stat|
+      if stat
+        Rails.logger << "#{minion}: File exists #{self.cert_path}"
+        handle_result(salt.truncate_file(self.node_group, self.cert_path), 'truncate file')
+      else
+        Rails.logger << "#{minion}: Creating file #{self.cert_path}"
+        salt.create_file(minion, self.cert_path)
+      end
+    end
+    handle_result(salt.append_file(self.node_group, self.cert_path, chain), 'append_file')
+    handle_result(salt.shell_execute(self.node_group, self.after_rotate), 'execute script')
+
+    last_deployed = Time.now
   end
 
   private

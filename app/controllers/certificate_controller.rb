@@ -1,4 +1,3 @@
-include CertificateHelper
 include CrlHelper
 
 class CertificateController < ApplicationController
@@ -32,11 +31,7 @@ class CertificateController < ApplicationController
     cert = Certificate.new
     cert.subject = subject_model
     cert.private_key_data = private_key.to_pem
-
-    ActiveRecord::Base.transaction do
-      subject_model.save!
-      cert.save!
-    end
+    cert.save!
 
     redirect_to cert
   end
@@ -100,49 +95,41 @@ class CertificateController < ApplicationController
   end
 
   def do_import
-    certs = CertificateHelper.extract_certificates(params[:key])
-    keys = CertificateHelper.extract_private_keys(params[:key])
+    certs = CertificateTools.extract_certificates(params[:key])
+    keys = CertificateTools.extract_private_keys(params[:key])
 
+    certs.uniq! {|x| x.subject.to_s }
     # Welcome to hell
-    certs = certs.map { |key|
-      # This should be moved to a Certificate.merge! method
-      cert = Certificate.from_r509(key)
-      cert.issuer_subject = key.issuer
-      tmp = Certificate.joins(:subject).where(subjects: { CN: key.subject.CN }).first
-      if tmp.present?
-        tmp.public_key = key
-        tmp.save!
-        tmp.issuer_subject = cert.issuer_subject
+    @certs = []
+    certs.each { |key|
+      cert = Certificate.find_or_create(key)
+      f = @certs.find {|c| c.subject.CN.to_s == key.issuer.CN.to_s }
+      if f.present?
+        cert.issuer = f
       else
-        cert.subject.save!
-        cert.save!
+        cert.issuer = Certificate.find_or_create(key.issuer)
       end
-      tmp || cert
-    }
-    certs.each { |cert|
-      if cert.issuer.nil?
-        cert.issuer = Certificate.joins(:public_key => :subject).where(subjects: {CN: cert.issuer_subject.CN.to_s }).first
-        if cert.issuer.nil?
-          issuer = Certificate.new_stub cert.issuer_subject
-          issuer.save!
-          cert.issuer = issuer
-        end
-        cert.save! if cert.issuer.present?
-      end
+      @certs << cert
     }
     keys.each { |key|
-      cert = Certificate.with_modulus(key.key.params['n']).first
+      cert = @certs.find {|c|
+          c.public_key.modulus_hash == Digest::SHA1.hexdigest(key.key.params['n'].to_s) if c.public_key
+        } #c.Certificate.with_modulus(key.key.params['n']).first
       if cert.present?
         cert.private_key_data = key.to_pem
-        cert.save!
       end
+    }
+    @certs.each { |crt|
+      crt.save!
     }
     if params[:return_url]
       redirect_to params[:return_url]
     else
-      render plain: certs.inspect
+      render 'import_done'
     end
   end
+
+  private
   def subject_params
     params[:subject].permit(:O, :OU, :C, :CN) if params[:subject]
   end

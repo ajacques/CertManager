@@ -17,7 +17,7 @@
         %tr
           %td= use.to_s
           %td Basic
-= link_to 'Show certificate', format: :pem
+= link_to 'Show certificate (PEM)', format: :pem
 %p
   %div Not Before: #{@cert.public_key.not_before}
   %div Not After: #{@cert.public_key.not_after} #{time_ago_in_words(@cert.public_key.not_after)}

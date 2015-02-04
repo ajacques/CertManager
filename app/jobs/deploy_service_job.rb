@@ -18,5 +18,6 @@ class DeployServiceJob < ActiveJob::Base
 
   def perform(service)
     service.deploy
+    service.save! if service.changed?
   end
 end

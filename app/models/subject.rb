@@ -11,10 +11,6 @@ class Subject < ActiveRecord::Base
     subj
   end
   def self.from_r509(subject)
-    subj = Subject.new
-    subject.to_h.each do |k,v|
-      subj.send("#{k}=", v)
-    end
-    subj
+    Subject.find_or_initialize_by(subject.to_h)
   end
 end

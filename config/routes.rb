@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
     collection do
       get 'deployment'
+      get 'nodes'
     end
   end
 

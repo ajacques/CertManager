@@ -2,4 +2,6 @@
   = f.select :certificate, Certificate.owned.map {|c| [c, c.id]}
   = f.text_field :cert_path, label: 'Certificate path', placeholder: '/etc/nginx/certs/example.com.pem'
   = f.text_field :after_rotate, label: 'After Rotate Script', placeholder: 'service nginx reload'
+  = f.text_field :node_group, label: 'Target Nodes'
+  %ul#node_list
   = f.submit "Create service", class: 'btn btn-primary'

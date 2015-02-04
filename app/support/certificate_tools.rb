@@ -1,5 +1,5 @@
-module CertificateHelper
-  def extract_certificates(input)
+class CertificateTools
+  def self.extract_certificates(input)
     parts = []
     part = ''
     input.lines.each { |line|
@@ -17,7 +17,7 @@ module CertificateHelper
     }
     parts
   end
-  def extract_private_keys(input)
+  def self.extract_private_keys(input)
     parts = []
     part = ''
     input.lines.each { |line|
@@ -35,7 +35,7 @@ module CertificateHelper
     }
     parts
   end
-  def find_private_key_for(cert, keys)
+  def self.find_private_key_for(cert, keys)
     modulus = cert.public_key.modulus
     keys.first { |key|
       key.is_a?(R509::PrivateKey) and key.key.modulus == modulus

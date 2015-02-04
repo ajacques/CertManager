@@ -1,7 +1,7 @@
 class PublicKey < ActiveRecord::Base
   has_one :certificate
-  belongs_to :subject
-  has_many :revocation_endpoints
+  belongs_to :subject, autosave: true
+  has_many :revocation_endpoints, autosave: true
 
   def method_missing(meth, *args, &blk)
     return nil if self.body.nil?

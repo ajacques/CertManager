@@ -7,3 +7,9 @@
 %pre= @service.cert_path
 %h5 Post deployment script:
 %pre= @service.after_rotate
+%h5 Node Status
+%ul
+- SaltClient.new.execute(@service.node_group, 'file.get_hash', @service.cert_path).each do |minion, stat|
+  %li
+    %span= minion
+    %span= stat

@@ -4,6 +4,7 @@ class CreateServices < ActiveRecord::Migration
       t.integer :certificate_id, null: false
       t.string :cert_path, null: false
       t.string :after_rotate, null: false
+      t.string :node_group, null: false
       t.timestamp :last_deployed
 
       t.timestamps null: false

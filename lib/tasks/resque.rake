@@ -7,7 +7,6 @@ namespace :resque do
     require 'resque'
 
     resque = CertManager::Configuration.resque
-    resque.symbolize_keys! if resque.respond_to?(:symbolize_keys!)
 
     Resque.redis = resque
   end
