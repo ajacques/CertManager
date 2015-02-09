@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112001343) do
+ActiveRecord::Schema.define(version: 20150209034103) do
 
   create_table "certificate_requests", force: :cascade do |t|
     t.integer  "subject_id"
@@ -68,6 +68,14 @@ ActiveRecord::Schema.define(version: 20150112001343) do
     t.string "C"
     t.string "ST"
     t.string "L"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email_address", null: false
+    t.binary   "password_hash", null: false
+    t.binary   "password_salt", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
 end

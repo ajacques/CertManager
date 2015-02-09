@@ -2,6 +2,9 @@ require 'resque/server'
 
 Rails.application.routes.draw do
   root 'certificate#index'
+  get 'login' => 'session#new'
+  post 'login' => 'session#create'
+  post 'logout' => 'session#destroy'
   resources :certificate, only: [:create, :index, :new, :show], constraints: {
       id: /[0-9]+/,
       another_id: /[0-9]+/

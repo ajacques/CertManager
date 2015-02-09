@@ -1,6 +1,8 @@
 include CrlHelper
 
 class CertificateController < ApplicationController
+  before_action :require_login
+
   def index
     @certs = Certificate.owned
     @expiring = Certificate.expiring_in(7.days)
