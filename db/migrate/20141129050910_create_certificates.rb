@@ -5,6 +5,7 @@ class CreateCertificates < ActiveRecord::Migration
       t.integer :subject_id, null: false
       t.integer :public_key_id
       t.integer :issuer_id, null: true
+      t.string :chain_hash, null: false
 
       t.timestamps
     end

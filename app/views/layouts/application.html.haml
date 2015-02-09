@@ -7,13 +7,18 @@
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
     %header.navbar.navbar-static-top
+      - if bg_refresh_out_of_date
+        %nav.bg-danger
+          .container
+            %span Background refresh job hasn't run recently (last run #{bg_refresh_last_update_in_words}). Certificate validation will be incorrect.
+            = link_to 'Refresh now', jobs_refresh_all_path, method: :post
       .container
         .navbar-header
           = link_to 'Certificates', root_path, class: 'navbar-brand'
         %nav
           %ul.nav.navbar-nav
             %li= link_to 'New', new_certificate_path
-            %li= link_to 'Import', certificate_import_path
+            %li= link_to 'Import', import_certificate_index_path
             %li= link_to 'Services', service_index_path
     .container
       = yield

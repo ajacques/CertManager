@@ -6,9 +6,7 @@ namespace :resque do
   task :setup => :environment do
     require 'resque'
 
-    resque = CertManager::Configuration.resque
-
-    Resque.redis = resque
+    Resque.redis = CertManager::Configuration.resque
   end
   task :setup_schedule => :setup do
     require 'resque-scheduler'

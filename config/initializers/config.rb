@@ -1,5 +1,6 @@
 require 'ostruct'
 require 'app/configuration'
+require 'app/instrumented_redis'
 
 email_delivery = CertManager::Configuration.email_delivery
 secret_key = CertManager::Configuration.secret_key

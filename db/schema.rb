@@ -22,9 +22,10 @@ ActiveRecord::Schema.define(version: 20150112001343) do
 
   create_table "certificates", force: :cascade do |t|
     t.string   "private_key_data"
-    t.string   "subject_id",       null: false
+    t.integer  "subject_id",       null: false
     t.integer  "public_key_id"
     t.integer  "issuer_id"
+    t.string   "chain_hash",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,15 +47,17 @@ ActiveRecord::Schema.define(version: 20150112001343) do
   end
 
   create_table "services", force: :cascade do |t|
-    t.integer  "certificate_id"
-    t.string   "cert_path"
-    t.string   "after_rotate"
+    t.integer  "certificate_id", null: false
+    t.string   "cert_path",      null: false
+    t.string   "after_rotate",   null: false
+    t.string   "node_group",     null: false
+    t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|
-    t.integer "certificate_"
+    t.integer "certificate_id"
     t.string  "name"
   end
 

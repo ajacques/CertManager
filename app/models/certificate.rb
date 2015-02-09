@@ -8,6 +8,7 @@ class Certificate < ActiveRecord::Base
   has_many :services
   belongs_to :public_key, autosave: true
   belongs_to :subject, autosave: true
+  before_save :refresh_hash
 
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where("public_keys.not_after < ?", Time.now + time) if time.present? }
@@ -106,5 +107,10 @@ class Certificate < ActiveRecord::Base
         end if crt.san
       end
     end
+  end
+
+  private
+  def refresh_hash
+    self.chain_hash = Digest::SHA256.hexdigest(self.full_chain(true))
   end
 end

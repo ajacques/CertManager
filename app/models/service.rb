@@ -22,6 +22,14 @@ class Service < ActiveRecord::Base
 
     last_deployed = Time.now
   end
+  def node_status(&block)
+    rkey = "SERVICE_#{id}_NODESTATUS"
+    redis = CertManager::Configuration.redis_client
+    redis.hgetall(rkey).each {|key, value|
+      block.call(key, JSON.parse(value))
+    }
+    #SaltClient.new.execute(node_group, 'file.get_hash', cert_path).each &block
+  end
 
   private
   def handle_result(input, msg)

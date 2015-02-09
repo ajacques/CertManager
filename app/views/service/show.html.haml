@@ -8,8 +8,21 @@
 %h5 Post deployment script:
 %pre= @service.after_rotate
 %h5 Node Status
-%ul
-- SaltClient.new.execute(@service.node_group, 'file.get_hash', @service.cert_path).each do |minion, stat|
-  %li
-    %span= minion
-    %span= stat
+%table
+  %thead
+    %tr
+      %td Hostname
+      %td Status
+      %td Last checked
+  %tbody
+    - @service.node_status do |minion, status|
+      %tr{class: if status['exists'] and status['valid'] then 'bg-success' elsif status['exists'] then 'bg-warning' else 'bg-danger' end}
+        %td= minion
+        %td<
+          - if status['exists'] and status['valid']
+            Online
+          - elsif status['exists']
+            Invalid
+          - else
+            Not deployed
+        %td #{time_ago_in_words status['update']} ago

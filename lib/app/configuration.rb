@@ -9,12 +9,8 @@ module CertManager
         yaml = YAML.load_file("#{Rails.root}/config/configuration.yml")
         @config = {}
         if yaml.is_a?(Hash)
-          if yaml['default']
-            @config.merge!(yaml['default'])
-          end
-          if yaml[Rails.env]
-            @config.merge!(yaml[Rails.env])
-          end
+          @config.merge!(yaml['default']) if yaml['default']
+          @config.merge!(yaml[Rails.env]) if yaml[Rails.env]
         end
 
         @config = HashWithIndifferentAccess.new(@config)
@@ -26,6 +22,9 @@ module CertManager
         end
       end
       def redis_client
+        CertManager::InstrumentedRedis.new redis
+      end
+      def redis_client_no_metrics
         Redis.new redis
       end
 
