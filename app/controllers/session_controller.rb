@@ -3,8 +3,11 @@ class SessionController < ApplicationController
   end
 
   def create
-    user = User.authenticate(params[:email_address], params[:password])
-    redirect_to login_path if user.nil?
+    unless user = User.authenticate(params[:email], params[:password])
+      logger.info "#{params[:email]} did not match any known users"
+      redirect_to action: :new
+      return
+    end
 
     url = session[:return_url] || root_path
     reset_session

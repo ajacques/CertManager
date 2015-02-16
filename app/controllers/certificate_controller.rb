@@ -79,7 +79,7 @@ class CertificateController < ApplicationController
     else
       @signee.subject
     end
-    @hash_algorithm = params[:hash_algorithm] || 'sha1' # Don't hard code this
+    @hash_algorithm = params[:hash_algorithm] || CertManager::SecurityPolicy.hash_algorithms.default
     @csr = R509::CSR.new key: @signee.private_key,
       subject: @subject.to_r509,
       message_digest: @hash_algorithm
@@ -88,8 +88,8 @@ class CertificateController < ApplicationController
       R509::CertificateAuthority::Signer.selfsign(csr: @csr)
     else
       ca = R509::CertificateAuthority::Signer.new(ca_cert: {
-      cert: @signer.public_key.to_r509,
-      key: (R509::PrivateKey.new key: @signer.private_key_data)
+        cert: @signer.public_key.to_r509,
+        key: (R509::PrivateKey.new key: @signer.private_key_data)
       })
       ca.sign(csr: @csr)
     end

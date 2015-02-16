@@ -20,6 +20,6 @@
             %li= link_to 'New', new_certificate_path
             %li= link_to 'Import', import_certificate_index_path
             %li= link_to 'Services', service_index_path
-            %li= link_to 'Sign out', logout_path, method: :post
+            %li= link_to 'Sign out', destroy_user_session_path, method: :post
     .container
       = yield

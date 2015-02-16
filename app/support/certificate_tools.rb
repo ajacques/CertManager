@@ -6,10 +6,6 @@ class CertificateTools
       part = part + line
       if line.starts_with?('-----END')
         if line.include?('CERTIFICATE')
-          parts.push(R509::Cert.new cert: part)
-        elsif line.include?('PRIVATE KEY')
-          #parts.push(R509::PrivateKey.new key: part)
-        else
           parts.push(part)
         end
         part = ''
@@ -23,11 +19,7 @@ class CertificateTools
     input.lines.each { |line|
       part = part + line
       if line.starts_with?('-----END')
-        if line.include?('CERTIFICATE')
-          #parts.push(R509::Cert.new cert: part)
-        elsif line.include?('PRIVATE KEY')
-          parts.push(R509::PrivateKey.new key: part)
-        else
+        if line.include?('PRIVATE KEY')
           parts.push(part)
         end
         part = ''

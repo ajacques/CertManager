@@ -3,7 +3,7 @@ var CertificateShow = new function() {
 	var checkCRLStatus = function() {
 		var crl_group = $('#crl-group');
 		$.ajax({
-			url: location.href + '/revocation_status.json',
+			url: location.href + '/revocation_check.json',
 			dataType: 'json',
 			success: function(data) {
 				var list = $('ul#crl-list');

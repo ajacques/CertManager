@@ -4,10 +4,10 @@ class Certificate < ActiveRecord::Base
   # Associations
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
-  has_many :subject_alternate_names, autosave: true
+  has_many :subject_alternate_names, autosave: true, dependent: :delete_all
   has_many :services
   belongs_to :public_key, autosave: true
-  belongs_to :subject, autosave: true
+  belongs_to :subject, autosave: true, dependent: :destroy
   before_save :refresh_hash
 
   # Scopes
@@ -63,9 +63,8 @@ class Certificate < ActiveRecord::Base
     chain += issuer.full_chain(false) if issuer_id.present? and issuer_id != self.id
     chain
   end
-
-  def to_s
-    subject.CN
+  def cert_chain
+    [*(issuer.cert_chain if issuer.present? and issuer_id != self.id)] + [self]
   end
 
   def private_key
@@ -96,17 +95,23 @@ class Certificate < ActiveRecord::Base
   def self.with_subject_name(name)
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
   end
-  def self.find_or_create(crt)
-    if crt.is_a?(R509::Cert)
-      Certificate.joins(:subject).where(subjects: { CN: crt.subject.CN }).first_or_initialize do |cert|
-        cert.public_key = PublicKey.from_r509(crt)
-        cert.subject = Subject.from_r509(crt.subject)
-        crt.san.names.each do |san|
-          san = SubjectAlternateName.new name: san.value
-          cert.subject_alternate_names << san
-        end if crt.san
-      end
+  def self.import(crt)
+    r509 = R509::Cert.new(cert: crt)
+    cert = Certificate.joins(:subject).includes(:subject, :subject_alternate_names).where(subjects: { CN: r509.subject.CN }).first
+    if cert.nil?
+      cert = Certificate.new
+      puts "Did not find certificate for #{r509.subject}. Creating: #{cert}"
+    else
+      puts "Found certificate for #{r509} -> #{cert}"
+      cert.subject_alternate_names.clear
     end
+    cert.public_key = PublicKey.from_r509(r509)
+    cert.subject = Subject.from_r509(r509.subject)
+    r509.san.names.each do |san|
+      san = SubjectAlternateName.new name: san.value
+      cert.subject_alternate_names << san
+    end if r509.san
+    cert
   end
 
   private

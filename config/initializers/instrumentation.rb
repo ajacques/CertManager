@@ -18,7 +18,7 @@ module RedisInstrumentation
     end
     private
     def self.inc_runtime(inc)
-      @runtime = (@runtime || 0) + 1
+      @runtime = (@runtime || 0.0) + 1
     end
   end
   module ControllerRuntime
@@ -33,7 +33,7 @@ module RedisInstrumentation
 
     module ClassMethods
       def log_process_action(payload)
-        messages, runtime = super, payload[:redis_runtime]
+        messages, runtime = super, LogSubscriber.runtime
         messages << ("Redis: %.1fms" % runtime.to_f) if runtime
         LogSubscriber.reset_runtime
         messages

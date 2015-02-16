@@ -1,4 +1,3 @@
-require 'ostruct'
 require 'app/configuration'
 require 'app/instrumented_redis'
 

@@ -1,5 +1,3 @@
-require 'ostruct'
-
 module CertManager
   module Configuration
     @config = nil
@@ -14,12 +12,6 @@ module CertManager
         end
 
         @config = HashWithIndifferentAccess.new(@config)
-
-        if email_delivery
-          email_delivery.each do |key, value|
-            ActionMailer::Base.send("#{key}=", value)
-          end
-        end
       end
       def redis_client
         CertManager::InstrumentedRedis.new redis

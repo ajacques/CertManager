@@ -9,6 +9,7 @@ gem 'haml-rails'
 gem 'bootstrap_form'
 
 gem 'redis'
+gem 'devise'
 
 gem 'r509' # SSL certificate utilities
 

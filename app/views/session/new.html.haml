@@ -1,4 +1,4 @@
 = bootstrap_form_tag url: url_for(action: :create) do |f|
-  = f.text_field :email_address, label: 'Email Address', placeholder: 'user@example.com'
-  = f.password_field :password, label: 'Password', placeholder: 'hunter2'
+  = f.text_field :email, label: 'Email Address', placeholder: 'user@example.com'
+  = f.password_field :password, label: 'Password'
   = f.submit "Login", class: 'btn btn-primary'
