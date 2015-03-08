@@ -2,24 +2,31 @@
 %html
   %head
     %title CertManager
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    %meta{charset: "utf-8"}/
+    %meta{content: "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %meta{content: "width=device-width, initial-scale=1.0, maximum-scale=1.0", name: "viewport"}/
+    = stylesheet_link_tag    'application', media: 'all', data: {bturbolinks_track: true}
+    = javascript_include_tag 'application', data: { turbolinks_track: true }
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
-    %header.navbar.navbar-static-top
-      - if bg_refresh_out_of_date
+    - if user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests
+      %header
         %nav.bg-danger
           .container
             %span Background refresh job hasn't run recently (last run #{bg_refresh_last_update_in_words}). Certificate validation will be incorrect.
             = link_to 'Refresh now', jobs_refresh_all_path, method: :post
+    %nav.navbar.navbar-default
       .container
         .navbar-header
           = link_to 'Certificates', root_path, class: 'navbar-brand'
-        %nav
-          %ul.nav.navbar-nav
-            %li= link_to 'New', new_certificate_path
-            %li= link_to 'Import', import_certificate_index_path
-            %li= link_to 'Services', service_index_path
-            %li= link_to 'Sign out', destroy_user_session_path, method: :post
+        - if user_signed_in?
+          %nav
+            %ul.nav.navbar-nav
+              %li= link_to 'New', new_certificate_path
+              %li= link_to 'Import', import_certificate_index_path
+              %li= link_to 'Services', service_index_path
+            %ul.nav.navbar-nav.navbar-right
+              %li= link_to current_user.first_name, '/user'
+              %li= link_to 'Sign out', destroy_user_session_path, method: :post
     .container
       = yield

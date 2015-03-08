@@ -1,4 +1,10 @@
-= bootstrap_form_tag url: url_for(action: :create) do |f|
-  = f.text_field :email, label: 'Email Address', placeholder: 'user@example.com'
-  = f.password_field :password, label: 'Password'
-  = f.submit "Login", class: 'btn btn-primary'
+.container
+  .row
+    .col-sm-12
+      %h1 Sign in
+  = form_tag action: :create do
+    .row
+      .col-sm-12
+        = email_field_tag :email, '', autocaptalize: false, autocorrect: false, class: 'form-control', placeholder: 'user@example.com', tabindex: 1
+        = password_field_tag :password, '', class: 'form-control', placeholder: 'Password', tabindex: 2
+        = submit_tag "Login", class: 'btn btn-primary', tabindex: 3

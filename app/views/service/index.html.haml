@@ -1,14 +1,19 @@
+%ol.breadcrumb
+  %li.active= link_to 'Services', action: :index
 %h2 Your services
 = link_to 'New service', action: :new
-%table.table
-  %thead
-    %tr
-      %td Common Name
-      %td Status
-      %td Control
-  %tbody
-    - @services.each do |service|
-      %tr{class: ('bg-danger' if service.certificate.expires_in < 7.days)}
-        %td= link_to service.certificate.subject.CN, id: service.id, action: :show
-        %td Unknown
-        %td Refresh
+- if not @services.any?
+  %p You haven't configuration any services yet. A service allows you to automatically deploy certificates to targets
+- else
+  %table.table
+    %thead
+      %tr
+        %td Common Name
+        %td Status
+        %td Control
+    %tbody
+      - @services.each do |service|
+        %tr{class: ('bg-danger' if service.certificate.expires_in < 7.days)}
+          %td= link_to service.certificate.subject.CN, id: service.id, action: :show
+          %td Unknown
+          %td Refresh

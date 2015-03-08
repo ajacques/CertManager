@@ -8,6 +8,9 @@ class PublicKey < ActiveRecord::Base
     cert = R509::Cert.new cert: self.body
     cert.send(meth, *args)
   end
+  def to_pem
+    self.body
+  end
 
   def self.from_r509(crt)
     pub = PublicKey.new
@@ -16,7 +19,7 @@ class PublicKey < ActiveRecord::Base
     pub.not_before = crt.not_before
     pub.not_after = crt.not_after
     crt.crl_distribution_points.uris.each do |uri|
-      pub.revocation_endpoints << RevocationEndpoint.new(uri_type: 'crl', endpoint: uri)
+      pub.revocation_endpoints << RevocationEndpoint.find_or_initialize_by(uri_type: 'crl', endpoint: uri)
     end if crt.crl_distribution_points.present?
     pub.modulus_hash = Digest::SHA1.hexdigest(crt.public_key.n.to_s)
     pub

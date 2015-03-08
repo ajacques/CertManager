@@ -57,9 +57,12 @@ class Certificate < ActiveRecord::Base
     issuer_id.present?
   end
   def full_chain(include_private=false)
+    puts "   #{self.attributes.inspect} #{self.subject.CN} #{include_private} #{private_key == true}"
     chain = ''
-    chain += private_key.to_pem if include_private and private_key
-    chain += public_key.to_pem
+    chain += private_key.to_pem if include_private and private_key.present?
+    if public_key.present?
+      chain += public_key.to_pem
+    end
     chain += issuer.full_chain(false) if issuer_id.present? and issuer_id != self.id
     chain
   end
@@ -78,8 +81,6 @@ class Certificate < ActiveRecord::Base
   def self.new_stub(subject)
     cert = Certificate.new
     cert.subject = Subject.from_r509(subject)
-    public_key = PublicKey.new subject: cert.subject
-    cert.public_key = public_key
     cert
   end
   def self.from_r509(crt)
@@ -92,15 +93,18 @@ class Certificate < ActiveRecord::Base
     end if crt.san
     cert
   end
-  def self.with_subject_name(name)
+  def self.find_by_common_name(name)
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
+  end
+  def self.find_by_subject(subject)
+    Certificate.joins(public_key: :subject).where(subjects: subject.to_h)
   end
   def self.import(crt)
     r509 = R509::Cert.new(cert: crt)
     cert = Certificate.joins(:subject).includes(:subject, :subject_alternate_names).where(subjects: { CN: r509.subject.CN }).first
     if cert.nil?
       cert = Certificate.new
-      puts "Did not find certificate for #{r509.subject}. Creating: #{cert}"
+      puts "Did not find certificate for #{r509.subject}. Creating"
     else
       puts "Found certificate for #{r509} -> #{cert}"
       cert.subject_alternate_names.clear

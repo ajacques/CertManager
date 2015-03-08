@@ -1,7 +1,31 @@
-= bootstrap_form_tag url: url_for(action: :create) do |f|
-  = f.select :certificate, Certificate.owned.map {|c| [c, c.id]}
-  = f.text_field :cert_path, label: 'Certificate path', placeholder: '/etc/nginx/certs/example.com.pem'
-  = f.text_field :after_rotate, label: 'After Rotate Script', placeholder: 'service nginx reload'
-  = f.text_field :node_group, label: 'Target Nodes'
+%ol.breadcrumb
+  %li= link_to 'Services', action: :index
+  %li.active New
+%h2 Create service
+= form_tag url_for(action: :create), class: 'form-horizontal' do
+  .form-group
+    %label.col-sm-2.control-label Certificate
+    .col-sm-10
+      %select.form-control{name: :certificate}
+        - Certificate.owned.find_each do |cert|
+          %option{value: cert.id, selected: cert.id == @selected_cert_id}= cert
+  .form-group
+    %label.col-sm-2.control-label Deploy System
+    .col-sm-10
+      = radio_button_tag :deploy_system, :salt, true
+      = label_tag :deploy_system_salt_stack, 'Salt stack'
+  .form-group
+    %label.col-sm-2.control-label File Path
+    .col-sm-10
+      = text_field_tag :cert_path, '', placeholder: '/etc/nginx/certs/example.com.pem', class: 'form-control'
+  .form-group
+    %label.col-sm-2.control-label After-Rotate Script
+    .col-sm-10
+      = text_field_tag :after_rotate, '', placeholder: 'service nginx reload', class: 'form-control'
+  .form-group
+    %label.col-sm-2.control-label Host Group
+    .col-sm-10 Specifies 
+    .col-sm-10
+      = text_field_tag :node_group, '', class: 'form-control'
   %ul#node_list
-  = f.submit "Create service", class: 'btn btn-primary'
+  = submit_tag "Create service", class: 'btn btn-primary'

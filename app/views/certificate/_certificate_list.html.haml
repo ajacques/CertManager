@@ -3,17 +3,13 @@
     %tr
       %td Common Name
       %td Status
-      %td Has Private Key
-      %td Has Certificate
   %tbody
-    - @certs.each do |cert|
+    - @certs.find_each do |cert|
       %tr{class: ('bg-danger' if cert.expires_in < 7.days)}
         %td
           = link_to cert.subject.CN, cert
           - if cert.expires_in < 7.days
             %span (expires in #{time_ago_in_words(cert.public_key.not_after)})
           - if cert.subject_alternate_names.any?
-            (+#{cert.subject_alternate_names.count} alternates)
+            %span.visible-xs-block.visible-sm-inline.visible-md-inline.visible-lg-inline (+#{cert.subject_alternate_names.count} alternates)
         %td= cert.status
-        %td= cert.private_key_data.present?
-        %td= cert.public_key.present?

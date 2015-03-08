@@ -1,6 +1,13 @@
+%ol.breadcrumb
+  = cert_chain_tree(@cert) do |cert|
+    - if cert == @cert
+      %li{class: 'active'}= cert
+    - else
+      %li= link_to cert, cert
+
 %h1= @cert.subject.CN
-- if @cert.issuer.present?
-  Signer: #{link_to @cert.issuer, @cert.issuer}
+%ul
+  %li.bg-danger Can't sign other certificates
 %table{class: 'table'}
   %thead
     %tr
@@ -50,6 +57,7 @@
     Private Key Bit Length:
     = @cert.private_key.bit_length
     bits
+  %pre= (OpenSSL::X509::Certificate.new @cert.public_key.body).to_text
 %h3
   Public Key Bit Length:
   = @cert.public_key.bit_length
@@ -57,6 +65,10 @@
 - if @cert.private_key.present? and @cert.signed?
   %p Certificate is ready for deployment
 %h2 Services
-%ul
-  - @cert.services.each do |service|
-    %li= link_to service, service
+- if @cert.services.any?
+  %ul
+    - @cert.services.each do |service|
+      %li= link_to service, service
+- else
+  %p no services yet. A service allows you to securely deploy this certificate to a host
+  = link_to 'Create a service', controller: :service, action: :new

@@ -36,7 +36,7 @@ module CsrHelper
     errors = []
     errors << :subject if csr.subject.to_s == ''
     errors << :hash_algorithm if CertManager::SecurityPolicy.hash_algorithms.insecure?(hash)
-    errors << :bit_length if CertManager::SecurityPolicy.bit_lengths.secure?(csr.bit_length)
+    errors << :bit_length if CertManager::SecurityPolicy.bit_lengths.insecure?(csr.bit_length)
     errors
   end
 end

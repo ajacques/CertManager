@@ -4,6 +4,7 @@ class ServiceController < ApplicationController
   end
 
   def new
+    @selected_cert_id = params[:cert_id].to_i || 0
   end
 
   def show

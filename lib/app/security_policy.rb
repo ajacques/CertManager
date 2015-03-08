@@ -38,7 +38,7 @@ module CertManager
     end
     class IntegerPolicyChecker < PolicyChecker
       def secure?(method)
-        method <= @set['min_secure'].to_i - 1
+        method >= @set['min_secure'].to_i
       end
     end
   end

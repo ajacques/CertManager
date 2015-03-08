@@ -100,30 +100,37 @@ class CertificateController < ApplicationController
     certs = CertificateTools.extract_certificates(params[:key])
     keys = CertificateTools.extract_private_keys(params[:key])
 
-    certs.uniq! {|x| x.subject.to_s }
+    certs.uniq!
     # Welcome to hell
-    @certs = []
-    certs.each { |key|
-      cert = Certificate.find_or_create(key)
-      f = @certs.find {|c| c.subject.CN.to_s == key.issuer.CN.to_s }
-      if f.present?
-        cert.issuer = f
-      else
-        cert.issuer = Certificate.find_or_create(key.issuer)
-      end
-      @certs << cert
+    @certs = certs.map {|cert2|
+      cert3 = R509::Cert.new cert: cert2
+      cert = Certificate.import cert2
+      cert.issuer_subject = cert3.issuer
+      cert.save!
+      cert
     }
     keys.each { |key|
+      pkey = R509::PrivateKey.new key: key
       cert = @certs.find {|c|
-          c.public_key.modulus_hash == Digest::SHA1.hexdigest(key.key.params['n'].to_s) if c.public_key
+          c.public_key.modulus_hash == Digest::SHA1.hexdigest(pkey.key.params['n'].to_s) if c.public_key
         } #c.Certificate.with_modulus(key.key.params['n']).first
       if cert.present?
-        cert.private_key_data = key.to_pem
+        cert.private_key_data = pkey.to_pem
       end
     }
-    @certs.each { |crt|
-      crt.save!
-    }
+    ActiveRecord::Base.transaction do
+      @certs.each { |cert|
+        if cert.issuer.nil?
+          issuer = Certificate.find_by_subject(cert.issuer_subject).first
+          if issuer.present?
+            cert.issuer = issuer
+          else
+            cert.issuer = Certificate.new_stub(cert.issuer_subject)
+          end
+        end
+        cert.save!
+      }
+    end
     if params[:return_url]
       redirect_to params[:return_url]
     else
