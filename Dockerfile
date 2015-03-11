@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN /usr/bin/apt-get update && /usr/bin/apt-get install -qy ruby1.9.1 ruby1.9.1-dev make g++ libmysqlclient-dev libsqlite3-dev nodejs patch
+RUN /usr/bin/apt-get update && /usr/bin/apt-get install -qy ruby ruby-dev make g++ libmysqlclient-dev libsqlite3-dev nodejs patch
 RUN gem install bundler --no-ri --no-rdoc
 ADD . /rails-app
 WORKDIR /rails-app
