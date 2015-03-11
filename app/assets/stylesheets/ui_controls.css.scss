@@ -1,27 +1,27 @@
 .certificate {
-	font-family: monospace;
+  font-family: monospace;
 }
 
 textarea.certificate {
-	width: 100%;
-	height: 330px;
-	padding: 0.5em;
+  width: 100%;
+  height: 330px;
+  padding: 0.5em;
 }
 
 div.certificate {
-	border: solid thin black;
-	border-radius: 5px;
-	background-color: #eee;
+  border: solid thin black;
+  border-radius: 5px;
+  background-color: #eee;
 
-	span {
-		padding: 0.5em;
-	}
+  span {
+    padding: 0.5em;
+  }
 
-	ul {
-		list-style-type: none
-	}
+  ul {
+    list-style-type: none
+  }
 
-	> ul {
-		padding-left: 0;
-	}
+  > ul {
+    padding-left: 0;
+  }
 }
