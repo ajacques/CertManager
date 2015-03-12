@@ -1,6 +1,6 @@
 class Subject < ActiveRecord::Base
   def to_s
-    to_r509.to_s
+    if self.CN then self.CN else self.OU end
   end
   def to_r509
     subj = R509::Subject.new
@@ -16,6 +16,6 @@ class Subject < ActiveRecord::Base
 
   private
   def self.filter_params(params)
-    params.slice(:O, :OU, :S, :C)
+    params.slice(:O, :OU, :S, :C, :CN, :L, :ST)
   end
 end

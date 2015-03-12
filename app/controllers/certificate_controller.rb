@@ -4,23 +4,28 @@ class CertificateController < ApplicationController
   before_action :require_login
 
   def index
-    @certs = Certificate.owned
+    @certs = Certificate.all
     @expiring = Certificate.expiring_in(7.days)
   end
 
   def show
     @cert = Certificate.find(params[:id])
-    if @cert.public_key
-      respond_to do |format|
-        format.pem {
-          render plain: @cert.public_key.to_pem
-        }
-        format.html {
+    respond_to do |format|
+      format.pem {
+        render plain: @cert.public_key.to_pem
+      }
+      format.html {
+        if @cert.public_key
           render 'show'
-        }
-      end
-    else
-      render 'show_csr'
+        elsif @cert.stub?
+          render 'show_stub'
+        else
+          render 'show_csr'
+        end
+      }
+      format.json {
+        render json: @cert
+      }
     end
   end
 

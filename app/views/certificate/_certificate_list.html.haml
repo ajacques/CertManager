@@ -4,10 +4,10 @@
       %td Common Name
       %td Status
   %tbody
-    - @certs.find_each do |cert|
+    - @certs.each do |cert|
       %tr{class: ('bg-danger' if cert.expires_in < 7.days)}
         %td
-          = link_to cert.subject.CN, cert
+          = link_to cert, cert
           - if cert.expires_in < 7.days
             %span (expires in #{time_ago_in_words(cert.public_key.not_after)})
           - if cert.subject_alternate_names.any?

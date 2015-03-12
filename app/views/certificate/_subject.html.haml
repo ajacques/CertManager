@@ -1,0 +1,6 @@
+%ul.subject
+  - subject.attributes.each do |attrib|
+    - if attrib[1].present? and attrib[0] != 'id'
+      %li
+        %div= attrib[1]
+        %label= t("subject.#{attrib[0]}")

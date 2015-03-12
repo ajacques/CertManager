@@ -25,3 +25,24 @@ div.certificate {
     padding-left: 0;
   }
 }
+
+ul.subject {
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    float: left;
+    padding: 0 1em;
+    height: 2.5em;
+    border-left: dotted thin black;
+
+    &:last-child {
+      border-right: dotted thin black;
+    }
+
+    label {
+      font-weight: normal;
+      top: 1em;
+    }
+  }
+}

@@ -1,0 +1,4 @@
+%h1= @cert.subject
+%p This certificate is a stub and does not contain any public or private key data. As such no detailed data can be shown. Please import the key to view more data.
+%p The only thing we know about the certificate is the subject:
+= render partial: 'subject', locals: {subject: @cert.subject}

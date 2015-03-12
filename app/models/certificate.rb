@@ -38,10 +38,35 @@ class Certificate < ActiveRecord::Base
     self.public_key.crl_distribution_points.uris
   end
   def ocsp_endpoints
-    return nil if self.public_key.nil?
+    return [] if self.public_key.nil?
+    return [] if self.public_key.authority_info_access.nil?
     self.public_key.authority_info_access.ocsp.names.map {|obj|
       obj.value
     }
+  end
+  def to_s
+    subject.to_s
+  end
+  def to_json(param)
+    json = {
+      id: id,
+      subject: subject
+    }
+    json.merge! ({
+      public_key: {
+        pem: public_key.to_pem
+      },
+      domain_names: subject_alternate_names.map {|r| r.name},
+      crl: crl_endpoints,
+      ocsp: ocsp_endpoints,
+      issuer: ({
+        id: issuer.id,
+        subject: issuer.subject
+      } if issuer.present?),
+      not_before: public_key.not_before,
+      not_after: public_key.not_after
+    }) if public_key.present?
+    json.to_json(param)
   end
   def expires_in
     return 9999999.years if not expires?
@@ -52,6 +77,9 @@ class Certificate < ActiveRecord::Base
   end
   def expired?
     expires? and Time.now < self.public_key.not_after
+  end
+  def stub?
+    public_key.nil? and private_key.nil?
   end
   def signed?
     issuer_id.present?
@@ -104,9 +132,7 @@ class Certificate < ActiveRecord::Base
     cert = Certificate.joins(:subject).includes(:subject, :subject_alternate_names).where(subjects: { CN: r509.subject.CN }).first
     if cert.nil?
       cert = Certificate.new
-      puts "Did not find certificate for #{r509.subject}. Creating"
     else
-      puts "Found certificate for #{r509} -> #{cert}"
       cert.subject_alternate_names.clear
     end
     cert.public_key = PublicKey.from_r509(r509)

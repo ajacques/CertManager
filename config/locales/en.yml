@@ -1,2 +1,6 @@
 en:
   certificates: Certificates
+  subject:
+    CN: Common Name
+    O: Organization
+    C: Country

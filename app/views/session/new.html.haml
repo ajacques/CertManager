@@ -5,6 +5,6 @@
   = form_tag action: :create do
     .row
       .col-sm-12
-        = email_field_tag :email, '', autocaptalize: false, autocorrect: false, class: 'form-control', placeholder: 'user@example.com', tabindex: 1
-        = password_field_tag :password, '', class: 'form-control', placeholder: 'Password', tabindex: 2
+        = email_field_tag :email, nil, autocapitalize: false, autocorrect: false, class: 'form-control', placeholder: 'user@example.com', tabindex: 1
+        = password_field_tag :password, nil, class: 'form-control', placeholder: 'Password', tabindex: 2
         = submit_tag "Login", class: 'btn btn-primary', tabindex: 3
