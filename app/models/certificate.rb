@@ -94,8 +94,8 @@ class Certificate < ActiveRecord::Base
     chain += issuer.full_chain(false) if issuer_id.present? and issuer_id != self.id
     chain
   end
-  def cert_chain
-    [*(issuer.cert_chain if issuer.present? and issuer_id != self.id)] + [self]
+  def chain
+    [*(issuer.chain if issuer.present? and issuer_id != self.id)] + [self]
   end
 
   def private_key

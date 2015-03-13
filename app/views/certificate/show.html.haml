@@ -24,7 +24,11 @@
         %tr
           %td= use.to_s
           %td Basic
-= link_to 'Show certificate (PEM)', format: :pem
+%aside
+  %ul
+    %li= link_to 'Show certificate (PEM)', format: :pem
+    %li #{link_to 'Download chain', chain_certificate_path} #{link_to '(PEM)', chain_certificate_path(format: :pem)}
+= render partial: 'validator', locals: {public_key: @cert.public_key}
 %p
   %div Not Before: #{@cert.public_key.not_before}
   %div Not After: #{@cert.public_key.not_after} #{time_ago_in_words(@cert.public_key.not_after)}
@@ -71,4 +75,4 @@
       %li= link_to service, service
 - else
   %p no services yet. A service allows you to securely deploy this certificate to a host
-  = link_to 'Create a service', controller: :service, action: :new
+  = link_to 'Create a service', controller: :service, action: :new, cert_id: @cert.id

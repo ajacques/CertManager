@@ -5,7 +5,7 @@ class SigningController < ApplicationController
     @allow_subject_changes = @signer != @signee
     @self_signing = @signer == @signee
     @subject = @signee.subject
-    @hash_algorithm = CertManager::SecurityPolicy.hash_algorithms.default
+    @hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
   end
 
   def sign_cert

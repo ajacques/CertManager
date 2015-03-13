@@ -2,7 +2,7 @@ class ValidateCertificateJob < ActiveJob::Base
   queue_as :refresh
 
   def perform
-    expiring = Certificate.expiring_in(365.days)
+    expiring = Certificate.expiring_in(7.days)
     @redis = CertManager::Configuration.redis_client
     if expiring.any?
       CertificateMailer.expiration_notice('adam@technowizardry.net', expiring).deliver

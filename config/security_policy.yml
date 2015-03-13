@@ -1,4 +1,4 @@
-hash_algorithms:
+hash_algorithm:
   type: array
   default: sha1
   secure:
@@ -6,6 +6,6 @@ hash_algorithms:
     - sha384
     - sha512
 
-bit_lengths:
+bit_length:
   type: integer
   min_secure: 2048

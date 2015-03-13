@@ -15,6 +15,5 @@ var CertificateShow = new function() {
 	};
 
 	self.init = function() {
-		checkCRLStatus();
 	};
 };

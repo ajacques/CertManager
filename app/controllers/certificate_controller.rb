@@ -4,7 +4,7 @@ class CertificateController < ApplicationController
   before_action :require_login
 
   def index
-    @certs = Certificate.all
+    @certs = Certificate.all.joins(:public_key).includes(:subject, :subject_alternate_names, :public_key)
     @expiring = Certificate.expiring_in(7.days)
   end
 
@@ -30,6 +30,17 @@ class CertificateController < ApplicationController
   end
 
   def new
+  end
+
+  def chain
+    @cert = Certificate.find(params[:id])
+    respond_to do |format|
+      format.pem {
+        render plain: @cert.chain.map {|cert|
+          cert.public_key.body
+        }.join()
+      }
+    end
   end
 
   def create
@@ -70,7 +81,7 @@ class CertificateController < ApplicationController
       @allow_subject_changes = @signer != @signee
       @lifetime = 1.year
       @subject = @signee.subject
-      @hash_algorithm = CertManager::SecurityPolicy.hash_algorithms.default
+      @hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
     end
   end
 
@@ -84,7 +95,7 @@ class CertificateController < ApplicationController
     else
       @signee.subject
     end
-    @hash_algorithm = params[:hash_algorithm] || CertManager::SecurityPolicy.hash_algorithms.default
+    @hash_algorithm = params[:hash_algorithm] || CertManager::SecurityPolicy.hash_algorithm.default
     @csr = R509::CSR.new key: @signee.private_key,
       subject: @subject.to_r509,
       message_digest: @hash_algorithm

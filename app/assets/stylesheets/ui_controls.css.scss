@@ -32,12 +32,15 @@ ul.subject {
 
   li {
     float: left;
-    padding: 0 1em;
-    height: 2.5em;
+    padding: 0.4em 1em;
     border-left: dotted thin black;
 
     &:last-child {
       border-right: dotted thin black;
+    }
+
+    &:nth-child(odd) {
+      background-color: #eee;
     }
 
     label {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209073711) do
+ActiveRecord::Schema.define(version: 201503122300000) do
 
   create_table "certificate_requests", force: :cascade do |t|
     t.integer  "subject_id"
@@ -47,13 +47,14 @@ ActiveRecord::Schema.define(version: 20150209073711) do
   end
 
   create_table "services", force: :cascade do |t|
-    t.integer  "certificate_id", null: false
-    t.string   "cert_path",      null: false
-    t.string   "after_rotate",   null: false
-    t.string   "node_group",     null: false
+    t.integer  "certificate_id",  null: false
+    t.string   "cert_path",       null: false
+    t.string   "after_rotate",    null: false
+    t.string   "node_group",      null: false
     t.datetime "last_deployed"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "deploy_strategy", null: false
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|

@@ -7,7 +7,7 @@ module CertManager
       end
     end
     def method_missing(command, *args, &block)
-      ActiveSupport::Notifications.instrument "query.redis", command: command, query: args[0] do
+      ActiveSupport::Notifications.instrument "query.redis", command: command, args: args do
         return @client.send(command, *args, &block)
       end
     end

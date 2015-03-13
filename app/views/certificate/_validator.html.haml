@@ -1,0 +1,13 @@
+%table.table.table-condensed
+  %tbody
+    %tr{class: if public_key.not_before < Time.now then 'bg-success' else 'bg-danger' end}
+      %td Valid from
+      %td= public_key.not_before.to_s :long
+    %tr{class: if public_key.not_after > Time.now then 'bg-success' else 'bg-danger' end}
+      %td Valid until
+      %td= public_key.not_after.to_s :long
+    = cert_show_validate_result(:bit_length, public_key.bit_length, 'Bit Length') do
+      - "#{public_key.bit_length} bits"
+    - hash_algo = public_key.signature_algorithm[0, public_key.signature_algorithm.index('With')]
+    = cert_show_validate_result(:hash_algorithm, hash_algo, 'Hash algorithm') do
+      - t "hash.#{hash_algo}"

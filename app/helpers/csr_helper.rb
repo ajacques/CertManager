@@ -35,8 +35,8 @@ module CsrHelper
     hash = csr.signature_algorithm[0, csr.signature_algorithm.index('With')]
     errors = []
     errors << :subject if csr.subject.to_s == ''
-    errors << :hash_algorithm if CertManager::SecurityPolicy.hash_algorithms.insecure?(hash)
-    errors << :bit_length if CertManager::SecurityPolicy.bit_lengths.insecure?(csr.bit_length)
+    errors << :hash_algorithm if CertManager::SecurityPolicy.hash_algorithm.insecure?(hash)
+    errors << :bit_length if CertManager::SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end
 end

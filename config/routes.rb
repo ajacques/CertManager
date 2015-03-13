@@ -9,10 +9,13 @@ Rails.application.routes.draw do
       id: /[0-9]+/,
       another_id: /[0-9]+/
     } do
-    get 'csr', on: :member
-    get 'revocation_check', on: :member
-    get 'sign/:another_id' => 'signing#configure', on: :member
-    post 'sign/:another_id' => 'signing#sign_cert', on: :member
+    member do
+      get 'chain'
+      get 'csr'
+      get 'revocation_check'
+      get 'sign/:another_id' => 'signing#configure'
+      post 'sign/:another_id' => 'signing#sign_cert'
+    end
     collection do
       get 'import'
       post 'import', action: :do_import
