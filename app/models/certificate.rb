@@ -34,15 +34,18 @@ class Certificate < ActiveRecord::Base
     end
   end
   def crl_endpoints
-    return nil if self.public_key.nil?
-    self.public_key.crl_distribution_points.uris
+    self.public_key
+      .try(:crl_distribution_points)
+      .try(:uris)
   end
   def ocsp_endpoints
-    return [] if self.public_key.nil?
-    return [] if self.public_key.authority_info_access.nil?
-    self.public_key.authority_info_access.ocsp.names.map {|obj|
-      obj.value
-    }
+    self.public_key
+      .try(:authority_info_access)
+      .try(:ocsp)
+      .try(:names)
+      .try(:map, Proc.new {|obj|
+        obj.value
+      })
   end
   def to_s
     subject.to_s
@@ -56,8 +59,7 @@ class Certificate < ActiveRecord::Base
       public_key: {
         pem: public_key.to_pem
       },
-      domain_names: subject_alternate_names.map {|r| r.name},
-      crl: crl_endpoints,
+      alternate_names: subject_alternate_names.map {|r| r.name},
       ocsp: ocsp_endpoints,
       issuer: ({
         id: issuer.id,
@@ -66,6 +68,7 @@ class Certificate < ActiveRecord::Base
       not_before: public_key.not_before,
       not_after: public_key.not_after
     }) if public_key.present?
+    json[:crl_endpoints] = crl_endpoints if crl_endpoints
     json.to_json(param)
   end
   def expires_in
@@ -76,7 +79,7 @@ class Certificate < ActiveRecord::Base
     public_key.present?
   end
   def expired?
-    expires? and Time.now < self.public_key.not_after
+    expires? and self.public_key.not_after < Time.now
   end
   def stub?
     public_key.nil? and private_key.nil?
@@ -85,7 +88,6 @@ class Certificate < ActiveRecord::Base
     issuer_id.present?
   end
   def full_chain(include_private=false)
-    puts "   #{self.attributes.inspect} #{self.subject.CN} #{include_private} #{private_key == true}"
     chain = ''
     chain += private_key.to_pem if include_private and private_key.present?
     if public_key.present?
@@ -96,6 +98,12 @@ class Certificate < ActiveRecord::Base
   end
   def chain
     [*(issuer.chain if issuer.present? and issuer_id != self.id)] + [self]
+  end
+  def can_sign?
+    return false if not public_key
+    constraint = public_key.basic_constraints
+    return false if not constraint
+    constraint.is_ca?
   end
 
   def private_key

@@ -1,15 +1,19 @@
 include CrlHelper
 
-class CertificateController < ApplicationController
+class CertificatesController < ApplicationController
   before_action :require_login
 
   def index
+    @query = params[:search]
     @certs = Certificate.all.joins(:public_key).includes(:subject, :subject_alternate_names, :public_key)
-    @expiring = Certificate.expiring_in(7.days)
+    if @query
+      @certs = @certs.where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
+    end
+    @expiring = Certificate.expiring_in 7.days
   end
 
   def show
-    @cert = Certificate.find(params[:id])
+    @cert = Certificate.includes(:subject, :subject_alternate_names, :public_key).find(params[:id])
     respond_to do |format|
       format.pem {
         render plain: @cert.public_key.to_pem
@@ -45,7 +49,7 @@ class CertificateController < ApplicationController
 
   def create
     private_key = R509::PrivateKey.new bit_length: params[:bit_length].to_i
-    subject_model = Subject.create(subject_params)
+    subject_model = Subject.new subject_params
     cert = Certificate.new
     cert.subject = subject_model
     cert.private_key_data = private_key.to_pem
@@ -70,46 +74,6 @@ class CertificateController < ApplicationController
         render plain: result.to_json
       }
     end
-  end
-
-  def sign_cert
-    @signee = Certificate.find(params[:another_id])
-    if @signee.signer then
-      render 'already_signed'
-    else
-      @signer = Certificate.find(params[:id])
-      @allow_subject_changes = @signer != @signee
-      @lifetime = 1.year
-      @subject = @signee.subject
-      @hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
-    end
-  end
-
-  def do_sign_cert
-    @signer = Certificate.find(params[:id])
-    @signee = Certificate.find(params[:another_id])
-    @allow_subject_changes = @signer != @signee
-    @lifetime = 1.year
-    @subject = if params[:subject]
-      Subject.create subject_params
-    else
-      @signee.subject
-    end
-    @hash_algorithm = params[:hash_algorithm] || CertManager::SecurityPolicy.hash_algorithm.default
-    @csr = R509::CSR.new key: @signee.private_key,
-      subject: @subject.to_r509,
-      message_digest: @hash_algorithm
-
-    cert = if @signer.id == @signee.id
-      R509::CertificateAuthority::Signer.selfsign(csr: @csr)
-    else
-      ca = R509::CertificateAuthority::Signer.new(ca_cert: {
-        cert: @signer.public_key.to_r509,
-        key: (R509::PrivateKey.new key: @signer.private_key_data)
-      })
-      ca.sign(csr: @csr)
-    end
-    render plain: cert
   end
 
   def do_import
@@ -156,6 +120,6 @@ class CertificateController < ApplicationController
 
   private
   def subject_params
-    params[:subject].permit(:O, :OU, :C, :CN) if params[:subject]
+    params[:subject].permit(:O, :OU, :S, :C, :CN, :L, :ST) if params[:subject]
   end
 end

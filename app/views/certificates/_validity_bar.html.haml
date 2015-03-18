@@ -1,0 +1,27 @@
+- ratio = (Time.now - cert.not_before) / (cert.not_after - cert.not_before)
+- width_const = 900
+- scale = (ratio * width_const).to_i
+- left_midpoint = scale / 2
+- right_midpoint = (width_const / 2) * (ratio + 1)
+%svg{viewBox: "0 0 #{width_const} 90", height: '90px', width: '100%'}
+  %text{x: width_const / 2, y: 20, 'text-anchor' => 'middle'}= distance_of_time_in_words(cert.not_after, cert.not_before)
+  -# Top timeline
+  %g{stroke: 'black', transform: 'translate(0, 20)'}
+    %line{y2: 15}
+    %line{y1: 7.5, y2: 7.5, x2: width_const}
+    %line{y2: 15, x1: width_const, x2: width_const}
+  -# Tick mark
+  %polygon{fill: 'black', points: '0,0 -6,12 6,12', transform: "translate(#{scale}, 55)"}
+  %g{transform: 'translate(0, 40)'}
+    -# Progress Bar
+    %rect{fill: 'grey', height: 15, width: width_const}
+    %rect{fill: 'green', height: 15, width: scale}
+  -# Bottom timeline
+  %g{stroke: 'black', transform: 'translate(0, 60)'}
+    %line{y2: 15}
+    %line{y1: 7.5, y2: 7.5, x2: width_const}
+    %line{y2: 15, x1: width_const, x2: width_const}
+  -# Labels
+  %g{transform: 'translate(0, 85)'}
+    %text{x: left_midpoint, 'text-anchor' => 'middle'}= time_ago_in_words(cert.not_before)
+    %text{x: right_midpoint.to_i, 'text-anchor' => 'middle'}= time_ago_in_words(cert.not_after)

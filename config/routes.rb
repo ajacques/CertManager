@@ -1,11 +1,14 @@
 require 'resque/server'
 
 Rails.application.routes.draw do
-  root 'certificate#index'
-  get 'login' => 'session#new', as: :new_user_session
-  post 'login' => 'session#create', as: :user_session
-  post 'logout' => 'session#destroy', as: :destroy_user_session
-  resources :certificate, only: [:create, :index, :new, :show], constraints: {
+  root 'certificates#index'
+  get 'login' => 'sessions#new', as: :new_user_session
+  post 'login' => 'sessions#create', as: :user_session
+  post 'logout' => 'sessions#destroy', as: :destroy_user_session
+  resource :user, only: [:show] do
+    get 'two_factor' => 'sessions#two_factor'
+  end
+  resources :certificates, only: [:create, :index, :new, :show], constraints: {
       id: /[0-9]+/,
       another_id: /[0-9]+/
     } do
@@ -21,7 +24,7 @@ Rails.application.routes.draw do
       post 'import', action: :do_import
     end
   end
-  resources :service, only: [:create, :index, :new, :show] do
+  resources :services, only: [:create, :index, :new, :show] do
     member do
       get 'deploy'
     end
@@ -30,7 +33,7 @@ Rails.application.routes.draw do
       get 'nodes'
     end
   end
-  post 'jobs/refresh_all' => 'job#refresh_all'
+  post 'jobs/refresh_all' => 'jobs#refresh_all'
 
   mount Resque::Server.new, at: '/resque'
 end

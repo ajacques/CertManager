@@ -49,3 +49,26 @@ ul.subject {
     }
   }
 }
+
+.cert-validity-bar {
+  width: 100%;
+  progress[value] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 20px;
+
+    &::-webkit-progress-bar {
+      background-color: #eee;
+    }
+  }
+  progress[value].before {
+    &::-webkit-progress-value {
+      background-color: transparent;
+      &:after {
+        content: attr(pseudo) '%';
+        float: right;
+      }
+    }
+  }
+}

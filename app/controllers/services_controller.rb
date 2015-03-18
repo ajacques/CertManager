@@ -1,6 +1,6 @@
-class ServiceController < ApplicationController
+class ServicesController < ApplicationController
   def index
-    @services = Service.all
+    @services = Service.all.includes(:subject_alternate_names, :subjects)
   end
 
   def new

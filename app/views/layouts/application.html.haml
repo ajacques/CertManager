@@ -5,7 +5,7 @@
     %meta{charset: "utf-8"}/
     %meta{content: "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1.0, maximum-scale=1.0", name: "viewport"}/
-    = stylesheet_link_tag    'application', media: 'all', data: {bturbolinks_track: true}
+    = stylesheet_link_tag    'application', media: 'all', data: {turbolinks_track: true}
     = javascript_include_tag 'application', data: { turbolinks_track: true }
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
@@ -23,10 +23,12 @@
           %nav
             %ul.nav.navbar-nav
               %li= link_to 'New', new_certificate_path
-              %li= link_to 'Import', import_certificate_index_path
-              %li= link_to 'Services', service_index_path
+              %li= link_to 'Import', import_certificates_path
+              %li= link_to 'Services', services_path
+            = form_tag certificates_path, method: :get, role: :search, enforce_utf8: false, class: 'center-block col-sm-6 navbar-form' do
+              = search_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search'
             %ul.nav.navbar-nav.navbar-right
               %li= link_to current_user.first_name, '/user'
-              %li= link_to 'Sign out', destroy_user_session_path, method: :post
+              %li= link_to 'Sign out', destroy_user_session_path
     .container
       = yield

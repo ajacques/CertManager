@@ -2,7 +2,7 @@ var ServiceNew = new function() {
 	var self = this;
 	var refresh_nodes = function(evt) {
 		$.ajax({
-			url: location.origin + '/service/nodes?query=' + this.value,
+			url: location.origin + '/services/nodes?query=' + this.value,
 			dataType: 'json',
 			success: function(data) {
 				var list = $('ul#node_list');

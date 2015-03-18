@@ -23,12 +23,15 @@ class SigningController < ApplicationController
       message_digest: hash_algorithm
 
     extensions = []
+    extensions << R509::Cert::Extensions::BasicConstraints.new(ca: (params[:attributes][:ca]) == '1')
     cert = if signer.id == signee.id
-      R509::CertificateAuthority::Signer.selfsign(csr: csr, extensions: extensions)
+      R509::CertificateAuthority::Signer.selfsign(csr: csr, extensions: extensions, message_digest: hash_algorithm)
     else
       ca = R509::CertificateAuthority::Signer.new(ca_cert: {
         cert: signer.public_key.to_r509,
-        key: (R509::PrivateKey.new key: signer.private_key_data)
+        key: (R509::PrivateKey.new key: signer.private_key_data),
+        extensions: extensions,
+        message_digest: hash_algorithm
       })
       ca.sign(csr: csr)
     end
