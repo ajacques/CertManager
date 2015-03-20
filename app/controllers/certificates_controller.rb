@@ -82,12 +82,14 @@ class CertificatesController < ApplicationController
 
     certs.uniq!
     # Welcome to hell
-    @certs = certs.map {|cert2|
+    @certs = []
+    certs.each {|cert2|
       cert3 = R509::Cert.new cert: cert2
       cert = Certificate.import cert2
       cert.issuer_subject = cert3.issuer
-      cert.save!
-      cert
+      logger.info "Certificate: #{cert.inspect} for #{cert3.subject}"
+      cert.save! if cert.id.nil?
+      @certs << cert
     }
     keys.each { |key|
       pkey = R509::PrivateKey.new key: key

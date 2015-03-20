@@ -16,6 +16,6 @@ class Subject < ActiveRecord::Base
 
   private
   def self.filter_params(params)
-    params.slice(Subject.attribute_names)
+    params.slice(*Subject.attribute_names.map {|s| s.to_sym})
   end
 end
