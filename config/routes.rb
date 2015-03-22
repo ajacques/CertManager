@@ -2,6 +2,7 @@ require 'resque/server'
 
 Rails.application.routes.draw do
   root 'certificates#index'
+  get 'ping' => 'health_check#ping'
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
   post 'logout' => 'sessions#destroy', as: :destroy_user_session
