@@ -15,5 +15,5 @@ Devise.setup do |config|
 
   CertManager::Configuration.auth.each do |key, value|
     config.send("#{key}=", value)
-  end
+  end if CertManager::Configuration.auth
 end

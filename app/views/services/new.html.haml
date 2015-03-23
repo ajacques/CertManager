@@ -8,7 +8,7 @@
     .col-sm-10
       %select.form-control{name: :certificate}
         - Certificate.owned.find_each do |cert|
-          %option{value: cert.id, selected: cert.id == @selected_cert_id}= cert
+          %option{value: cert.id, selected: cert.id == @selected_cert_id, data: {ca: cert.can_sign?}}= cert
   .form-group
     %label.col-sm-2.control-label Deploy System
     .col-sm-10
@@ -17,11 +17,11 @@
   .form-group
     %label.col-sm-2.control-label File Path
     .col-sm-10
-      = text_field_tag :cert_path, '', placeholder: '/etc/nginx/certs/example.com.pem', class: 'form-control'
+      = text_field_tag :cert_path, nil, placeholder: '/etc/nginx/certs/example.com.pem', class: 'form-control'
   .form-group
     %label.col-sm-2.control-label After-Rotate Script
     .col-sm-10
-      = text_field_tag :after_rotate, '', placeholder: 'service nginx reload', class: 'form-control'
+      = text_field_tag :after_rotate, nil, placeholder: 'service nginx reload', class: 'form-control'
   .form-group
     %label.col-sm-2.control-label Host Group
     .col-sm-10 Specifies 
