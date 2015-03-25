@@ -72,3 +72,13 @@ ul.subject {
     }
   }
 }
+
+.drop-target {
+  width: 30em;
+  min-height: 30;
+  border: dashed 3px black;
+
+  &:-moz-drag-over, &:-webkit-drag-over {
+    background-color: gray;
+  }
+}

@@ -14,6 +14,22 @@
     %li Can't sign other certificates
   - if @cert.expired?
     %li Expired
+%aside
+  %ul
+    %li= link_to 'Show certificate (PEM)', format: :pem
+    %li #{link_to 'Download chain', chain_certificate_path} #{link_to '(PEM)', chain_certificate_path(format: :pem)}
+    - if @cert.private_key
+      %li= link_to 'Renew', action: :csr
+= render partial: 'validator', locals: {public_key: @cert.public_key}
+%h2 Services
+- if @cert.services.any?
+  %ul
+    - @cert.services.each do |service|
+      %li= link_to service, service
+- else
+  %p no services yet. A service allows you to securely deploy this certificate to a host
+  = link_to 'Create a service', controller: :services, action: :new, cert_id: @cert.id
+%h2 Random Details
 %table{class: 'table'}
   %thead
     %tr
@@ -30,11 +46,6 @@
         %tr
           %td= use.to_s
           %td Basic
-%aside
-  %ul
-    %li= link_to 'Show certificate (PEM)', format: :pem
-    %li #{link_to 'Download chain', chain_certificate_path} #{link_to '(PEM)', chain_certificate_path(format: :pem)}
-= render partial: 'validator', locals: {public_key: @cert.public_key}
 %h2 Revocation Lists
 #crl-group
   - if @cert.public_key.crl_distribution_points
@@ -68,11 +79,3 @@
 %pre= (OpenSSL::X509::Certificate.new @cert.public_key.body).to_text
 - if @cert.private_key.present? and @cert.signed?
   %p Certificate is ready for deployment
-%h2 Services
-- if @cert.services.any?
-  %ul
-    - @cert.services.each do |service|
-      %li= link_to service, service
-- else
-  %p no services yet. A service allows you to securely deploy this certificate to a host
-  = link_to 'Create a service', controller: :services, action: :new, cert_id: @cert.id

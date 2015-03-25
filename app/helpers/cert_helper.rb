@@ -8,12 +8,15 @@ module CertHelper
   def cert_validate_config(facet, value)
     CertManager::SecurityPolicy.send(facet).secure?(value)
   end
-  def cert_show_validate_result(facet, value, header, &block)
+  def cert_show_validate_policy(facet, value, header, &block)
     secure = cert_validate_config(facet, value)
+    cert_show_validate_result(secure, header, &block)
+  end
+  def cert_show_validate_result(bool, header, &block)
     capture_haml do
-      haml_tag :tr, class: (if secure then 'bg-success' else 'bg-danger' end) do
+      haml_tag :tr, class: (if bool then 'bg-success' else 'bg-danger' end) do
         haml_tag :td, header
-        integrity = if secure then 'OK' else 'Weak' end
+        integrity = if bool then 'OK' else 'Weak' end
         haml_tag :td, "#{if block.present? then block.call else value end} (#{integrity})"
       end
     end

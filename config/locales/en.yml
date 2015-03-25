@@ -1,5 +1,6 @@
 en:
-  certificates: Certificates
+  brand: Certificates
+  certificate: Certificate
   subject:
     C: Country
     CN: Common Name
@@ -13,3 +14,8 @@ en:
     sha256: SHA-256
     sha384: SHA-384
     sha512: SHA-512
+  operations:
+    new: New
+    import: Import
+  attributes:
+    hash_algorithm: Hash algorithm
