@@ -1,0 +1,17 @@
+= link_to (t 'users.new'), new_user_path
+%table.table
+  %thead
+    %tr
+      %td User
+      %td= t 'account.email'
+      %td Last Sign-in
+      %td
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= link_to "#{user.first_name} #{user.last_name}", user
+        %td= user.email
+        %td= user.last_sign_in_at
+        %td
+          - if user != current_user
+            = link_to 'Disable', disable_user_path(user), class: 'text-danger'

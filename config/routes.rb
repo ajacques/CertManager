@@ -5,9 +5,21 @@ Rails.application.routes.draw do
   get 'ping' => 'health_check#ping'
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
-  post 'logout' => 'sessions#destroy', as: :destroy_user_session
-  resource :user, only: [:show] do
-    get 'two_factor' => 'sessions#two_factor'
+  get 'logout' => 'sessions#destroy', as: :destroy_user_session
+  resources :users, only: [:create, :index, :new, :show], constraints: {
+    id: /[0-9]/
+  } do
+    member do
+      post 'disable'
+    end
+    collection do
+      get 'activate'
+    end
+  end
+  scope :install, controller: :install, as: :install do
+    get 'user'
+    post 'user', action: :create_user
+    get 'configure'
   end
   resources :certificates, only: [:create, :index, :new, :show], constraints: {
       id: /[0-9]+/,
@@ -25,7 +37,9 @@ Rails.application.routes.draw do
       post 'import', action: :do_import
     end
   end
-  resources :services, only: [:create, :index, :new, :show] do
+  resources :services, only: [:create, :index, :new, :show], constraints: {
+    id: /[0-9]/
+  } do
     member do
       get 'deploy'
     end

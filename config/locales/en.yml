@@ -1,6 +1,18 @@
 en:
   brand: Certificates
   certificate: Certificate
+  account:
+    first_name: First name
+    last_name: Last name
+    username: Email
+    password: Password
+    login: Login
+    create: Create account
+    mailers:
+      your_new_account: CertManager - Your Account
+  users:
+    list: Users
+    new: New user
   subject:
     C: Country
     CN: Common Name

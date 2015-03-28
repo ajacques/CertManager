@@ -1,10 +1,9 @@
-.container
-  .row
-    .col-sm-12
-      %h1 Sign in
-  = form_tag action: :create do
+.row.vertical-center-row
+  .col-lg-12
     .row
-      .col-sm-12
-        = email_field_tag :email, nil, autocapitalize: false, autocorrect: false, class: 'form-control', placeholder: 'user@example.com', tabindex: 1
-        = password_field_tag :password, nil, class: 'form-control', placeholder: 'Password', tabindex: 2
-        = submit_tag "Login", class: 'btn btn-primary', tabindex: 3
+      .col-xs-12.col-sm-offset-4
+        %h1 Sign in
+        = form_tag action: :create do
+          = email_field_tag :email, nil, autocapitalize: false, autocorrect: false, class: 'form-control', placeholder: (t 'account.username'), tabindex: 1
+          = password_field_tag :password, nil, class: 'form-control', placeholder: (t 'account.password'), tabindex: 2
+          = submit_tag "Login", class: 'btn btn-primary', tabindex: 3

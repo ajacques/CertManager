@@ -1,10 +1,10 @@
 = form_tag url_for(action: :create), class: 'form-horizontal' do
   .form-group
-    = label_tag 'subject[CN]', 'Common Name', class: 'col-sm-2 control-label'
+    = label :subject, :CN, 'Common Name', class: 'col-sm-2 control-label'
     .col-sm-10
       .input-group
         .input-group-addon https://
-        = text_field_tag 'subject[CN]', '', class: 'form-control', placeholder: 'example.com'
+        = text_field :subject, :CN, class: 'form-control', placeholder: 'example.com'
   %ul#subjectAltList
   .form-group
     = label_tag 'subject[O]', 'Organization Name', class: 'col-sm-2 control-label'

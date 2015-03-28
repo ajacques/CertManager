@@ -14,6 +14,13 @@ class User < ActiveRecord::Base
   def password_matches?(pwd)
     password_hash == User.hash_password(pwd, password_salt)
   end
+  def create_confirm_token
+    confirmation_token = SecureRandom.urlsafe_base64(32)
+    confirmation_sent_at = Time.now
+  end
+  def to_s
+    "#{first_name} #{last_name}"
+  end
   def self.authenticate(username, password)
     user = find_by_email(username)
     return nil  if user.nil?

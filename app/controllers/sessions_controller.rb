@@ -1,5 +1,8 @@
 class SessionsController < ApplicationController
   def new
+    unless User.any?
+      redirect_to install_user_path
+    end
   end
 
   def create

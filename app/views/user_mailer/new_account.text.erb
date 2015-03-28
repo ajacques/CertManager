@@ -1,0 +1,10 @@
+Your new account on CertManager has been created.
+
+Please click the link below to activate it:
+<%= activate_users_url(token: @user.confirmation_token) %>
+
+If you are not expecting this, please click here:
+<%= activate_users_url(token: @user.confirmation_token, disavow: true) %>
+
+This is an automated notification email
+Copyright <%= Time.now.year %> Techno Wizardry

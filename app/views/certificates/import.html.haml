@@ -1,5 +1,5 @@
 %div.drop-target{data: {drop: {type: :textbox, target: :key}}}
   = form_tag action: :import do
-    = label_tag :key, t 'certificate'
+    = label_tag :key, (t 'certificate')
     = text_area_tag :key
     = submit_tag
