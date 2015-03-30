@@ -7,6 +7,7 @@ class UsersController < ApplicationController
     @user.confirmation_token_confirmation = params[:token]
     @message = flash.try(:[], :message)
     @errors = flash.try(:[], :errors)
+    flash[:return_url] = url_for
   end
 
   def update
@@ -19,7 +20,7 @@ class UsersController < ApplicationController
   rescue ActiveRecord::RecordInvalid => e
     flash[:message] = e.to_s
     flash[:errors] = user.errors
-    redirect_to action: :activate
+    redirect_to flash[:return_url]
   end
 
   def lock
@@ -54,7 +55,7 @@ class UsersController < ApplicationController
     if user.invalid?
       logger.info "Failed to save record #{user_params}. Validations failed #{user.errors.inspect}"
       flash[:validations] = user.errors
-      flash[:data] = user
+      flash[:data] = user.to_h
       redirect_to action: :new
       return
     end
@@ -73,6 +74,10 @@ class UsersController < ApplicationController
   def show
     user_id = params[:id] || session[:user_id]
     @user = User.find(user_id)
+    flash[:errors].each do |key, error|
+      @user.errors.add(key, error.to_sentence)
+    end if flash[:errors]
+    flash[:return_url] = url_for
   end
 
   protected

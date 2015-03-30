@@ -6,7 +6,7 @@ en:
     last_name: Last name
     username: Email
     password: Password
-    confirm_password: Confirm password
+    confirm_password: Repeat password
     login: Login
     create: Create account
     mailers:
