@@ -4,10 +4,11 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :registerable, :recoverable, :rememberable, :trackable, :validatable
-  attr_accessor :password
-  validates :password, :first_name, :last_name, presence: true
+  attr_accessor :password, :password_confirmation, :confirmation_token_confirmation
+  validates :first_name, :last_name, presence: true
   validates :email, email: true, uniqueness: true
-  validates :password, length: { within: 6..128 }
+  validates :password, length: { within: 6..128 }, confirmation: true, allow_nil: true
+  validates :confirmation_token, confirmation: true
   before_save :update_password
 
   def password_matches?(pwd)
@@ -25,7 +26,8 @@ class User < ActiveRecord::Base
   end
   def self.authenticate(username, password)
     user = find_by_email(username)
-    return user.try(:password_matches?, password) and user.try(:can_login?)
+    return nil  if user.nil?
+    return user if user.password_matches?(password) and user.can_login?
   end
 
   private

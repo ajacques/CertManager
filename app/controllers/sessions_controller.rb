@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_filter :require_login, only: [:new, :create]
+
   def new
     unless User.any?
       redirect_to install_user_path
@@ -21,10 +23,5 @@ class SessionsController < ApplicationController
   def destroy
     reset_session
     redirect_to new_user_session_path
-  end
-
-  protected
-  def require_login?
-    false
   end
 end

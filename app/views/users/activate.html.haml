@@ -1,0 +1,18 @@
+%h1 Activate account
+%h4= @user
+= form_for @user, url: url_for(action: :update), class: 'form-horizontal' do
+  - if @message
+    %p= @message
+  = hidden_field :user, :confirmation_token_confirmation
+  .form-group
+    = label :user, :password, (t 'account.password'), class: 'col-sm-2 control-label'
+    .col-sm-10
+      = password_field :user, :password, placeholder: (t 'account.password'), class: 'form-control'
+  .form-group
+    = label :user, :password_confirmation, (t 'account.confirm_password'), class: 'col-sm-2 control-label'
+    .col-sm-10
+      = password_field :user, :password_confirmation, placeholder: (t 'account.password'), class: 'form-control'
+  .form-group
+    .col-sm-2
+    .col-sm-10
+      = submit_tag 'Activate account', class: 'btn btn-primary'

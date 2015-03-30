@@ -6,13 +6,12 @@ Rails.application.routes.draw do
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
-  resources :users, only: [:create, :index, :new, :show], constraints: {
+  resources :users, only: [:create, :index, :new, :show, :update], constraints: {
     id: /[0-9]/
   } do
     member do
-      post 'disable'
-    end
-    collection do
+      post 'lock'
+      post 'unlock'
       get 'activate'
     end
   end

@@ -11,15 +11,12 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
   def require_login
-    if require_login? and not user_signed_in?
+    if not user_signed_in?
       session[:return_url] = request.fullpath
       redirect_to new_user_session_path
     end
   end
   def user_signed_in?
     session.has_key?(:user_id)
-  end
-  def require_login?
-    true
   end
 end

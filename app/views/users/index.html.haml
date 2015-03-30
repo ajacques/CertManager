@@ -1,17 +1,27 @@
 = link_to (t 'users.new'), new_user_path
-%table.table
+%table.table.table-striped
   %thead
     %tr
       %td User
-      %td= t 'account.email'
-      %td Last Sign-in
+      %td= t 'account.username'
+      %td Created
+      %td Last connection
       %td
   %tbody
     - @users.each do |user|
-      %tr
+    - color = if not user.can_login? then 'warning' end
+      %tr{class: color}
         %td= link_to "#{user.first_name} #{user.last_name}", user
         %td= user.email
-        %td= user.last_sign_in_at
+        %td= user.created_at
         %td
-          - if user != current_user
-            = link_to 'Disable', disable_user_path(user), class: 'text-danger'
+          - if user.confirmation_token
+            .text-danger Not activated yet
+          - elsif user.last_sign_in_at
+            = user.last_sign_in_at
+        %td
+          - if user != current_user and user.confirmation_token.nil?
+            - if user.can_login?
+              = link_to 'Lock', lock_user_path(user), class: 'text-danger', remote: true, method: :post
+            - else
+              = link_to 'Unlock', unlock_user_path(user), class: 'text-danger', remote: true, method: :post

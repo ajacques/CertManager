@@ -1,4 +1,5 @@
 class InstallController < ApplicationController
+  skip_before_filter :require_login
   def user
     if User.any?
       redirect_to root_path
@@ -18,10 +19,6 @@ class InstallController < ApplicationController
   end
 
   protected
-  def require_login?
-    false
-  end
-
   private
   def user_params
     params.permit(:email, :password, :first_name, :last_name)

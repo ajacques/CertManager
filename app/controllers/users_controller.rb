@@ -1,5 +1,38 @@
 class UsersController < ApplicationController
+  skip_before_filter :require_login, only: [:activate, :update]
   helper_method :validates?
+
+  def activate
+    @user = User.find params[:id]
+    @user.confirmation_token_confirmation = params[:token]
+    @message = flash.try(:[], :message)
+    @errors = flash.try(:[], :errors)
+  end
+
+  def update
+    user = User.find params[:id]
+    user.can_login = true
+    user.update_attributes user_update_params
+    user.save!
+    flash[:action] = :activated_account
+    redirect_to user
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:message] = e.to_s
+    flash[:errors] = user.errors
+    redirect_to action: :activate
+  end
+
+  def lock
+    user = User.find params[:id]
+    user.can_login = false
+    user.save!
+    respond_to do |format|
+      format.json {
+        head 204
+      }
+    end
+  end
+
   def index
     @users = User.all
   end
@@ -42,14 +75,18 @@ class UsersController < ApplicationController
     @user = User.find(user_id)
   end
 
-  def user_params
-    params[:user].permit(:first_name, :last_name, :email)
-  end
-
   protected
   def validates?(selector, if_true)
     if_true if @validations
       .try(:[], selector.to_s)
       .try(:any?)
+  end
+
+  private
+  def user_params
+    params[:user].permit(:first_name, :last_name, :email)
+  end
+  def user_update_params
+    params[:user].permit(:confirmation_token_confirmation, :password, :password_confirmation)
   end
 end
