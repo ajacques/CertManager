@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
       return
     end
 
+    user.last_sign_in_at = Time.now
+    user.save!
     url = session[:return_url] || root_path
     reset_session
     session[:user_id] = user.id

@@ -34,6 +34,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def unlock
+    user = User.find params[:id]
+    user.can_login = true
+    user.save!
+    respond_to do |format|
+      format.json {
+        head 204
+      }
+    end
+  end
+
   def index
     @users = User.all
   end

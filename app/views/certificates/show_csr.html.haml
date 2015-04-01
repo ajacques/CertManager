@@ -9,6 +9,9 @@
   %li
     %h5 Sign with existing private key
     %p If you already have a certificate capable of signing other certificates, you can sign this certificate without going to an external party
+    %ul
+      - @sign_candidates.each do |cert|
+        %li= cert
     .text-danger No capable certificates found
   %li
     %h5 Self sign

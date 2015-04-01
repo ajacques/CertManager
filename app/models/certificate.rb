@@ -2,6 +2,7 @@ require 'digest/sha1'
 
 class Certificate < ActiveRecord::Base
   # Associations
+  attr_accessor :issuer_subject
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :subject_alternate_names, autosave: true, dependent: :delete_all
@@ -15,15 +16,9 @@ class Certificate < ActiveRecord::Base
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where("public_keys.not_after < ?", Time.now + time) if time.present? }
   scope :owned, -> { where('private_key_data IS NOT NULL') }
+  scope :signed, -> { where('public_key_id IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
 
-  @issuer_subject = nil
-  def issuer_subject=(t)
-    @issuer_subject = t
-  end
-  def issuer_subject
-    @issuer_subject
-  end
   def status
     if private_key.present? and public_key.present?
       'Signed'

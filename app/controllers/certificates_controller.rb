@@ -5,7 +5,7 @@ class CertificatesController < ApplicationController
 
   def index
     @query = params[:search]
-    @certs = Certificate.all.joins(:public_key).includes(:subject, :subject_alternate_names, :public_key)
+    @certs = Certificate.all.includes(:subject, :subject_alternate_names, :public_key)
     if @query
       @certs = @certs.where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
@@ -24,6 +24,7 @@ class CertificatesController < ApplicationController
         elsif @cert.stub?
           render 'show_stub'
         else
+          @sign_candidates = Certificate.owned.signed
           render 'show_csr'
         end
       }

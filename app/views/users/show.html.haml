@@ -4,15 +4,9 @@
 %h2= @user
 .row
   .col-md-6
-    .panel.panel-primary
-      .panel-heading Profile
-      .panel-body
-        = bootstrap_form_for @user, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9' do |f|
-          = f.hidden_field :patch_target, value: :password
-          = f.text_field :first_name, readonly: true
-          = f.text_field :last_name, readonly: true
-          = f.email_field :email, readonly: true
-          = f.submit 'Update profile', class: 'btn center-block', disabled: true
-  - if current_user = @user
+    = render partial: 'profile_info_block'
+  - if current_user == @user
     .col-md-6
       = render partial: 'change_password_block'
+  .col-md-6
+    = render partial: 'account_status_block'
