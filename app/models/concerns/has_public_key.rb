@@ -31,8 +31,7 @@ module HasPublicKey
     public_key.present?
   end
   def can_sign?
-    public_key.basic_constraints
-      .try(:is_ca?)
+    self.public_key.basic_constraints.is_ca? if self.public_key
   end
   def ocsp_enabled?
     ocsp_endpoints.present?

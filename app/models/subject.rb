@@ -14,7 +14,6 @@ class Subject < ActiveRecord::Base
     Subject.find_or_initialize_by(filter_params(subject.to_h))
   end
 
-  private
   def self.filter_params(params)
     params.slice(*Subject.attribute_names.map {|s| s.to_sym})
   end

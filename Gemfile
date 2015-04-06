@@ -7,6 +7,7 @@ gem 'rails', '4.2'
 gem 'haml'
 gem 'haml-rails'
 gem 'bootstrap_form'
+gem 'will_paginate'
 
 gem 'redis'
 gem 'devise'

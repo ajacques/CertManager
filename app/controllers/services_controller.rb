@@ -1,6 +1,6 @@
 class ServicesController < ApplicationController
   def index
-    @services = Service.all.includes(:subject_alternate_names, :subjects)
+    @services = Service.all.includes(:certificate)
   end
 
   def new
@@ -14,7 +14,7 @@ class ServicesController < ApplicationController
   def deploy
     service = Service.find(params[:id])
     job = DeployServiceJob.perform_later service
-    redirect_to deployment_service_index_path(id: job.job_id)
+    redirect_to deployment_services_path(id: job.job_id)
   end
 
   def nodes
@@ -24,8 +24,8 @@ class ServicesController < ApplicationController
   end
 
   def create
-    cert = Certificate.find(params[:certificate])
-    service = Service.create(params.permit(:cert_path, :after_rotate, :node_group).merge({certificate: cert}))
+    cert = Certificate.find(params[:certificate_id])
+    service = Service.create(params.permit(:cert_path, :after_rotate, :node_group, :deploy_strategy).merge({certificate: cert}))
     #service.certificate = cert
     service.save!
     redirect_to service

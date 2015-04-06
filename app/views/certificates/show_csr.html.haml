@@ -11,8 +11,7 @@
     %p If you already have a certificate capable of signing other certificates, you can sign this certificate without going to an external party
     %ul
       - @sign_candidates.each do |cert|
-        %li= cert
-    .text-danger No capable certificates found
+        %li= link_to cert, controller: :signing, action: :configure, id: cert, another_id: @cert
   %li
     %h5 Self sign
     %p This certificate won't be trusted by any clients by default. Use this if you want a basic certificate or a custom certificate authority

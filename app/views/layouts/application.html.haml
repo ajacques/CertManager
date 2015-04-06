@@ -1,12 +1,16 @@
 !!!
 %html
   %head
-    %title CertManager
-    %meta{charset: "utf-8"}
-    %meta{content: "IE=edge,chrome=1", http: {equiv: "X-UA-Compatible"}}
-    %meta{content: "width=device-width, initial-scale=1.0, maximum-scale=1.0", name: "viewport"}
+    %title<
+      - if content_for? :title
+        = yield :title
+      - else
+        CertManager
+    %meta{charset: 'utf-8'}
+    %meta{content: 'IE=edge,chrome=1', http: {equiv: 'X-UA-Compatible'}}
+    %meta{content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport'}
     = stylesheet_link_tag    'application', media: 'all', data: {turbolinks_track: true}
-    = javascript_include_tag 'application', data: { turbolinks_track: true }
+    = javascript_include_tag 'application', data: {turbolinks_track: true}
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
     - if user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests

@@ -13,15 +13,14 @@ class PublicKey < ActiveRecord::Base
   end
 
   def self.from_r509(crt)
-    pub = PublicKey.new
-    pub.body = crt.to_pem
-    pub.subject = Subject.from_r509(crt.subject)
-    pub.not_before = crt.not_before
-    pub.not_after = crt.not_after
-    crt.crl_distribution_points.uris.each do |uri|
-      pub.revocation_endpoints << RevocationEndpoint.find_or_initialize_by(uri_type: 'crl', endpoint: uri)
-    end if crt.crl_distribution_points.present?
-    pub.modulus_hash = Digest::SHA1.hexdigest(crt.public_key.n.to_s)
-    pub
+    PublicKey.find_or_initialize_by(body: crt.to_pem) do |r|
+      r.subject = Subject.from_r509(crt.subject)
+      r.not_before = crt.not_before
+      r.not_after = crt.not_after
+      crt.crl_distribution_points.uris.each do |uri|
+        r.revocation_endpoints << RevocationEndpoint.find_or_initialize_by(uri_type: 'crl', endpoint: uri)
+      end if crt.crl_distribution_points.present?
+      r.modulus_hash = crt.fingerprint
+    end
   end
 end

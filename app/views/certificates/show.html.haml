@@ -1,3 +1,5 @@
+- content_for :title do
+  #{@cert.subject} | CertManager
 %ol.breadcrumb
   = cert_chain_tree(@cert) do |cert|
     - if cert == @cert
@@ -63,19 +65,9 @@
           %td= v
 - if @cert.public_key.extensions
   %h2 Extensions
+  = @cert.public_key.basic_constraints.is_ca?.inspect
   %table
     - @cert.public_key.extensions.each do |k, v|
       %tr
-        %td= k
-        %td= v
-- if @cert.private_key_data.nil?
-  %h3 No private key yet, can't use for encryption
-- if @cert.private_key_data.present?
-  %h3
-    Private Key Bit Length:
-    = @cert.private_key.bit_length
-    bits
-%h3 Public Key Bit Length: #{@cert.public_key.bit_length} bits
-%pre= (OpenSSL::X509::Certificate.new @cert.public_key.body).to_text
-- if @cert.private_key.present? and @cert.signed?
-  %p Certificate is ready for deployment
+        %td
+        %td= v.to_s.inspect

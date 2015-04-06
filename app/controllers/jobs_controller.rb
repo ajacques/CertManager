@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
   def refresh_all
     ValidateCertificateJob.perform_later
-    redirect_to controller: :certificate, action: :index
+    redirect_to root_path
   end
 end

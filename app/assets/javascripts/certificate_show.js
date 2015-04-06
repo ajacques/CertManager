@@ -1,4 +1,4 @@
-var CertificateShow = new function() {
+var CertificateShow = function() {
 	var self = this;
 	var checkCRLStatus = function() {
 		var crl_group = $('#crl-group');

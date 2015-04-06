@@ -14,10 +14,12 @@ class Certificate < ActiveRecord::Base
   include HasPublicKey
 
   # Scopes
-  scope :expiring_in, -> time { joins(:public_key).where("public_keys.not_after < ?", Time.now + time) if time.present? }
+  scope :expiring_in, -> time { joins(:public_key).where('public_keys.not_after < ? ', Time.now + time) if time.present? }
+  scope :expired, -> { joins(:public_key).where('public_keys.not_after < ?', Time.now) }
   scope :owned, -> { where('private_key_data IS NOT NULL') }
   scope :signed, -> { where('public_key_id IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
+  scope :with_subject, -> subject { Certificate.joins(:subject).where(subjects: Subject.filter_params(subject.to_h)) }
 
   def status
     if private_key.present? and public_key.present?
@@ -32,7 +34,7 @@ class Certificate < ActiveRecord::Base
   end
 
   def to_s
-    subject.to_s
+    subject.to_s || 'No Subject'
   end
   def to_json(param)
     json = {
@@ -84,12 +86,9 @@ class Certificate < ActiveRecord::Base
   def self.find_by_common_name(name)
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
   end
-  def self.find_by_subject(subject)
-    Certificate.joins(:subject).where(subjects: subject.to_h)
-  end
   def self.import(crt)
     r509 = R509::Cert.new(cert: crt)
-    cert = Certificate.find_by_subject(r509.subject).first
+    cert = Certificate.with_subject(r509.subject).first
     if cert.nil?
       cert = Certificate.new
     else

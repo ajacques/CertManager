@@ -4,7 +4,7 @@ You currently have <%= pluralize @certificates.count, 'certificate' %> expiring 
 * <%= cert.subject.CN %>
 <% end %>
 
-View online: [link]
+View online: <%= certificates_path expires_in: 7.days %>
 
 This is an automated notification email
 Copyright <%= Time.now.year %> Techno Wizardry

@@ -11,6 +11,7 @@ en:
     create: Create account
     mailers:
       your_new_account: CertManager - Your Account
+    change_password: Change password
   users:
     list: Users
     new: New user

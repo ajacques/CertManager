@@ -7,6 +7,9 @@ class InstallController < ApplicationController
   end
 
   def create_user
+    if User.any?
+      redirect_to root_path
+    end
     reset_session
     params = user_params.merge ({
       can_login: true
@@ -18,7 +21,6 @@ class InstallController < ApplicationController
     redirect_to install_configure_path
   end
 
-  protected
   private
   def user_params
     params.permit(:email, :password, :first_name, :last_name)

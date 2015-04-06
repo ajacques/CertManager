@@ -4,12 +4,6 @@
       %td Common Name
       %td Status
   %tbody
-    - @certs.each do |cert|
-      %tr{class: ('bg-danger' if cert.expires_in < 7.days)}
-        %td
-          = link_to cert, cert
-          - if cert.expires_in < 7.days
-            %span (expires in #{time_ago_in_words(cert.public_key.not_after)})
-          - if cert.subject_alternate_names.any?
-            %span.visible-xs-block.visible-sm-inline.visible-md-inline.visible-lg-inline (+#{cert.subject_alternate_names.size} alternates)
-        %td= cert.status
+    = render partial: 'certificate_row', collection: @certs, as: :cert
+.row
+  .center-block.col-md-3= will_paginate @certs

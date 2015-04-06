@@ -3,7 +3,7 @@ module CertManager
     @config = nil
     public
     class << self
-      def load
+      def load_file
         yaml = YAML.load_file("#{Rails.root}/config/configuration.yml")
         @config = {}
         if yaml.is_a?(Hash)
@@ -21,7 +21,7 @@ module CertManager
       end
 
       def method_missing(method, *args, &block)
-        load unless @config
+        load_file unless @config
         @config[method]
       end
     end

@@ -73,7 +73,7 @@ class UsersController < ApplicationController
     begin
       user.save!
     rescue ActiveRecord::RecordInvalid => err
-      logger.info "Failed to save record #{user_params} #{err}}"
+      logger.info "Failed to save record #{user_params} #{err}"
       flash[:error] = err.to_s
       redirect_to action: :new
     else

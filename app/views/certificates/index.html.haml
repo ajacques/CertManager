@@ -1,6 +1,6 @@
 - if @expiring.any?
   %div
-    %h3 #{pluralize @expiring.count, 'certificates'} expire in the next 7 days
+    %h3 #{pluralize @expiring.count, 'certificates'} expire in the next 30 days
     %ul
       - @expiring.each do |cert|
         %li= link_to cert.subject.CN, cert

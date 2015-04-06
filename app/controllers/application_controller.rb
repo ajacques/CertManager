@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
     User.find(session[:user_id])
   end
   def require_login
-    if not user_signed_in?
+    unless user_signed_in?
       session[:return_url] = request.fullpath
       redirect_to new_user_session_path
     end
