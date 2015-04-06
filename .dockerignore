@@ -1,0 +1,8 @@
+docker-compose.yml
+Dockerfile
+log/*
+tmp/cache/*
+tmp/pids/*
+tmp/sockets/*
+public/assets/*
+db/*.sqlite3
