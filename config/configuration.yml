@@ -1,19 +1,18 @@
 default:
-  secret_key: c962d7be3a3a72aa9ffefcff4aea8f4821430aa59739f5770b8d1c78ab7539c38f8fca13d66bccc8e831b9259622207534c1a4659a6dd3c33dbfc174035e7511
   redis: &redis_config
-    host: 172.17.42.1
-  resque: 172.17.42.1:6379/resque
-  session:
-    - :redis_session_store
-    -
-      key: _CertManager_session
-      redis:
-        <<: *redis_config
+    host: redis
+  resque: redis:6379/resque
   salt_stack:
     user: saltdev
     pass: saltdev
     eauth: auto
     host: http://salt:8000
+  auth:
+    mailer_sender: 'certs@technowizardry.net'
+  session:
+    - :cookie_store
+    -
+      key: _CertManager_session
 
 development:
   email_delivery:
