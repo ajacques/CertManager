@@ -1,0 +1,16 @@
+%nav.navbar.navbar-default
+  .container
+    .navbar-header
+      = link_to (t 'brand'), root_path, class: 'navbar-brand'
+    - if user_signed_in?
+      %nav
+        %ul.nav.navbar-nav
+          %li= link_to (t 'operations.new'), new_certificate_path
+          %li= link_to (t 'operations.import'), import_certificates_path
+          %li= link_to (t 'users.list'), users_path
+          %li= link_to 'Services', services_path
+        = form_tag certificates_path, method: :get, role: :search, enforce_utf8: false, class: 'center-block col-sm-6 navbar-form' do
+          = search_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search'
+        %ul.nav.navbar-nav.navbar-right
+          %li= link_to current_user.first_name, user_path(current_user)
+          %li= link_to 'Sign out', destroy_user_session_path

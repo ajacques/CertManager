@@ -3,10 +3,12 @@
   = link_to 'Deploy certificate', action: :deploy
 - else
   Can't be deployed until the #{link_to 'certificate', @service.certificate} has been signed
-%h5 Certificate path
-%pre= @service.cert_path
-%h5 Post deployment script:
-%pre= @service.after_rotate
+= form_for @service do |f|
+  %h5 Certificate path
+  %pre= f.text_field :cert_path
+  %h5 Post deployment script:
+  %pre= @service.after_rotate
+  = f.submit
 %h5 Node Status
 %table
   %thead

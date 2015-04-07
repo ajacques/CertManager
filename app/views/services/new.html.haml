@@ -4,7 +4,7 @@
   %li= link_to 'Services', action: :index
   %li.active New
 %h2 Create service
-= bootstrap_form_tag url: url_for(action: :create), layout: :horizontal do |f|
+= bootstrap_form_for @service, layout: :horizontal do |f|
   = f.select :certificate_id, options_for_certificate_list(Certificate.owned)
   = f.form_group :deploy_strategy do
     = f.radio_button :deploy_strategy, :salt, label: 'Salt stack', checked: true

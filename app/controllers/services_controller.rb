@@ -4,11 +4,19 @@ class ServicesController < ApplicationController
   end
 
   def new
-    @selected_cert_id = params[:cert_id].to_i || 0
+    @service = Service.new
+    @service.certificate_id = params[:cert_id].to_i || 0
   end
 
   def show
     @service = Service.find(params[:id])
+  end
+
+  def update
+    service = Service.find params[:id]
+    service.update_attributes service_params
+    service.save!
+    redirect_to service
   end
 
   def deploy
@@ -24,8 +32,7 @@ class ServicesController < ApplicationController
   end
 
   def create
-    cert = Certificate.find(params[:certificate_id])
-    service = Service.create(params.permit(:cert_path, :after_rotate, :node_group, :deploy_strategy).merge({certificate: cert}))
+    service = Service.create(service_params)
     #service.certificate = cert
     service.save!
     redirect_to service
@@ -35,5 +42,10 @@ class ServicesController < ApplicationController
     redis = CertManager::Configuration.redis_client
     service_id = redis.get("job_#{params[:id]}_service").to_i
     @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
+  end
+
+  private
+  def service_params
+    params[:service].permit(:certificate_id, :cert_path, :after_rotate, :node_group, :deploy_strategy)
   end
 end

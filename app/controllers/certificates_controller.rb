@@ -7,9 +7,9 @@ class CertificatesController < ApplicationController
     @query = params[:search]
     @certs = Certificate.all.includes(:subject, :subject_alternate_names, :public_key).paginate(page: params[:page])
     if @query
-      @certs = @certs.where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
+      @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
-    @expiring = Certificate.expiring_in 7.days
+    @expiring = @certs.expiring_in(30.days).order('not_after asc')
   end
 
   def show
@@ -63,18 +63,6 @@ class CertificatesController < ApplicationController
     @cert = Certificate.find(params[:id])
     @csr = R509::CSR.new key: @cert.private_key, subject: @cert.subject.to_r509
     render 'csr/show'
-  end
-
-  def revocation_check
-    cert = Certificate.find(params[:id])
-    result = CrlHelper.check_status(cert)
-    result << OcspFetcher.fetch_ocsp('http://ocsp.comodoca.com/', cert)
-
-    respond_to do |format|
-      format.json {
-        render plain: result.to_json
-      }
-    end
   end
 
   def do_import

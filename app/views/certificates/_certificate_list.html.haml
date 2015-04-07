@@ -3,7 +3,9 @@
     %tr
       %td Common Name
       %td Status
+      %td Expiration
   %tbody
+    = render partial: 'certificate_row', collection: @expiring, as: :cert
     = render partial: 'certificate_row', collection: @certs, as: :cert
 .row
   .center-block.col-md-3= will_paginate @certs

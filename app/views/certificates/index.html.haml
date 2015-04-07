@@ -1,8 +1,4 @@
 - if @expiring.any?
-  %div
-    %h3 #{pluralize @expiring.count, 'certificates'} expire in the next 30 days
-    %ul
-      - @expiring.each do |cert|
-        %li= link_to cert.subject.CN, cert
+  %h3 #{pluralize @expiring.count, 'certificate'} expire in the next 30 days
 %h2 Your certificates
 = render partial: 'certificate_list'

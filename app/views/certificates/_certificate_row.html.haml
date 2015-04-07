@@ -1,8 +1,15 @@
-%tr{class: ('bg-danger' if cert.expired? or cert.expires_in < 7.days)}
+%tr{class: ('bg-danger' if cert.expired? or cert.expires_in < 30.days)}
   %td
     = link_to cert, cert
-    - if cert.expires_in < 7.days
+    - if cert.expired?
+      %span (expired #{time_ago_in_words(cert.public_key.not_after)} ago)
+    - elsif cert.expires_in < 30.days
       %span (expires in #{time_ago_in_words(cert.public_key.not_after)})
     - if cert.subject_alternate_names.any?
       %span.visible-xs-block.visible-sm-inline.visible-md-inline.visible-lg-inline (+#{cert.subject_alternate_names.size} alternates)
   %td= cert.status
+  %td<
+    - if cert.expired?
+      Expired
+    - else
+      = time_ago_in_words(cert.public_key.not_after) if cert.signed?
