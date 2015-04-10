@@ -7,8 +7,13 @@ class Certificate < ActiveRecord::Base
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :subject_alternate_names, autosave: true, dependent: :delete_all
   has_many :services
+  belongs_to :created_by, class_name: 'User'
+  belongs_to :updated_by, class_name: 'User'
+  belongs_to :private_key, autosave: true
   belongs_to :public_key, autosave: true
   belongs_to :subject, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :subject
+  accepts_nested_attributes_for :private_key
   before_save :refresh_hash
 
   include HasPublicKey
@@ -68,10 +73,6 @@ class Certificate < ActiveRecord::Base
   end
   def chain
     [*(issuer.chain if issuer.present? and issuer_id != self.id)] + [self]
-  end
-
-  def private_key
-    R509::PrivateKey.new key: self.private_key_data if self.private_key_data.present?
   end
 
   def self.with_modulus(modulus)

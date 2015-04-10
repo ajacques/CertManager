@@ -14,8 +14,7 @@ class ServicesController < ApplicationController
 
   def update
     service = Service.find params[:id]
-    service.update_attributes service_params
-    service.save!
+    service.update_attributes! service_params
     redirect_to service
   end
 
@@ -32,10 +31,13 @@ class ServicesController < ApplicationController
   end
 
   def create
-    service = Service.create(service_params)
-    #service.certificate = cert
-    service.save!
-    redirect_to service
+    redirect_to Service.create service_params
+  end
+
+  def destroy
+    service = Service.find params[:id]
+    service.destroy!
+    redirect_to
   end
 
   def deployment

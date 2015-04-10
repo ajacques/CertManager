@@ -1,33 +1,19 @@
-= form_tag url_for(action: :create), class: 'form-horizontal' do
-  .form-group
-    = label :subject, :CN, 'Common Name', class: 'col-sm-2 control-label'
-    .col-sm-10
-      .input-group
-        .input-group-addon https://
-        = text_field :subject, :CN, class: 'form-control', placeholder: 'example.com'
-  %ul#subjectAltList
-  .form-group
-    = label_tag 'subject[O]', 'Organization Name', class: 'col-sm-2 control-label'
-    .col-sm-10
-      = text_field_tag 'subject[O]', '', class: 'form-control', placeholder: 'Foo Widgets, Ltd.'
-  .form-group
-    = label_tag 'subject[OU]', 'Department Name', class: 'col-sm-2 control-label'
-    .col-sm-10
-      = text_field_tag 'subject[OU]', '', class: 'form-control', placeholder: 'Accounting'
-  .form-group
-    = label_tag 'subject[C]', 'Country', class: 'col-sm-2 control-label'
-    .col-sm-10
-      = text_field_tag 'subject[C]', '', class: 'form-control', placeholder: 'US or UK'
-  .form-group
-    %label.col-sm-2.control-label Bit Length
-    .col-sm-10
-      .radio
-        = radio_button_tag :bit_length, '1024', false, class: 'bg-danger'
-        = label_tag :bit_length_1024, '1024 bit (insecure)'
-      .radio
-        = radio_button_tag :bit_length, '2048', checked: true
-        = label_tag :bit_length_2048, '2048 bit'
-      .radio
-        = radio_button_tag :bit_length, '4096'
-        = label_tag :bit_length_4096, '4096 bit'
-  = submit_tag "Create Certificate", class: 'btn btn-primary'
+= bootstrap_form_for :certificate, url: url_for(action: :create), layout: :horizontal do |f|
+  = f.fields_for :subject_attributes do |sb|
+    -# TODO: Figure out how to use Bootstrap forms for this one
+    .form-group
+      = label :subject, :CN, 'Common Name', class: 'col-sm-2 control-label'
+      .col-sm-10
+        .input-group
+          .input-group-addon https://
+          = text_field_tag 'certificate[subject_attributes][CN]', nil, class: 'form-control', placeholder: 'example.com'
+    = sb.text_field :O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
+    = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
+    = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
+  = f.fields_for :private_key_attributes do |pk|
+    = pk.hidden_field :key_type, value: 'rsa'
+    = f.form_group :bit_length, label: { text: 'Bit length' } do
+      = pk.radio_button :bit_length, 1024, label: '1024 bit (insecure)', class: 'bg-danger'
+      = pk.radio_button :bit_length, 2048, label: '2048 bit', checked: true
+      = pk.radio_button :bit_length, 4096, label: '4096 bit'
+  = f.submit 'Create Certificate', class: 'btn btn-primary'

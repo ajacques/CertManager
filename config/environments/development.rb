@@ -16,6 +16,9 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  # Generate digests for assets URLs.
+  config.assets.digest = true
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

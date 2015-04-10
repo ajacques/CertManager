@@ -103,6 +103,6 @@ class UsersController < ApplicationController
     params[:user].permit(:first_name, :last_name, :email)
   end
   def user_update_params
-    params[:user].permit(:confirmation_token_confirmation, :password, :password_confirmation)
+    params.require(:user).permit(:confirmation_token_confirmation, :password, :password_confirmation)
   end
 end

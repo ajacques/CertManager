@@ -49,11 +49,9 @@ class CertificatesController < ApplicationController
   end
 
   def create
-    private_key = R509::PrivateKey.new bit_length: params[:bit_length].to_i
-    subject_model = Subject.new subject_params
-    cert = Certificate.new
-    cert.subject = subject_model
-    cert.private_key_data = private_key.to_pem
+    cert = Certificate.new certificate_params
+    cert.updated_by = current_user
+    cert.created_by = current_user
     cert.save!
 
     redirect_to cert
@@ -89,7 +87,7 @@ class CertificatesController < ApplicationController
       pkey = R509::PrivateKey.new key: key
       cert = @certs.find {|c|
           c.public_key.modulus_hash == Digest::SHA1.hexdigest(pkey.key.params['n'].to_s) if c.public_key
-        } #c.Certificate.with_modulus(key.key.params['n']).first
+        }
       if cert.present?
         cert.private_key_data = pkey.to_pem
       end
@@ -115,7 +113,9 @@ class CertificatesController < ApplicationController
   end
 
   private
-  def subject_params
-    params[:subject].permit(:O, :OU, :S, :C, :CN, :L, :ST) if params[:subject]
+  def certificate_params
+    params.require(:certificate)
+      .permit(subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST],
+              private_key_attributes: [:bit_length, :key_type])
   end
 end

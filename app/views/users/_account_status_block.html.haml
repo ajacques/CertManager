@@ -5,7 +5,10 @@
       %label.col-sm-3.control-label Status
       .col-sm-9
         - if @user.confirmed_at.nil?
-          %p.form-control-static.text-danger Email unconfirmed
+          %p.form-control-static.text-danger
+            %span Email unconfirmed
+            = form_for @user do |f|
+              = f.submit 'Resend', class: 'btn btn-default'
         - elsif @user.can_login?
           %p.form-control-static.text-success Active
         - else

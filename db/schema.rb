@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209073711) do
+ActiveRecord::Schema.define(version: 20150409060633) do
 
   create_table "certificate_requests", force: :cascade do |t|
     t.integer  "subject_id"
@@ -21,13 +21,25 @@ ActiveRecord::Schema.define(version: 20150209073711) do
   end
 
   create_table "certificates", force: :cascade do |t|
-    t.string   "private_key_data"
+    t.integer  "private_key_id"
     t.integer  "subject_id",       null: false
     t.integer  "public_key_id"
     t.integer  "issuer_id"
     t.string   "chain_hash",       null: false
+    t.integer  "created_by_id",    null: false
+    t.integer  "updated_by_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "private_keys", force: :cascade do |t|
+    t.string   "key_type",   null: false
+    t.integer  "bit_length", null: false
+    t.string   "curve_name"
+    t.string   "thumbprint", null: false
+    t.string   "pem"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "public_keys", force: :cascade do |t|

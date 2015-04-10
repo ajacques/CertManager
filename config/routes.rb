@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       post 'import', action: :do_import
     end
   end
-  resources :services, only: [:create, :index, :new, :show, :update], constraints: {
+  resources :services, constraints: {
     id: /[0-9]/
   } do
     member do

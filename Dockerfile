@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:15.04
 
 RUN /usr/bin/apt-get update && /usr/bin/apt-get install -qy ruby ruby-dev make g++ libmysqlclient-dev libsqlite3-dev nodejs patch && gem install bundler --no-ri --no-rdoc
 ADD . /rails-app
