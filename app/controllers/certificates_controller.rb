@@ -38,10 +38,14 @@ class CertificatesController < ApplicationController
   end
 
   def chain
-    @cert = Certificate.find(params[:id])
+    chain = Certificate.find(params[:id]).chain
+    chain.delete_at(0) if params.has_key? :exclude_root
     respond_to do |format|
+      format.json {
+        render json: chain
+      }
       format.pem {
-        render plain: @cert.chain.map {|cert|
+        render plain: chain.map {|cert|
           cert.public_key.body
         }.join()
       }
@@ -59,7 +63,7 @@ class CertificatesController < ApplicationController
 
   def csr
     @cert = Certificate.find(params[:id])
-    @csr = R509::CSR.new key: @cert.private_key, subject: @cert.subject.to_r509
+    @csr = @cert.new_csr
     render 'csr/show'
   end
 

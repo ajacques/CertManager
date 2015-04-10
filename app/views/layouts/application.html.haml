@@ -19,6 +19,6 @@
           .container
             %span Background refresh job hasn't run recently (last run #{bg_refresh_last_update_in_words}). Certificate validation will be incorrect.
             = link_to 'Refresh now', jobs_refresh_all_path, method: :post
-      = render partial: 'layouts/navbar'
+    = render partial: 'layouts/navbar'
     .container
       = yield

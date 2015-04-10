@@ -21,7 +21,7 @@ class Certificate < ActiveRecord::Base
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where('public_keys.not_after < ? ', Time.now + time) if time.present? }
   scope :expired, -> { joins(:public_key).where('public_keys.not_after < ?', Time.now) }
-  scope :owned, -> { where('private_key_data IS NOT NULL') }
+  scope :owned, -> { where('private_key_id IS NOT NULL') }
   scope :signed, -> { where('public_key_id IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
   scope :with_subject, -> subject { Certificate.joins(:subject).where(subjects: Subject.filter_params(subject.to_h)) }
@@ -41,11 +41,12 @@ class Certificate < ActiveRecord::Base
   def to_s
     subject.to_s || 'No Subject'
   end
-  def to_json(param)
+  def as_json(param)
     json = {
       id: id,
       subject: subject
     }
+    json[:public_key] = nil
     json.merge! ({
       public_key: {
         pem: public_key.to_pem
@@ -59,8 +60,9 @@ class Certificate < ActiveRecord::Base
       not_before: public_key.not_before,
       not_after: public_key.not_after
     }) if public_key.present?
+    json[:private_key] = private_key
     json[:crl_endpoints] = crl_endpoints if crl_endpoints
-    json.to_json(param)
+    json.as_json(param)
   end
   def full_chain(include_private=false)
     chain = ''
@@ -73,6 +75,9 @@ class Certificate < ActiveRecord::Base
   end
   def chain
     [*(issuer.chain if issuer.present? and issuer_id != self.id)] + [self]
+  end
+  def new_csr
+    R509::CSR.new key: private_key.to_pem, subject: subject.to_r509
   end
 
   def self.with_modulus(modulus)
