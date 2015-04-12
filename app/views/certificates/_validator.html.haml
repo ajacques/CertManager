@@ -6,6 +6,6 @@
       - public_key.not_after.to_s :long
     = cert_show_validate_policy(:bit_length, public_key.bit_length, 'Bit Length') do
       - "#{public_key.bit_length} bits"
-    - hash_algo = public_key.signature_algorithm[0, public_key.signature_algorithm.index('With')]
+    - hash_algo = public_key.hash_algorithm
     = cert_show_validate_policy(:hash_algorithm, hash_algo, t('attributes.hash_algorithm')) do
       - t "hash.#{hash_algo}"

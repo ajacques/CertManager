@@ -10,6 +10,9 @@ class PrivateKey < ActiveRecord::Base
   def to_pem
     self.pem
   end
+  def to_openssl
+    OpenSSL::PKey::RSA.new to_pem
+  end
   def as_json(opts=nil)
     {
      key_type: key_type,

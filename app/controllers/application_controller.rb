@@ -8,13 +8,15 @@ class ApplicationController < ActionController::Base
 
   protected
   def current_user
-    User.find(session[:user_id])
+    @user
   end
   def require_login
     unless user_signed_in?
       session[:return_url] = request.fullpath
       redirect_to new_user_session_path
+      return
     end
+    @user = User.find session[:user_id]
   end
   def user_signed_in?
     session.has_key?(:user_id)

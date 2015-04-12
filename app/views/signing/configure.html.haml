@@ -5,28 +5,26 @@
     %p This certificate has already been signed. A certificate can only have one issuer, performing this action will replace the previous issuer.
     %p Previous issuer: #{link_to @signee.issuer, @signee.issuer}
 %h5 Make any changes that you want to make here
-= bootstrap_form_tag url: url_for(action: :sign_cert) do |f|
+= bootstrap_form_for @public_key, url: url_for(action: :sign_cert), layout: :horizontal do |f|
   - if not @allow_subject_changes
     .bg-info These values can't be changed because you're self signing
-  = f.hidden_field 'redirect_to', value: certificate_path(@signee)
+  = hidden_field_tag 'redirect_to', certificate_path(@signee)
   = f.fields_for :subject do |sb|
-    = sb.text_field :CN, value: @subject.CN, label: 'Common Name', readonly: @self_signing
-    = sb.text_field :O, value: @subject.O, label: 'Organization Name', readonly: @self_signing
-    = sb.text_field :OU, value: @subject.OU, label: 'Department Name', readonly: @self_signing
-    = sb.text_field :C, value: @subject.C, label: 'Country', readonly: @self_signing
+    = sb.text_field :CN, label: 'Common Name', readonly: @self_signing
+    = sb.text_field :O, label: 'Organization Name', readonly: @self_signing
+    = sb.text_field :OU, label: 'Department Name', readonly: @self_signing
+    = sb.text_field :C, label: 'Country', readonly: @self_signing
   = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
     = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger', checked: @hash_algorithm == 'md5'
     = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning', checked: @hash_algorithm == 'sha1'
     = f.radio_button :hash_algorithm, 'sha256', label: 'SHA-256', checked: @hash_algorithm == 'sha256'
     = f.radio_button :hash_algorithm, 'sha384', label: 'SHA-384', checked: @hash_algorithm == 'sha384'
     = f.radio_button :hash_algorithm, 'sha512', label: 'SHA-512', checked: @hash_algorithm == 'sha512'
-  = f.fields_for :attributes do |a|
-    = f.form_group :attributes, label: { text: 'Attributes' } do
-      = a.check_box :ca, label: 'Can sign other certificates'
-  = f.form_group :lifetime, label: { text: 'Certificate lifetime' } do
-    = f.text_field :not_before, value: Time.now.utc.to_s, readonly: true
-    = f.text_field :lifetime, value: '1', label: 'Expires in n years'
-  = f.text_field :ocsp_endpoint, label: 'OCSP Responder', placeholder: 'A url: http://example.com/ocsp_responder', readonly: @self_signing
+  = f.form_group :extensions_attributes, label: { text: 'Attributes' } do
+    = f.check_box :is_ca, label: 'Can sign other certificates'
+  - start = Time.now.utc
+  = f.text_field :not_before, value: start, readonly: true
+  = f.text_field :not_after, value: (start + 1.years), label: 'Expires in n years'
   - if @signee.services.any?
     = f.check_box :auto_deploy, label: "Deploy to #{pluralize @signee.services.count, 'service'}"
     %p Push the certificate to all assigned hosts after signing

@@ -79,6 +79,13 @@ class Certificate < ActiveRecord::Base
   def new_csr
     R509::CSR.new key: private_key.to_pem, subject: subject.to_r509
   end
+  def sign(public_key)
+    public_key.issuer_id = self.issuer_id
+    cert = public_key.to_openssl
+    cert.sign private_key.to_openssl, public_key.hash_algorithm
+    public_key.body = cert.to_s
+    cert
+  end
 
   def self.with_modulus(modulus)
     modulus_hash = Digest::SHA1.hexdigest(modulus.to_s)

@@ -1,19 +1,17 @@
 include CrlHelper
 
 class CertificatesController < ApplicationController
-  before_action :require_login
-
   def index
     @query = params[:search]
-    @certs = Certificate.all.includes(:subject, :subject_alternate_names, :public_key).paginate(page: params[:page])
+    @certs = Certificate.all.eager_load(:subject, :public_key, :private_key).includes(:subject_alternate_names).paginate(page: params[:page])
     if @query
       @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
-    @expiring = @certs.expiring_in(30.days).order('not_after asc')
+    @expiring = [] #@certs.expiring_in(30.days).order('not_after asc')
   end
 
   def show
-    @cert = Certificate.includes(:subject, :subject_alternate_names, :public_key).find(params[:id])
+    @cert = Certificate.eager_load(:subject, :public_key).includes(:subject_alternate_names).find(params[:id])
     respond_to do |format|
       format.pem {
         render plain: @cert.public_key.to_pem

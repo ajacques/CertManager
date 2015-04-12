@@ -22,12 +22,12 @@ ActiveRecord::Schema.define(version: 20150409060633) do
 
   create_table "certificates", force: :cascade do |t|
     t.integer  "private_key_id"
-    t.integer  "subject_id",       null: false
+    t.integer  "subject_id",     null: false
     t.integer  "public_key_id"
     t.integer  "issuer_id"
-    t.string   "chain_hash",       null: false
-    t.integer  "created_by_id",    null: false
-    t.integer  "updated_by_id",    null: false
+    t.string   "chain_hash",     null: false
+    t.integer  "created_by_id",  null: false
+    t.integer  "updated_by_id",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -43,13 +43,20 @@ ActiveRecord::Schema.define(version: 20150409060633) do
   end
 
   create_table "public_keys", force: :cascade do |t|
-    t.integer  "subject_id",   null: false
-    t.string   "body"
+    t.integer  "subject_id",     null: false
+    t.integer  "private_key_id"
+    t.integer  "issuer_id"
+    t.string   "key_type",       null: false
+    t.string   "curve_name"
+    t.string   "hash_algorithm", null: false
+    t.integer  "bit_length"
+    t.boolean  "is_ca",          null: false
+    t.datetime "not_before",     null: false
+    t.datetime "not_after",      null: false
+    t.string   "body",           null: false
     t.string   "modulus_hash"
-    t.datetime "not_before"
-    t.datetime "not_after"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "revocation_endpoints", force: :cascade do |t|
