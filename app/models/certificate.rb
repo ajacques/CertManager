@@ -80,7 +80,7 @@ class Certificate < ActiveRecord::Base
     R509::CSR.new key: private_key.to_pem, subject: subject.to_r509
   end
   def sign(public_key)
-    public_key.issuer_id = self.issuer_id
+    public_key.issuer_subject_id = self.subject_id
     cert = public_key.to_openssl
     cert.sign private_key.to_openssl, public_key.hash_algorithm
     public_key.body = cert.to_s
@@ -107,7 +107,7 @@ class Certificate < ActiveRecord::Base
     else
       cert.subject_alternate_names.clear
     end
-    cert.public_key = PublicKey.from_r509(r509)
+    cert.public_key = PublicKey.from_pem(crt)
     cert.subject = Subject.from_r509(r509.subject)
     r509.san.names.each do |san|
       san = SubjectAlternateName.new name: san.value

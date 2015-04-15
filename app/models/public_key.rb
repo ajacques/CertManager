@@ -2,11 +2,15 @@ class PublicKey < ActiveRecord::Base
   has_one :certificate
   belongs_to :subject, autosave: true
   belongs_to :private_key
+  belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :revocation_endpoints, autosave: true
   has_many :extensions, class_name: 'CertificateExtension', autosave: true
   accepts_nested_attributes_for :subject
   accepts_nested_attributes_for :extensions
-  validates :key_type, inclusion: { in: %W(rsa), message: '%{value} is not a supported key type' }
+  validates :key_type, presence: true,  inclusion: { in: %W(rsa), message: '%{value} is not a supported key type' }
+  validates :bit_length, numericality: { only_integer: true, greater_than: 0 }
+  before_save :update_thumbprint
+  after_initialize :set_defaults
 
   def to_pem
     self.body
@@ -38,16 +42,16 @@ class PublicKey < ActiveRecord::Base
     })
   end
 
-  def self.from_r509(crt)
-    PublicKey.find_or_initialize_by(body: crt.to_pem) do |r|
-      r.subject = Subject.from_r509(crt.subject)
-      %w(not_before not_after hash_algorithm bit_length).each do |attrib|
-        r.send("#{attrib}=", crt.send(attrib))
+  def self.from_pem(pem)
+    PublicKey.find_or_initialize_by(body: pem) do |r|
+      r509 = R509::Cert.new cert: pem
+      r.subject = Subject.from_r509(r509.subject)
+      %w(not_before not_after bit_length).each do |attrib|
+        r.send("#{attrib}=", r509.send(attrib))
       end
-      crt.crl_distribution_points.uris.each do |uri|
-        r.revocation_endpoints << RevocationEndpoint.find_or_initialize_by(uri_type: 'crl', endpoint: uri)
-      end if crt.crl_distribution_points.present?
-      r.modulus_hash = crt.fingerprint
+      r.key_type = r509.key_algorithm.downcase
+      r.hash_algorithm = r509.signature_algorithm
+      r.is_ca = r509.basic_constraints.try(:is_ca?) || false
     end
   end
   def self.from_private_key(key)
@@ -56,5 +60,16 @@ class PublicKey < ActiveRecord::Base
       pub.send("#{attrib}=", key.send(attrib))
     end
     pub
+  end
+
+  private
+  def update_thumbprint
+    if body
+
+    end
+  end
+  def set_defaults
+
+    self.is_ca ||= false
   end
 end

@@ -19,7 +19,7 @@
 %aside
   %ul
     %li= link_to 'Show certificate (PEM)', format: :pem
-    %li #{link_to 'Download chain', chain_certificate_path} #{link_to '(PEM)', chain_certificate_path(format: :pem)}
+    %li #{link_to 'Certificate chain', certificate_path(include_chain: true)} #{link_to '(PEM)', certificate_path(chain: true, format: :pem)}
     - if @cert.private_key
       %li= link_to 'Renew', action: :csr
 = render partial: 'validator', locals: {public_key: @cert.public_key}

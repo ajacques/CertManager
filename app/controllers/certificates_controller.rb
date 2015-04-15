@@ -11,10 +11,18 @@ class CertificatesController < ApplicationController
   end
 
   def show
-    @cert = Certificate.eager_load(:subject, :public_key).includes(:subject_alternate_names).find(params[:id])
+    @cert = Certificate.eager_load(:subject, :public_key, :private_key).includes(:services, :subject_alternate_names).find(params[:id])
+    if params.has_key? :chain
+      chain = @cert.chain
+      chain.delete_at(0) if params.has_key? :exclude_root
+    else
+      chain = [@cert]
+    end
     respond_to do |format|
       format.pem {
-        render plain: @cert.public_key.to_pem
+        render plain: chain.map {|cert|
+          cert.public_key.body
+        }.join()
       }
       format.html {
         if @cert.public_key
@@ -73,12 +81,13 @@ class CertificatesController < ApplicationController
     # Welcome to hell
     @certs = []
     @bad_certs = []
-    certs.each do |cert2|
+    certs.each do |pem|
       begin
-        cert3 = R509::Cert.new cert: cert2
-        cert = Certificate.import cert2
-        cert.issuer_subject = cert3.issuer
-        logger.info "Certificate: #{cert.inspect} for #{cert3.subject}"
+        r509 = R509::Cert.new cert: pem
+        cert = Certificate.import pem
+        cert.issuer_subject = r509.issuer
+        cert.updated_by = cert.created_by = current_user
+        logger.info "Certificate: #{cert.inspect} for #{r509.subject}"
         cert.save! if cert.id.nil?
         @certs << cert
       rescue R509::R509Error => e
@@ -88,7 +97,7 @@ class CertificatesController < ApplicationController
     keys.each { |key|
       pkey = R509::PrivateKey.new key: key
       cert = @certs.find {|c|
-          c.public_key.modulus_hash == Digest::SHA1.hexdigest(pkey.key.params['n'].to_s) if c.public_key
+          c.public_key.fingerprint == Digest::SHA1.hexdigest(pkey.key.params['n'].to_s) if c.public_key
         }
       if cert.present?
         cert.private_key_data = pkey.to_pem

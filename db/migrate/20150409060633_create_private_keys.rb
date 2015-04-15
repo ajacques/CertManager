@@ -4,7 +4,7 @@ class CreatePrivateKeys < ActiveRecord::Migration
       t.string :key_type, null: false
       t.integer :bit_length, null: false
       t.string :curve_name
-      t.string :thumbprint, null: false
+      t.string :fingerprint, null: false
       t.string :pem
 
       t.timestamps null: false

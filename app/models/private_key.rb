@@ -25,7 +25,7 @@ class PrivateKey < ActiveRecord::Base
     if valid? and new_record? and rsa?
       rsa = R509::PrivateKey.new type: key_type, bit_length: bit_length
       self.pem = rsa.to_pem
-      self.thumbprint = Digest::SHA1.hexdigest(rsa.key.params['n'].to_s)
+      self.fingerprint = Digest::SHA1.hexdigest(rsa.key.params['n'].to_s)
     end
   end
 end

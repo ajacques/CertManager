@@ -3,7 +3,7 @@ class CreatePublicKeys < ActiveRecord::Migration
     create_table :public_keys do |t|
       t.integer :subject_id, null: false
       t.integer :private_key_id
-      t.integer :issuer_id
+      t.integer :issuer_subject_id
       t.string :key_type, null: false
       t.string :curve_name
       t.string :hash_algorithm, null: false
@@ -13,7 +13,7 @@ class CreatePublicKeys < ActiveRecord::Migration
       t.datetime :not_after, null: false
 
       t.string :body, null: false
-      t.string :modulus_hash
+      t.string :fingerprint
 
       t.timestamps null: false
     end
