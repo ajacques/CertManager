@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2'
+gem 'rails', '4.2.1'
 
 # User Interface Gems
 gem 'haml'
@@ -10,6 +10,7 @@ gem 'bootstrap_form'
 gem 'will_paginate'
 
 gem 'redis'
+gem 'redis-session-store'
 gem 'devise'
 
 gem 'r509' # SSL certificate utilities
@@ -17,12 +18,14 @@ gem 'r509' # SSL certificate utilities
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+group :assets, :development do
+  # Use jquery as the JavaScript library
+  gem 'jquery-rails'
+  # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+  gem 'turbolinks'
 
-gem 'bootstrap-sass'
+  gem 'bootstrap-sass'
+end
 
 group :assets do
   # Use SCSS for stylesheets
@@ -38,6 +41,8 @@ group :development do
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 gem 'unicorn'

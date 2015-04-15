@@ -13,12 +13,7 @@
     = javascript_include_tag 'application', data: {turbolinks_track: true}
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
-    - if user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests
-      %header
-        %nav.bg-danger
-          .container
-            %span Background refresh job hasn't run recently (last run #{bg_refresh_last_update_in_words}). Certificate validation will be incorrect.
-            = link_to 'Refresh now', jobs_refresh_all_path, method: :post
+    = render partial: 'layouts/header'
     = render partial: 'layouts/navbar'
     .container
       = yield

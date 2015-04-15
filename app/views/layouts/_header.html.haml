@@ -1,0 +1,6 @@
+- if false and user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests
+  %header
+    %nav.bg-danger
+      .container
+        %span Background refresh job hasn't run recently (last run #{bg_refresh_last_update_in_words}). Certificate validation will be incorrect.
+        = link_to 'Refresh now', jobs_refresh_all_path, method: :post
