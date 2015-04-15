@@ -24,10 +24,13 @@ class User < ActiveRecord::Base
   def to_s
     "#{first_name} #{last_name}"
   end
-  def self.authenticate(username, password)
+  def self.authenticate!(username, password)
     user = find_by_email(username)
-    return nil  if user.nil?
-    return user if user.password_matches?(password) and user.can_login?
+    if user.present? and user.password_matches?(password) and user.can_login?
+      user.last_sign_in_at = Time.now
+      user.save!
+      user
+    end
   end
 
   private

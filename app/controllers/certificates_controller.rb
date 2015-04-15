@@ -7,6 +7,7 @@ class CertificatesController < ApplicationController
     if @query
       @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
+    @certs = @certs.expiring_in params[:expiring_in].to_i.seconds if params.has_key? :expiring_in
     @expiring = [] #@certs.expiring_in(30.days).order('not_after asc')
   end
 

@@ -8,14 +8,12 @@ class SessionsController < ApplicationController
   end
 
   def create
-    unless user = User.authenticate(params[:email], params[:password])
+    unless user = User.authenticate!(params[:email], params[:password])
       logger.info "#{params[:email]} did not match any known users"
       redirect_to action: :new
       return
     end
 
-    user.last_sign_in_at = Time.now
-    user.save!
     url = session[:return_url] || root_path
     reset_session
     session[:user_id] = user.id
