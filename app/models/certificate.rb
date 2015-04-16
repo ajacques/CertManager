@@ -21,10 +21,11 @@ class Certificate < ActiveRecord::Base
   # Scopes
   scope :expiring_in, -> time { joins(:public_key).where('public_keys.not_after < ? ', Time.now + time) if time.present? }
   scope :expired, -> { joins(:public_key).where('public_keys.not_after < ?', Time.now) }
-  scope :owned, -> { where('private_key_id IS NOT NULL') }
-  scope :signed, -> { where('public_key_id IS NOT NULL') }
+  scope :owned, -> { where('certificates.private_key_id IS NOT NULL') }
+  scope :signed, -> { where('certificates.public_key_id IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
   scope :with_subject, -> subject { Certificate.joins(:subject).where(subjects: Subject.filter_params(subject.to_h)) }
+  scope :can_sign, -> { joins(:public_key).where(public_keys: { is_ca: true })}
 
   def status
     if private_key.present? and public_key.present?

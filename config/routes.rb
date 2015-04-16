@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#create', as: :user_session
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
   resources :users, only: [:create, :index, :new, :show, :update], constraints: {
-    id: /[0-9]/
+    id: /[0-9]+/
   } do
     member do
       post 'lock'
@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     end
   end
   resources :services, constraints: {
-    id: /[0-9]/
+    id: /[0-9]+/
   } do
     member do
       get 'deploy'

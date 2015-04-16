@@ -17,7 +17,6 @@ class SigningController < ApplicationController
     end
     signee.public_key = public_key = PublicKey.from_private_key signee.private_key
     public_key.assign_attributes certificate_params
-    public_key.issuer_id = signer.id
     signer.sign(public_key)
     signee.save!
 
