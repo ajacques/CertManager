@@ -3,17 +3,19 @@ class SigningController < ApplicationController
     @signee = Certificate.find(params[:another_id])
     @signer = Certificate.find(params[:id])
     @public_key = PublicKey.new subject: @signee.subject
+    @public_key.not_before = Time.now
+    @public_key.not_after = Time.now + 1.year
+    @public_key.hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
     @allow_subject_changes = @signer != @signee
     @self_signing = @signer == @signee
-    @hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
   end
 
   def sign_cert
     signer = Certificate.find(params[:id])
-    signee = if params[:id] == params[:another_id]
-     signer
+    if params[:id] == params[:another_id]
+     signee = signer
     else
-     Certificate.find(params[:another_id])
+     signee = Certificate.find(params[:another_id])
     end
     signee.public_key = public_key = PublicKey.from_private_key signee.private_key
     public_key.assign_attributes certificate_params

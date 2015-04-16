@@ -81,6 +81,7 @@ class Certificate < ActiveRecord::Base
     R509::CSR.new key: private_key.to_pem, subject: subject.to_r509
   end
   def sign(public_key)
+    raise 'Must be a CA cert to sign other certs' unless self.public_key.is_ca?
     public_key.issuer_subject_id = self.subject_id
     cert = public_key.to_openssl
     cert.sign private_key.to_openssl, public_key.hash_algorithm

@@ -15,21 +15,27 @@
     = sb.text_field :OU, label: 'Department Name', readonly: @self_signing
     = sb.text_field :C, label: 'Country', readonly: @self_signing
   = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
-    = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger', checked: @hash_algorithm == 'md5'
-    = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning', checked: @hash_algorithm == 'sha1'
-    = f.radio_button :hash_algorithm, 'sha256', label: 'SHA-256', checked: @hash_algorithm == 'sha256'
-    = f.radio_button :hash_algorithm, 'sha384', label: 'SHA-384', checked: @hash_algorithm == 'sha384'
-    = f.radio_button :hash_algorithm, 'sha512', label: 'SHA-512', checked: @hash_algorithm == 'sha512'
-  = f.form_group :extensions_attributes, label: { text: 'Attributes' } do
+    = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger'
+    = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning'
+    - CertManager::SecurityPolicy.hash_algorithm.secure.each do |hash|
+      = f.radio_button :hash_algorithm, hash, label: t("hash.#{hash}")
+  = f.form_group :extensions_attributes, label: { text: 'Constraints' } do
     = f.check_box :is_ca, label: 'Can sign other certificates'
   - start = Time.now.utc
-  = f.text_field :not_before, value: start, readonly: true
-  = f.text_field :not_after, value: (start + 1.years), label: 'Expires in n years'
-  - if @signee.services.any?
-    = f.check_box :auto_deploy, label: "Deploy to #{pluralize @signee.services.count, 'service'}"
-    %p Push the certificate to all assigned hosts after signing
-    %h5 Services:
-    %ul
-      - @signee.services.each do |service|
-        %li= link_to service, service
+  = f.text_field :not_before, readonly: true
+  = f.text_field :not_after
+  .form-group
+    %label.control-label.col-sm-2 Deployment
+    .col-sm-10
+      - if @signee.services.any?
+        = fields_for :certificate do |c|
+          .checkbox
+            = c.label :auto_deploy do
+              = c.check_box :auto_deploy
+              %span Deploy to #{pluralize @signee.services.count, 'service'}
+        %p Push the certificate to all assigned hosts after signing
+        %h5 Services:
+        %ul
+          - @signee.services.each do |service|
+            %li= link_to service, service
   = f.submit 'Sign this certificate', class: 'btn btn-danger center-block'

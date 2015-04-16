@@ -27,6 +27,9 @@ module CertManager
       def default
         @set['default']
       end
+      def secure
+        @set['secure']
+      end
       def insecure?(method)
         not secure? method
       end
