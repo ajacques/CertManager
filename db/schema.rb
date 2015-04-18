@@ -13,13 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20150409060633) do
 
-  create_table "certificate_requests", force: :cascade do |t|
-    t.integer  "subject_id"
-    t.string   "body"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "certificates", force: :cascade do |t|
     t.integer  "private_key_id"
     t.integer  "subject_id",     null: false
@@ -77,8 +70,8 @@ ActiveRecord::Schema.define(version: 20150409060633) do
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|
-    t.integer "certificate_id"
-    t.string  "name"
+    t.integer "public_key_id", null: false
+    t.string  "name",          null: false
   end
 
   create_table "subjects", force: :cascade do |t|

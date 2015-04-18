@@ -4,9 +4,8 @@ class PublicKey < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
-  has_many :extensions, class_name: 'CertificateExtension', autosave: true
+  has_many :subject_alternate_names, autosave: true, dependent: :delete_all
   accepts_nested_attributes_for :subject
-  accepts_nested_attributes_for :extensions
   validates :key_type, presence: true, inclusion: { in: %W(rsa), message: '%{value} is not a supported key type' }
   validates :bit_length, numericality: { only_integer: true, greater_than: 0 }
   validates :hash_algorithm, presence: true, inclusion: { in: %W(md5 sha1 sha256 sha384 sha512), message: '%{value} is not an expected hash_algorithm' }

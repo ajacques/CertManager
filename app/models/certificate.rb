@@ -3,7 +3,6 @@ class Certificate < ActiveRecord::Base
   attr_accessor :issuer_subject
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
-  has_many :subject_alternate_names, autosave: true, dependent: :delete_all
   has_many :services
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
@@ -104,15 +103,9 @@ class Certificate < ActiveRecord::Base
     cert = Certificate.with_subject(r509.subject).first
     if cert.nil?
       cert = Certificate.new
-    else
-      cert.subject_alternate_names.clear
     end
     cert.public_key = PublicKey.from_pem(crt)
     cert.subject = Subject.from_r509(r509.subject)
-    r509.san.names.each do |san|
-      san = SubjectAlternateName.new name: san.value
-      cert.subject_alternate_names << san
-    end if r509.san
     cert
   end
 

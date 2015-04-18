@@ -39,4 +39,7 @@ module HasPublicKey
   def crl_enabled?
     crl_endpoints.present?
   end
+  def subject_alternate_names
+    public_key.subject_alternate_names
+  end
 end

@@ -10,7 +10,7 @@ module CertManager
       end
 
       def method_missing(method, *args, &block)
-        load_file unless @config
+        load_file unless @config and not Rails.env.development?
         set = @config.send(method, *args)
         if set['type'] == 'array'
           ArrayPolicyChecker.new(set)
