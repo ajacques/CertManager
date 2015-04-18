@@ -1,5 +1,3 @@
-require 'digest/sha1'
-
 class Certificate < ActiveRecord::Base
   # Associations
   attr_accessor :issuer_subject

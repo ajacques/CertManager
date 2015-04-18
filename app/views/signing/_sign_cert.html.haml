@@ -1,0 +1,29 @@
+= bootstrap_form_for @public_key, url: url_for(action: :sign_cert), layout: :horizontal do |f|
+  - if not @allow_subject_changes
+    .bg-info These values can't be changed because you're self signing
+  = hidden_field_tag 'redirect_to', certificate_path(@signee)
+  = render partial: 'subject_form', locals: { f: f }
+  = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
+    = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger'
+    = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning'
+    - CertManager::SecurityPolicy.hash_algorithm.secure.each do |hash|
+      = f.radio_button :hash_algorithm, hash, label: t("hash.#{hash}")
+  = f.form_group :extensions_attributes, label: { text: 'Constraints' } do
+    = f.check_box :is_ca, label: 'Can sign other certificates'
+  = f.text_field :not_before
+  = f.text_field :not_after
+  .form-group
+    %label.control-label.col-sm-2 Deployment
+    .col-sm-10
+      - if @signee.services.any?
+        = fields_for :certificate do |c|
+          .checkbox
+            = c.label :auto_deploy do
+              = c.check_box :auto_deploy
+              %span Deploy to #{pluralize @signee.services.count, 'service'}
+        %p Push the certificate to all assigned hosts after signing
+        %h5 Services:
+        %ul
+          - @signee.services.each do |service|
+            %li= link_to service, service
+  = f.submit 'Sign this certificate', class: 'btn btn-danger center-block'

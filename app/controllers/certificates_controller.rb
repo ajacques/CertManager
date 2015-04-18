@@ -128,6 +128,6 @@ class CertificatesController < ApplicationController
   def certificate_params
     params.require(:certificate)
       .permit(subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST],
-              private_key_attributes: [:bit_length, :key_type])
+              private_key_attributes: [:bit_length, :key_type, :curve_name])
   end
 end

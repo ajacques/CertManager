@@ -8,4 +8,5 @@ hash_algorithm:
 
 bit_length:
   type: integer
+  default: 2048
   min_secure: 2048

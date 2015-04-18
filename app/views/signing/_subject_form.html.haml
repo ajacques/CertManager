@@ -1,0 +1,5 @@
+= f.fields_for :subject do |sb|
+  = sb.text_field :CN, label: 'Common Name'
+  = sb.text_field :O, label: 'Organization Name'
+  = sb.text_field :OU, label: 'Department Name'
+  = sb.text_field :C, label: 'Country', data: {ng: {bind: 'country-select'}}

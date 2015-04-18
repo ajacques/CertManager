@@ -18,8 +18,9 @@ def new_key_pair!(opts={})
   public.not_after = Time.now + 1.year
   public.assign_attributes opts.slice(:is_ca)
   cert = Certificate.new(opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] }))
-  cert.sign(public)
-  cert.issuer = cert
+  signer = opts[:issuer] || cert
+  signer.sign(public)
+  cert.issuer = signer
   cert.save!
   cert
 end

@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20150409060633) do
     t.integer  "bit_length",  null: false
     t.string   "curve_name"
     t.string   "fingerprint", null: false
-    t.string   "pem"
+    t.binary   "body",        null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

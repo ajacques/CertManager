@@ -5,7 +5,7 @@ class CreatePrivateKeys < ActiveRecord::Migration
       t.integer :bit_length, null: false
       t.string :curve_name
       t.string :fingerprint, null: false
-      t.string :pem
+      t.binary :body, null: false
 
       t.timestamps null: false
     end

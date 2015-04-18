@@ -35,8 +35,8 @@ module CertManager
       end
     end
     class ArrayPolicyChecker < PolicyChecker
-      def secure?(method)
-        @set['secure'].include?(method)
+      def secure?(value)
+        @set['secure'].include? value
       end
     end
     class IntegerPolicyChecker < PolicyChecker

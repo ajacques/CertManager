@@ -11,9 +11,11 @@
     = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
     = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
   = f.fields_for :private_key_attributes do |pk|
-    = pk.hidden_field :key_type, value: 'rsa'
+    = pk.form_group :key_type, label: { text: 'Key algorithm' } do
+      = pk.radio_button :key_type, 'rsa', checked: true, label: 'RSA'
     = f.form_group :bit_length, label: { text: 'Bit length' } do
-      = pk.radio_button :bit_length, 1024, label: '1024 bit (insecure)', class: 'bg-danger'
-      = pk.radio_button :bit_length, 2048, label: '2048 bit', checked: true
-      = pk.radio_button :bit_length, 4096, label: '4096 bit'
+      - default = CertManager::SecurityPolicy.bit_length.default
+      - (10..12).map {|b| 2 ** b}.each do |bit, secure|
+        - insecure = CertManager::SecurityPolicy.bit_length.insecure? bit
+        = pk.radio_button :bit_length, bit, label: "#{bit} bit #{'(insecure)' if insecure}", checked: default == bit
   = f.submit 'Create Certificate', class: 'btn btn-primary'
