@@ -1,0 +1,106 @@
+{
+  "family": "CertManager",
+  "containerDefinitions": [
+    {
+      "name": "redis",
+      "image": "redis:latest",
+      "cpu": 256,
+      "memory": 256,
+      "entryPoint": [],
+      "environment": [],
+      "command": [],
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "containerPort": 6379
+        }
+      ],
+      "volumesFrom": [],
+      "links": [],
+      "mountPoints": [],
+      "essential": true
+    },
+    {
+      "name": "nginx",
+      "image": "nginx:latest",
+      "cpu": 256,
+      "memory": 16,
+      "entryPoint": [],
+      "environment": [],
+      "command": [],
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "volumesFrom": [],
+      "links": [],
+      "mountPoints": [
+        {
+          "sourceVolume": "nginx-config",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": false
+        }
+      ],
+      "essential": true
+    },
+    {
+      "name": "docker-gen",
+      "image": "jwilder/docker-gen:latest",
+      "cpu": 64,
+      "memory": 8,
+      "entryPoint": [],
+      "environment": [],
+      "command": [
+        "-notify-sighup",
+        "nginx",
+        "-watch",
+        "-only-exposed",
+        "/etc/docker-gen/templates/nginx.tmpl",
+        "/etc/nginx/conf.d/docker.conf"
+      ],
+      "portMappings": [],
+      "volumesFrom": [
+        {
+          "sourceContainer": "nginx",
+          "readOnly": false
+        }
+      ],
+      "links": [],
+      "mountPoints": [
+        {
+          "sourceVolume": "docker-socket",
+          "containerPath": "/tmp/docker.sock",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "gen-templates",
+          "containerPath": "/etc/docker-gen/templates",
+          "readOnly": false
+        }
+      ],
+      "essential": true
+    }
+  ],
+  "volumes": [
+    {
+      "name": "gen-templates",
+      "host": {
+        "sourcePath": "/tmp/templates"
+      }
+    },
+    {
+      "name": "docker-socket",
+      "host": {
+        "sourcePath": "/var/run/docker.sock"
+      }
+    },
+    {
+      "name": "nginx-config",
+      "host": {
+        "sourcePath": null
+      }
+    }
+  ]
+}

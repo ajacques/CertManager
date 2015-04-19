@@ -1,4 +1,9 @@
 {
+  "Mappings": {
+    "EcsAmiIds": {
+      "us-east-1": {"ami": "ami-ecd5e884"}
+    }
+  },
   "Parameters": {
     "WebsiteApplicationS3Bucket": {
       "Description": "S3 bucket to find application release",
@@ -33,6 +38,20 @@
       "Type" : "String",
       "Description" : "ECS AMI Id"
     },
+    "IamRoleInstanceProfile" : {
+      "Type" : "String",
+      "Description" : "Name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance"
+    },
+    "EcsClusterName" : {
+      "Type": "String",
+      "Description": "ECS Cluster Name",
+      "Default": "default"
+    },
+    "AsgMaxSize" : {
+      "Type" : "Number",
+      "Description" : "Maximum size and initial Desired Capacity of ECS Auto Scaling Group",
+      "Default" : "1"
+    },
   },
   "Resources": {
     "RootVPC": {
@@ -46,7 +65,7 @@
       "Type": "AWS::EC2::Subnet",
       "Properties": {
         "CidrBlock": "10.0.1.0/26",
-        "VpcId": { "Ref": "RootVPC" },
+        "VpcId": { "Ref": "RootVPC" }
       }
     },
     "MainRouteTable": {
@@ -138,88 +157,28 @@
         }
       }
     },
-    "Application": {
-      "Type": "AWS::ElasticBeanstalk::Application"
-    },
-    "ApplicationVersion": {
-      "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+    "HostInstance": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
-        "ApplicationName": { "Ref": "Application" },
-        "SourceBundle": {
-          "S3Bucket": { "Ref": "WebsiteApplicationS3Bucket" },
-          "S3Key": { "Ref": "WebsiteApplicationS3FileName" }
+        "ImageId": { "Fn::FindInMap": ["EcsAmiIds", {"Ref": "AWS::Region"}, "ami" ] },
+        "InstanceType": { "Ref": "" },
+        "AssociatePublicIpAddress": true,
+        "IamInstanceProfile": { "Ref": "IamRoleInstanceProfile" },
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroups": [ { "Ref": "AppServerSecurityGroup" } ],
+        "UserData": { "Fn::Base64": { "Fn::Join" : ["", [
+            "#!/bin/bash\n",
+            "echo ECS_CLUSTER=", { "Ref" : "EcsClusterName" }, " >> /etc/ecs/ecs.config"
+          ]]}
         }
       }
     },
-    "FrontendTemplate": {
-      "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
-      "Properties": {
-        "ApplicationName": { "Ref": "Application" },
-        "SolutionStackName": "64bit Amazon Linux 2014.09 v1.2.0 running Ruby 2.1 (Puma)",
-        "OptionSettings": [
-          {
-            "Namespace": "aws:autoscaling:asg",
-            "OptionName": "MinSize",
-            "Value": "1"
-          },
-          {
-            "Namespace": "aws:autoscaling:asg",
-            "OptionName": "MaxSize",
-            "Value": "1"
-          },
-          {
-            "Namespace": "aws:autoscaling:launchconfiguration",
-            "OptionName": "EC2KeyName",
-            "Value": { "Ref": "KeyName" }
-          },
-          {
-            "Namespace": "aws:autoscaling:launchconfiguration",
-            "OptionName": "InstanceType",
-            "Value": { "Ref": "FrontendAppServerType" }
-          },
-          {
-            "Namespace": "aws:autoscaling:updatepolicy:rollingupdate",
-            "OptionName": "RollingUpdateEnabled",
-            "Value": "true"
-          },
-          {
-            "Namespace": "aws:ec2:vpc",
-            "OptionName": "VPCId",
-            "Value": { "Ref": "RootVPC" }
-          },
-          {
-            "Namespace": "aws:ec2:vpc",
-            "OptionName": "Subnets",
-            "Value": { "Fn::Join" : [
-              ",",
-              [
-                { "Ref": "FrontendSubnet1" }
-              ]
-            ]}
-          },
-          {
-            "Namespace": "aws:elasticbeanstalk:application",
-            "OptionName": "Application Healthcheck URL",
-            "Value": "/"
-          },
-          {
-            "Namespace": "aws:elasticbeanstalk:environment",
-            "OptionName": "EnvironmentType",
-            "Value": "LoadBalanced"
-          }
-        ]
-      }
-    },
-    "FrontendEnvironment": {
-      "Type": "AWS::ElasticBeanstalk::Environment",
-      "Properties": {
-        "ApplicationName": { "Ref": "Application" },
-        "Description": "Front-end application servers",
-        "TemplateName": { "Ref": "FrontendTemplate" },
-        "Tier": {
-          "Name": "WebServer",
-          "Type": "Standard"
-        }
+    "EcsInstanceAsg": {
+      "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "VPCZoneIdentifier" : { "Fn::Join" : [",", [ { "Ref" : "FrontendSubnet1" } ] ] },
+        "MinSize" : "0",
+        "MaxSize" : { "Ref" : "AsgMaxSize" }
       }
     },
     "AppServerSecurityGroup": {
