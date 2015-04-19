@@ -1,0 +1,246 @@
+{
+  "Parameters": {
+    "WebsiteApplicationS3Bucket": {
+      "Description": "S3 bucket to find application release",
+      "Type": "String"
+    },
+    "WebsiteApplicationS3FileName": {
+      "Description": "S3 file name for application file",
+      "Type": "String"
+    },
+    "KeyName": {
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "CacheNodeType": {
+      "Description": "ElastiCache instance type",
+      "Default": "cache.t1.micro",
+      "AllowedValues": [
+        "cache.t1.micro"
+      ],
+      "Type": "String"
+    },
+    "FrontendAppServerType": {
+      "Description": "Application server instance type",
+      "Default": "t1.micro",
+      "AllowedValues": [
+        "t1.micro"
+      ],
+      "Type": "String"
+    },
+    "EcsAmiId" : {
+      "Type" : "String",
+      "Description" : "ECS AMI Id"
+    },
+  },
+  "Resources": {
+    "RootVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true
+      }
+    },
+    "FrontendSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.1.0/26",
+        "VpcId": { "Ref": "RootVPC" },
+      }
+    },
+    "MainRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
+    "FrontendACL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
+    "FrontendACLAssoc": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "FrontendSubnet1" },
+        "NetworkAclId": { "Ref": "FrontendACL" }
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway"
+    },
+    "AttachInternetGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": { "Ref": "RootVPC" },
+        "InternetGatewayId": { "Ref": "InternetGateway" }
+      }
+    },
+    "InternetRoute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": { "Ref": "InternetGateway" },
+        "RouteTableId": { "Ref" : "MainRouteTable" }
+      }
+    },
+    "FrontendRouteTableAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "FrontendSubnet1" },
+        "RouteTableId": { "Ref": "MainRouteTable" }
+      }
+    },
+    "FrontendACLPermitHTTPIn": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": { "Ref": "FrontendACL" },
+        "CidrBlock": "0.0.0.0/0",
+        "RuleNumber": 1,
+        "RuleAction": "allow",
+        "Protocol": 6,
+        "Egress": false,
+        "PortRange": {
+          "From": 80,
+          "To": 80
+        }
+      }
+    },
+    "FrontendACLPermitEphemeralIn": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": { "Ref": "FrontendACL" },
+        "CidrBlock": "0.0.0.0/0",
+        "RuleNumber": 2,
+        "RuleAction": "allow",
+        "Protocol": 6,
+        "Egress": false,
+        "PortRange": {
+          "From": 0,
+          "To": 65535
+        }
+      }
+    },
+    "FrontendACLPermitAllOut": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": { "Ref": "FrontendACL" },
+        "RuleNumber": 1,
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": 6,
+        "Egress": true,
+        "PortRange": {
+          "From": 0,
+          "To": 65535
+        }
+      }
+    },
+    "Application": {
+      "Type": "AWS::ElasticBeanstalk::Application"
+    },
+    "ApplicationVersion": {
+      "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+      "Properties": {
+        "ApplicationName": { "Ref": "Application" },
+        "SourceBundle": {
+          "S3Bucket": { "Ref": "WebsiteApplicationS3Bucket" },
+          "S3Key": { "Ref": "WebsiteApplicationS3FileName" }
+        }
+      }
+    },
+    "FrontendTemplate": {
+      "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
+      "Properties": {
+        "ApplicationName": { "Ref": "Application" },
+        "SolutionStackName": "64bit Amazon Linux 2014.09 v1.2.0 running Ruby 2.1 (Puma)",
+        "OptionSettings": [
+          {
+            "Namespace": "aws:autoscaling:asg",
+            "OptionName": "MinSize",
+            "Value": "1"
+          },
+          {
+            "Namespace": "aws:autoscaling:asg",
+            "OptionName": "MaxSize",
+            "Value": "1"
+          },
+          {
+            "Namespace": "aws:autoscaling:launchconfiguration",
+            "OptionName": "EC2KeyName",
+            "Value": { "Ref": "KeyName" }
+          },
+          {
+            "Namespace": "aws:autoscaling:launchconfiguration",
+            "OptionName": "InstanceType",
+            "Value": { "Ref": "FrontendAppServerType" }
+          },
+          {
+            "Namespace": "aws:autoscaling:updatepolicy:rollingupdate",
+            "OptionName": "RollingUpdateEnabled",
+            "Value": "true"
+          },
+          {
+            "Namespace": "aws:ec2:vpc",
+            "OptionName": "VPCId",
+            "Value": { "Ref": "RootVPC" }
+          },
+          {
+            "Namespace": "aws:ec2:vpc",
+            "OptionName": "Subnets",
+            "Value": { "Fn::Join" : [
+              ",",
+              [
+                { "Ref": "FrontendSubnet1" }
+              ]
+            ]}
+          },
+          {
+            "Namespace": "aws:elasticbeanstalk:application",
+            "OptionName": "Application Healthcheck URL",
+            "Value": "/"
+          },
+          {
+            "Namespace": "aws:elasticbeanstalk:environment",
+            "OptionName": "EnvironmentType",
+            "Value": "LoadBalanced"
+          }
+        ]
+      }
+    },
+    "FrontendEnvironment": {
+      "Type": "AWS::ElasticBeanstalk::Environment",
+      "Properties": {
+        "ApplicationName": { "Ref": "Application" },
+        "Description": "Front-end application servers",
+        "TemplateName": { "Ref": "FrontendTemplate" },
+        "Tier": {
+          "Name": "WebServer",
+          "Type": "Standard"
+        }
+      }
+    },
+    "AppServerSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Permit HTTP access",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
+    "CacheSecurityGroup": {
+      "Type": "AWS::ElastiCache::SecurityGroup",
+      "Properties": {
+        "Description": "Lock the cluster down"
+      }
+    }
+  }
+}
