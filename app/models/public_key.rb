@@ -13,7 +13,7 @@ class PublicKey < ActiveRecord::Base
   after_initialize :set_defaults
 
   def to_pem
-    "------BEGIN CERTIFICATE------\n#{Base64.encode64(self.body)}------END CERTIFICATE-----"
+    "-----BEGIN CERTIFICATE-----\n#{Base64.encode64(self.body)}-----END CERTIFICATE-----"
   end
   def rsa?
     key_type == 'rsa'

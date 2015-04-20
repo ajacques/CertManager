@@ -2,7 +2,7 @@ class Certificate < ActiveRecord::Base
   # Associations
   attr_accessor :issuer_subject
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
-  has_many :sub_certificates, class_name: 'Certificate', foreign_key: 'issuer_id'
+  has_many :sub_certificates, -> { where('certificates.issuer_id != certificates.id') }, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :services
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
