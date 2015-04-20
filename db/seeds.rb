@@ -9,8 +9,8 @@
 user = User.create!({email: 'user@example.com', password: 'testtest', can_login: true, first_name: 'John-Paul', last_name: 'Jones'})
 
 def new_key_pair!(opts={})
-  subject = Subject.new opts.slice(:CN, :O, :OU)
-  private = PrivateKey.new opts.slice(:key_type, :bit_length)
+  subject = Subject.new opts.slice(*Subject.safe_attributes)
+  private = PrivateKey.new opts.slice(:key_type, :bit_length, :curve_name)
   public = PublicKey.from_private_key(private)
   public.subject = subject
   public.hash_algorithm = 'sha256'
@@ -25,6 +25,7 @@ def new_key_pair!(opts={})
   cert
 end
 
-ca = new_key_pair! CN: 'Fintech Internal CA', O: 'Fintech, Inc.', OU: 'InfoSec', key_type: 'rsa', bit_length: 2048, user: user, is_ca: true
+ca = new_key_pair! CN: 'Fintech Internal CA', O: 'Fintech, Inc.', OU: 'InfoSec', L: 'United States', key_type: 'rsa', bit_length: 2048, user: user, is_ca: true
 
 new_key_pair! CN: 'fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'rsa', bit_length: 2048, user: user, issuer: ca
+new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca

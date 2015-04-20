@@ -39,28 +39,31 @@ class Certificate < ActiveRecord::Base
   def to_s
     subject.to_s || 'No Subject'
   end
-  def as_json(param)
-    json = {
-      id: id,
-      subject: subject
+  def to_h
+    hash = {
+     id: id,
+     subject: subject
     }
-    json[:public_key] = nil
-    json.merge! ({
-      public_key: {
-        pem: public_key.to_pem
-      },
-      alternate_names: subject_alternate_names.map {|r| r.name},
-      ocsp: ocsp_endpoints,
-      issuer: ({
-        id: issuer.id,
-        subject: issuer.subject
-      } if issuer.present?),
-      not_before: public_key.not_before,
-      not_after: public_key.not_after
-    }) if public_key.present?
-    json[:private_key] = private_key
-    json[:crl_endpoints] = crl_endpoints if crl_endpoints
-    json.as_json(param)
+    hash[:public_key] = nil
+    hash.merge! ({
+                 public_key: {
+                  pem: public_key.to_pem
+                 },
+                 alternate_names: subject_alternate_names.map {|r| r.name},
+                 ocsp: ocsp_endpoints,
+                 issuer: ({
+                  id: issuer.id,
+                  subject: issuer.subject
+                 } if issuer.present?),
+                 not_before: public_key.not_before,
+                 not_after: public_key.not_after
+                }) if public_key.present?
+    hash[:private_key] = private_key
+    hash[:crl_endpoints] = crl_endpoints if crl_endpoints
+    hash
+  end
+  def as_json(param)
+    to_h.as_json(param)
   end
   def full_chain(include_private=false)
     chain = ''
@@ -82,7 +85,7 @@ class Certificate < ActiveRecord::Base
     public_key.issuer_subject_id = self.subject_id
     cert = public_key.to_openssl
     cert.sign private_key.to_openssl, public_key.hash_algorithm
-    public_key.body = cert.to_s
+    public_key.body = cert.to_der
     cert
   end
 

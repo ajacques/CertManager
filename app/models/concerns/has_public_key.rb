@@ -15,7 +15,7 @@ module HasPublicKey
       })
   end
   def expires_in
-    return 9999999.years if not expires?
+    return 9999999.years unless expires?
     self.public_key.not_after - Time.now
   end
   def expires?
@@ -40,6 +40,6 @@ module HasPublicKey
     crl_endpoints.present?
   end
   def subject_alternate_names
-    public_key.subject_alternate_names
+    public_key.try(:subject_alternate_names) || []
   end
 end

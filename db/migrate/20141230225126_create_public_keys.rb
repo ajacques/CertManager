@@ -12,7 +12,7 @@ class CreatePublicKeys < ActiveRecord::Migration
       t.datetime :not_before, null: false
       t.datetime :not_after, null: false
 
-      t.string :body, null: false
+      t.binary :body, null: false
       t.string :fingerprint
 
       t.timestamps null: false

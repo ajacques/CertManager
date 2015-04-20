@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20150409060633) do
 
   create_table "private_keys", force: :cascade do |t|
     t.string   "key_type",    null: false
-    t.integer  "bit_length",  null: false
+    t.integer  "bit_length"
     t.string   "curve_name"
     t.string   "fingerprint", null: false
     t.binary   "body",        null: false
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20150409060633) do
     t.boolean  "is_ca",             null: false
     t.datetime "not_before",        null: false
     t.datetime "not_after",         null: false
-    t.string   "body",              null: false
+    t.binary   "body",              null: false
     t.string   "fingerprint"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false

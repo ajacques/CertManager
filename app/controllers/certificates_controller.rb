@@ -3,7 +3,7 @@ include CrlHelper
 class CertificatesController < ApplicationController
   def index
     @query = params[:search]
-    @certs = Certificate.eager_load(:subject, :public_key, :private_key).paginate(page: params[:page])
+    @certs = Certificate.eager_load(:subject, :public_key, :private_key).includes(public_key: :subject_alternate_names).paginate(page: params[:page])
     if @query
       @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
@@ -21,9 +21,9 @@ class CertificatesController < ApplicationController
     end
     respond_to do |format|
       format.pem {
-        render plain: chain.map {|cert|
-          cert.public_key.body
-        }.join()
+        render body: chain.map {|cert|
+          cert.public_key.to_pem
+        }.join(), content_type: Mime::Type.lookup_by_extension(:pem)
       }
       format.html {
         if @cert.public_key
@@ -91,7 +91,8 @@ class CertificatesController < ApplicationController
         logger.info "Certificate: #{cert.inspect} for #{r509.subject}"
         cert.save! if cert.id.nil?
         @certs << cert
-      rescue R509::R509Error => e
+      rescue => e
+        logger.error "Failed to import #{cert}: {e}"
         @bad_certs << cert
       end
     end

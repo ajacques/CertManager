@@ -1,7 +1,7 @@
 class PrivateKey < ActiveRecord::Base
   has_one :certificate
   validates :key_type, inclusion: { in: %W(rsa ec), message: '%{value} must be a supported key type' }
-  validates :bit_length, numericality: { only_integer: true, greater_than: 0 }
+  validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
   validates :curve_name, presence: true, if: :ec?
   validates :curve_name, absence: true, if: 'not ec?'
   after_initialize :generate_key
@@ -28,8 +28,12 @@ class PrivateKey < ActiveRecord::Base
     if valid? and new_record?
       key = R509::PrivateKey.new key_attribs
       self.body = key.to_der
-      self.fingerprint = Digest::SHA1.hexdigest(key.key.params['n'].to_s)
+      self.fingerprint = Digest::SHA1.hexdigest(public_param(key))
     end
+  end
+  def public_param(key)
+    return key.key.params['n'].to_s if rsa?
+    return key.key.public_key.to_bn.to_s if ec?
   end
   def key_attribs
     self.slice(:bit_length, :curve_name).merge(type: self.key_type)
