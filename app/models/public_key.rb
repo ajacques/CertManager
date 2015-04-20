@@ -9,7 +9,6 @@ class PublicKey < ActiveRecord::Base
   validates :key_type, presence: true, inclusion: { in: %W(rsa ec), message: '%{value} is not a supported key type' }
   validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
   validates :hash_algorithm, presence: true, inclusion: { in: %W(md2 md5 sha1 sha256 sha384 sha512), message: '%{value} is not an expected hash_algorithm' }
-  before_save :update_thumbprint
   after_initialize :set_defaults
 
   def to_pem
@@ -67,11 +66,6 @@ class PublicKey < ActiveRecord::Base
   end
 
   private
-  def update_thumbprint
-    if body
-
-    end
-  end
   def set_defaults
     self.is_ca ||= false
   end

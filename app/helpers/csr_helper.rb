@@ -32,11 +32,11 @@ module CsrHelper
     end
   end
   def validate_csr(csr)
-    hash = csr.signature_algorithm[0, csr.signature_algorithm.index('With')]
+    hash = csr.signature_algorithm
     errors = []
     errors << :subject if csr.subject.to_s == ''
     errors << :hash_algorithm if CertManager::SecurityPolicy.hash_algorithm.insecure?(hash)
-    errors << :bit_length if CertManager::SecurityPolicy.bit_length.insecure?(csr.bit_length)
+    errors << :bit_length if csr.rsa? and CertManager::SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end
 end

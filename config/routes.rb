@@ -25,7 +25,6 @@ Rails.application.routes.draw do
       another_id: /[0-9]+/
     } do
     member do
-      get 'chain'
       get 'csr'
       get 'revocation_check'
       get 'sign/:another_id' => 'signing#configure'

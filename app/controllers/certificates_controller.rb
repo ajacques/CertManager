@@ -45,21 +45,6 @@ class CertificatesController < ApplicationController
   def new
   end
 
-  def chain
-    chain = Certificate.find(params[:id]).chain
-    chain.delete_at(0) if params.has_key? :exclude_root
-    respond_to do |format|
-      format.json {
-        render json: chain
-      }
-      format.pem {
-        render plain: chain.map {|cert|
-          cert.public_key.body
-        }.join()
-      }
-    end
-  end
-
   def create
     cert = Certificate.new certificate_params
     cert.updated_by = current_user

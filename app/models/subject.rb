@@ -1,4 +1,5 @@
 class Subject < ActiveRecord::Base
+  after_update :prune_empty
   def to_s
     if self.CN then self.CN else self.OU end
   end
@@ -38,5 +39,14 @@ class Subject < ActiveRecord::Base
 
   def self.safe_attributes
     [:O, :OU, :C, :CN, :L, :ST]
+  end
+
+  private
+  def prune_empty
+    Subject.safe_attributes.each do |attrib|
+      if self.send(attrib).nil?
+        self.send("#{attrib}=", nil)
+      end
+    end
   end
 end
