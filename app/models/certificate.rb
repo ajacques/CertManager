@@ -108,7 +108,7 @@ class Certificate < ActiveRecord::Base
       cert = Certificate.new
     end
     cert.public_key = PublicKey.from_pem(crt)
-    cert.subject = Subject.from_r509(r509.subject)
+    cert.subject = cert.public_key.subject
     cert
   end
 
