@@ -34,10 +34,6 @@
       ],
       "Type": "String"
     },
-    "EcsAmiId" : {
-      "Type" : "String",
-      "Description" : "ECS AMI Id"
-    },
     "IamRoleInstanceProfile" : {
       "Type" : "String",
       "Description" : "Name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance"
@@ -51,7 +47,7 @@
       "Type" : "Number",
       "Description" : "Maximum size and initial Desired Capacity of ECS Auto Scaling Group",
       "Default" : "1"
-    },
+    }
   },
   "Resources": {
     "RootVPC": {
@@ -157,30 +153,6 @@
         }
       }
     },
-    "HostInstance": {
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-      "Properties": {
-        "ImageId": { "Fn::FindInMap": ["EcsAmiIds", {"Ref": "AWS::Region"}, "ami" ] },
-        "InstanceType": { "Ref": "" },
-        "AssociatePublicIpAddress": true,
-        "IamInstanceProfile": { "Ref": "IamRoleInstanceProfile" },
-        "KeyName": { "Ref": "KeyName" },
-        "SecurityGroups": [ { "Ref": "AppServerSecurityGroup" } ],
-        "UserData": { "Fn::Base64": { "Fn::Join" : ["", [
-            "#!/bin/bash\n",
-            "echo ECS_CLUSTER=", { "Ref" : "EcsClusterName" }, " >> /etc/ecs/ecs.config"
-          ]]}
-        }
-      }
-    },
-    "EcsInstanceAsg": {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
-      "Properties" : {
-        "VPCZoneIdentifier" : { "Fn::Join" : [",", [ { "Ref" : "FrontendSubnet1" } ] ] },
-        "MinSize" : "0",
-        "MaxSize" : { "Ref" : "AsgMaxSize" }
-      }
-    },
     "AppServerSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -193,6 +165,31 @@
             "CidrIp": "0.0.0.0/0"
           }
         ]
+      }
+    },
+    "HostInstance": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "ImageId": { "Fn::FindInMap": ["EcsAmiIds", {"Ref": "AWS::Region"}, "ami" ] },
+        "InstanceType": { "Ref": "FrontendAppServerType" },
+        "AssociatePublicIpAddress": true,
+        "IamInstanceProfile": { "Ref": "IamRoleInstanceProfile" },
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroups": [ { "Ref": "AppServerSecurityGroup" } ],
+        "UserData": { "Fn::Base64": { "Fn::Join" : ["", [
+          "#!/bin/bash\n",
+          "echo ECS_CLUSTER=", { "Ref" : "EcsClusterName" }, " >> /etc/ecs/ecs.config"
+        ]]}
+        }
+      }
+    },
+    "EcsInstanceAsg": {
+      "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "VPCZoneIdentifier": [ { "Ref" : "FrontendSubnet1" } ],
+        "MinSize": "0",
+        "MaxSize": { "Ref" : "AsgMaxSize" },
+        "LaunchConfigurationName": { "Ref": "HostInstance" }
       }
     },
     "CacheSecurityGroup": {

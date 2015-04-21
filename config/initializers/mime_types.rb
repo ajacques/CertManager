@@ -4,3 +4,4 @@
 # Mime::Type.register "text/richtext", :rtf
 
 Mime::Type.register 'application/x-pem-file', :pem
+Mime::Type.register 'application/x-x509-ca-cert', :der

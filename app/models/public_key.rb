@@ -14,6 +14,12 @@ class PublicKey < ActiveRecord::Base
   def to_pem
     "-----BEGIN CERTIFICATE-----\n#{Base64.encode64(self.body)}-----END CERTIFICATE-----"
   end
+  def to_text
+    OpenSSL::X509::Certificate.new(self.body).to_text
+  end
+  def to_der
+    self.body
+  end
   def rsa?
     key_type == 'rsa'
   end

@@ -26,6 +26,9 @@ class CertificatesController < ApplicationController
           cert.public_key.to_pem
         }.join(), content_type: Mime::Type.lookup_by_extension(:pem)
       }
+      format.der {
+        render body: @cert.public_key.to_der, content_type: Mime::Type.lookup_by_extension(:der)
+      }
       format.html {
         if @cert.public_key
           render 'show'
@@ -38,6 +41,9 @@ class CertificatesController < ApplicationController
       }
       format.json {
         render json: @cert
+      }
+      format.text {
+        render text: @cert.public_key.to_text
       }
     end
   end
@@ -98,7 +104,9 @@ class CertificatesController < ApplicationController
           if issuer.present?
             cert.issuer = issuer
           else
-            cert.issuer = Certificate.new_stub(cert.issuer_subject)
+            stub = Certificate.new_stub(cert.issuer_subject)
+            stub.updated_by = stub.created_by = current_user
+            cert.issuer = stub
           end
         end
         cert.save!

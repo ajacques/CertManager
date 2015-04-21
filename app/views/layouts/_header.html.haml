@@ -1,4 +1,4 @@
-- if false and user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests
+- if user_signed_in? and bg_refresh_out_of_date # FIXME: This block creates two Redis requests
   %header
     %nav.bg-danger
       .container

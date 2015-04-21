@@ -30,7 +30,7 @@ class Certificate < ActiveRecord::Base
     elsif private_key.present?
       'Unsigned'
     elsif public_key.present?
-      'No Key'
+      'Public Only'
     else
       'Stub'
     end

@@ -20,7 +20,7 @@ class Service < ActiveRecord::Base
     handle_result(salt.append_file(self.node_group, self.cert_path, chain), 'append_file')
     handle_result(salt.shell_execute(self.node_group, self.after_rotate), 'execute script')
 
-    last_deployed = Time.now
+    self.last_deployed = Time.now
   end
   def node_status(&block)
     rkey = "SERVICE_#{id}_NODESTATUS"
