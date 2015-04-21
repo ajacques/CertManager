@@ -1,0 +1,8 @@
+rsa_pub:
+  key_type: rsa
+  hash_algorithm: sha256
+  not_before: 2015-01-01T00:00:00Z
+  not_after: 2016-01-01T00:00:00Z
+  is_ca: f
+  subject: example
+  body: random

@@ -1,0 +1,10 @@
+rsa_key:
+  key_type: rsa
+  bit_length: 512
+  body: test
+  fingerprint: test
+
+ec_key:
+  key_type: ec
+  body: test
+  fingerprint: test
