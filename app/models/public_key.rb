@@ -38,6 +38,7 @@ class PublicKey < ActiveRecord::Base
     cert.subject = subject.to_openssl
     cert.not_before = not_after
     cert.not_after = not_after
+    cert.serial = serial
     cert.add_extension R509::Cert::Extensions::BasicConstraints.new(ca: is_ca)
     cert
   end
@@ -75,5 +76,6 @@ class PublicKey < ActiveRecord::Base
   private
   def set_defaults
     self.is_ca ||= false
+    self.serial ||= 1
   end
 end

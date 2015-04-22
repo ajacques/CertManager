@@ -1,8 +1,10 @@
-rsa_pub:
+rsa_ca:
   key_type: rsa
   hash_algorithm: sha256
+  private_key: rsa_key
+  serial: 1
   not_before: 2015-01-01T00:00:00Z
   not_after: 2016-01-01T00:00:00Z
-  is_ca: f
-  subject: example
+  is_ca: t
+  subject: ca_subject
   body: random

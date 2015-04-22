@@ -1,10 +1,23 @@
 rsa_key:
   key_type: rsa
   bit_length: 512
-  body: test
-  fingerprint: test
+  fingerprint: 3e3c9f7cee93b2c32c1e4673370af3d49de61cd4
+  body: !binary |-
+    MIIBOwIBAAJBAOC6hIddQFoMV+keap5/8T6tC9EOWDRA7knDvnNdYnxtOImN
+    v8zhoiZWX9hTzu4X0q7sJNuVpZWnK8VAGsiCAe8CAwEAAQJAcWNKuS4A6S5v
+    MM1LCHwPkgsn+ixdrsfQM2HTd0v4BET5d9vHZBrAjho5fLoFqK9LXodD2R8K
+    yWq/oETrVK/oEQIhAPT2pJgqaBV9ZEaFHnzuymAyu/R7G88ppXWfZ4Ttppj3
+    AiEA6tp9dLaoHo5ueZxjW69Cg+nUzRmbmbzXz++SRuQZWMkCIQCrT3F8GOwB
+    W1etGZtgs35EGDbpms6v6egUgg3bIHfJsQIgUmkK/uqdgeNvBsOG5gRQ7eMe
+    pj3nKQJoJHInvTKLZmkCIQC7Ib7PElLzH1KMRVtE3Od5SyS1fwrZZhs/J2bR
+    82KjhQ==
 
 ec_key:
   key_type: ec
-  body: test
-  fingerprint: test
+  curve_name: secp384r1
+  fingerprint: ab0f356a3b2e00631f0b633e989e25489428d7cd
+  body: !binary |-
+    MIGkAgEBBDCLb8rJqSKZXOUqCQkuyYTckgF9Z4o2VZcQTf8p6d8bJkcZd3EF
+    vxhXK+I4RduzHs+gBwYFK4EEACKhZANiAASKCQGCqeX58hW+1Tjsfkx70x/E
+    vu9MGA23KMsj2za92VDaXlnCcKE9vjyGvQOOyjodI3LMhhqHD/xgfrtikyhA
+    ZK8wHcnMK+NdC1UDbA5zUQs4YwivV+ONUK+EClzMDwk=

@@ -11,6 +11,7 @@ class CreatePublicKeys < ActiveRecord::Migration
       t.boolean :is_ca, null: false
       t.datetime :not_before, null: false
       t.datetime :not_after, null: false
+      t.integer :serial, null: false
 
       t.binary :body, null: false
       t.string :fingerprint

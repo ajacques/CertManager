@@ -3,3 +3,6 @@ example:
   O: ExampleO
   OU: ExampleOU
   C: ExampleCompany
+
+ca_subject:
+  CN: Unit Test CA

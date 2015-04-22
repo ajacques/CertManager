@@ -1,17 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-parent:
-  subject: example
-  public_key: example
-  issuer: parent
-  chain_hash: invalid
-  created_by_id: 1
-  updated_by_id: 1
-
-one:
-  subject: example
-  issuer: parent
-  public_key: example
+rsa_ca:
+  subject: ca_subject
+  private_key: rsa_key
+  public_key: rsa_ca
   chain_hash: invalid
   created_by_id: 1
   updated_by_id: 1
