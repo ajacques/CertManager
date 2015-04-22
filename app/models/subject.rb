@@ -1,5 +1,7 @@
 class Subject < ActiveRecord::Base
   after_update :prune_empty
+  after_initialize :prune_empty
+
   def to_s
     if self.CN then self.CN else self.OU end
   end
