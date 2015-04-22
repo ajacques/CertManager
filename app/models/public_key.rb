@@ -34,6 +34,7 @@ class PublicKey < ActiveRecord::Base
   end
   def to_openssl
     cert = OpenSSL::X509::Certificate.new
+    cert.version = 2
     cert.subject = subject.to_openssl
     cert.not_before = not_after
     cert.not_after = not_after

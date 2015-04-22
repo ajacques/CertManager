@@ -15,6 +15,9 @@ class PrivateKey < ActiveRecord::Base
   def to_pem
     to_openssl.to_pem
   end
+  def to_text
+    to_openssl.to_text
+  end
   def to_openssl
     return OpenSSL::PKey::RSA.new body if rsa?
     return OpenSSL::PKey::EC.new body if ec?

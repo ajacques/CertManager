@@ -44,7 +44,7 @@ class Subject < ActiveRecord::Base
   private
   def prune_empty
     Subject.safe_attributes.each do |attrib|
-      if self.send(attrib).nil?
+      if self.send(attrib) == ''
         self.send("#{attrib}=", nil)
       end
     end
