@@ -1,7 +1,7 @@
 class PrivateKey < ActiveRecord::Base
   has_one :certificate
   validates :key_type, inclusion: { in: %W(rsa ec), message: '%{value} must be a supported key type' }
-  validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
+  validates :bit_length, numericality: { only_integer: true, greater_than_or_equal_to: 512 }, if: :rsa?
   validates :curve_name, presence: true, if: :ec?
   validates :curve_name, absence: true, if: 'not ec?'
   after_initialize :generate_key
@@ -14,6 +14,9 @@ class PrivateKey < ActiveRecord::Base
   end
   def to_pem
     to_openssl.to_pem
+  end
+  def to_der
+    self.body
   end
   def to_text
     to_openssl.to_text

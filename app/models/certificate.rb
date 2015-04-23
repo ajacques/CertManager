@@ -84,6 +84,8 @@ class Certificate < ActiveRecord::Base
     raise 'Must be a CA cert to sign other certs' unless self.public_key.is_ca?
     public_key.issuer_subject_id = self.subject_id
     cert = public_key.to_openssl
+    cert.issuer = self.subject.to_openssl
+    cert.public_key = self.private_key.to_openssl.public_key
     cert.sign private_key.to_openssl, public_key.hash_algorithm
     public_key.body = cert.to_der
     cert
