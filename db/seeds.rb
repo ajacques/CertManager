@@ -19,7 +19,7 @@ def new_key_pair!(opts={})
   public.assign_attributes opts.slice(:is_ca)
   cert = Certificate.new(opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] }))
   signer = opts[:issuer] || cert
-  signer.sign(public)
+  signer.sign(cert)
   cert.issuer = signer
   cert.save!
   cert
@@ -28,4 +28,4 @@ end
 ca = new_key_pair! CN: 'Fintech Internal CA', O: 'Fintech, Inc.', OU: 'InfoSec', L: 'United States', key_type: 'rsa', bit_length: 2048, user: user, is_ca: true
 
 new_key_pair! CN: 'fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'rsa', bit_length: 2048, user: user, issuer: ca
-new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca
+#new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca
