@@ -19,7 +19,7 @@ class SigningController < ApplicationController
     end
     signee.public_key = public_key = PublicKey.from_private_key signee.private_key
     public_key.assign_attributes certificate_params
-    signer.sign(public_key)
+    signer.sign(signee)
     signee.save!
 
     DeployCertificateJob.perform_later signee if params[:auto_deploy]
