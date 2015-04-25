@@ -5,6 +5,7 @@ class PublicKey < ActiveRecord::Base
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
   has_many :subject_alternate_names, autosave: true, dependent: :delete_all
+  has_many :key_usages, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
   validates :key_type, presence: true, inclusion: { in: %W(rsa ec), message: '%{value} is not a supported key type' }
   validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
@@ -39,17 +40,9 @@ class PublicKey < ActiveRecord::Base
     cert.not_before = not_after
     cert.not_after = not_after
     cert.serial = serial
-    cert.add_extension R509::Cert::Extensions::BasicConstraints.new(ca: is_ca)
+    cert.add_extension R509::Cert::Extensions::BasicConstraints.new ca: is_ca
+    cert.add_extension R509::Cert::Extensions::KeyUsage.new value: key_usage if key_usage
     cert
-  end
-
-  def create_csr
-    R509::CSR.new({
-      type: key_type,
-      key: private_key.to_pem,
-      subject: subject.to_r509,
-      message_digest: hash_algorithm
-    })
   end
 
   def self.from_pem(pem)
@@ -75,7 +68,9 @@ class PublicKey < ActiveRecord::Base
 
   private
   def set_defaults
-    self.is_ca ||= false
     self.serial ||= 1
+  end
+  def key_usage
+    self.key_usages.map {|usage| usage.value }.join(',')
   end
 end

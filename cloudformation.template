@@ -30,7 +30,7 @@
       "Description": "Application server instance type",
       "Default": "t1.micro",
       "AllowedValues": [
-        "t1.micro"
+        "t2.micro"
       ],
       "Type": "String"
     },
@@ -157,6 +157,7 @@
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
         "GroupDescription": "Permit HTTP access",
+        "VpcId": {"Ref": "RootVPC"},
         "SecurityGroupIngress": [
           {
             "IpProtocol": "tcp",
@@ -172,10 +173,11 @@
       "Properties": {
         "ImageId": { "Fn::FindInMap": ["EcsAmiIds", {"Ref": "AWS::Region"}, "ami" ] },
         "InstanceType": { "Ref": "FrontendAppServerType" },
-        "AssociatePublicIpAddress": true,
+        "AssociatePublicIpAddress": false,
         "IamInstanceProfile": { "Ref": "IamRoleInstanceProfile" },
         "KeyName": { "Ref": "KeyName" },
-        "SecurityGroups": [ { "Ref": "AppServerSecurityGroup" } ],
+        "InstanceMonitoring": false,
+        "SecurityGroups": [ {"Ref": "AppServerSecurityGroup" } ],
         "UserData": { "Fn::Base64": { "Fn::Join" : ["", [
           "#!/bin/bash\n",
           "echo ECS_CLUSTER=", { "Ref" : "EcsClusterName" }, " >> /etc/ecs/ecs.config"
