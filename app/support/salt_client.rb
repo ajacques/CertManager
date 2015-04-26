@@ -44,14 +44,14 @@ class SaltClient
   def stat_file(target, file)
     Hash[execute(target, 'file.lstat', file).map {|key, value|
       val = {
-        created: Time.at(value["st_ctime"]),
-        accessed: Time.at(value["st_atime"]),
-        modified: Time.at(value["st_mtime"]),
-        size: value["st_size"],
-        uid: value["st_uid"],
-        gid: value["st_gid"],
-        perms: value["st_mode"]
-      } if value.has_key?("st_ctime")
+        created: Time.at(value['st_ctime']),
+        accessed: Time.at(value['st_atime']),
+        modified: Time.at(value['st_mtime']),
+        size: value['st_size'],
+        uid: value['st_uid'],
+        gid: value['st_gid'],
+        perms: value['st_mode']
+      } if value.has_key?('st_ctime')
       [key, val]
     }]
   end
