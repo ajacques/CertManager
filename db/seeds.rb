@@ -16,8 +16,9 @@ def new_key_pair!(opts={})
   public.hash_algorithm = 'sha256'
   public.not_before = Time.now
   public.not_after = Time.now + 1.year
-  public.assign_attributes opts.slice(:is_ca)
-  cert = Certificate.new(opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] }))
+  public.assign_attributes opts.slice(:is_ca, :key_usage, :extended_key_usage)
+  cert_props = opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] })
+  cert = Certificate.new(cert_props)
   signer = opts[:issuer] || cert
   signer.sign(cert)
   cert.issuer = signer
@@ -25,7 +26,18 @@ def new_key_pair!(opts={})
   cert
 end
 
-ca = new_key_pair! CN: 'Fintech Internal CA', O: 'Fintech, Inc.', OU: 'InfoSec', L: 'United States', key_type: 'rsa', bit_length: 2048, user: user, is_ca: true
+ca = new_key_pair!({
+  CN: 'Fintech Internal CA',
+   O: 'Fintech, Inc.',
+   OU: 'InfoSec',
+   L: 'United States',
+   key_type: 'rsa',
+   bit_length: 2048,
+   user: user,
+   is_ca: true,
+   key_usage: [:keyCertSign],
+   extended_key_usage: [:serverAuth]
+})
 
 new_key_pair! CN: 'fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'rsa', bit_length: 2048, user: user, issuer: ca
 #new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca

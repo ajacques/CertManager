@@ -5,7 +5,8 @@ class PublicKey < ActiveRecord::Base
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
   has_many :subject_alternate_names, autosave: true, dependent: :delete_all
-  has_many :key_usages, autosave: true, dependent: :destroy
+  has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
+  has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
   validates :key_type, presence: true, inclusion: { in: %W(rsa ec), message: '%{value} is not a supported key type' }
   validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
@@ -41,7 +42,8 @@ class PublicKey < ActiveRecord::Base
     cert.not_after = not_after
     cert.serial = serial
     cert.add_extension R509::Cert::Extensions::BasicConstraints.new ca: is_ca
-    cert.add_extension R509::Cert::Extensions::KeyUsage.new value: key_usage if key_usage
+    cert.add_extension R509::Cert::Extensions::KeyUsage.new value: key_usage unless key_usage.empty?
+    cert.add_extension R509::Cert::Extensions::ExtendedKeyUsage.new value: extended_key_usage unless extended_key_usage.empty?
     cert
   end
 
@@ -67,10 +69,27 @@ class PublicKey < ActiveRecord::Base
   end
 
   private
+  def self.generate_key_usage_accessors(name, group)
+    plural = name.to_s.pluralize
+    define_method(name) do
+      self.send(plural).map do |usage|
+        usage.value
+      end
+    end
+    define_method("#{name}=") do |usages|
+      orig = self.send(plural).dup
+      new = usages.map do |usage|
+        first = orig.select {|k| k.value == usage}.first
+        return first if first
+        KeyUsage.new value: usage, public_key: self, group: group
+      end
+      self.send("#{plural}=", new)
+    end
+  end
   def set_defaults
     self.serial ||= 1
   end
-  def key_usage
-    self.key_usages.map {|usage| usage.value }.join(',')
-  end
+
+  generate_key_usage_accessors(:key_usage, 'basic')
+  generate_key_usage_accessors(:extended_key_usage, 'extended')
 end

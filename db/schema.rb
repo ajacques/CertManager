@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20150424052321) do
   create_table "key_usages", force: :cascade do |t|
     t.integer "public_key_id", null: false
     t.string  "value",         null: false
+    t.string  "group",         null: false
   end
 
   create_table "private_keys", force: :cascade do |t|
