@@ -25,8 +25,11 @@ class PrivateKey < ActiveRecord::Base
     return OpenSSL::PKey::RSA.new body if rsa?
     return OpenSSL::PKey::EC.new body if ec?
   end
+  def to_h
+    key_attribs
+  end
   def as_json(opts=nil)
-    key_attribs.as_json(opts)
+    to_h.as_json(opts)
   end
 
   private

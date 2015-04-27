@@ -27,11 +27,8 @@ class PublicKey < ActiveRecord::Base
   end
   def to_h
     {
-     certificate_id: certificate_id,
      hash_algorithm: hash_algorithm,
-     subject: subject.to_h,
-     private_key_id: private_key_id,
-     pem: to_pem
+     key_usage: self.key_usage
     }
   end
   def to_openssl
@@ -73,7 +70,7 @@ class PublicKey < ActiveRecord::Base
     plural = name.to_s.pluralize
     define_method(name) do
       self.send(plural).map do |usage|
-        usage.value
+        usage.value.to_sym
       end
     end
     define_method("#{name}=") do |usages|

@@ -42,23 +42,10 @@ class Certificate < ActiveRecord::Base
   def to_h
     hash = {
      id: id,
-     subject: subject
+     subject: subject.to_h.stringify_keys
     }
-    hash[:public_key] = nil
-    hash.merge! ({
-                 public_key: {
-                  pem: public_key.to_pem
-                 },
-                 alternate_names: subject_alternate_names.map {|r| r.name},
-                 ocsp: ocsp_endpoints,
-                 issuer: ({
-                  id: issuer.id,
-                  subject: issuer.subject
-                 } if issuer.present?),
-                 not_before: public_key.not_before,
-                 not_after: public_key.not_after
-                }) if public_key.present?
-    hash[:private_key] = private_key
+    hash[:public_key] = public_key.to_h if public_key
+    hash[:private_key] = private_key.to_h
     hash[:crl_endpoints] = crl_endpoints if crl_endpoints
     hash
   end
@@ -85,6 +72,7 @@ class Certificate < ActiveRecord::Base
   end
   def sign(cert)
     raise 'Must be a CA cert to sign other certs' unless self.public_key.is_ca?
+    raise 'Basic constraints must include keyCertSign' unless self.public_key.key_usage.include? :keyCertSign
     public_key.issuer_subject_id = self.subject_id
     ossl = cert.public_key.to_openssl
     ossl.issuer = self.subject.to_openssl

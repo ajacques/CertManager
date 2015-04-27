@@ -39,6 +39,9 @@ class CertificatesController < ApplicationController
           render 'show_csr'
         end
       }
+      format.yaml {
+        render plain: @cert.to_h.stringify_keys.to_yaml
+      }
       format.json {
         render json: @cert
       }
