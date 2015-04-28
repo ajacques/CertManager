@@ -34,6 +34,8 @@ class SigningController < ApplicationController
        :not_before,
        :not_after,
        :is_ca,
+       extended_key_usage: [],
+       key_usage: [],
        subject_attributes: Subject.safe_attributes,
        extensions_attributes: [:name, :value]
       )

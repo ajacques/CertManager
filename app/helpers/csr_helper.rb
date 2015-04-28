@@ -39,4 +39,21 @@ module CsrHelper
     errors << :bit_length if csr.rsa? and CertManager::SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end
+  def key_usage_option_tag(name)
+    key_usage_option_tag_impl 'key_usage', name
+  end
+  def extended_key_usage_option_tag(name)
+    key_usage_option_tag_impl 'extended_key_usage', name
+  end
+  private
+  def key_usage_option_tag_impl(group, name)
+    capture_haml do
+      haml_tag :div, class: 'checkbox' do
+        haml_tag :label do
+          haml_tag :input, type: 'checkbox', name: "public_key[#{group}][]", value: name
+          haml_tag :span, t("attributes.#{group}.#{name}")
+        end
+      end
+    end
+  end
 end

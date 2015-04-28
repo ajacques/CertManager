@@ -8,6 +8,15 @@
 
 user = User.create!({email: 'user@example.com', password: 'testtest', can_login: true, first_name: 'John-Paul', last_name: 'Jones'})
 
+def new_csr!(opts={})
+  subject = Subject.new opts.slice(*Subject.safe_attributes)
+  private = PrivateKey.new opts.slice(:key_type, :bit_length, :curve_name)
+  cert_props = opts.slice(:issuer).merge({ subject: subject, private_key: private, created_by: opts[:user], updated_by: opts[:user] })
+  cert = Certificate.new(cert_props)
+  cert.save!
+  cert
+end
+
 def new_key_pair!(opts={})
   subject = Subject.new opts.slice(*Subject.safe_attributes)
   private = PrivateKey.new opts.slice(:key_type, :bit_length, :curve_name)
@@ -35,9 +44,11 @@ ca = new_key_pair!({
    bit_length: 2048,
    user: user,
    is_ca: true,
-   key_usage: [:keyCertSign],
-   extended_key_usage: [:serverAuth]
+   key_usage: [:keyCertSign, :cRLSign],
+   extended_key_usage: [:OCSPSigning]
 })
 
 new_key_pair! CN: 'fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'rsa', bit_length: 2048, user: user, issuer: ca
 #new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca
+
+new_csr! CN: 'new.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'rsa', bit_length: 2048, user: user, issuer: ca

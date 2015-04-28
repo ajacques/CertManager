@@ -33,3 +33,8 @@ en:
     import: Import
   attributes:
     hash_algorithm: Hash algorithm
+    key_usage:
+      digitalSignature: Sign data
+    extended_key_usage:
+      serverAuth: Authenticates as a server
+      clientAuth: Authenticates as a client

@@ -10,6 +10,12 @@
       = f.radio_button :hash_algorithm, hash, label: t("hash.#{hash}")
   = f.form_group :extensions_attributes, label: { text: 'Constraints' } do
     = f.check_box :is_ca, label: 'Can sign other certificates'
+    = f.fields_for :key_usage do |ku|
+      = key_usage_option_tag :digitalSignature
+      = key_usage_option_tag :keyEncipherment
+      = key_usage_option_tag :keyAgreement
+      = extended_key_usage_option_tag :serverAuth
+      = extended_key_usage_option_tag :clientAuth
   = f.text_field :not_before
   = f.text_field :not_after
   .form-group
