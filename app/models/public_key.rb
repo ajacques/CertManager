@@ -55,6 +55,7 @@ class PublicKey < ActiveRecord::Base
       r.hash_algorithm = r509.signature_algorithm[0, r509.signature_algorithm.index('With')]
       r.issuer_subject = Subject.from_r509 r509.issuer
       r.is_ca = r509.basic_constraints.try(:is_ca?)
+      r.key_usage = r509.key_usage.allowed_uses if r509.key_usage
     end
   end
   def self.from_private_key(key)
