@@ -7,5 +7,6 @@
   %tbody
     = render partial: 'certificate_row', collection: @expiring, as: :cert
     = render partial: 'certificate_row', collection: @certs, as: :cert
-.row
-  .center-block.col-md-3= will_paginate @certs
+- if @certs.respond_to? :page
+  .row
+    .center-block.col-md-3= will_paginate @certs
