@@ -42,21 +42,21 @@ ActiveRecord::Schema.define(version: 20150424052321) do
   end
 
   create_table "public_keys", force: :cascade do |t|
-    t.integer  "subject_id",                        null: false
+    t.integer  "subject_id",                                  null: false
     t.integer  "private_key_id"
     t.integer  "issuer_subject_id"
-    t.string   "key_type",                          null: false
+    t.string   "key_type",                                    null: false
     t.string   "curve_name"
-    t.string   "hash_algorithm",                    null: false
+    t.string   "hash_algorithm",                              null: false
     t.integer  "bit_length"
-    t.boolean  "is_ca",             default: false, null: false
-    t.datetime "not_before",                        null: false
-    t.datetime "not_after",                         null: false
-    t.integer  "serial",                            null: false
-    t.binary   "body",                              null: false
+    t.boolean  "is_ca",                       default: false, null: false
+    t.datetime "not_before",                                  null: false
+    t.datetime "not_after",                                   null: false
+    t.integer  "serial",            limit: 8,                 null: false
+    t.binary   "body",                                        null: false
     t.string   "fingerprint"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "revocation_endpoints", force: :cascade do |t|
