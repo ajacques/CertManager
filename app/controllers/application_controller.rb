@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   protected
   def current_user
-    @user
+    @current_user
   end
   def require_login
     unless user_signed_in?
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
       redirect_to new_user_session_path
       return
     end
-    @user = User.find session[:user_id]
+    @current_user = User.find session[:user_id]
   end
   def user_signed_in?
     session.has_key?(:user_id)

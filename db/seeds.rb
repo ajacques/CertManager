@@ -39,7 +39,7 @@ ca = new_key_pair!({
   CN: 'Fintech Internal CA',
    O: 'Fintech, Inc.',
    OU: 'InfoSec',
-   L: 'United States',
+   C: 'US',
    key_type: 'rsa',
    bit_length: 2048,
    user: user,
