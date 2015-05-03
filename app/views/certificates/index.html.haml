@@ -1,2 +1,6 @@
 %h2 Your certificates
+%ul.nav.nav-pills
+  %li= link_to (t 'certificate'), certificates_path
+  %li= link_to (t 'operations.import'), import_certificates_path
+  %li= link_to (t 'operations.new'), new_certificate_path
 = render partial: 'certificate_list'

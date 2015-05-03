@@ -1,5 +1,4 @@
 - public_key = cert.public_key
-- fratio = (public_key.not_after - public_key.not_before) / (Time.now - public_key.not_before)
 - ratio = (Time.now - public_key.not_before) / (public_key.not_after - public_key.not_before)
 - width_const = 900
 - scale = (ratio * width_const).to_i
@@ -13,7 +12,7 @@
     %line{y1: 7.5, y2: 7.5, x2: width_const}
     %line{y2: 15, x1: width_const, x2: width_const}
   - if not cert.expired?
-    / Tick mark
+    -# Tick mark
     %polygon{fill: 'black', points: '0,0 -6,12 6,12', transform: "translate(#{scale}, 55)"}
   %g{transform: 'translate(0, 40)'}
     -# Progress Bar

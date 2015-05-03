@@ -87,7 +87,7 @@ class CertificatesController < ApplicationController
         cert.save! if cert.id.nil?
         @certs << cert
       rescue => e
-        logger.error "Failed to import #{cert}: {e}"
+        logger.error "Failed to import #{cert}: #{e}"
         @bad_certs << cert
       end
     end

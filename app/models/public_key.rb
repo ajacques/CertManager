@@ -8,8 +8,6 @@ class PublicKey < ActiveRecord::Base
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
-  validates :key_type, presence: true, inclusion: { in: %W(rsa ec), message: '%{value} is not a supported key type' }
-  validates :bit_length, numericality: { only_integer: true, greater_than: 0 }, if: :rsa?
   validates :hash_algorithm, presence: true, inclusion: { in: %W(md2 md5 sha1 sha256 sha384 sha512), message: '%{value} is not an expected hash_algorithm' }
   after_initialize :set_defaults
 
@@ -23,10 +21,10 @@ class PublicKey < ActiveRecord::Base
     self.body
   end
   def rsa?
-    key_type == 'rsa'
+    false
   end
   def ec?
-    key_type == 'ec'
+    false
   end
   def to_h
     {
@@ -47,34 +45,37 @@ class PublicKey < ActiveRecord::Base
     cert
   end
 
-  def self.from_pem(pem)
+  def self.from_pem(pem, &block)
     r509 = R509::Cert.new cert: pem
-    PublicKey.find_or_initialize_by(body: r509.to_der) do |r|
-      r.subject = Subject.from_r509(r509.subject)
-      %w(not_before not_after).each do |attrib|
-        r.send("#{attrib}=", r509.send(attrib))
-      end
-      r.key_type = r509.key_algorithm.downcase
-      if r509.rsa?
-        r.bit_length = r509.bit_length
-        r.hash_algorithm = r509.signature_algorithm[0, r509.signature_algorithm.index('With')]
-      end
-      if r509.ec?
-        i = r509.signature_algorithm.rindex('-')
-        r.hash_algorithm = r509.signature_algorithm[i+1, r509.signature_algorithm.length - i].downcase
-        r.curve_name = r509.curve_name
-      end
-      r.issuer_subject = Subject.from_r509 r509.issuer
-      r.is_ca = r509.basic_constraints.try(:is_ca?)
-      r.key_usage = r509.key_usage.allowed_uses if r509.key_usage
+    name = if r509.rsa?
+      RSAPublicKey
+    elsif r509.ec?
+      ECPublicKey
+    end
+    name.find_or_initialize_by(body: r509.to_der) do |r|
+      r.import_from_r509 r509
     end
   end
   def self.from_private_key(key)
-    pub = PublicKey.new private_key_id: key.id
-    %w(key_type curve_name bit_length).each do |attrib|
+    pub = if key.rsa?
+      RSAPublicKey.new private_key_id: key.id
+    elsif key.ec?
+      ECPublicKey.new private_key_id: key.id
+    end
+    %w(curve_name bit_length).each do |attrib|
       pub.send("#{attrib}=", key.send(attrib))
     end
     pub
+  end
+
+  def import_from_r509(r509)
+    self.subject = Subject.from_r509(r509.subject)
+    %w(not_before not_after).each do |attrib|
+      self.send("#{attrib}=", r509.send(attrib))
+    end
+    self.issuer_subject = Subject.from_r509 r509.issuer
+    self.is_ca = r509.basic_constraints.try(:is_ca?)
+    self.key_usage = r509.key_usage.allowed_uses if r509.key_usage
   end
 
   private

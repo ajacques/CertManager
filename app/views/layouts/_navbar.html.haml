@@ -5,8 +5,10 @@
     - if user_signed_in?
       %nav
         %ul.nav.navbar-nav
-          %li= link_to (t 'operations.new'), new_certificate_path
-          %li= link_to (t 'operations.import'), import_certificates_path
+          %li.dropdown
+            = link_to (t 'certificate').pluralize, certificates_path
+            %ul.dropdown-menu
+              %li= link_to (t 'operations.import'), import_certificates_path
           %li= link_to (t 'users.list'), users_path
           %li= link_to 'Services', services_path
         = form_tag certificates_path, method: :get, role: :search, enforce_utf8: false, class: 'center-block col-sm-6 navbar-form' do

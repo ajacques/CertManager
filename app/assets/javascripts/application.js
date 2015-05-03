@@ -23,5 +23,5 @@ document.addEventListener('DOMContentLoaded', function() {
 		window[page].init();
 	for (var i = 0; i < on_pageload.length; i++) {
 		on_pageload[i]();
-	};
+	}
 });

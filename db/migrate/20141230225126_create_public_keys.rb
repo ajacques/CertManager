@@ -6,7 +6,7 @@ class CreatePublicKeys < ActiveRecord::Migration
       t.integer :issuer_subject_id
 
       # Key attributes
-      t.string :key_type, null: false
+      t.string :type, null: false
       t.string :curve_name
       t.string :hash_algorithm, null: false
       t.integer :bit_length

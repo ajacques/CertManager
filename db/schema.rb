@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20150424052321) do
     t.integer  "subject_id",                                  null: false
     t.integer  "private_key_id"
     t.integer  "issuer_subject_id"
-    t.string   "key_type",                                    null: false
+    t.string   "type",                                        null: false
     t.string   "curve_name"
     t.string   "hash_algorithm",                              null: false
     t.integer  "bit_length"

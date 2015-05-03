@@ -22,7 +22,7 @@ def new_key_pair!(opts={})
   private = PrivateKey.new opts.slice(:key_type, :bit_length, :curve_name)
   public = PublicKey.from_private_key(private)
   public.subject = subject
-  public.hash_algorithm = 'sha256'
+  public.hash_algorithm = opts[:hash_algorithm] || 'sha256'
   public.not_before = Time.now
   public.not_after = Time.now + 1.year
   public.assign_attributes opts.slice(:is_ca, :key_usage, :extended_key_usage)
