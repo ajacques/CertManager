@@ -13,10 +13,10 @@
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
-      = pk.radio_button :type, 'ECPrivateKey'
+      = pk.radio_button :type, 'ECPrivateKey', label: 'Elliptic Curve'
     = f.form_group :bit_length, label: { text: 'Bit length' } do
       - default = CertManager::SecurityPolicy.bit_length.default
-      - (10..12).map {|b| 2 ** b}.each do |bit, secure|
+      - (10..12).map {|b| 2 ** b}.each do |bit|
         - insecure = CertManager::SecurityPolicy.bit_length.insecure? bit
         = pk.radio_button :bit_length, bit, label: "#{bit} bit #{'(insecure)' if insecure}", checked: default == bit
   = f.submit 'Create Certificate', class: 'btn btn-primary'

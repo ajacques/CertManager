@@ -4,7 +4,7 @@ class PublicKey < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
-  has_many :subject_alternate_names, autosave: true, dependent: :delete_all
+  has_many :_subject_alternate_names, class_name: 'SubjectAlternateName', autosave: true, dependent: :delete_all
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
@@ -44,6 +44,20 @@ class PublicKey < ActiveRecord::Base
     cert.add_extension R509::Cert::Extensions::ExtendedKeyUsage.new value: extended_key_usage unless extended_key_usage.empty?
     cert
   end
+  def subject_alternate_names
+    self._subject_alternate_names.map do |s|
+      s.name
+    end
+  end
+  def subject_alternate_names=(sans)
+    orig = self._subject_alternate_names.dup
+    new = sans.map do |usage|
+      first = orig.select {|k| k.value == usage}.first
+      return first if first
+      SubjectAlternateName.new name: usage, public_key: self
+    end
+    self._subject_alternate_names = new
+  end
 
   def self.from_pem(pem, &block)
     r509 = R509::Cert.new cert: pem
@@ -55,17 +69,6 @@ class PublicKey < ActiveRecord::Base
     name.find_or_initialize_by(body: r509.to_der) do |r|
       r.import_from_r509 r509
     end
-  end
-  def self.from_private_key(key)
-    pub = if key.rsa?
-      RSAPublicKey.new private_key_id: key.id
-    elsif key.ec?
-      ECPublicKey.new private_key_id: key.id
-    end
-    %w(curve_name bit_length).each do |attrib|
-      pub.send("#{attrib}=", key.send(attrib))
-    end
-    pub
   end
 
   def import_from_r509(r509)

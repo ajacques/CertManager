@@ -10,3 +10,6 @@
     - hash_algo = public_key.hash_algorithm
     = cert_show_validate_policy(:hash_algorithm, hash_algo, t('attributes.hash_algorithm')) do
       - t "hash.#{hash_algo}"
+    %tr
+      %td Subject Alternate Names
+      %td= public_key.subject_alternate_names

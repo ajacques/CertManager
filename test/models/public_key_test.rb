@@ -22,4 +22,10 @@ class PublicKeyTest < ActiveSupport::TestCase
     assert pub.valid?, pub.errors
     assert_equal 'sha384', pub.hash_algorithm
   end
+
+  test 'has san' do
+    san = %w(example.com www.example.com)
+    pub = RSAPublicKey.new subject_alternate_names: san
+    assert_equal san, pub.subject_alternate_names
+  end
 end

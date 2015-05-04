@@ -17,7 +17,7 @@ class SigningController < ApplicationController
     else
      signee = Certificate.find(params[:another_id])
     end
-    signee.public_key = public_key = PublicKey.from_private_key signee.private_key
+    signee.public_key = public_key = signee.private_key.create_public_key
     public_key.assign_attributes certificate_params
     signer.sign(signee)
     signee.save!

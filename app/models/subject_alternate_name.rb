@@ -1,3 +1,3 @@
 class SubjectAlternateName < ActiveRecord::Base
-  belongs_to :certificate
+  belongs_to :public_key
 end
