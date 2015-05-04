@@ -11,7 +11,7 @@ var ServiceNew = new function() {
 					var elem = document.createElement('li');
 					elem.innerHTML = data[i];
 					list.append(elem);
-				};
+				}
 			}
 		});
 	};

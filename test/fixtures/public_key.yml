@@ -1,5 +1,5 @@
 rsa_ca:
-  key_type: rsa
+  type: RSAPublicKey
   hash_algorithm: sha256
   private_key: rsa_key
   serial: 1

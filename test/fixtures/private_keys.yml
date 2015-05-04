@@ -1,5 +1,5 @@
 rsa_key:
-  key_type: rsa
+  type: RSAPrivateKey
   bit_length: 512
   fingerprint: 3e3c9f7cee93b2c32c1e4673370af3d49de61cd4
   body: !binary |-
@@ -13,7 +13,7 @@ rsa_key:
     82KjhQ==
 
 ec_key:
-  key_type: ec
+  type: ECPrivateKey
   curve_name: secp384r1
   fingerprint: ab0f356a3b2e00631f0b633e989e25489428d7cd
   body: !binary |-

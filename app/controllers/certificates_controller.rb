@@ -51,9 +51,6 @@ class CertificatesController < ApplicationController
     end
   end
 
-  def new
-  end
-
   def create
     cert = Certificate.new certificate_params
     cert.updated_by = current_user
@@ -126,6 +123,6 @@ class CertificatesController < ApplicationController
   def certificate_params
     params.require(:certificate)
       .permit(subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST],
-              private_key_attributes: [:bit_length, :key_type, :curve_name])
+              private_key_attributes: [:bit_length, :type, :curve_name])
   end
 end

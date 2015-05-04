@@ -11,8 +11,9 @@
     = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
     = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
   = f.fields_for :private_key_attributes do |pk|
-    = pk.form_group :key_type, label: { text: 'Key algorithm' } do
-      = pk.radio_button :key_type, 'rsa', checked: true, label: 'RSA'
+    = pk.form_group :type, label: { text: 'Key algorithm' } do
+      = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
+      = pk.radio_button :type, 'ECPrivateKey'
     = f.form_group :bit_length, label: { text: 'Bit length' } do
       - default = CertManager::SecurityPolicy.bit_length.default
       - (10..12).map {|b| 2 ** b}.each do |bit, secure|

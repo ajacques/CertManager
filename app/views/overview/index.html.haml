@@ -3,4 +3,13 @@
   %li #{pluralize @certs.count, 'total certificate'}
   %li #{pluralize @expiring.count, 'certificate'} expiring in the next 30 days
   %li #{pluralize @bad_hashes.count, 'certificate'} with insecure hash algorithms
-  %li= @by_hash.count.inspect
+.col-md-3
+  %table.table.table-condensed
+    %thead
+      %tr
+        %td Hash
+        %td Count
+    %tbody
+      - @by_hash.count.each do |k, v|
+        %td= k
+        %td= v

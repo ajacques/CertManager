@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20150424052321) do
   end
 
   create_table "private_keys", force: :cascade do |t|
-    t.string   "key_type",    null: false
+    t.string   "type",        null: false
     t.integer  "bit_length"
     t.string   "curve_name"
     t.string   "fingerprint", null: false
