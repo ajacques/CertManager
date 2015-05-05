@@ -11,7 +11,7 @@ class PublicKeyTest < ActiveSupport::TestCase
   end
 
   test 'can import ec ca' do
-    pem = get_example_cert :ec_ca
+    pem = public_key_raw :ec_ca
     pub = PublicKey.from_pem pem
     assert_not_nil pub
 

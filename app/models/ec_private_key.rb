@@ -16,7 +16,7 @@ class ECPrivateKey < PrivateKey
   private
   def generate_key
     if valid? and new_record?
-      key = R509::PrivateKey.new self.slice(:bit_length, :curve_name).merge(type: 'ec')
+      key = R509::PrivateKey.new self.slice(:bit_length, :curve_name)
       self.body = key.to_der
       self.fingerprint = Digest::SHA1.hexdigest(key.key.public_key.to_bn.to_s)
     end

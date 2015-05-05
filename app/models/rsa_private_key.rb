@@ -12,10 +12,16 @@ class RSAPrivateKey < PrivateKey
     key.private_key = self
     key
   end
+  def self.import(src)
+    self.find_or_initialize_by(body: src.to_der) do |r|
+      r.bit_length = src.bit_length
+      r.body = src.to_der
+    end
+  end
 
   private
   def generate_key
-    if valid? and new_record?
+    if valid? and new_record? and self.body.nil?
       key = R509::PrivateKey.new self.slice(:bit_length)
       self.body = key.to_der
       self.fingerprint = Digest::SHA1.hexdigest(key.key.params['n'].to_s)

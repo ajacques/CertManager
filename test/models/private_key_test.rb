@@ -24,6 +24,25 @@ class PrivateKeyTest < ActiveSupport::TestCase
     assert pkey.rsa?
     assert_equal key, pkey.private_key
   end
+  test 'imports rsa' do
+    der = private_key_raw :rsa_2048
+    key = PrivateKey.import der
+    assert_not_nil key, 'Imported key model should not be nil'
+    assert_instance_of RSAPrivateKey, key
+    assert_equal 2048, key.bit_length, 'Incorrect bit length'
+    assert_nil key.curve_name
+    assert_equal der, key.to_der
+    assert key.valid?
+  end
+  test 'imports ec' do
+    der = private_key_raw :ec_384
+    key = PrivateKey.import der
+    assert_not_nil key, 'Imported key model should not be nil'
+    assert_instance_of ECPrivateKey, key
+    assert_equal 'secp384r1', key.curve_name
+    assert_equal der, key.to_der
+    assert key.valid?
+  end
   test 'invalid type' do
     assert_raises ActiveRecord::SubclassNotFound do
       PrivateKey.new type: 'foo'

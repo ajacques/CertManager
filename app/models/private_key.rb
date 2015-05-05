@@ -24,6 +24,13 @@ class PrivateKey < ActiveRecord::Base
     to_h.as_json(opts)
   end
 
+  def self.import(pem)
+    ossl = R509::PrivateKey.new key: pem
+    if ossl.rsa?
+      RSAPrivateKey.import ossl
+    end
+  end
+
   private
   def key_attribs
     self.slice(:bit_length, :curve_name).merge(type: self.key_type)

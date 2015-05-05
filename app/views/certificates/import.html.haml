@@ -1,5 +1,9 @@
+%h2 Import from another server
+%p This will import an entire certificate chain from an existing public website. The private key will have to be imported manually
+= form_tag action: :import_from_url do
+  = text_field_tag :host
+  = submit_tag 'Import'
 %div.drop-target{data: {drop: {type: :textbox, target: :key}}}
-  = form_tag action: :import do
-    = label_tag :key, (t 'certificate')
-    = text_area_tag :key
-    = submit_tag
+  = bootstrap_form_for :certificate, url: url_for(action: :import) do |f|
+    = f.text_area :key, label: (t 'certificate'), placeholder: "Insert a valid certificate key pair\r\n-----BEGIN CERTIFICATE-----"
+    = f.submit 'Import certificate', class: 'btn btn-primary'
