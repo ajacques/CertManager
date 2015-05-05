@@ -43,6 +43,8 @@ group :development do
   gem 'sqlite3'
   gem 'ruby-debug-ide'
   gem 'debase'
+  gem 'simplecov'
+  gem 'mocha'
 end
 
 gem 'unicorn'

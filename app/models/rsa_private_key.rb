@@ -21,7 +21,7 @@ class RSAPrivateKey < PrivateKey
 
   private
   def generate_key
-    if valid? and new_record? and self.body.nil?
+    if valid? and self.body.nil?
       key = R509::PrivateKey.new self.slice(:bit_length)
       self.body = key.to_der
       self.fingerprint = Digest::SHA1.hexdigest(key.key.params['n'].to_s)
