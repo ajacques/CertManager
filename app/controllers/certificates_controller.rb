@@ -67,55 +67,38 @@ class CertificatesController < ApplicationController
   end
 
   def do_import
-    certs = CertificateTools.extract_certificates(params[:key])
-    keys = CertificateTools.extract_private_keys(params[:key])
+    public_keys = CertificateTools.extract_certificates(params[:key])
+    private_keys = CertificateTools.extract_private_keys(params[:key])
 
-    certs.uniq!
-    # Welcome to hell
-    @certs = []
-    @bad_certs = []
-    certs.each do |pem|
-      begin
-        r509 = R509::Cert.new cert: pem
-        cert = Certificate.import pem
-        cert.issuer_subject = r509.issuer
-        cert.updated_by = cert.created_by = current_user
-        logger.info "Certificate: #{cert.inspect} for #{r509.subject}"
-        cert.save! if cert.id.nil?
-        @certs << cert
-      rescue => e
-        logger.error "Failed to import #{cert}: #{e}"
-        @bad_certs << cert
-      end
+    public_keys.uniq!
+    public_keys = public_keys.map do |raw|
+      key = PublicKey.import raw
+      key.save!
+      key
     end
-    keys.each { |key|
-      pkey = R509::PrivateKey.new key: key
-      cert = @certs.find {|c|
-          c.public_key.fingerprint == Digest::SHA1.hexdigest(pkey.key.params['n'].to_s) if c.public_key
-        }
-      if cert.present?
-        cert.private_key_data = pkey.to_pem
-      end
-    }
-    ActiveRecord::Base.transaction do
-      @certs.each { |cert|
-        if cert.issuer.nil?
-          issuer = Certificate.with_subject(cert.issuer_subject).first
-          if issuer.present?
-            cert.issuer = issuer
-          else
-            stub = Certificate.new_stub(cert.issuer_subject)
-            stub.updated_by = stub.created_by = current_user
-            cert.issuer = stub
-          end
-        end
-        cert.save!
+    private_keys = private_keys.map do |raw|
+      key = PrivateKey.import raw
+      key.save!
+      key
+    end
+    @certs = public_keys.map do |pub|
+      certificate = Certificate.find_for_key_pair pub, nil
+      certificate.touch_by current_user
+      certificate.save!
+      certificate
+    end
+
+    respond_to do |format|
+      format.json {
+        render json: @certs.to_json
       }
-    end
-    if params[:return_url]
-      redirect_to params[:return_url]
-    else
-      render 'import_done'
+      format.html {
+        if params[:return_url]
+          redirect_to params[:return_url]
+        else
+          render 'import_done'
+        end
+      }
     end
   end
 

@@ -12,7 +12,7 @@ class PublicKeyTest < ActiveSupport::TestCase
 
   test 'can import ec ca' do
     pem = public_key_raw :ec_ca
-    pub = PublicKey.from_pem pem
+    pub = PublicKey.import pem
     assert_not_nil pub
 
     assert pub.ec?

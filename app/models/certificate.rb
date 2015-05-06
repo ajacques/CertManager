@@ -81,6 +81,11 @@ class Certificate < ActiveRecord::Base
     cert.public_key.body = ossl.to_der
     cert
   end
+  def touch_by(user)
+    self.created_by_id = user.id if not self.created_by_id
+    self.updated_by_id = user.id
+    self.touch if not new_record?
+  end
 
   def self.with_modulus(modulus)
     modulus_hash = Digest::SHA1.hexdigest(modulus.to_s)
@@ -94,13 +99,20 @@ class Certificate < ActiveRecord::Base
   def self.find_by_common_name(name)
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
   end
+  def self.find_for_key_pair(pub, priv)
+    Certificate.find_or_initialize_by(public_key_id: pub.id) do |r|
+      r.public_key = pub
+      r.subject = pub.subject
+      r.private_key = priv
+    end
+  end
   def self.import(crt)
     r509 = R509::Cert.new(cert: crt)
     cert = Certificate.with_subject(r509.subject).first
     if cert.nil?
       cert = Certificate.new
     end
-    cert.public_key = PublicKey.from_pem(crt)
+    cert.public_key = PublicKey.import(crt)
     cert.subject = cert.public_key.subject
     cert
   end

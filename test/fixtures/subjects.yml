@@ -6,3 +6,9 @@ example:
 
 ca_subject:
   CN: Unit Test CA
+
+add_trust:
+  CN: AddTrust External CA Root
+  O: AddTrust AB
+  OU: AddTrust External TTP Network
+  C: SE

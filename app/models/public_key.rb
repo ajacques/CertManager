@@ -59,7 +59,7 @@ class PublicKey < ActiveRecord::Base
     self._subject_alternate_names = new
   end
 
-  def self.from_pem(pem, &block)
+  def self.import(pem, &block)
     r509 = R509::Cert.new cert: pem
     name = if r509.rsa?
       RSAPublicKey

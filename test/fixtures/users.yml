@@ -1,0 +1,6 @@
+main:
+  first_name: John
+  last_name: Smith
+  email: user@example.com
+  password_hash: five
+  password_salt: six
