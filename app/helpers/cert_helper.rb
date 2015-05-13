@@ -6,7 +6,7 @@ module CertHelper
     end
   end
   def cert_validate_config(facet, value)
-    CertManager::SecurityPolicy.send(facet).secure?(value)
+    SecurityPolicy.send(facet).secure?(value)
   end
   def cert_show_validate_policy(facet, value, header, &block)
     secure = cert_validate_config(facet, value)

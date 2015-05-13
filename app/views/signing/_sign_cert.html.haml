@@ -6,7 +6,7 @@
   = f.form_group :hash_algorithm, label: { text: 'Hash Algorithm' } do
     = f.radio_button :hash_algorithm, 'md5', label: 'MD5 (highly insecure)', class: 'bg-danger'
     = f.radio_button :hash_algorithm, 'sha1', label: 'SHA-1 (insecure)', class: 'bg-warning'
-    - CertManager::SecurityPolicy.hash_algorithm.secure.each do |hash|
+    - SecurityPolicy.hash_algorithm.secure.each do |hash|
       = f.radio_button :hash_algorithm, hash, label: t("hash.#{hash}")
   = f.form_group :extensions_attributes, label: { text: 'Constraints' } do
     = f.check_box :is_ca, label: 'Can sign other certificates'

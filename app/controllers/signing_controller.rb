@@ -5,7 +5,7 @@ class SigningController < ApplicationController
     @public_key = PublicKey.new subject: @signee.subject
     @public_key.not_before = Time.now
     @public_key.not_after = Time.now + 1.year
-    @public_key.hash_algorithm = CertManager::SecurityPolicy.hash_algorithm.default
+    @public_key.hash_algorithm = SecurityPolicy.hash_algorithm.default
     @allow_subject_changes = @signer != @signee
     @self_signing = @signer == @signee
   end

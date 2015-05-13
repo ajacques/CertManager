@@ -10,3 +10,11 @@ bit_length:
   type: integer
   default: 2048
   min_secure: 2048
+
+elliptic_curve:
+  type: array
+  default: secp384r1
+  secure:
+    - secp256r1
+    - secp384r1
+    - secp512r1

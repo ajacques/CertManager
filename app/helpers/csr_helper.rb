@@ -1,5 +1,3 @@
-require 'app/security_policy'
-
 module CsrHelper
   def explain_csr(csr)
     description = OpenSSL::X509::Request.new(csr.to_pem).to_text.lines
@@ -35,8 +33,8 @@ module CsrHelper
     hash = csr.signature_algorithm
     errors = []
     errors << :subject if csr.subject.to_s == ''
-    errors << :hash_algorithm if CertManager::SecurityPolicy.hash_algorithm.insecure?(hash)
-    errors << :bit_length if csr.rsa? and CertManager::SecurityPolicy.bit_length.insecure?(csr.bit_length)
+    errors << :hash_algorithm if SecurityPolicy.hash_algorithm.insecure?(hash)
+    errors << :bit_length if csr.rsa? and SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end
   def key_usage_option_tag(name)

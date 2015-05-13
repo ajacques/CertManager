@@ -15,8 +15,11 @@
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
       = pk.radio_button :type, 'ECPrivateKey', label: 'Elliptic Curve'
     = f.form_group :bit_length, label: { text: 'Bit length' } do
-      - default = CertManager::SecurityPolicy.bit_length.default
+      - default = SecurityPolicy.bit_length.default
       - (10..12).map {|b| 2 ** b}.each do |bit|
-        - insecure = CertManager::SecurityPolicy.bit_length.insecure? bit
+        - insecure = SecurityPolicy.bit_length.insecure? bit
         = pk.radio_button :bit_length, bit, label: "#{bit} bit #{'(insecure)' if insecure}", checked: default == bit
+    = f.form_group :curve_name, label: { text: 'Curve name'} do
+      - SecurityPolicy.elliptic_curve.secure.each do |curve|
+        = pk.radio_button :curve_name, curve, label: curve
   = f.submit 'Create Certificate', class: 'btn btn-primary'

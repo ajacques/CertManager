@@ -1,5 +1,5 @@
 - content_for :title do
-  #{@cert.subject} | CertManager
+  = @cert.subject
 %ol.breadcrumb
   = cert_chain_tree(@cert) do |cert|
     - if cert == @cert
