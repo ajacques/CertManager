@@ -1,0 +1,10 @@
+%ol.breadcrumb
+  %li= link_to 'Services', action: :index
+  %li= link_to @service.certificate, service_path
+  %li.active Edit
+%h2 Edit #{@service.certificate}
+= bootstrap_form_for @service, layout: :horizontal do |f|
+  = f.text_field :cert_path
+  = f.text_field :after_rotate
+  = f.text_field :node_group
+  = f.submit

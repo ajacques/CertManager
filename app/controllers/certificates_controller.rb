@@ -23,7 +23,7 @@ class CertificatesController < ApplicationController
     respond_to do |format|
       format.pem {
         render body: chain.map {|cert|
-          cert.public_key.to_pem
+          "#{cert.public_key.to_pem}\n"
         }.join(), content_type: Mime::Type.lookup_by_extension(:pem)
       }
       format.der {

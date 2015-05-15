@@ -1,0 +1,22 @@
+- bad_count = @node_status.count {|n| not n.valid?}
+- if bad_count >= 1
+  %h3 There #{'is'.pluralize bad_count} currently #{pluralize bad_count, 'node'} that inconsistent
+  %p= link_to 'Attempt to fix', deploy_service_path
+%table
+  %thead
+    %tr
+      %td Hostname
+      %td Status
+      %td Last checked
+  %tbody
+    - @node_status.each do |node|
+      %tr
+        %td= node.hostname
+        %td<
+          - if node.valid?
+            Deployed
+          - elsif node.exists?
+            Invalid
+          - else
+            Not deployed
+        %td #{time_ago_in_words node.updated_at} ago

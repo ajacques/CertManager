@@ -8,8 +8,13 @@ class ServicesController < ApplicationController
     @service.certificate_id = params[:cert_id].to_i || 0
   end
 
+  def edit
+    @service = Service.find params[:id]
+  end
+
   def show
     @service = Service.find(params[:id])
+    @node_status = @service.node_status
   end
 
   def update
@@ -27,7 +32,7 @@ class ServicesController < ApplicationController
   def nodes
     salt = SaltClient.new
     salt.login
-    render json: salt.get_minions("#{params[:query]}*")['return'].first.map {|k,v| k }
+    render json: salt.get_minions("#{params[:query]}*")['return'].first.map { |k, v| k }
   end
 
   def create
