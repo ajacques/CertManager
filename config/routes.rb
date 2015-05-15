@@ -43,7 +43,9 @@ Rails.application.routes.draw do
     end
     collection do
       get 'deployment'
-      get 'nodes'
+      scope :salt do
+        get 'nodes'
+      end
     end
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'

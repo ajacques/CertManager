@@ -27,8 +27,8 @@ class ValidateCertificateJob < ActiveJob::Base
           valid: hash == service.certificate.chain_hash
         }) if nexists[node]
         @redis.hset("#{key}_NEW", node, obj.to_json)
-        @redis.rename("#{key}_NEW", key)
       end
+      @redis.rename("#{key}_NEW", key)
     end
   end
 end

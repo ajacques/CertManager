@@ -7,6 +7,9 @@ class RSAPrivateKey < PrivateKey
   def to_openssl
     OpenSSL::PKey::RSA.new body
   end
+  def to_pem
+    "-----BEGIN RSA PRIVATE KEY-----\n#{Base64.encode64(self.body)}-----END RSA PRIVATE KEY-----"
+  end
   def create_public_key
     key = RSAPublicKey.new self.slice(:bit_length)
     key.private_key = self

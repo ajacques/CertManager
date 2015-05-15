@@ -54,10 +54,8 @@ class Certificate < ActiveRecord::Base
   end
   def full_chain(include_private=false)
     chain = ''
-    chain += private_key.to_pem if include_private and private_key.present?
-    if public_key.present?
-      chain += public_key.to_pem
-    end
+    chain += "#{private_key.to_pem}\n" if include_private and private_key.present?
+    chain += "#{public_key.to_pem}\n" if public_key
     chain += issuer.full_chain(false) if issuer_id.present? and issuer_id != self.id
     chain
   end
@@ -82,9 +80,9 @@ class Certificate < ActiveRecord::Base
     cert
   end
   def touch_by(user)
-    self.created_by_id = user.id if not self.created_by_id
+    self.created_by_id = user.id unless self.created_by_id
     self.updated_by_id = user.id
-    self.touch if not new_record?
+    self.touch unless new_record?
   end
 
   def self.with_modulus(modulus)

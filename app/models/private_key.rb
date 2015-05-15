@@ -8,9 +8,6 @@ class PrivateKey < ActiveRecord::Base
   def ec?
     false
   end
-  def to_pem
-    to_openssl.to_pem
-  end
   def to_der
     self.body
   end
@@ -33,6 +30,6 @@ class PrivateKey < ActiveRecord::Base
 
   private
   def key_attribs
-    self.slice(:bit_length, :curve_name).merge(type: self.key_type)
+    self.slice(:bit_length, :curve_name).merge(type: self.type)
   end
 end
