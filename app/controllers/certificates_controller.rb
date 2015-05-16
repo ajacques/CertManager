@@ -67,8 +67,9 @@ class CertificatesController < ApplicationController
   end
 
   def do_import
-    public_keys = CertificateTools.extract_certificates(params[:key])
-    private_keys = CertificateTools.extract_private_keys(params[:key])
+    key = params[:certificate][:key]
+    public_keys = CertificateTools.extract_certificates(key)
+    private_keys = CertificateTools.extract_private_keys(key)
 
     public_keys.uniq!
     public_keys = public_keys.map do |raw|

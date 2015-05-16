@@ -15,5 +15,5 @@
       - @services.each do |service|
         %tr{class: ('bg-danger' if service.certificate.expires_in < 7.days)}
           %td= link_to service.certificate.subject.CN, id: service.id, action: :show
-          %td Unknown
+          %td= service.status
           %td Refresh

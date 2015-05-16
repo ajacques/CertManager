@@ -34,7 +34,17 @@ class Service < ActiveRecord::Base
       node.updated_at = Time.parse json['update']
       node
     }
-    #SaltClient.new.execute(node_group, 'file.get_hash', cert_path).each &block
+  end
+  def status
+    status = node_status
+    good = status.count {|n| n.valid?}
+    if status.count == 0
+      'Unknown'
+    elsif good == status.count
+      "Running [#{good}/#{status.count}]"
+    else
+      'Inconsistent'
+    end
   end
 
   private

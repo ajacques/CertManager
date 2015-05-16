@@ -24,10 +24,13 @@ class RSAPrivateKey < PrivateKey
 
   private
   def generate_key
-    if valid? and self.body.nil?
+    return unless valid?
+    unless body
       key = R509::PrivateKey.new self.slice(:bit_length)
       self.body = key.to_der
-      self.fingerprint = Digest::SHA1.hexdigest(key.key.params['n'].to_s)
+    else
+      key = R509::PrivateKey.new key: to_openssl
     end
+    self.fingerprint = Digest::SHA1.hexdigest(key.key.params['n'].to_s)
   end
 end
