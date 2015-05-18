@@ -82,17 +82,25 @@ class CertificatesController < ApplicationController
       key.save!
       key
     end
-    @certs = public_keys.map do |pub|
+    @certs = []
+    public_keys.each do |pub|
       certificate = Certificate.find_for_key_pair pub, nil
       certificate.touch_by current_user
       certificate.save!
-      certificate
+      @certs << certificate
     end
-    @certs = private_keys.map do |priv|
+    private_keys.each do |priv|
       certificate = Certificate.find_for_key_pair nil, priv
       certificate.touch_by current_user
       certificate.save!
-      certificate
+      @certs << certificate
+    end
+    @certs.each do |cert|
+      issuer = Certificate.find_by_subject_id cert.public_key.issuer_subject_id
+      if issuer
+        cert.issuer = issuer
+        cert.save!
+      end
     end
 
     respond_to do |format|
