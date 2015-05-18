@@ -59,7 +59,7 @@ leaf = new_key_pair!({
  key_usage: [:keyEncipherment],
  extended_key_usage: [:serverAuth]
 })
-#new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: 'ec', curve_name: 'secp384r1', user: user, issuer: ca
+#new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: ECPrivateKey, curve_name: 'secp384r1', user: user, issuer: ca
 
 new_csr! CN: 'new.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: RSAPrivateKey, bit_length: 2048, user: user, issuer: ca
 

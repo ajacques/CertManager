@@ -98,11 +98,23 @@ class Certificate < ActiveRecord::Base
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
   end
   def self.find_for_key_pair(pub, priv)
-    Certificate.find_or_initialize_by(public_key_id: pub.id) do |r|
-      r.public_key = pub
-      r.subject = pub.subject
-      r.private_key = priv
+    cert1 = Certificate.find_by_public_key_id pub.id if pub
+    cert2 = Certificate.find_by_private_key_id priv.id if priv
+    cert3 = Certificate.find_by_subject_id pub.subject.id if pub
+    cert = cert1 || cert2 || cert3
+    if not cert and pub
+      cert = Certificate.joins(:private_key).where(private_keys: {fingerprint: pub.fingerprint}).first
     end
+    if not cert and priv
+      cert = Certificate.joins(:public_key).where(public_keys: {fingerprint: priv.fingerprint}).first
+    end
+    unless cert
+      cert = Certificate.new
+      cert.subject = pub.subject
+    end
+    cert.public_key = pub if pub
+    cert.private_key = priv if priv
+    cert
   end
   def self.import(crt)
     r509 = R509::Cert.new(cert: crt)

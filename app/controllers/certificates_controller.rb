@@ -88,6 +88,12 @@ class CertificatesController < ApplicationController
       certificate.save!
       certificate
     end
+    @certs = private_keys.map do |priv|
+      certificate = Certificate.find_for_key_pair nil, priv
+      certificate.touch_by current_user
+      certificate.save!
+      certificate
+    end
 
     respond_to do |format|
       format.json {

@@ -11,5 +11,6 @@
         %td Count
     %tbody
       - @by_hash.count.each do |k, v|
-        %td= k
-        %td= v
+        %tr
+          %td= k
+          %td= v
