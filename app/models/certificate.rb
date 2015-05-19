@@ -63,10 +63,7 @@ class Certificate < ActiveRecord::Base
     [*(issuer.chain if issuer.present? and issuer_id != self.id)] + [self]
   end
   def new_csr
-    request = OpenSSL::X509::Request.new
-    request.subject = subject.to_openssl
-    request.public_key = private_key.to_openssl.public_key
-    request
+    CertificateSignRequest.from_cert self
   end
   def sign(cert)
     raise 'Must be a CA cert to sign other certs' unless self.public_key.is_ca?
