@@ -66,41 +66,48 @@ class CertificatesController < ApplicationController
     render 'csr/show'
   end
 
+  def import_from_url
+    importer = CertificateImporter.new params[:host], 443
+    render plain: importer.get_certs.map {|c| c.to_pem }.to_json
+  end
+
   def do_import
     key = params[:certificate][:key]
     public_keys = CertificateTools.extract_certificates(key)
     private_keys = CertificateTools.extract_private_keys(key)
 
     public_keys.uniq!
-    public_keys = public_keys.map do |raw|
-      key = PublicKey.import raw
-      key.save!
-      key
-    end
-    private_keys = private_keys.map do |raw|
-      key = PrivateKey.import raw
-      key.save!
-      key
-    end
-    @certs = []
-    public_keys.each do |pub|
-      certificate = Certificate.find_for_key_pair pub, nil
-      certificate.touch_by current_user
-      certificate.save!
-      @certs << certificate
-    end
-    private_keys.each do |priv|
-      certificate = Certificate.find_for_key_pair nil, priv
-      certificate.touch_by current_user
-      certificate.save!
-      @certs << certificate
-    end
-    @certs.each do |cert|
-      issuer = cert if cert.public_key.issuer_subject_id = cert.public_key.subject_id
-      issuer = issuer || Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
-      if issuer
-        cert.issuer = issuer
-        cert.save!
+    ActiveRecord::Base.transaction do
+      public_keys = public_keys.map do |raw|
+        key = PublicKey.import raw
+        key.save!
+        key
+      end
+      private_keys = private_keys.map do |raw|
+        key = PrivateKey.import raw
+        key.save!
+        key
+      end
+      @certs = []
+      public_keys.each do |pub|
+        certificate = Certificate.find_for_key_pair pub, nil
+        certificate.touch_by current_user
+        certificate.save!
+        @certs << certificate
+      end
+      private_keys.each do |priv|
+        certificate = Certificate.find_for_key_pair nil, priv
+        certificate.touch_by current_user
+        certificate.save!
+        @certs << certificate
+      end
+      @certs.each do |cert|
+        issuer = cert if cert.public_key.issuer_subject_id = cert.public_key.subject_id
+        issuer = issuer || Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
+        if issuer
+          cert.issuer = issuer
+          cert.save!
+        end
       end
     end
 

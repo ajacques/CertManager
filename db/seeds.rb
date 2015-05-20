@@ -25,6 +25,7 @@ def new_key_pair!(opts={})
   public.hash_algorithm = opts[:hash_algorithm] || 'sha256'
   public.not_before = Time.now
   public.not_after = Time.now + 1.year
+  public.private_key = private
   public.assign_attributes opts.slice(:is_ca, :key_usage, :extended_key_usage)
   cert_props = opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] })
   cert = Certificate.new(cert_props)

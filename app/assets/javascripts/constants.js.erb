@@ -1,0 +1,5 @@
+<% url = Rails.application.routes.url_helpers %>
+
+var fetch_key_path = function(host) {
+  return '<%= url.import_from_url_certificates_path %>';
+};
