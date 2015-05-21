@@ -68,7 +68,18 @@ class CertificatesController < ApplicationController
 
   def import_from_url
     importer = CertificateImporter.new params[:host], 443
-    render plain: importer.get_certs.map {|c| c.to_pem }.to_json
+    respond_to do |format|
+      format.json {
+        certs = importer.get_certs
+        args = params[:properties]
+        args = args & (PublicKey.attribute_names + %w(to_pem subject))
+        args.map! {|s| s.to_sym}
+        certs.map! do |cert|
+          cert.slice(*args)
+        end
+        render json: certs
+      }
+    end
   end
 
   def do_import

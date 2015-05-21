@@ -4,12 +4,14 @@ var CertificatesImport = new function() {
   var box = document.getElementById('import-url');
   var result = document.getElementById('cert-body');
   var append_certs = function(keys) {
-    result.value = keys.join('\r\n');
+    result.value = keys.map(function(f) { return f.to_pem; }).join('\r\n');
   };
   var import_click = function(evt) {
     evt.preventDefault();
     var url = box.value;
-    import_from_url(url).then(append_certs);
+    if (url !== '') {
+      import_from_url(url).then(append_certs);
+    }
     return false;
   };
 
