@@ -8,9 +8,9 @@ class Certificate < ActiveRecord::Base
   belongs_to :updated_by, class_name: 'User'
   belongs_to :private_key, autosave: true
   belongs_to :public_key, autosave: true
-  belongs_to :subject, autosave: true, dependent: :destroy
-  accepts_nested_attributes_for :subject
+  has_one :csr, class_name: 'CertificateSignRequest'
   accepts_nested_attributes_for :private_key
+  accepts_nested_attributes_for :csr
   before_save :refresh_hash
 
   include HasPublicKey
@@ -34,6 +34,11 @@ class Certificate < ActiveRecord::Base
     else
       'Stub'
     end
+  end
+
+  def subject
+    base = public_key || csr
+    base.subject
   end
 
   def to_s
@@ -68,7 +73,7 @@ class Certificate < ActiveRecord::Base
   def sign(cert)
     raise 'Must be a CA cert to sign other certs' unless self.public_key.is_ca?
     raise 'Basic constraints must include keyCertSign' unless self.public_key.key_usage.include? :keyCertSign
-    public_key.issuer_subject_id = self.subject_id
+    public_key.issuer_subject_id = self.subject.id
     ossl = cert.public_key.to_openssl
     ossl.issuer = self.subject.to_openssl
     ossl.public_key = cert.private_key.to_openssl.public_key
@@ -80,6 +85,10 @@ class Certificate < ActiveRecord::Base
     self.created_by_id = user.id unless self.created_by_id
     self.updated_by_id = user.id
     self.touch unless new_record?
+  end
+  def touch_by!(user)
+    touch_by user
+    save!
   end
 
   def self.with_modulus(modulus)

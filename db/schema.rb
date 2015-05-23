@@ -11,11 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424052321) do
+ActiveRecord::Schema.define(version: 20150521223446) do
+
+  create_table "certificate_sign_requests", force: :cascade do |t|
+    t.integer "certificate_id", null: false
+    t.integer "subject_id",     null: false
+    t.integer "private_key_id", null: false
+  end
 
   create_table "certificates", force: :cascade do |t|
     t.integer  "private_key_id"
-    t.integer  "subject_id",     null: false
     t.integer  "public_key_id"
     t.integer  "issuer_id"
     t.string   "chain_hash",     null: false

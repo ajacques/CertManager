@@ -13,7 +13,7 @@ PublicKey.from_object = function(object) {
   return new PublicKey(object);
 };
 
-var import_from_url = function(host, callback) {
+var import_from_url = function(host) {
   var process = function(result) {
     var deferred = $.Deferred();
 

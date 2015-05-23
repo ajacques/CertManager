@@ -3,9 +3,9 @@ include CrlHelper
 class CertificatesController < ApplicationController
   def index
     @query = params[:search]
-    @certs = Certificate.eager_load(:subject, :public_key, :private_key).includes(public_key: :_subject_alternate_names).paginate(page: params[:page])
+    @certs = Certificate.eager_load(:public_key, :private_key).includes(public_key: :_subject_alternate_names).paginate(page: params[:page])
     if @query
-      @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.certificate_id = certificates.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
+      @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.public_key_id = public_keys.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
     @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.has_key? :issuer
     @expiring = [] #@certs.expiring_in(30.days).order('not_after asc')
@@ -13,7 +13,7 @@ class CertificatesController < ApplicationController
   end
 
   def show
-    @cert = Certificate.eager_load(:subject, :public_key, :private_key).includes(:services).find(params[:id])
+    @cert = Certificate.eager_load(:public_key, :private_key).includes(:services).find(params[:id])
     if params.has_key? :chain
       chain = @cert.chain
       chain.delete_at(0) if params.has_key? :exclude_root
@@ -53,9 +53,8 @@ class CertificatesController < ApplicationController
 
   def create
     cert = Certificate.new certificate_params
-    cert.updated_by = current_user
-    cert.created_by = current_user
-    cert.save!
+    cert.csr.private_key = cert.private_key
+    cert.touch_by! current_user
 
     redirect_to cert
   end
@@ -139,7 +138,7 @@ class CertificatesController < ApplicationController
   private
   def certificate_params
     params.require(:certificate)
-      .permit(subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST],
+      .permit(csr_attributes: [subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
               private_key_attributes: [:bit_length, :type, :curve_name])
   end
 end

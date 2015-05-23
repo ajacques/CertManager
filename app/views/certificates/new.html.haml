@@ -1,15 +1,16 @@
 = bootstrap_form_for :certificate, url: url_for(action: :create), layout: :horizontal do |f|
-  = f.fields_for :subject_attributes do |sb|
-    -# TODO: Figure out how to use Bootstrap forms for this one
-    .form-group
-      = label :subject, :CN, 'Common Name', class: 'col-sm-2 control-label'
-      .col-sm-10
-        .input-group
-          .input-group-addon https://
-          = text_field_tag 'certificate[subject_attributes][CN]', nil, class: 'form-control', placeholder: 'example.com'
-    = sb.text_field :O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
-    = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
-    = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
+  = f.fields_for :csr_attributes do |csr|
+    = csr.fields_for :subject_attributes do |sb|
+      -# TODO: Figure out how to use Bootstrap forms for this one
+      .form-group
+        = label :subject, :CN, 'Common Name', class: 'col-sm-2 control-label'
+        .col-sm-10
+          .input-group
+            .input-group-addon https://
+            = text_field_tag 'certificate[csr_attributes][subject_attributes][CN]', nil, class: 'form-control', placeholder: 'example.com'
+      = sb.text_field :O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
+      = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
+      = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'

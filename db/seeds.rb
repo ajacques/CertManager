@@ -11,7 +11,9 @@ user = User.create!({email: 'user@example.com', password: 'testtest', can_login:
 def new_csr!(opts={})
   subject = Subject.new opts.slice(*Subject.safe_attributes)
   private = opts[:key_type].new opts.slice(:bit_length, :curve_name)
-  cert_props = opts.slice(:issuer).merge({ subject: subject, private_key: private, created_by: opts[:user], updated_by: opts[:user] })
+  csr = CertificateSignRequest.new subject: subject, private_key: private
+
+  cert_props = opts.slice(:issuer).merge({ private_key: private, created_by: opts[:user], updated_by: opts[:user], csr: csr })
   cert = Certificate.new(cert_props)
   cert.save!
   cert
@@ -27,7 +29,7 @@ def new_key_pair!(opts={})
   public.not_after = Time.now + 1.year
   public.private_key = private
   public.assign_attributes opts.slice(:is_ca, :key_usage, :extended_key_usage)
-  cert_props = opts.slice(:issuer).merge({ subject: subject, private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] })
+  cert_props = opts.slice(:issuer).merge({  private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] })
   cert = Certificate.new(cert_props)
   signer = opts[:issuer] || cert
   signer.sign(cert)
