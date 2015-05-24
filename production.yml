@@ -1,0 +1,37 @@
+saltmaster:
+  extends:
+    file: common.yml
+    service: saltmaster
+
+saltminion:
+  extends:
+    file: common.yml
+    service: saltminion
+  links:
+    - 'saltmaster:salt'
+
+web:
+  extends:
+    file: common.yml
+    service: web
+  environment:
+    RAILS_ENV: production
+    VIRTUAL_HOST: certmgr.devvm
+  links:
+    - 'saltmaster:salt'
+    - redis
+
+redis:
+  extends:
+    file: common.yml
+    service: redis
+
+worker:
+  extends:
+    file: common.yml
+    service: worker
+  environment:
+    RAILS_ENV: production
+  links:
+    - 'saltmaster:salt'
+    - redis

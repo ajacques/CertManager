@@ -1,0 +1,4 @@
+ValidateCertificateJob:
+  every:
+    - '5m'
+  queue: refresh

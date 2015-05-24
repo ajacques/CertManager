@@ -12,4 +12,4 @@ RUN find . -type f -print -exec chmod 444 {} \; && find . -type d -print -exec c
 RUN chown www-data:www-data db && chown -R www-data:www-data tmp
 RUN chmod 755 db && find tmp -type d -print -exec chmod 755 {} \;
 USER www-data
-CMD unicorn -h 0.0.0.0
+CMD unicorn -o 0.0.0.0 -p 3000

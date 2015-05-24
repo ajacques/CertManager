@@ -1,0 +1,35 @@
+saltmaster:
+  image: salt-master
+  expose:
+    - 8000
+    - 4506
+  ports:
+    - "8080:8080"
+
+saltminion:
+  image: salt-minion
+
+web:
+  build: .
+  expose:
+    - 3000
+
+redis:
+  image: redis:3.0
+  expose:
+    - 6379
+
+worker:
+  build: .
+  command: bin/bundle exec bin/rake resque:work
+  volumes:
+    - .:/rails-app
+  environment:
+    QUEUE: "*"
+    TERM_CHILD: 1
+
+scheduler:
+  build: .
+  command: bundle exec rake resque:scheduler
+  volumes:
+    - .:/rails-app

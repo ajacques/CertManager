@@ -1,41 +1,42 @@
 saltmaster:
-  image: salt-master
-  expose:
-    - 8000
-    - 4506
-  ports:
-    - "8080:8080"
+  extends:
+    file: common.yml
+    service: saltmaster
 
 saltminion:
-  image: salt-minion
+  extends:
+    file: common.yml
+    service: saltminion
   links:
-    - "saltmaster:salt"
-  volumes:
-    - /tmp/nginx/certs:/tmp/nginx/certs
+    - 'saltmaster:salt'
 
 web:
-  build: .
-  command: "/bin/sh -c 'rm -f tmp/pids/server.pid && rails s -b 0.0.0.0'"
+  extends:
+    file: common.yml
+    service: web
   volumes:
     - .:/rails-app
   links:
-    - "saltmaster:salt"
+    - 'saltmaster:salt'
     - redis
-  expose:
-    - 3000
   environment:
     RAILS_ENV: development
     VIRTUAL_HOST: certmgr.devvm
-  tty: true
 
 redis:
   image: redis
   expose:
+    - 80
+
+redis:
+  image: redis:3.0
+  ports:
     - 6379
 
 worker:
-  build: .
-  command: rake resque:work
+  extends:
+    file: common.yml
+    service: worker
   volumes:
     - .:/rails-app
   links:
@@ -43,13 +44,26 @@ worker:
     - redis
   environment:
     RAILS_ENV: development
-    QUEUE: "*"
-    TERM_CHILD: 1
 
-#scheduler:
-#  build: .
-#  command: rake resque:scheduler
-#  volumes:
-#    - .:/rails-app
-#  environment:
-#    RAILS_ENV: development
+scheduler:
+  extends:
+    file: common.yml
+    service: scheduler
+  volumes:
+    - .:/rails-app
+  links:
+    - 'redis:redis'
+  environment:
+    RAILS_ENV: development
+
+browsersync:
+  image: browsersync
+  command: "nodejs /usr/local/bin/browser-sync start --proxy 'web:3000' --files '/app/app/**' --host 0.0.0.0 --port 80"
+  links:
+    - web
+  expose:
+    - 80
+  volumes:
+    - .:/app:ro
+  environment:
+    VIRTUAL_HOST: certmgr-sync.devvm
