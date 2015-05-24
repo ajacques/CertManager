@@ -8,6 +8,8 @@ RUN /usr/bin/env bundle install --without assets development test
 RUN /usr/bin/apt-get -qy purge ruby-dev g++ make patch && /usr/bin/apt-get -qy autoremove
 ADD . /rails-app
 RUN find public -mindepth 1 -not -name 'assets' -not -name 'manifest-*.json' -print -delete
-RUN chown -R www-data:www-data Gemfile.lock db tmp
+RUN find . -type f -print -exec chmod 444 {} \; && find . -type d -print -exec chmod 555 {} \;
+RUN chown www-data:www-data db && chown -R www-data:www-data tmp
+RUN chmod 755 db && find tmp -type d -print -exec chmod 755 {} \;
 USER www-data
 CMD unicorn -h 0.0.0.0

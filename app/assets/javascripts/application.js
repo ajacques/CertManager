@@ -17,11 +17,11 @@
 
 var on_pageload = on_pageload || [];
 document.addEventListener('DOMContentLoaded', function() {
-	'use strict'
-	var page = document.body.getAttribute('data-page');
-	if ("object" === typeof window[page])
-		window[page].init();
-	for (var i = 0; i < on_pageload.length; i++) {
-		on_pageload[i]();
-	}
+  'use strict'
+  var page = document.body.getAttribute('data-page');
+  if ("object" === typeof window[page])
+    window[page].init();
+  for (var i = 0; i < on_pageload.length; i++) {
+    on_pageload[i]();
+  }
 });

@@ -3,7 +3,7 @@ include CrlHelper
 class CertificatesController < ApplicationController
   def index
     @query = params[:search]
-    @certs = Certificate.eager_load(:public_key, :private_key).includes(public_key: :_subject_alternate_names).paginate(page: params[:page])
+    @certs = Certificate.with_everything.paginate(page: params[:page])
     if @query
       @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.public_key_id = public_keys.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
     end
