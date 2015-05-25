@@ -1,0 +1,29 @@
+.vertical-center {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  margin-top: -72px;
+}
+
+.login-form {
+  .form-control {
+    margin-bottom: 1em;
+  }
+}
+
+.form-login-error {
+  height: 16px;
+}
+
+@media screen and (max-device-width: 512px) {
+  .sessions-new {
+    background: linear-gradient(to bottom, #ffffff 0%, #ffe0e0 100%);
+
+    .login-form-container {
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+  }
+}

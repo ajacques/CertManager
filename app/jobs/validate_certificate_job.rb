@@ -4,9 +4,6 @@ class ValidateCertificateJob < ActiveJob::Base
   def perform
     expiring = Certificate.expiring_in(7.days)
     @redis = CertManager::Configuration.redis_client
-    if expiring.any?
-      CertificateMailer.expiration_notice('adam@technowizardry.net', expiring).deliver
-    end
     find_dirty_cert_files
     @redis.set('CertBgRefresh_LastRun', Time.now.to_f)
   end

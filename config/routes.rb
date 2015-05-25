@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       post 'unlock'
       get 'activate'
     end
+    collection do
+      get 'recover_account'
+    end
   end
   scope :install, controller: :install, as: :install do
     get 'user'

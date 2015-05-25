@@ -1,0 +1,6 @@
+%table.table.table-striped
+  %tbody
+    - event_log.each do |event|
+      %tr
+        %td= event
+        %td= event.updated_at

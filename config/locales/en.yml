@@ -4,14 +4,18 @@ en:
   account:
     first_name: First name
     last_name: Last name
-    username: Email
+    username: Email address
     password: Password
     confirm_password: Repeat password
     login: Login
+    lost_password: Forgot your password?
     create: Create account
     mailers:
       your_new_account: CertManager - Your Account
     change_password: Change password
+  login:
+    error:
+      no_match: Incorrect username or password
   users:
     list: Users
     new: New user

@@ -24,6 +24,8 @@
       %li= link_to 'Renew', action: :csr
     %li #{link_to "#{pluralize @cert.sub_certificates.count, 'child'}", action: :index, issuer: @cert.id}
 = render partial: 'validator', locals: {public_key: @cert.public_key}
+%h2 Audit Log
+= render partial: 'audit_log', locals: {event_log: @cert.public_keys}
 %h2 Services
 - if @cert.services.any?
   %ul

@@ -4,6 +4,7 @@ class Certificate < ActiveRecord::Base
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :sub_certificates, -> { where('certificates.issuer_id != certificates.id') }, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :services
+  has_many :public_keys
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
   belongs_to :private_key, autosave: true
@@ -104,6 +105,9 @@ class Certificate < ActiveRecord::Base
   def self.find_by_common_name(name)
     Certificate.joins(public_key: :subject).where(subjects: {CN: name })
   end
+  def self.find_by_subject_id(id)
+    Certificate.joins(:public_key).where(public_keys: {subject_id: id}).first
+  end
   def self.find_for_key_pair(pub, priv)
     cert1 = Certificate.find_by_public_key_id pub.id if pub
     cert2 = Certificate.find_by_private_key_id priv.id if priv
@@ -115,10 +119,7 @@ class Certificate < ActiveRecord::Base
     if not cert and priv
       cert = Certificate.joins(:public_key).where(public_keys: {fingerprint: priv.fingerprint}).first
     end
-    unless cert
-      cert = Certificate.new
-      cert.subject = pub.subject
-    end
+    cert = Certificate.new unless cert
     cert.public_key = pub if pub
     cert.private_key = priv if priv
     cert

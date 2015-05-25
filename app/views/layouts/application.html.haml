@@ -15,5 +15,5 @@
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
     = render partial: 'layouts/header'
     = render partial: 'layouts/navbar'
-    .container
+    .container{class: [controller_name, '-', action_name].join}
       = yield

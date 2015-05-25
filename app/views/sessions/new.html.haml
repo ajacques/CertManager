@@ -1,9 +1,17 @@
-.row.vertical-center-row
-  .col-lg-12
-    .row
-      .col-xs-12.col-sm-offset-4
-        %h1 Sign in
-        = form_tag action: :create do
-          = email_field_tag :email, nil, autocapitalize: false, autocorrect: false, class: 'form-control', placeholder: (t 'account.username'), tabindex: 1
-          = password_field_tag :password, nil, class: 'form-control', placeholder: (t 'account.password'), tabindex: 2
-          = submit_tag "Login", class: 'btn btn-primary', tabindex: 3
+.row.vertical-center
+  .login-form-container.col-sm-12.col-lg-4.well.well-lg.center-block
+    %h1 Sign in
+    .form-error-message
+      - if @error_message
+        = t "login.error.#{@error_message}"
+      - else
+        &nbsp;
+    = form_tag url_for(action: :create), class: 'login-form form-horizontal' do
+      .form-group{class: ('has-error' if @error_message)}
+        %input.form-control{type: :email, autocapitalize: 'false', autocorrect: 'false', autofocus: true, placeholder: (t 'account.username'), tabindex: 1, value: @username}
+      .form-group{class: ('has-error' if @error_message)}
+        %input.form-control{type: :password, placeholder: (t 'account.password'), tabindex: 2}
+      .form-group
+        %input.btn.btn-large.btn-block.btn-primary{type: :submit, tabindex: 3, value: 'Login'}
+      .form-group
+        = link_to t('account.lost_password'), recover_account_users_path
