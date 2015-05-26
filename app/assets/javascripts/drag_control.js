@@ -14,7 +14,7 @@ on_pageload.push(function() {
         target.textContent += target;
         return false;
       }
-    };
+    }
     if (event.dataTransfer.files.length >= 1) {
       var reader = new FileReader();
       reader.onload = function(text) {
@@ -22,7 +22,7 @@ on_pageload.push(function() {
       };
       for (var i = 0; i < event.dataTransfer.files.length; i++) {
         reader.readAsText(event.dataTransfer.files[i]);
-      };
+      }
     }
     return false;
   };
@@ -30,5 +30,5 @@ on_pageload.push(function() {
   for (var i = 0; i < targets.length; i++) {
     targets[i].ondragover = capture_drop;
     targets[i].ondrop = finish_drop;
-  };
+  }
 });

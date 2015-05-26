@@ -77,7 +77,7 @@ class PublicKey < ActiveRecord::Base
       self.send("#{attrib}=", r509.send(attrib))
     end
     self.issuer_subject = Subject.from_r509 r509.issuer
-    self.is_ca = r509.basic_constraints.try(:is_ca?)
+    self.is_ca = r509.basic_constraints.try(:is_ca?) || false
     self.key_usage = r509.key_usage.allowed_uses if r509.key_usage
     self.subject_alternate_names = r509.subject_alt_name.names.map {|n| n.value} if r509.subject_alt_name
   end

@@ -1,0 +1,21 @@
+@import "bootstrap/variables";
+
+html, body {
+  height: 100%;
+}
+
+.page-wrap {
+  min-height: 100%;
+}
+
+.content-pane {
+  overflow: auto;
+  padding-bottom: $navbar-height;
+}
+
+.footer {
+  position: relative;
+  margin-top: -$navbar-height;
+  clear: both;
+  padding-top: 20px;
+}

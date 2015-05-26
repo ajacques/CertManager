@@ -11,6 +11,7 @@
       = sb.text_field :O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
       = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
       = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
+    = csr.text_field :subject_alternate_names, label: 'Alternate Names (SAN)'
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'

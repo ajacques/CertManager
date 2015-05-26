@@ -13,7 +13,9 @@
     = javascript_include_tag 'application', data: {turbolinks_track: true}, defer: true
     = csrf_meta_tags
   %body{data: {page: [controller_name.capitalize, action_name.capitalize].join}}
-    = render partial: 'layouts/header'
-    = render partial: 'layouts/navbar'
-    .container{class: [controller_name, '-', action_name].join}
-      = yield
+    .page-wrap
+      = render partial: 'layouts/header'
+      = render partial: 'layouts/navbar'
+      .content-pane.container{class: [controller_name, '-', action_name].join}
+        = yield
+    = render partial: 'layouts/footer'

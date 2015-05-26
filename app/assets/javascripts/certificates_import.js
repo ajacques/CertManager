@@ -1,5 +1,5 @@
-var CertificatesImport = new function() {
-  'use strict'
+var CertificatesImport = function() {
+  'use strict';
   var button = document.getElementById('import-button');
   var box = document.getElementById('import-url');
   var result = document.getElementById('cert-body');
@@ -15,7 +15,5 @@ var CertificatesImport = new function() {
     return false;
   };
 
-  this.init = function() {
-    button.addEventListener('click', import_click);
-  };
+  button.addEventListener('click', import_click);
 };

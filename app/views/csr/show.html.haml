@@ -7,11 +7,11 @@
   = explain_csr @csr
   %h4 Step 2. Submit your request
   %p Submit this to your signing authority
-  = text_area_tag :csr_body, @csr.to_pem, class: 'certificate cert-body', readonly: true
+  = text_area_tag :csr_body, @csr.to_pem, class: 'form-control certificate cert-body', readonly: true
   %h4 Step 3. Import the signed chain
   %p Here's where you'd upload the signed chain
   = bootstrap_form_tag url: url_for(action: :import) do |f|
     = f.hidden_field :return_url, { value: url_for(action: :show) }
     = f.fields_for :certificate do |c|
       = c.text_area :key, label: 'Certificate chain', class: 'certificate'
-    = f.submit 'Submit dat shit'
+    = f.submit 'Import'
