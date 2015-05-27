@@ -112,7 +112,7 @@ class CertificatesController < ApplicationController
         @certs << certificate
       end
       @certs.each do |cert|
-        issuer = cert if cert.public_key.issuer_subject_id = cert.public_key.subject_id
+        issuer = cert if cert.public_key.issuer_subject_id == cert.public_key.subject_id
         issuer = issuer || Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
         if issuer
           cert.issuer = issuer

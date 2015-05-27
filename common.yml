@@ -1,5 +1,5 @@
 saltmaster:
-  image: salt-master
+  build: dev-dockers/salt-master
   expose:
     - 8000
     - 4506
@@ -7,7 +7,7 @@ saltmaster:
     - "8080:8080"
 
 saltminion:
-  image: salt-minion
+  build: dev-dockers/salt-minion
 
 web:
   build: .
