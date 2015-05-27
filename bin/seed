@@ -1,0 +1,3 @@
+#!/bin/sh
+docker exec certmanager_web_1 /bin/sh -c 'bin/bundle exec rake db:drop && bin/bundle exec rake db:migrate && bin/bundle exec rake db:seed'
+#docker exec certmanager_web_1 /bin/sh -c 'bin/bundle exec rake db:schema:load && bin/bundle exec rake db:seed'

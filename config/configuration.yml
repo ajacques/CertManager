@@ -10,9 +10,11 @@ default:
   auth:
     mailer_sender: 'certs@technowizardry.net'
   session:
-    - :cookie_store
+    - :redis_session_store
     -
       key: _CertManager_session
+      redis:
+        host: redis
 
 development:
   email_delivery:

@@ -11,14 +11,17 @@ saltminion:
     - 'saltmaster:salt'
 
 web:
-  extends:
-    file: common.yml
-    service: web
+#  extends:
+#    file: common.yml
+#    service: web
+  image: rails
+  command: bin/bundle exec bin/spring rails s -b 0.0.0.0
   volumes:
     - .:/rails-app
   links:
     - 'saltmaster:salt'
     - 'redis:redis'
+  user: www-data
   environment:
     RAILS_ENV: development
     VIRTUAL_HOST: certmgr.devvm
@@ -40,7 +43,7 @@ worker:
   volumes:
     - .:/rails-app
   links:
-    - "saltmaster:salt"
+    - 'saltmaster:salt'
     - 'redis:redis'
   environment:
     RAILS_ENV: development
