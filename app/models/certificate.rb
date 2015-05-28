@@ -23,7 +23,7 @@ class Certificate < ActiveRecord::Base
   scope :signed, -> { where('certificates.public_key_id IS NOT NULL') }
   scope :leaf, -> { where('(SELECT COUNT(*) FROM certificates AS sub WHERE sub.issuer_id = certificates.id) == 0') }
   scope :with_subject, -> subject { Certificate.joins(:subject).where(subjects: Subject.filter_params(subject.to_h)) }
-  scope :with_everything, -> { eager_load(:public_key, :private_key).includes(public_key: :_subject_alternate_names) }
+  scope :with_everything, -> { eager_load(:private_key, public_key: :subject) }
   scope :can_sign, -> { joins(:public_key).where(public_keys: { is_ca: true })}
 
   def status

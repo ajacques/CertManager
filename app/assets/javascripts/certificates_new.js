@@ -1,11 +1,13 @@
 var CertificatesNew = function() {
   'use strict';
   var self = this;
-  var subject_root = document.getElementById('subjectAltList');
-  var subject_boxes = [];
-  subject_boxes.push(document.getElementById('certificate_csr_attributes_subject_alternate_names'));
+  var subject_root = document.getElementById('subject-alt-list');
+  var subject_boxes = subject_root.children;
+  var san_box_tmpl = document.getElementById('subject-alt-name-body').innerHTML;
+  Mustache.parse(san_box_tmpl);
   var add_textbox = function() {
-    var elem = document.createElement('input');
+    var elem = document.createElement('div');
+    elem.innerHTML = Mustache.render(san_box_tmpl);
     subject_root.appendChild(elem);
   };
   var handle_subject_key = function(evt) {

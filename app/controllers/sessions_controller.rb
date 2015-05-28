@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   skip_before_filter :require_login, only: [:new, :create]
 
   def new
+    redirect_to root_path if current_user
     @error_message = flash[:error]
     @username = flash[:username]
     unless User.any?

@@ -25,6 +25,7 @@ group :assets, :development do
   gem 'turbolinks'
 
   gem 'bootstrap-sass'
+  gem 'mustache-js-rails'
 end
 
 group :assets do

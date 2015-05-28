@@ -2,10 +2,10 @@ include CrlHelper
 
 class CertificatesController < ApplicationController
   def index
-    @query = params[:search]
+    query = params[:search]
     @certs = Certificate.with_everything.paginate(page: params[:page])
-    if @query
-      @certs = @certs.joins(:public_key).where('subjects.CN LIKE ? OR (SELECT 1 FROM subject_alternate_names san WHERE san.public_key_id = public_keys.id AND san.name LIKE ?)', "%#{@query}%", "%#{@query}%")
+    if query
+      @certs = @certs.joins(public_key: :subject).where('("subjects"."CN" LIKE ?) OR (SELECT TRUE FROM "subject_alternate_names" "san" WHERE "san"."public_key_id" = "public_keys"."id" AND "san"."name" LIKE ?)', "%#{query}%", "%#{@query}%")
     end
     @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.has_key? :issuer
     @expiring = [] #@certs.expiring_in(30.days).order('not_after asc')
@@ -138,7 +138,7 @@ class CertificatesController < ApplicationController
   private
   def certificate_params
     params.require(:certificate)
-      .permit(csr_attributes: [subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
+      .permit(csr_attributes: [subject_alternate_names: [], subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
               private_key_attributes: [:bit_length, :type, :curve_name])
   end
 end

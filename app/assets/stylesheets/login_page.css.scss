@@ -18,13 +18,18 @@
 
 @media screen and (max-device-width: 512px) {
   .sessions-new {
-    background: linear-gradient(to bottom, #ffffff 0%, #ffe0e0 100%);
-
     .login-form-container {
       width: 100%;
       background-color: transparent;
       border: none;
       box-shadow: none;
     }
+  }
+}
+@media screen and (min-device-width: 512px) {
+  .sessions-new .login-form-container {
+    transition: background-color 0.1s;
+    transition: border 0.1s;
+    width: 512px;
   }
 }
