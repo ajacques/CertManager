@@ -15,7 +15,7 @@ web:
 #    file: common.yml
 #    service: web
   image: rails
-  command: bin/bundle exec bin/spring rails s -b 0.0.0.0
+  command: bin/bundle exec bin/spring rails s -b 0.0.0.0 --pid /tmp/rails_s.pid
   volumes:
     - .:/rails-app
   links:
