@@ -4,6 +4,7 @@ class CreatePublicKeys < ActiveRecord::Migration
       t.integer :subject_id, null: false
       t.integer :private_key_id
       t.integer :issuer_subject_id
+      t.integer :certificate_id
 
       # Key attributes
       t.string :type, null: false

@@ -10,6 +10,5 @@ class CreateCertificates < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_foreign_key :certificates, :private_keys
   end
 end

@@ -30,7 +30,8 @@ def new_key_pair!(opts={})
   public.private_key = private
   public.assign_attributes opts.slice(:is_ca, :key_usage, :extended_key_usage)
   cert_props = opts.slice(:issuer).merge({  private_key: private, public_key: public, created_by: opts[:user], updated_by: opts[:user] })
-  cert = Certificate.new(cert_props)
+  cert = Certificate.new cert_props
+  public.certificate_id = cert.id
   signer = opts[:issuer] || cert
   signer.sign(cert)
   cert.issuer = signer

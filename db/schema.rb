@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150521223446) do
     t.integer  "subject_id",                                  null: false
     t.integer  "private_key_id"
     t.integer  "issuer_subject_id"
+    t.integer  "certificate_id"
     t.string   "type",                                        null: false
     t.string   "curve_name"
     t.string   "hash_algorithm",                              null: false
