@@ -60,12 +60,12 @@ scheduler:
     RAILS_ENV: development
 
 browsersync:
-  image: browsersync
-  command: "nodejs /usr/local/bin/browser-sync start --proxy 'web:3000' --files '/app/app/**' --host 0.0.0.0 --port 80"
+  build: dockers/browsersync
+  command: start --proxy 'web:3000' --files '/app/app/**' --host 0.0.0.0 --port 8080 --no-notify
   links:
     - web
   expose:
-    - 80
+    - 8080
   volumes:
     - .:/app:ro
   environment:
