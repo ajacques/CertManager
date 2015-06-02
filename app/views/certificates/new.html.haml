@@ -1,3 +1,5 @@
+%h1 New Certificate
+%p Fill out the following information to create a private key and associated certificate request.
 = bootstrap_form_for :certificate, url: url_for(action: :create), layout: :horizontal do |f|
   = f.fields_for :csr_attributes do |csr|
     = csr.fields_for :subject_attributes do |sb|
@@ -14,7 +16,6 @@
     .form-group
       %label.col-sm-2.control-label Alternate Names (SAN)
       #subject-alt-list.col-sm-10
-        %input.form-control{type: :text, name: 'certificate[csr_attributes][subject_alternate_names][]'}
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
@@ -29,4 +30,4 @@
         = pk.radio_button :curve_name, curve, label: curve
   = f.submit 'Create Certificate', class: 'btn btn-primary'
 %script#subject-alt-name-body{type: 'x-tmpl-mustache'}
-  %input.form-control{type: :text, name: 'certificate[csr_attributes][subject_alternate_names][]'}
+  %input.san-textbox.form-control{type: :text, data: {name: 'certificate[csr_attributes][subject_alternate_names][]'}}
