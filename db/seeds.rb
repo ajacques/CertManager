@@ -12,8 +12,15 @@ def new_csr!(opts={})
   subject = Subject.new opts.slice(*Subject.safe_attributes)
   private = opts[:key_type].new opts.slice(:bit_length, :curve_name)
   csr = CertificateSignRequest.new subject: subject, private_key: private
+  csr.update_attributes opts.slice(:subject_alternate_names)
 
-  cert_props = opts.slice(:issuer).merge({ private_key: private, created_by: opts[:user], updated_by: opts[:user], csr: csr })
+  cert_props = opts.slice(:issuer).merge(
+   {
+    private_key: private,
+    created_by: opts[:user],
+    updated_by: opts[:user],
+    csr: csr
+   })
   cert = Certificate.new(cert_props)
   cert.save!
   cert
@@ -65,6 +72,15 @@ leaf = new_key_pair!({
 })
 #new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: ECPrivateKey, curve_name: 'secp384r1', user: user, issuer: ca
 
-new_csr! CN: 'new.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: RSAPrivateKey, bit_length: 2048, user: user, issuer: ca
+new_csr!(
+ CN: 'new.fintech.com',
+ O: 'Fintech, Inc.',
+ OU: 'Web Services',
+ key_type: RSAPrivateKey,
+ bit_length: 2048,
+ user: user,
+ issuer: ca,
+ subject_alternate_names: ['alt.fintech.com']
+)
 
 Service.create! certificate: leaf, cert_path: '/tmp/fintech.com', after_rotate: 'exit 0', deploy_strategy: :salt, node_group: '*'

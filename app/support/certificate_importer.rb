@@ -9,7 +9,7 @@ class CertificateImporter
   def get_certs
     connect
     certs = grab_cert
-    @ssl_socket.close
+    disconnect
     certs.map do |cert|
       PublicKey.import cert.to_s
     end
@@ -22,6 +22,9 @@ class CertificateImporter
     @ssl_socket = OpenSSL::SSL::SSLSocket.new @socket, @ssl_context
     @ssl_socket.hostname = @host
     @ssl_socket.connect
+  end
+  def disconnect
+    @ssl_socket.close
   end
 
   def grab_cert

@@ -1,0 +1,6 @@
+%h3 Import from PEM
+%p Import one or more certificates by pasting the the raw Base64-encoded data below
+%div.drop-target{data: {drop: {type: :textbox, target: :key}}}
+  = bootstrap_form_for :certificate, url: url_for(action: :import) do |f|
+    = f.text_area :key, label: (t 'certificate'), placeholder: "Insert a valid certificate key pair\r\n-----BEGIN CERTIFICATE-----", class: :certificate, id: 'cert-body'
+    = f.submit 'Import certificate', class: 'btn btn-primary'
