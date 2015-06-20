@@ -4,4 +4,5 @@ document.addEventListener 'DOMContentLoaded', () ->
   for d, i in on_pageload
     d()
   if "function" == typeof page_obj
+    console.info "Registering page load handler"
     page_obj()

@@ -13,6 +13,23 @@ PublicKey.from_object = function(object) {
   return new PublicKey(object);
 };
 
+PublicKey.find = function(id, format) {
+  var process = function(result) {
+    var deferred = $.Deferred();
+
+    deferred.resolve(new PublicKey());
+    return deferred.promise();
+  };
+  var ajax = function() {
+    return $.ajax({
+      url: certificate_path(id, format),
+      method: 'GET',
+      dataType: 'json'
+    });
+  };
+  return ajax().done(process);
+};
+
 var import_from_url = function(host) {
   var process = function(result) {
     var deferred = $.Deferred();

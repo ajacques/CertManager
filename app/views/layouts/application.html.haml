@@ -18,4 +18,6 @@
       = render partial: 'layouts/navbar'
       .content-pane.container{class: [controller_name, '-', action_name].join}
         = yield
+    .modal-backdrop.in
+    = render partial: 'controls/modal'
     = render partial: 'layouts/footer'
