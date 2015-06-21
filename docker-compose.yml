@@ -11,9 +11,6 @@ saltminion:
     - 'saltmaster:salt'
 
 web:
-#  extends:
-#    file: common.yml
-#    service: web
   image: rails
   command: bin/bundle exec bin/spring rails s -b 0.0.0.0 --pid /tmp/rails_s.pid
   volumes:
@@ -24,12 +21,16 @@ web:
   user: www-data
   environment:
     RAILS_ENV: development
-    VIRTUAL_HOST: certmgr.devvm
+  tty: true
 
-redis:
-  image: redis
-  expose:
+nginx:
+  build: dockers/nginx
+  ports:
     - 80
+  links:
+    - 'browsersync:web'
+  environment:
+    VIRTUAL_HOST: certmgr.devvm
 
 redis:
   image: redis:3.0
@@ -68,5 +69,3 @@ browsersync:
     - 8080
   volumes:
     - .:/app:ro
-  environment:
-    VIRTUAL_HOST: certmgr-sync.devvm

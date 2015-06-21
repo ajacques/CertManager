@@ -1,5 +1,6 @@
 #!/bin/sh
 setfacl -m u:www-data:rwx db
-setfacl -m u:www-data:rwx db/schema.rb
+setfacl -m u:www-data:rw db/schema.rb
+setfacl -m u:www-data:rw Gemfile.lock
 setfacl -m u:www-data:rwx tmp
 setfacl -m u:www-data:rwx log

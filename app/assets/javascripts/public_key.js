@@ -20,14 +20,9 @@ PublicKey.find = function(id, format) {
     deferred.resolve(new PublicKey());
     return deferred.promise();
   };
-  var ajax = function() {
-    return $.ajax({
-      url: certificate_path(id, format),
-      method: 'GET',
-      dataType: 'json'
-    });
-  };
-  return ajax().done(process);
+  return $.ajax({
+    url: certificate_path(id, format)
+  }).done(process);
 };
 
 var import_from_url = function(host) {

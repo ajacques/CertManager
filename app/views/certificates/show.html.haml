@@ -34,3 +34,18 @@
 - else
   %p no services yet. A service allows you to securely deploy this certificate to a host
   = link_to 'Create a service', controller: :services, action: :new, cert_id: @cert.id
+#modal.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close &times;
+        %h4.modal-title
+      %ul.nav.nav-tabs.nav-justified
+        %li.active
+          %a.modal-format-selector{href: '#', data: {format: :pem}} PEM
+        %li
+          %a.modal-format-selector{href: '#', data: {format: :der}} DER
+      %pre.certificate.modal-body
+      .modal-footer
+        %a#modal-download-link Download
+        %button.btn.btn-default Close

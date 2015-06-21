@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  'use strict'
+  'use strict';
   var elems = document.getElementsByClassName('cert-body');
   var selectAll = function(evt) {
     this.focus();
