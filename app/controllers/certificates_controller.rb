@@ -14,6 +14,7 @@ class CertificatesController < ApplicationController
 
   def show
     @cert = Certificate.eager_load(:public_key, :private_key).includes(:services).find(params[:id])
+    self.model_id = @cert.id
     if params.has_key? :chain
       chain = @cert.chain
       chain.delete_at(0) if params.has_key? :exclude_root

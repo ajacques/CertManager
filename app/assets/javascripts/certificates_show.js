@@ -2,7 +2,7 @@ var CertificatesShow = function() {
   var modal;
   var currentFormat;
   var downloadLink;
-  var id;
+  var id = document.body.getAttribute('data-id');
   var addText = function(pubkey) {
     modal.setBody(pubkey);
   };
@@ -20,7 +20,7 @@ var CertificatesShow = function() {
   var changeFormat = function(evt) {
     currentFormat = this.getAttribute('data-format');
     PublicKey.find(id, currentFormat).done(addText);
-    downloadLink.href = certificate_path(1, currentFormat);
+    downloadLink.href = certificate_path(id, currentFormat);
     evt.preventDefault();
     return false;
   };
