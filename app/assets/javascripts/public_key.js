@@ -21,7 +21,8 @@ PublicKey.find = function(id, format) {
     return deferred.promise();
   };
   return $.ajax({
-    url: certificate_path(id, format)
+    url: certificate_path(id, format),
+    dataType: 'text'
   }).done(process);
 };
 

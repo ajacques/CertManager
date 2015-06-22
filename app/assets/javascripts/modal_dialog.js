@@ -3,8 +3,9 @@ var ModalDialog = function() {
   var modal = document.getElementById('modal');
   var header = modal.getElementsByClassName('modal-title')[0];
   var modal_body = modal.getElementsByClassName('modal-body')[0];
+  var close_buttons = modal.getElementsByClassName('close-button');
 
-  return {
+  var md = {
     setHeader: function(text) {
       header.innerHTML = text;
     },
@@ -16,4 +17,15 @@ var ModalDialog = function() {
       modal.classList.add('center-block');
     }
   };
+
+  md.close = function() {
+    modal.classList.remove('center-block');
+    body.classList.remove('modal-visible');
+  };
+
+  for (var i = 0; i < close_buttons.lengthg; i++) {
+    close_buttons[i].addEventListener('click', md.close);
+  }
+
+  return md;
 };

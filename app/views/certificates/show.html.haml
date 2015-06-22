@@ -38,14 +38,13 @@
   .modal-dialog
     .modal-content
       .modal-header
-        %button.close &times;
+        %button.close.close-button &times;
         %h4.modal-title
       %ul.nav.nav-tabs.nav-justified
-        %li.active
-          %a.modal-format-selector{href: '#', data: {format: :pem}} PEM
-        %li
-          %a.modal-format-selector{href: '#', data: {format: :der}} DER
+        - %w(pem der json yaml text).each do |format|
+          %li
+            %a.modal-format-selector{href: '#', data: {format: format}}= format
       %pre.certificate.modal-body
       .modal-footer
         %a#modal-download-link Download
-        %button.btn.btn-default Close
+        %button.close-button.btn.btn-default Close
