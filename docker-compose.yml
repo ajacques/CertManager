@@ -11,7 +11,7 @@ saltminion:
     - 'saltmaster:salt'
 
 web:
-  image: rails
+  build: .
   command: bin/bundle exec bin/spring rails s -b 0.0.0.0 --pid /tmp/rails_s.pid
   volumes:
     - .:/rails-app
