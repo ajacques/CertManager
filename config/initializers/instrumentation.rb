@@ -9,7 +9,7 @@ module RedisInstrumentation
     def query(event)
       return unless logger.debug?
 
-      name = '%s (%.1fms)' % ["Redis Query", event.duration]
+      name = '%s (%.1fms)' % ['Redis Query', event.duration]
 
       command = event.payload[:command]
       args = event.payload[:args].join(' ')
@@ -36,7 +36,7 @@ module RedisInstrumentation
     module ClassMethods
       def log_process_action(payload)
         messages, runtime = super, payload[:redis_runtime]
-        messages << ("Redis: %.1fms" % runtime.to_f) if runtime
+        messages << ('Redis: %.1fms' % runtime.to_f) if runtime
         messages
       end
     end

@@ -4,7 +4,9 @@ tmp/cache/*
 tmp/pids/*
 tmp/sockets/*
 public/assets/*
-dockers
 db/*.sqlite3
+README.md
+
+dockers/
 .idea
 .git

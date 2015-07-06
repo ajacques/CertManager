@@ -40,8 +40,8 @@ class PublicKey < ActiveRecord::Base
     cert.not_after = not_after
     cert.serial = OpenSSL::BN.new serial.to_s
     cert.add_extension R509::Cert::Extensions::BasicConstraints.new ca: is_ca
-    cert.add_extension R509::Cert::Extensions::KeyUsage.new value: key_usage unless key_usage.empty?
-    cert.add_extension R509::Cert::Extensions::ExtendedKeyUsage.new value: extended_key_usage unless extended_key_usage.empty?
+    cert.add_extension R509::Cert::Extensions::KeyUsage.new value: key_usage if key_usage
+    cert.add_extension R509::Cert::Extensions::ExtendedKeyUsage.new value: extended_key_usage if extended_key_usage
     cert
   end
   def subject_alternate_names
