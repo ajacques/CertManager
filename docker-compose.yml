@@ -35,7 +35,7 @@ nginx:
     VIRTUAL_HOST: certmgr.devvm
 
 redis:
-  image: redis:3.0
+  image: redis:3.0.2
   expose:
     - 6379
 
