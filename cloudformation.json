@@ -5,14 +5,6 @@
     }
   },
   "Parameters": {
-    "WebsiteApplicationS3Bucket": {
-      "Description": "S3 bucket to find application release",
-      "Type": "String"
-    },
-    "WebsiteApplicationS3FileName": {
-      "Description": "S3 file name for application file",
-      "Type": "String"
-    },
     "KeyName": {
       "Type": "AWS::EC2::KeyPair::KeyName",
       "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
@@ -29,9 +21,6 @@
     "FrontendAppServerType": {
       "Description": "Application server instance type",
       "Default": "t1.micro",
-      "AllowedValues": [
-        "t2.micro"
-      ],
       "Type": "String"
     },
     "IamRoleInstanceProfile" : {
@@ -113,7 +102,7 @@
       "Properties": {
         "NetworkAclId": { "Ref": "FrontendACL" },
         "CidrBlock": "0.0.0.0/0",
-        "RuleNumber": 1,
+        "RuleNumber": 2,
         "RuleAction": "allow",
         "Protocol": 6,
         "Egress": false,
@@ -128,17 +117,17 @@
       "Properties": {
         "NetworkAclId": { "Ref": "FrontendACL" },
         "CidrBlock": "0.0.0.0/0",
-        "RuleNumber": 2,
+        "RuleNumber": 5,
         "RuleAction": "allow",
         "Protocol": 6,
         "Egress": false,
         "PortRange": {
-          "From": 0,
+          "From": 1024,
           "To": 65535
         }
       }
     },
-    "FrontendACLPermitAllOut": {
+    "FrontendACLPermitEphemeralOut": {
       "Type": "AWS::EC2::NetworkAclEntry",
       "Properties": {
         "NetworkAclId": { "Ref": "FrontendACL" },
@@ -148,8 +137,38 @@
         "Protocol": 6,
         "Egress": true,
         "PortRange": {
-          "From": 0,
+          "From": 1024,
           "To": 65535
+        }
+      }
+    },
+    "FrontendACLPermitHTTPOut": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": { "Ref": "FrontendACL" },
+        "RuleNumber": 2,
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": 6,
+        "Egress": true,
+        "PortRange": {
+          "From": 80,
+          "To": 80
+        }
+      }
+    },
+    "FrontendACLPermitHTTPSOut": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": { "Ref": "FrontendACL" },
+        "RuleNumber": 3,
+        "RuleAction": "allow",
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": 6,
+        "Egress": true,
+        "PortRange": {
+          "From": 443,
+          "To": 443
         }
       }
     },
@@ -163,6 +182,26 @@
             "IpProtocol": "tcp",
             "FromPort": 80,
             "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 443,
+            "ToPort": 443,
             "CidrIp": "0.0.0.0/0"
           }
         ]
