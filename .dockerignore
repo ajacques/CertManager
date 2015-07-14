@@ -6,9 +6,11 @@ tmp/pids/*
 tmp/sockets/*
 public/assets/*
 db/*.sqlite3
-dockers/
-.idea/
-.git/
+
+# Development Environment
+dockers
+.idea
+.git
 
 README.md
 *.yml
