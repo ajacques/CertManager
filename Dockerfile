@@ -6,6 +6,7 @@ ADD Gemfile.lock /rails-app/Gemfile.lock
 WORKDIR /rails-app
 RUN /usr/bin/env bundle install
 RUN /usr/bin/apt-get -qy purge ruby-dev g++ make patch && /usr/bin/apt-get -qy autoremove
+RUN /bin/rm -rf /var/lib/gems/2.1.0/cache /var/cache/
 ADD . /rails-app
 RUN find public -mindepth 1 -not -name 'assets' -not -name 'manifest-*.json' -print -delete
 RUN find . -type f -print -exec chmod 444 {} \; && find . -type d -print -exec chmod 555 {} \;
