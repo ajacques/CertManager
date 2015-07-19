@@ -4,7 +4,6 @@ log/*
 tmp/cache/*
 tmp/pids/*
 tmp/sockets/*
-public/assets/*
 db/*.sqlite3
 
 # Development Environment
