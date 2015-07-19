@@ -12,6 +12,5 @@ dockers
 .git
 
 README.md
-*.yml
 cloudformation.json
 ecs-manifest.json
