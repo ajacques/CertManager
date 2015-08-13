@@ -17,6 +17,8 @@ Rails.application.configure do
   # Generate digests for assets URLs.
   config.assets.digest = true
 
+  config.compact_haml = true
+
   # Set to :debug to see everything in the log.
   config.log_level = :info
 

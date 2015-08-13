@@ -19,6 +19,8 @@ Rails.application.configure do
   # Generate digests for assets URLs.
   config.assets.digest = true
 
+  config.compact_haml = false
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
