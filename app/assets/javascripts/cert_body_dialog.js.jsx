@@ -19,9 +19,9 @@ var CertBodyDialog = React.createClass({
     formats.forEach(function(format) {
       var link = <a onClick={self.handleChangeFormat.bind(null, format)} format={format}>{format}</a>;
       if (format === self.state.format) {
-        formatElems.push(<li className="active">{link}</li>);
+        formatElems.push(<li className="active" key={format}>{link}</li>);
       } else {
-        formatElems.push(<li>{link}</li>);
+        formatElems.push(<li key={format}>{link}</li>);
       }
     });
     return (
