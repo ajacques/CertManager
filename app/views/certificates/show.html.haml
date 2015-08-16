@@ -18,10 +18,9 @@
     %li Expired
 %aside
   %ul
-    %li#cert-data-popup-link= link_to 'Show certificate (PEM)', format: :pem
-    %li #{link_to 'Certificate chain', certificate_path(chain: true)} #{link_to '(PEM)', certificate_path(chain: true, format: :pem)}
+    %li#cert-data-popup-link= link_to 'Show certificate', format: :pem
     - if @cert.private_key
-      %li= link_to 'Renew', action: :csr
+      %li= link_to 'Renew manually', action: :csr
     %li #{link_to "#{pluralize @cert.sub_certificates.count, 'child'}", action: :index, issuer: @cert.id}
 = render partial: 'validator', locals: {public_key: @cert.public_key}
 %h2 Audit Log
