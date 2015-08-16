@@ -40,6 +40,10 @@ GEM
     autoprefixer-rails (5.2.1.1)
       execjs
       json
+    babel-source (5.8.19)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.10)
     bootstrap-sass (3.3.5.1)
       autoprefixer-rails (>= 5.0.0.1)
@@ -53,6 +57,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    connection_pool (2.2.0)
     debase (0.1.8)
       debase-ruby_core_source
     debase-ruby_core_source (0.7.9)
@@ -138,6 +143,13 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.14.0)
     rake (10.4.2)
+    react-rails (1.1.0)
+      babel-transpiler (>= 0.7.0)
+      coffee-script-source (~> 1.8)
+      connection_pool
+      execjs
+      rails (>= 3.2)
+      tilt
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -224,6 +236,7 @@ DEPENDENCIES
   pg
   r509
   rails (= 4.2.3)
+  react-rails
   redis
   redis-session-store
   resque
@@ -239,4 +252,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.10.5
+   1.10.6

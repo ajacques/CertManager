@@ -1,8 +1,30 @@
-var PublicKey = function(obj) {
+'use strict';
+var PublicKey = function(id) {
   var self = this;
-  self.to_pem = function() {
-    return obj.to_pem;
-  }
+  var cache = {};
+
+  self.get_format = function(format) {
+    if (cache.hasOwnProperty(format)) {
+      var deferred = $.Deferred();
+
+      deferred.resolve(cache[format]);
+      return deferred.promise();
+    }
+    var process = function(result) {
+      var deferred = $.Deferred();
+
+      cache[format] = result;
+      deferred.resolve(result);
+      return deferred.promise();
+    };
+    return $.ajax({
+      url: certificate_path(id, format),
+      dataType: 'text'
+    }).success(process);
+  };
+
+  self.to_pem = self.get_format.bind(self, 'pem');
+  self.id = id;
 };
 
 PublicKey.from_string = function(string) {
@@ -13,17 +35,8 @@ PublicKey.from_object = function(object) {
   return new PublicKey(object);
 };
 
-PublicKey.find = function(id, format) {
-  var process = function(result) {
-    var deferred = $.Deferred();
-
-    deferred.resolve(new PublicKey());
-    return deferred.promise();
-  };
-  return $.ajax({
-    url: certificate_path(id, format),
-    dataType: 'text'
-  }).done(process);
+PublicKey.find = function(id) {
+  return new PublicKey(id);
 };
 
 var import_from_url = function(host) {

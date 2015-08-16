@@ -27,6 +27,7 @@ group :assets, :development do
 
   gem 'bootstrap-sass'
   gem 'mustache-js-rails'
+  gem 'react-rails'
 end
 
 group :assets do

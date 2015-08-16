@@ -21,9 +21,12 @@ web:
     - 'saltmaster:salt'
     - 'redis:redis'
     - db
+  volumes_from:
+    - gems-2.1
   user: www-data
   environment:
     RAILS_ENV: development
+    GEM_HOME: /gem-store
   tty: true
 
 nginx:
@@ -31,7 +34,7 @@ nginx:
   ports:
     - 80
   links:
-    - 'browsersync:web'
+    - 'web:web'
   environment:
     VIRTUAL_HOST: certmgr.devvm
 

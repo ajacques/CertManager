@@ -15,7 +15,8 @@
       = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
     .form-group
       %label.col-sm-2.control-label Alternate Names (SAN)
-      #subject-alt-list.col-sm-10
+      .col-sm-10
+        #subject-alt-list
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'

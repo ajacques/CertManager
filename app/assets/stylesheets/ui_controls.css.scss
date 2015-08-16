@@ -3,3 +3,7 @@ body:not(.modal-visible) {
     display: none;
   }
 }
+
+.modal-body {
+  max-height: 66vh;
+}
