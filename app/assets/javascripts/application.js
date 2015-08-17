@@ -16,4 +16,3 @@
 //= require react
 //= require_tree .
 
-var on_pageload = on_pageload || [];

@@ -9,7 +9,7 @@ var CertificatesShow = function() {
   };
   var popCertWindow = function(evt) {
     elem = React.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
-    elem.handleChangeFormat(elem.state.format);
+    elem.changeFormat(elem.state.format);
     evt.preventDefault();
     return false;
   };
