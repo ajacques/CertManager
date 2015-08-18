@@ -1,7 +1,8 @@
 func = () ->
+  window.on_pageload = window.on_pageload || []
   page_name = document.body.getAttribute('data-page')
   page_obj = window[page_name]
-  for d, i in on_pageload
+  for d, i in window.on_pageload
     d()
   if "function" == typeof page_obj
     console.info "Registering page load handler"
