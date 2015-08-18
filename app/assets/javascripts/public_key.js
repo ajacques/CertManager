@@ -1,5 +1,5 @@
-'use strict';
 var PublicKey = function(id) {
+  'use strict';
   var self = this;
   var cache = {};
 
@@ -18,7 +18,7 @@ var PublicKey = function(id) {
       return deferred.promise();
     };
     return $.ajax({
-      url: certificate_path(id, format),
+      url: urls.certificate_path(id, format),
       dataType: 'text'
     }).success(process);
   };
@@ -39,7 +39,7 @@ PublicKey.find = function(id) {
   return new PublicKey(id);
 };
 
-var import_from_url = function(host) {
+PublicKey.from_url = function(host) {
   var process = function(result) {
     var deferred = $.Deferred();
 
@@ -50,7 +50,7 @@ var import_from_url = function(host) {
   };
   var ajax = function() {
     return $.ajax({
-      url: fetch_key_path(),
+      url: urls.fetch_key_path(),
       method: 'POST',
       dataType: 'json',
       data: {

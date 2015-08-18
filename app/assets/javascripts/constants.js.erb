@@ -1,14 +1,28 @@
 <% url = Rails.application.routes.url_helpers %>
 
-var fetch_key_path = function() {
-  return '<%= url.import_from_url_certificates_path %>';
-};
+var urls = {};
+(function(root) {
+  root.fetch_key_path = function () {
+    return '<%= url.import_from_url_certificates_path %>';
+  };
 
-var certificate_path = function(id, format) {
-  if (typeof format !== "undefined") {
-    format = "." + format;
-  } else {
-    format = "";
+  function serialize(obj) {
+    var str = [];
+    for(var p in obj)
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    return str.join("&");
   }
-  return '<%= url.certificates_path %>/' + id + format;
-};
+
+  root.certificate_path = function (id, format) {
+    if (typeof format !== "undefined") {
+      format = "." + format;
+    } else {
+      format = "";
+    }
+    if (arguments.length >= 2) {
+      format += '?';
+      format += serialize(arguments[2]);
+    }
+    return '<%= url.certificates_path %>/' + id + format;
+  };
+}).call(null, urls);

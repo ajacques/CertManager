@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
+window.on_pageload = window.on_pageload || [];
+window.on_pageload.push(function() {
   'use strict';
   var elems = document.getElementsByClassName('cert-body');
   var selectAll = function(evt) {
