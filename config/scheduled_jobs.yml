@@ -1,4 +1,11 @@
-ValidateCertificateJob:
+validate_certs:
+  class: ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+  args:
+    -
+      job_class: ValidateCertificateJob
+      job_id: #{SecureRandom.uuid}
+      queue_name: refresh
+      arguments:
   every:
     - '5m'
   queue: refresh
