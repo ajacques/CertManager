@@ -8,7 +8,7 @@
   = f.select :certificate_id, options_for_certificate_list(Certificate.owned)
   = f.form_group :deploy_strategy do
     = f.radio_button :deploy_strategy, :salt, label: 'Salt stack', checked: true
-  = f.text_field :cert_path, label: 'File path', placeholder: 'etc/nginx/certs/example.com.pem'
+  = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
   = f.text_field :after_rotate, placeholder: 'service nginx reload'
   = f.text_field :node_group
   = f.submit 'Create service', class: 'btn btn-primary'
