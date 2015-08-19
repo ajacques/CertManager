@@ -11,7 +11,6 @@ gem 'will_paginate'
 
 gem 'redis'
 gem 'redis-session-store'
-gem 'devise'
 
 gem 'r509' # SSL certificate utilities
 
