@@ -8,21 +8,20 @@ var urls = {};
 
   function serialize(obj) {
     var str = [];
-    for(var p in obj)
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    for (var p in obj) {
+      if (p !== 'format') {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      }
+    }
     return str.join("&");
   }
 
-  root.certificate_path = function (id, format) {
-    if (typeof format !== "undefined") {
-      format = "." + format;
-    } else {
-      format = "";
-    }
+  root.certificate_path = function (id) {
+    var url = '';
     if (arguments.length >= 2) {
-      format += '?';
-      format += serialize(arguments[2]);
+      url += '?';
+      url += serialize(arguments[2]);
     }
-    return '<%= url.certificates_path %>/' + id + format;
+    return '<%= url.certificates_path %>/' + id + url;
   };
 }).call(null, urls);
