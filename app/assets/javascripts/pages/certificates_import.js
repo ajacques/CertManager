@@ -15,5 +15,7 @@ var CertificatesImport = function() {
     return false;
   };
 
+  React.constructAndRenderComponentByID(CertImportBox, {}, 'import-box-attach');
+
   button.addEventListener('click', import_click);
 };
