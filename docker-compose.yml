@@ -34,7 +34,7 @@ nginx:
   ports:
     - 80
   links:
-    - 'web:web'
+    - 'browsersync:web'
   environment:
     VIRTUAL_HOST: certmgr.devvm
 
