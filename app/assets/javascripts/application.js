@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require mustache
 //= require react
+//= require js-routes
 //= require_tree .
 

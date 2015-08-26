@@ -136,6 +136,21 @@ class CertificatesController < ApplicationController
     end
   end
 
+  def analyze
+    cert = PublicKey.import request.body.read
+    respond_to do |format|
+      format.json {
+        render json: cert.to_h
+      }
+      format.text {
+        render plain: cert.to_text
+      }
+      format.yaml {
+        render plain: cert.to_yaml
+      }
+    end
+  end
+
   private
   def certificate_params
     params.require(:certificate)

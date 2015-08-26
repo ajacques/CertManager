@@ -29,7 +29,9 @@ class PublicKey < ActiveRecord::Base
   def to_h
     {
      hash_algorithm: hash_algorithm,
-     key_usage: self.key_usage
+     key_usage: self.key_usage,
+     subject: subject.to_h,
+     issuer_subject: issuer_subject.to_h
     }
   end
   def to_openssl

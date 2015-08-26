@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get 'import'
       post 'import/from_url', action: :import_from_url
       post 'import', action: :do_import
+      post 'analyze'
     end
   end
   resources :services, constraints: {
