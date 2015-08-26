@@ -1,34 +1,32 @@
 (function(root) {
   'use strict';
-  var regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}([a-zA-Z0-9=/+\r\n]+)-----END ([A-Z ]+)-----/g;
 
   var chunk_valid = function(chunk) {
     return chunk[1] == chunk[3];
   };
 
   root.CertBundle = function(data) {
-    var matches = data.match(regex);
+    var regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}([a-zA-Z0-9=/+\r\n]+)-----END ([A-Z ]+)-----[\r\n]{0,2}/g;
     var certs = [];
     var unknown = [];
     var keys = [];
 
-    if (matches === null) {
-      return;
-    }
-
-    var chunks = matches.map(function(cert) {
-      regex.lastIndex = 0;
-      return regex.exec(cert);
-    });
-
-    for (var i = 0; i < chunks.length; i++) {
-      var chunk = chunks[i];
+    var chunk;
+    while (chunk = regex.exec(data)) {
       if (chunk_valid(chunk)) {
-        if (chunk[1] === "CERTIFICATE") {
-          certs.push(chunk[0]);
+        var match = {
+          index: regex.lastIndex - chunk[0].length,
+          length: chunk[0].length + 1,
+          type: chunk[1],
+          value: chunk[0]
+        };
+        var list = [];
+        if (match.type === "CERTIFICATE") {
+          list = certs;
         } else {
-          unknown.push(chunk[0]);
+          list = unknown;
         }
+        list.push(match);
       }
     }
 

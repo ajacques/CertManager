@@ -16,16 +16,19 @@ var CertificatesImport = function() {
     }
     return false;
   };
-  var handle_analyze = function(result) {
-    certificates.push(result);
-    import_component.setState({certificates: certificates});
+  var handle_analyze = function(match) {
+    return function(result) {
+      certificates.push(result);
+      import_component.setState({certificates: certificates});
+      import_component.removeChunk(match);
+    };
   };
   var update = function(body) {
     var bundle = new CertBundle(body);
     var certs = bundle.get_certs();
     for (var i = 0; i < certs.length; i++) {
-      var cert = Certificate.analyze(certs[i]);
-      cert.then(handle_analyze);
+      var cert = Certificate.analyze(certs[i].value);
+      cert.then(handle_analyze(certs[i]));
     }
   };
 
