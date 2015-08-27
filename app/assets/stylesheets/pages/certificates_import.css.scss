@@ -1,0 +1,19 @@
+#import-box-attach {
+  width: 100%;
+  height: 300px;
+  background-color: white;
+  border: dashed 2px black;
+  overflow: auto;
+
+  .cert-input-container {
+    width: 100%;
+    height: 100%;
+  }
+  .cert-input-span {
+    font-family: monospace;
+    width: 100%;
+    height: 100%;
+    display: block;
+    outline: none;
+  }
+}
