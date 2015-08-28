@@ -122,7 +122,7 @@ var ContentEditable = React.createClass({
   },
 
   unsetPlaceholder: function(){
-    this.props.onChange('', false, '')
+    //this.props.onChange('', false, '')
   },
 
   setCursorToStart: function(){
@@ -234,7 +234,10 @@ var ContentEditable = React.createClass({
     // handle paste manually to ensure we unset our placeholder
     e.preventDefault();
     var data = e.clipboardData.getData('text/plain');
-    this.props.onChange(escapeHtml(data), false, data);
+    var foo = data.split(/\r\n{1,2}/).map(function(f) {
+      return '<div>' + f + '</div>';
+    }).join('');
+    //this.props.onChange(foo, false, data);
     // a bit hacky. set cursor to end of contents
     // after the paste, which is async
     setTimeout(function(){
@@ -257,12 +260,12 @@ var ContentEditable = React.createClass({
     var self = this;
 
     if (!target.textContent.trim().length) {
-      this.props.onChange('', true, '');
+      //this.props.onChange('', true, '');
       setTimeout(function() {
         self.setCursorToStart()
       }, 1);
     } else {
-      this.props.onChange(target.textContent, false, target.innerHTML);
+      //this.props.onChange(target.textContent, false, target.innerHTML);
     }
 
   },
@@ -276,6 +279,6 @@ var ContentEditable = React.createClass({
       return;
     }
 
-    this.props.onChange(escapeHtml(e.target.textContent), false, e.target.innerHTML);
+    this.props.onChange(e.target, escapeHtml(e.target.textContent), false, e.target.innerHTML);
   }
 });

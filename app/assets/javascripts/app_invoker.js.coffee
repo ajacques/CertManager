@@ -5,7 +5,7 @@ func = () ->
   for d, i in window.on_pageload
     d()
   if "function" == typeof page_obj
-    console.info "Registering page load handler"
+    console.info "Invoking registered page load handler"
     page_obj()
 document.addEventListener 'DOMContentLoaded', func
 if document.readyState == "complete" || document.readyState == "loaded" || document.readyState == "interactive"
