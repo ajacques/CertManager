@@ -38,7 +38,7 @@
     var range = document.createRange();
     var it = Iterator(el).select(Node.TEXT_NODE).revisit(false);
     var next;
-    var startindex;
+    var startIndex;
     var start = pos.start;
     var end = pos.end;
     var atStart = pos.atStart;
@@ -49,8 +49,8 @@
 
       // Set start point of selection
       var atLength = atStart ? length > start : length >= start;
-      if (!startindex && atLength) {
-        startindex = true;
+      if (!startIndex && atLength) {
+        startIndex = true;
         range.setStart(next, start - olen);
         if (!setSelection) {
           range.collapse(true);
@@ -66,7 +66,7 @@
         break;
       }
     }
-  }
+  };
 
   /**
    * add selection / insert cursor.

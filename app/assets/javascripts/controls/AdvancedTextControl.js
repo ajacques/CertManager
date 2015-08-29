@@ -56,14 +56,14 @@ var ContentEditable = React.createClass({
   componentWillReceiveProps: function (nextProps) {
     if (!this.props.editing && nextProps.editing) {
       if (this.contentIsEmpty(nextProps.html)) {
-        this.props.onChange('', true)
+        //this.props.onChange('', true)
       }
     }
   },
 
   componentDidUpdate: function() {
     if (!this.props.editing && !this.props.html) {
-      this.props.onChange('')
+      //this.props.onChange('')
     }
 
     if (this._range) {
@@ -238,6 +238,7 @@ var ContentEditable = React.createClass({
       return '<div>' + f + '</div>';
     }).join('');
     //this.props.onChange(foo, false, data);
+    this.notifyChanged(e);
     // a bit hacky. set cursor to end of contents
     // after the paste, which is async
     setTimeout(function(){
@@ -246,7 +247,7 @@ var ContentEditable = React.createClass({
   },
 
   onKeyPress: function(e){
-    this.props.onKeyPress(e)
+    this.props.onKeyPress(e);
   },
 
   onKeyUp: function(e) {
@@ -265,7 +266,7 @@ var ContentEditable = React.createClass({
         self.setCursorToStart()
       }, 1);
     } else {
-      //this.props.onChange(target.textContent, false, target.innerHTML);
+      this.notifyChanged(e);
     }
 
   },
@@ -279,6 +280,9 @@ var ContentEditable = React.createClass({
       return;
     }
 
-    this.props.onChange(e.target, escapeHtml(e.target.textContent), false, e.target.innerHTML);
+    this.notifyChanged(e);
+  },
+  notifyChanged: function(e) {
+    this.props.onChange(e.target, escapeHtml(e.target.textContent), false, e.target.innerHTML)
   }
 });
