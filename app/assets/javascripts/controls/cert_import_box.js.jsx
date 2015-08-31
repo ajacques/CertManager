@@ -10,6 +10,9 @@
 
   root.CertImportBox = React.createClass({
     flattenDOM: function(elem, array) {
+      if (elem.childNodes === null) {
+        return;
+      }
       for (var i = 0; i < elem.childNodes.length; i++) {
         var node = elem.childNodes[i];
         if (node.nodeType === Node.TEXT_NODE) {
@@ -17,7 +20,7 @@
         } else if (node.tagName === "DIV") {
           this.flattenDOM(node, array);
         } else if (node.tagName === "BR") {
-          //array.push("<br>");
+          array.push("");
         }
       }
     },
@@ -32,9 +35,14 @@
     handleType: function(target) {
       var text = [];
       this.flattenDOM(target, text);
-      text = text.join('\n');
-      this.props.update(text);
-      this.setState({text: target.innerHTML});
+      this.props.update(text.join('\n'));
+      var collapsed_html = text.map(function(m) {
+        if (m === '') {
+          return '<div><br></div>';
+        }
+        return '<div>' + m + '</div>';
+      }).join('');
+      this.setState({text: collapsed_html});
     },
     render: function () {
       var certs = this.state.certificates.map(function (cert) {

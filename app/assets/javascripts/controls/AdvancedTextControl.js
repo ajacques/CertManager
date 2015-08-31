@@ -163,7 +163,6 @@ var ContentEditable = React.createClass({
     return !content.trim().length;
   },
 
-
   onMouseDown: function(e) {
     // prevent cursor placement if placeholder is set
     if (this.contentIsEmpty(this.props.html)) {
@@ -232,12 +231,11 @@ var ContentEditable = React.createClass({
 
   onPaste: function(e){
     // handle paste manually to ensure we unset our placeholder
-    e.preventDefault();
+    //e.preventDefault();
     var data = e.clipboardData.getData('text/plain');
     var foo = data.split(/\r\n{1,2}/).map(function(f) {
       return '<div>' + f + '</div>';
     }).join('');
-    //this.props.onChange(foo, false, data);
     this.notifyChanged(e);
     // a bit hacky. set cursor to end of contents
     // after the paste, which is async
