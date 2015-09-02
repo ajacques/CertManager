@@ -16,19 +16,22 @@ var CertificatesImport = function() {
     }
     return false;
   };
-  var handle_analyze = function(match) {
+  var handle_analyze = function(bundle, match) {
     return function(result) {
-      certificates.push(result);
-      import_component.setState({certificates: certificates});
-      import_component.removeChunk(match);
+      match['parsed'] = result;
+      delete match.fetching;
+      import_component.setState({bundle: bundle.all});
+      //import_component.removeChunk(match);
     };
   };
   var update = function(body) {
     var bundle = new CertBundle(body);
-    var certs = bundle.get_certs();
+    var certs = bundle.certs;
+    this.setState({bundle: bundle.all}); // TODO: Encapsulate this with a public method
     for (var i = 0; i < certs.length; i++) {
-      var cert = Certificate.analyze(certs[i].value);
-      cert.then(handle_analyze(certs[i]));
+      certs[i]['fetching'] = true;
+      var cert = Certificate.analyze(certs[i].values.join('\n'));
+      cert.then(handle_analyze(bundle, certs[i]));
     }
   };
 

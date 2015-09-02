@@ -6,38 +6,60 @@
   };
 
   root.CertBundle = function(data) {
-    var regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}([a-zA-Z0-9=/+\r\n]+)-----END ([A-Z ]+)-----[\r\n]{0,2}/g;
-    var certs = [];
-    var unknown = [];
-    var keys = [];
+    var start = /-----BEGIN ([A-Z ]+)-----/;
+    var middle = /[a-zA-Z0-9=/+\r\n]+/;
+    var end = /-----END ([A-Z ]+)-----/;
+    var groups = [];
 
-    var chunk;
-    while (chunk = regex.exec(data)) {
-      if (chunk_valid(chunk)) {
-        var match = {
-          index: regex.lastIndex - chunk[0].length,
-          length: chunk[0].length + 1,
-          type: chunk[1],
-          value: chunk[0]
+    var group = {
+      in_block: false,
+      index: 0,
+      length: 0,
+      values: []
+    };
+    for (var i = 0; i < data.length; i++) {
+      var match;
+      var line = data[i];
+      if (match = line.match(start)) {
+        group = {
+          in_block: true,
+          index: i,
+          length: 1,
+          type: match[1],
+          values: [
+            match[0]
+          ]
         };
-        var list = [];
-        if (match.type === "CERTIFICATE") {
-          list = certs;
-        } else {
-          list = unknown;
-        }
-        list.push(match);
+      } else if (group.in_block && (match = line.match(end))) {
+        group.length++;
+        group.values.push(match[0]);
+        groups.push(group);
+        group = {
+          in_block: false,
+          index: i + 1,
+          length: 0,
+          values: []
+        };
+      } else if (group.in_block && (match = line.match(middle))) {
+        group.length++;
+        group.values.push(match[0])
+      } else {
+        group.in_block = false;
+        group.length++;
+        group.values.push(line);
+        delete group.type;
       }
     }
+    if (group.index < data.length) {
+      groups.push(group);
+    }
 
-    this.get_certs = function() {
-      return certs;
-    };
-    this.get_keys = function() {
-      return keys;
-    };
-    this.get_unknown = function() {
-      return unknown;
-    };
+    this.certs = groups.filter(function(l) {
+      return l.type === 'CERTIFICATE';
+    });
+    this.unknown = groups.filter(function(l) {
+      return l.type !== 'CERTIFICATE';
+    });
+    this.all = groups;
   };
 })(this);
