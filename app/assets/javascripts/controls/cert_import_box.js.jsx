@@ -7,14 +7,16 @@
         body = <span>[Analyzing...]</span>;
       }
       if (this.props.hasOwnProperty('parsed')) {
-        body = <div>Subject: {this.props.parsed.subject.CN}</div>;
+        body = <div>
+            <div>Subject: {this.props.parsed.subject.CN}</div>
+          </div>;
       }
       return (
-        <div>
-          <div>-----BEGIN {this.props.type}-----</div>
-          <div>{this.props.values.length} lines hidden</div>
+        <div className="cert-chunk" contentEditable="false">
+          <div className="cert-boundary">-----BEGIN {this.props.type}-----</div>
+          <div className="cert-boundary">{this.props.values.length} lines hidden</div>
           {body}
-          <div>-----END {this.props.type}-----</div>
+          <div className="cert-boundary">-----END {this.props.type}-----</div>
         </div>
       );
     }
