@@ -32,7 +32,7 @@ The tricky areas with setting up the environment is making sure that the gems ar
 * web: Unicorn Rails app server - Runs the website
 * nginx: Front-end reverse proxy. Doesn't do much in development but is there to allow for prod verification. Will handle static files and load balancing
 * redis: Ephemeral data store - Used for caching host deployment status, CRL responses, and job scheduling for the works
-* db [Only in the postgres branch]: Permanent store for all application data (certificates, users, services) It's a Postgres instance
+* db: Permanent store for all application data (certificates, users, services) It's a Postgres instance
 * worker: Resque instance - Used for background job scheduling such as the periodic deployment status refresh and revocation checks
 * scheduler: Resque job scheduler - Used to schedule the periodic jobs. See config/scheduled_jobs.yml
 * browsersync: Useful development tool that automatically refreshes your web browser when you update CSS, JS, and HTML
