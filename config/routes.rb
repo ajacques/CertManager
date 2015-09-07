@@ -22,6 +22,10 @@ Rails.application.routes.draw do
       get 'recover_after' => 'user_recovery#after_send'
     end
   end
+  scope :search, controller: :search, as: :search do
+    get :manifest
+    get :suggest
+  end
   scope :install, controller: :install, as: :install do
     get 'user'
     post 'user', action: :create_user

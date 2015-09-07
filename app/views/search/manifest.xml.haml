@@ -1,0 +1,7 @@
+!!! XML
+%OpenSearchDescription{xmlns: 'http://a9.com/-/spec/opensearch/1.1/'}
+  %ShortName CertManager
+  %Description Search for certificates
+  %Url{type: 'application/rss+xml', template: "#{certificates_url(format: 'axd')}?query={searchTerms}"}
+  %Url{type: 'text/html', template: "#{certificates_url}?query={searchTerms}"}
+  %Url{type: 'application/x-suggestions+json', template: "http://certmgr.devvm#{search_suggest_path(format: 'json')}?query={searchTerms}"}
