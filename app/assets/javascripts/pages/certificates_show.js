@@ -1,14 +1,12 @@
 var CertificatesShow = function() {
   'use strict';
   var modalPoint;
-  var id = document.body.getAttribute('data-id');
-  var cert = Certificate.find(id);
-  var elem;
+  var cert = Certificate.find(document.body.getAttribute('data-id'));
   var closeModal = function() {
     React.unmountComponentAtNode(modalPoint);
   };
   var popCertWindow = function(evt) {
-    elem = React.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
+    var elem = React.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
     elem.changeFormat(elem.state.format);
     evt.preventDefault();
     return false;
