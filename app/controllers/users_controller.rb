@@ -13,8 +13,7 @@ class UsersController < ApplicationController
   def update
     user = User.find params[:id]
     user.can_login = true
-    user.update_attributes user_update_params
-    user.save!
+    user.update_attributes! user_update_params
     flash[:action] = :activated_account
     redirect_to user
   rescue ActiveRecord::RecordInvalid => e
@@ -23,6 +22,7 @@ class UsersController < ApplicationController
     redirect_to flash[:return_url]
   end
 
+  # TODO: Merge these into a single service call
   def lock
     user = User.find params[:id]
     user.can_login = false
