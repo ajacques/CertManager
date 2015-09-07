@@ -10,7 +10,7 @@ var CertificatesImport = function() {
     evt.preventDefault();
     var url = box.value;
     if (url !== '') {
-      PublicKey.from_url(url).then(append_certs);
+      Certificate.from_url(url).then(append_certs);
     }
     return false;
   };

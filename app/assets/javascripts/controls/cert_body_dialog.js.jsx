@@ -21,7 +21,7 @@ var CertBodyDialog = React.createClass({
     var formatElems = [];
     var self = this;
     formats.forEach(function(format) {
-      var link = <a href={urls.certificate_path(self.props.modal.id, format)} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
+      var link = <a href={Routes.certificate_path({id: self.props.modal.id, format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
       if (format === self.state.format) {
         formatElems.push(<li className="active" key={format}>{link}</li>);
       } else {

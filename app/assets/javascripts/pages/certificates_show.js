@@ -2,7 +2,7 @@ var CertificatesShow = function() {
   'use strict';
   var modalPoint;
   var id = document.body.getAttribute('data-id');
-  var cert = PublicKey.find(id);
+  var cert = Certificate.find(id);
   var elem;
   var closeModal = function() {
     React.unmountComponentAtNode(modalPoint);
