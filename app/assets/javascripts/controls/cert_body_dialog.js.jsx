@@ -1,4 +1,7 @@
 var CertBodyDialog = React.createClass({
+  getDefaultProps: function() {
+    return {formats: ['pem', 'text', 'yaml', 'json']};
+  },
   getInitialState: function() {
     return {format: 'pem', include_chain: false};
   },
@@ -17,11 +20,10 @@ var CertBodyDialog = React.createClass({
     this.setState({include_chain: event.target.checked});
   },
   render: function() {
-    var formats = ['pem', 'text', 'yaml', 'json'];
     var formatElems = [];
     var self = this;
-    formats.forEach(function(format) {
-      var link = <a href={Routes.certificate_path({id: self.props.modal.id, format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
+    this.props.formats.forEach(function(format) {
+      var link = <a href={Routes.certificate_path({id: self.props.modal.id}, {format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
       if (format === self.state.format) {
         formatElems.push(<li className="active" key={format}>{link}</li>);
       } else {
