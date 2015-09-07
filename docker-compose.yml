@@ -27,7 +27,6 @@ web:
   environment:
     RAILS_ENV: development
     GEM_HOME: /gem-store
-  tty: true
 
 nginx:
   build: dockers/nginx
