@@ -19,6 +19,10 @@
     var self = this;
     var cache = {};
 
+    if (opts.hasOwnProperty('to_pem')) {
+      cache['pem'] = opts.to_pem;
+    }
+
     var build_request = function(format) {
       if (opts.hasOwnProperty('id')) {
         return {
@@ -61,12 +65,11 @@
 
   proto.from_url = function(host) {
     var process = function(result) {
-      var deferred = $.Deferred();
+      var certs = result.map(function(f) {
+        return new proto(f);
+      });
 
-      var keys = result.map(Certificate.from_object);
-
-      deferred.resolve(keys);
-      return deferred.promise();
+      return resolved_promise(certs);
     };
     var ajax = function() {
       return $.ajax({

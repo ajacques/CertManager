@@ -6,7 +6,15 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-user = User.create!({email: 'user@example.com', password: 'testtest', can_login: true, first_name: 'John-Paul', last_name: 'Jones'})
+user = User.create!(
+ {
+  email: 'user@example.com',
+  password: 'testtest',
+  can_login: true,
+  first_name: 'John-Paul',
+  last_name: 'Jones',
+  time_zone: 'America/Los_Angeles' # PST
+})
 
 def new_csr!(opts={})
   subject = Subject.new opts.slice(*Subject.safe_attributes)

@@ -27,7 +27,6 @@ web:
   environment:
     RAILS_ENV: development
     GEM_HOME: /gem-store
-  tty: true
 
 nginx:
   build: dockers/nginx
@@ -51,9 +50,8 @@ db:
     POSTGRES_PASSWORD: password12345
 
 worker:
-  extends:
-    file: common.yml
-    service: worker
+  build: .
+  command: bin/bundle exec bin/rake resque:work
   volumes:
     - .:/rails-app
   volumes_from:
@@ -64,6 +62,7 @@ worker:
     - db
   environment:
     RAILS_ENV: development
+    QUEUE: '*'
 
 scheduler:
   extends:

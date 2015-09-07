@@ -7,6 +7,7 @@ class CreateUsers < ActiveRecord::Migration
       t.binary :password_hash, null: false
       t.binary :password_salt, null: false
       t.boolean :can_login, null: false, default: false
+      t.string :time_zone, null: false, default: 'Europe/London'
 
       t.timestamps null: false
     end

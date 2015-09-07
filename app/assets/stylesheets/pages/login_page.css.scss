@@ -16,8 +16,8 @@
   height: 16px;
 }
 
-@media screen and (max-device-width: 512px) {
-  .sessions-new {
+@media screen and (max-device-width: 350px) {
+  .modal-centered-form {
     .login-form-container {
       width: 100%;
       background-color: transparent;
@@ -26,10 +26,11 @@
     }
   }
 }
-@media screen and (min-device-width: 512px) {
-  .sessions-new .login-form-container {
-    transition: background-color 0.1s;
-    transition: border 0.1s;
-    width: 512px;
+@media screen and (min-device-width: 350px) {
+  .modal-centered-form {
+    .login-form-container {
+      transition: background-color 0.1s, border 0.1s;
+      width: 350px;
+    }
   }
 }

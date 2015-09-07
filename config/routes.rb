@@ -13,9 +13,13 @@ Rails.application.routes.draw do
       post 'lock'
       post 'unlock'
       get 'activate'
+      get 'recover' => 'user_recovery#prompt', as: :reset
+      post 'recover' => 'user_recovery#recover'
     end
     collection do
-      get 'recover_account'
+      get 'recover' => 'user_recovery#start'
+      post 'recover' => 'user_recovery#send_mail'
+      get 'recover_after' => 'user_recovery#after_send'
     end
   end
   scope :install, controller: :install, as: :install do

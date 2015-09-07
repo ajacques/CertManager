@@ -33,6 +33,7 @@ Rails.application.configure do
   config.assets.debug = true
 
   config.log_level = :debug
+  config.autoflush_log = true
 
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.

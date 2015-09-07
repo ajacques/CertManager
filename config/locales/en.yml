@@ -12,6 +12,7 @@ en:
     create: Create account
     mailers:
       your_new_account: CertManager - Your Account
+      recover_account: CertManager - Recover Account
     change_password: Change password
   login:
     error:
@@ -42,3 +43,6 @@ en:
     extended_key_usage:
       serverAuth: Authenticates as a server
       clientAuth: Authenticates as a client
+  time:
+    formats:
+      month_day_time: '%B %e at %l:%M %p'
