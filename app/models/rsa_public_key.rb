@@ -6,6 +6,12 @@ class RSAPublicKey < PublicKey
     true
   end
 
+  def to_h
+    h = super
+    h[:bit_length] = bit_length
+    h
+  end
+
   def import_from_r509(r509)
     super
     self.bit_length = r509.bit_length

@@ -3,8 +3,7 @@ saltmaster:
   expose:
     - 8000
     - 4506
-  ports:
-    - "8080:8080"
+    - 8080
 
 saltminion:
   build: dockers/salt-minion

@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
     unless user_signed_in?
       session[:return_url] = request.fullpath
       redirect_to new_user_session_path
-      return
     end
   end
   def user_signed_in?

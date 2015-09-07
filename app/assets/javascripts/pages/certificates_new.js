@@ -36,4 +36,6 @@ var CertificatesNew = function() {
   };
 
   add_textbox();
+  var attach = document.getElementById('multi-keyword-box');
+  React.render(React.createElement(SubjectAltBox, {}), attach);
 };

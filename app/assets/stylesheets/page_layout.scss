@@ -2,10 +2,14 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .page-wrap {
   min-height: 100%;
+  margin-bottom: -41px;
 }
 
 .content-pane {
@@ -13,9 +17,7 @@ html, body {
   padding-bottom: $navbar-height;
 }
 
-.footer {
-  position: relative;
-  margin-top: -$navbar-height;
+footer {
   clear: both;
-  padding-top: 20px;
+  position: relative;
 }

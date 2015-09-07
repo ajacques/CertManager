@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.3'
 
 # User Interface Gems
 gem 'haml'
@@ -11,12 +11,12 @@ gem 'will_paginate'
 
 gem 'redis'
 gem 'redis-session-store'
-gem 'devise'
 
 gem 'r509' # SSL certificate utilities
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
+gem 'pg'
 
 gem 'logstash-logger'
 
@@ -28,6 +28,8 @@ group :assets, :development do
 
   gem 'bootstrap-sass'
   gem 'mustache-js-rails'
+  gem 'react-rails'
+  gem 'js-routes'
 end
 
 group :assets do

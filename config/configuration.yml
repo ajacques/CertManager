@@ -7,14 +7,14 @@ default:
     pass: saltdev
     eauth: auto
     host: http://salt:8000
-  auth:
-    mailer_sender: 'certs@technowizardry.net'
   session:
     - :redis_session_store
     -
       key: _CertManager_session
       redis:
         host: redis
+  auth:
+    mailer_sender: user@example.com
 
 development:
   email_delivery:

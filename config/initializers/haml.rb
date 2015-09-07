@@ -10,6 +10,6 @@ module Haml
       result[5] = true # nuke_inner_whitespace
       result
     end
-    alias_method_chain :parse_tag, :nuked_whitespace if ::Rails.env.production?
+    alias_method_chain :parse_tag, :nuked_whitespace if ::Rails.application.config.compact_haml
   end
 end

@@ -12,19 +12,22 @@ saltminion:
 
 web:
   build: .
-  command: bin/bundle exec bin/spring rails s -b 0.0.0.0 --pid /tmp/rails_s.pid
+  command: bin/bundle exec bin/spring rails s -b 0.0.0.0 -p 8080 --pid /tmp/rails_s.pid
   volumes:
     - .:/rails-app
   expose:
-    - 3000
+    - 8080
   links:
     - 'saltmaster:salt'
     - 'redis:redis'
     - logstash
+    - db
+  volumes_from:
+    - gems-2.1
   user: www-data
   environment:
     RAILS_ENV: development
-  tty: true
+    GEM_HOME: /gem-store
 
 nginx:
   build: dockers/nginx
@@ -40,17 +43,27 @@ redis:
   expose:
     - 6379
 
+db:
+  image: postgres:latest
+  expose:
+    - 5432
+  environment:
+    POSTGRES_PASSWORD: password12345
+
 worker:
-  extends:
-    file: common.yml
-    service: worker
+  build: .
+  command: bin/bundle exec bin/rake resque:work
   volumes:
     - .:/rails-app
+  volumes_from:
+    - gems-2.1
   links:
     - 'saltmaster:salt'
     - 'redis:redis'
+    - db
   environment:
     RAILS_ENV: development
+    QUEUE: '*'
 
 scheduler:
   extends:
@@ -62,10 +75,11 @@ scheduler:
     - 'redis:redis'
   environment:
     RAILS_ENV: development
+    GEM_HOME: /gem-store
 
 browsersync:
   build: dockers/browsersync
-  command: start --proxy 'web:3000' --files '/app/app/**' --host 0.0.0.0 --port 8080 --no-notify
+  command: start --proxy 'web:8080' --files '/app/app/**' --host 0.0.0.0 --port 8080 --no-notify
   links:
     - web
   expose:

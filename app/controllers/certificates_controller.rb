@@ -15,17 +15,9 @@ class CertificatesController < ApplicationController
   def show
     @cert = Certificate.eager_load(:public_key, :private_key).includes(:services).find(params[:id])
     self.model_id = @cert.id
-    if params.has_key? :chain
-      chain = @cert.chain
-      chain.delete_at(0) if params.has_key? :exclude_root
-    else
-      chain = [@cert]
-    end
     respond_to do |format|
       format.pem {
-        render body: chain.map {|cert|
-          "#{cert.public_key.to_pem}\n"
-        }.join(), content_type: Mime::Type.lookup_by_extension(:pem)
+        render body: @cert.public_key.to_pem, content_type: Mime::Type.lookup_by_extension(:pem)
       }
       format.der {
         render body: @cert.public_key.to_der, content_type: Mime::Type.lookup_by_extension(:der)

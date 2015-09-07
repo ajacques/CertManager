@@ -19,6 +19,8 @@ Rails.application.configure do
   # Generate digests for assets URLs.
   config.assets.digest = true
 
+  config.compact_haml = false
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -31,6 +33,7 @@ Rails.application.configure do
   config.assets.debug = true
 
   config.log_level = :debug
+  config.autoflush_log = true
 
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.

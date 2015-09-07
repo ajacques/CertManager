@@ -11,6 +11,6 @@ module ApplicationHelper
     return "#{time_ago_in_words Time.at(last_run.to_f)} ago"
   end
   def bg_refresh_out_of_date
-    (Time.now - bg_refresh_last_update) > 1.minute
+    (Time.now - bg_refresh_last_update) > 10.minute
   end
 end
