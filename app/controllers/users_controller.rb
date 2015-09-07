@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  skip_before_filter :require_login, only: [:activate, :update]
   helper_method :validates?
 
   def activate
@@ -13,7 +12,7 @@ class UsersController < ApplicationController
   def update
     user = User.find params[:id]
     user.can_login = true
-    user.update_attributes! user_update_params
+    user.update! user_update_params
     flash[:action] = :activated_account
     redirect_to user
   rescue ActiveRecord::RecordInvalid => e

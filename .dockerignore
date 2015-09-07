@@ -1,4 +1,6 @@
+# Rails stuff
 docker-compose.yml
+README.md
 
 log/*
 tmp/cache/*
@@ -11,6 +13,5 @@ dockers
 .idea
 .git
 
-README.md
 cloudformation.json
 ecs-manifest.json

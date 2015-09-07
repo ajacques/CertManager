@@ -21,7 +21,7 @@ module CertManager
       end
 
       def method_missing(method, *args, &block)
-        load_file unless @config
+        load_file unless @config and Rails.env.production?
         @config[method]
       end
     end

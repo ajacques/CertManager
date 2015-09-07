@@ -1,6 +1,7 @@
 #!/bin/sh
-find tmp log public/assets -type f -exec setfacl -m u:www-data:rw {} \;
-find tmp log public/assets -type d -print -exec chown $USER {} \; -exec setfacl -m u:www-data:rwx {} \;
+# This script sets up certain files to be writable by the Rails process running as www-data and by your user account
+find tmp log public/assets -maxdepth 1 -type f -exec setfacl -m u:www-data:rw {} \;
+find tmp log public/assets -maxdepth 1 -type d -print -exec chown $USER {} \; -exec setfacl -m u:www-data:rwx {} \;
 setfacl -m u:www-data:rwx db
 setfacl -m u:www-data:rw db/schema.rb
 setfacl -m u:www-data:rw Gemfile.lock

@@ -1,17 +1,14 @@
 .row.vertical-center.modal-centered-form
   .login-form-container.col-sm-12.col-lg-4.well.well-lg.center-block
-    %h1 Sign in
+    %h1 Recover Account
     .form-error-message
       - if @error_message
         = t "login.error.#{@error_message}"
       - else
         &nbsp;
-    = form_tag url_for(action: :create), class: 'login-form form-horizontal' do
+    %p Enter your email address below and an email will be sent to your email account.
+    = form_tag url_for(action: :send_mail), class: 'login-form form-horizontal' do
       .form-group{class: ('has-error' if @error_message)}
         %input.form-control{type: :email, name: :email, autocapitalize: 'false', autocorrect: 'false', autofocus: true, placeholder: (t 'account.username'), tabindex: 1, value: @username}
-      .form-group{class: ('has-error' if @error_message)}
-        %input.form-control{type: :password, name: :password, placeholder: (t 'account.password'), tabindex: 2}
       .form-group
-        %input.btn.btn-large.btn-block.btn-primary{type: :submit, tabindex: 3, value: 'Login'}
-      .form-group
-        = link_to t('account.lost_password'), recover_users_path
+        %input.btn.btn-large.btn-block.btn-primary{type: :submit, tabindex: 2, value: 'Recover account'}
