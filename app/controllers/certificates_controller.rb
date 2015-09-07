@@ -17,9 +17,7 @@ class CertificatesController < ApplicationController
     self.model_id = @cert.id
     respond_to do |format|
       format.pem {
-        render body: @cert.map {|cert|
-          "#{cert.public_key.to_pem}\n"
-        }.join(), content_type: Mime::Type.lookup_by_extension(:pem)
+        render body: @cert.public_key.to_pem, content_type: Mime::Type.lookup_by_extension(:pem)
       }
       format.der {
         render body: @cert.public_key.to_der, content_type: Mime::Type.lookup_by_extension(:der)
