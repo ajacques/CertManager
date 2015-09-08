@@ -12,7 +12,7 @@
           %li= link_to (t 'users.list'), users_path
           %li= link_to 'Services', services_path
         = form_tag certificates_path, method: :get, role: :search, enforce_utf8: false, class: 'center-block col-sm-6 navbar-form' do
-          = search_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search'
+          = search_field_tag :query, params[:query], class: 'form-control', placeholder: 'Search'
         %ul.nav.navbar-nav.navbar-right
           %li= link_to current_user.first_name, user_path(current_user)
           %li= link_to 'Sign out', destroy_user_session_path
