@@ -1,12 +1,13 @@
 class SearchController < ApplicationController
   def suggest
-    terms = Subject.where('subjects."CN" LIKE ?', "#{params[:query]}%")
-    terms = terms.map do |subject|
-      subject.to_s
-    end
+    query = params[:query].downcase
+    certs = Certificate.joins(public_key: :subject).where('(LOWER("subjects"."CN") LIKE ?)', "%#{query}%")
+    resp = [
+      params[:query], certs.map(&:to_s)
+    ]
     respond_to do |format|
      format.json {
-       render json: [params[:query], terms]
+       render json: resp
      }
     end
   end
