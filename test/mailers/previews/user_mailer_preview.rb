@@ -1,8 +1,12 @@
 class UserMailerPreview < ActionMailer::Preview
   def new_account
-    UserMailer.new_account User.first
+    user = User.first
+    user.create_confirm_token
+    UserMailer.new_account user
   end
   def recover_account
-    UserMailer.recover_account User.first, '12.34.56.78'
+    user = User.first
+    user.create_reset_token
+    UserMailer.recover_account user, '12.34.56.78'
   end
 end
