@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find params[:id]
-    user.can_login = true
+    raise NotAuthorized unless current_user.can? :update_user, user
     user.update! user_update_params
     flash[:action] = :activated_account
     redirect_to user
@@ -19,29 +19,6 @@ class UsersController < ApplicationController
     flash[:message] = e.to_s
     flash[:errors] = user.errors
     redirect_to flash[:return_url]
-  end
-
-  # TODO: Merge these into a single service call
-  def lock
-    user = User.find params[:id]
-    user.can_login = false
-    user.save!
-    respond_to do |format|
-      format.json {
-        head 204
-      }
-    end
-  end
-
-  def unlock
-    user = User.find params[:id]
-    user.can_login = true
-    user.save!
-    respond_to do |format|
-      format.json {
-        head 204
-      }
-    end
   end
 
   def index
@@ -59,7 +36,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    user = User.create user_params
+    user = User.new user_params
     user.randomize_password
     user.create_confirm_token
     if user.invalid?
@@ -102,6 +79,6 @@ class UsersController < ApplicationController
     params[:user].permit(:first_name, :last_name, :email)
   end
   def user_update_params
-    params.require(:user).permit(:confirmation_token_confirmation, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :email, :confirmation_token_confirmation, :password, :password_confirmation)
   end
 end

@@ -10,8 +10,6 @@ Rails.application.routes.draw do
     id: /[0-9]+/
   } do
     member do
-      post 'lock'
-      post 'unlock'
       get 'activate'
       get 'recover' => 'user_recovery#prompt', as: :reset
       post 'recover' => 'user_recovery#recover'

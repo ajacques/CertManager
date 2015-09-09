@@ -42,6 +42,10 @@ class User < ActiveRecord::Base
       user
     end
   end
+  # Returns true if this user can perform {action} on {target}
+  def can?(action, target)
+    true
+  end
 
   def reset_token(name)
     self.send("#{name}_token=".to_sym, nil)
