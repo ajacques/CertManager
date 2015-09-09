@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   def to_s
     "#{first_name} #{last_name}"
   end
-  def to_email
+  def email_addr
     "#{to_s} <#{email}>"
   end
   def validate_reset_token!(token)

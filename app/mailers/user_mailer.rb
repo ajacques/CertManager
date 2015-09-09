@@ -4,7 +4,7 @@ class UserMailer < BaseMailer
     @user = user
     subject = t 'account.mailers.your_new_account'
 
-    mail to: user.to_email, subject: subject do |format|
+    mail to: user.email_addr, subject: subject do |format|
       format.text
     end
   end
@@ -15,7 +15,7 @@ class UserMailer < BaseMailer
     @create_date = Time.now.in_time_zone user.time_zone
     subject = t 'account.mailers.recover_account'
 
-    mail to: user.to_email, subject: subject do |format|
+    mail to: user.email_addr, subject: subject do |format|
       format.text
     end
   end

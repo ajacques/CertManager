@@ -5,7 +5,7 @@ class CertificateMailer < BaseMailer
       'X-Notify-Type' => 'Certificate-Expiration',
       'X-Priority' => '1'
 
-    mail to: user.email, subject: 'Certificate Expiration Notice' do |format|
+    mail to: user.email_addr, subject: 'Certificate Expiration Notice' do |format|
       format.text
     end
   end
