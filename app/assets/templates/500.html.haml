@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %title Soteria | Internal Server Error
+    %meta{charset: 'utf-8'}
+    %meta{content: 'IE=edge,chrome=1', http: {equiv: 'X-UA-Compatible'}}
+    %meta{content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport'}
+    = stylesheet_link_tag    'application', media: 'all', data: {turbolinks_track: true}
+    = javascript_include_tag 'application', data: {turbolinks_track: true}, defer: true
+  %body{data: {page: 'ErrorsInternalServerError'}}
+    .page-wrap
+      %nav.navbar.navbar-default
+        .container
+          .navbar-header
+            = link_to 'Soteria', root_path, class: 'navbar-brand'
+      .content-pane.container
+        %h1 Sorry! \#{ServiceName} is currently down.
+        %p The server encountered an internal error
