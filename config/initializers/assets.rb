@@ -7,8 +7,8 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Sprockets.register_mime_type 'text/html', extensions: ['.html']
-Sprockets.register_engine '.haml', Tilt::HamlTemplate
+Rails.application.assets.register_mime_type 'text/html', extensions: ['.html']
+Rails.application.assets.register_engine '.haml', Tilt::HamlTemplate
 Rails.application.config.assets.paths << Rails.root.join('app', 'assets', 'templates')
 
 Rails.application.assets.context_class.class_eval do
