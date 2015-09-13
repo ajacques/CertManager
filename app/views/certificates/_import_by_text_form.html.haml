@@ -3,4 +3,5 @@
 %div{data: {drop: {type: :textbox, target: :key}}}
   = bootstrap_form_for :certificate, url: url_for(action: :import) do |f|
     #import-box-attach
+      = react_component 'CertImportBox', {}, {prerender: true}
     = f.submit 'Import certificate', class: 'btn btn-primary'
