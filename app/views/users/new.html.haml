@@ -25,10 +25,6 @@
         - @validations.try(:[], 'email').try(:each) do |error|
           %span Email #{error}.
   .form-group
-    = label_tag nil, 'Permissions', class: 'col-sm-2 control-label'
-    .col-sm-10
-      %p De nada
-  .form-group
     .col-sm-2
     .col-sm-10
       = submit_tag 'Create account', class: 'btn btn-primary'
