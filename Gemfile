@@ -19,6 +19,7 @@ gem 'resque-scheduler'
 gem 'pg'
 
 gem 'logstash-logger'
+gem 'lograge'
 
 group :assets, :development do
   # Use jquery as the JavaScript library

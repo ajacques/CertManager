@@ -20,5 +20,6 @@ if resque
   Resque.redis = resque
 end
 
-config.logger = ActiveSupport::TaggedLogging.new LogStashLogger.new type: :udp, host: 'logstash', port: 5228
+Rails.logger = ActiveSupport::TaggedLogging.new LogStashLogger.new type: :udp, host: 'logstash', port: 5228
 config.log_level = :debug
+config.lograge.enabled = true

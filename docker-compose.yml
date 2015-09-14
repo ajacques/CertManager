@@ -61,6 +61,7 @@ worker:
     - 'saltmaster:salt'
     - 'redis:redis'
     - db
+    - logstash
   environment:
     RAILS_ENV: development
     QUEUE: '*'
@@ -90,3 +91,5 @@ browsersync:
 logstash:
   build: dockers/logstash
   command: logstash -f /etc/logstash/conf.d/logstash.conf
+  external_links:
+    - elasticsearch

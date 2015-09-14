@@ -88,6 +88,10 @@ GEM
       sprockets-rails
     json (1.8.3)
     kgio (2.10.0)
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     logstash-event (1.2.02)
     logstash-logger (0.13.0)
       logstash-event (~> 1.2)
@@ -226,6 +230,7 @@ DEPENDENCIES
   haml-rails
   jquery-rails
   js-routes
+  lograge
   logstash-logger
   mocha
   mustache-js-rails
