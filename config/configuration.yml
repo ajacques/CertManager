@@ -14,7 +14,7 @@ default:
       redis:
         host: redis
   auth:
-    mailer_sender: user@example.com
+    mailer_sender: certmgr@example.com
 
 development:
   email_delivery:

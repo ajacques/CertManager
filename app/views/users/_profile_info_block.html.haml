@@ -1,10 +1,9 @@
 .panel.panel-primary
   .panel-heading Profile
-  .bg-danger Not implemented yet
   .panel-body
     = bootstrap_form_for @user, layout: :horizontal, label_col: 'col-sm-3', control_col: 'col-sm-9' do |f|
       = f.hidden_field :patch_target, value: :password
-      = f.text_field :first_name, readonly: true
-      = f.text_field :last_name, readonly: true
-      = f.email_field :email, readonly: true
-      = f.submit 'Update profile', class: 'btn center-block', disabled: true
+      = f.text_field :first_name
+      = f.text_field :last_name
+      = f.email_field :email
+      = f.submit 'Update profile', class: 'btn center-block'

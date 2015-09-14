@@ -1,4 +1,6 @@
-= link_to (t 'users.new'), new_user_path
+%ul.nav.nav-pills
+  %li.active= link_to (t 'users.list'), users_path
+  %li= link_to (t 'users.new'), new_user_path
 %table.table.table-striped
   %thead
     %tr
@@ -9,7 +11,7 @@
       %td
   %tbody
     - @users.each do |user|
-    - color = if not user.can_login? then 'warning' end
+    - color = unless user.can_login? then 'warning' end
       %tr{class: color}
         %td= link_to "#{user.first_name} #{user.last_name}", user
         %td= user.email
@@ -19,9 +21,3 @@
             .text-danger Not activated yet
           - elsif user.last_sign_in_at
             = user.last_sign_in_at
-        %td
-          - if user != current_user and user.confirmation_token.nil?
-            - if user.can_login?
-              = link_to 'Lock', lock_user_path(user), class: 'text-danger', remote: true, method: :post
-            - else
-              = link_to 'Unlock', unlock_user_path(user), class: 'text-danger', remote: true, method: :post
