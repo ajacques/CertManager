@@ -4,7 +4,6 @@ class Certificate < ActiveRecord::Base
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true
   has_many :sub_certificates, -> { where('certificates.issuer_id != certificates.id') }, class_name: 'Certificate', foreign_key: 'issuer_id'
   has_many :services
-  has_many :public_keys
   belongs_to :created_by, class_name: 'User'
   belongs_to :updated_by, class_name: 'User'
   belongs_to :private_key, autosave: true
@@ -41,6 +40,9 @@ class Certificate < ActiveRecord::Base
   def subject
     base = public_key || csr
     base.subject
+  end
+  def public_keys
+    PublicKey.where subject_id: public_key.subject_id
   end
 
   def to_s

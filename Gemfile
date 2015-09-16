@@ -28,6 +28,9 @@ group :assets, :development do
   gem 'mustache-js-rails'
   gem 'react-rails'
   gem 'js-routes'
+
+  gem 'sprockets'
+  gem 'sprockets-es6'
 end
 
 group :assets do

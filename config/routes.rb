@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       post 'import', action: :do_import
     end
   end
+  resources :public_keys, only: [:show]
   resources :services, constraints: {
     id: /[0-9]+/
   } do

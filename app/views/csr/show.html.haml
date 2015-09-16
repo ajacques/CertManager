@@ -11,7 +11,7 @@
   %h4 Step 3. Import the signed chain
   %p Here's where you'd upload the signed chain
   = bootstrap_form_tag url: url_for(action: :import) do |f|
-    = f.hidden_field :return_url, { value: url_for(action: :show) }
+    = f.hidden_field :return_url, { value: url_for(action: :cert_history) }
     = f.fields_for :certificate do |c|
       = c.text_area :key, label: 'Certificate chain', class: 'certificate'
     = f.submit 'Import'

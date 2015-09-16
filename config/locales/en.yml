@@ -46,3 +46,4 @@ en:
   time:
     formats:
       month_day_time: '%B %e at %l:%M %p'
+      lifetime: '%B %e, %Y'

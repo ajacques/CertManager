@@ -186,6 +186,10 @@ GEM
     spring (1.4.0)
     sprockets (3.3.4)
       rack (~> 1.0)
+    sprockets-es6 (0.8.0)
+      babel-source (>= 5.8.11)
+      babel-transpiler
+      sprockets (>= 3.0.0)
     sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -235,6 +239,8 @@ DEPENDENCIES
   sass-rails
   simplecov
   spring
+  sprockets
+  sprockets-es6
   sqlite3
   turbolinks
   uglifier

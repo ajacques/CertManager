@@ -34,6 +34,9 @@ class PublicKey < ActiveRecord::Base
      issuer_subject: issuer_subject.to_h
     }
   end
+  def as_json(opts={})
+    to_h
+  end
   def to_openssl
     cert = OpenSSL::X509::Certificate.new
     cert.version = 2
