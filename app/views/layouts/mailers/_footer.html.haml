@@ -1,3 +1,4 @@
-%br
-%br
-&copy; #{Time.now.year} Techno Wizardry
+%footer
+  &copy; #{Time.now.year} Techno Wizardry
+  %div Recipient: #{@user.first_name}
+  %div= link_to 'Update email preferences', @user

@@ -1,0 +1,13 @@
+%h1 Expiration notice
+%h3 You have certificates expiring soon
+
+- @certificates.each do |cert|
+  %section
+    %div= link_to cert, cert
+    %div Expires: #{l cert.public_key.not_after, format: :month_day_time}
+    %div
+      %span
+        - if cert.private_key
+          = link_to 'Renew', csr_certificate_path(cert)
+        - else
+          %abbr{title: 'Associate a private key to renew'} Renew
