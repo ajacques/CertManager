@@ -5,7 +5,7 @@ class CertificatePart {
     this.show_url = opts.show_url;
 
     if (opts.hasOwnProperty('to_pem')) {
-      cache['pem'] = opts.to_pem;
+      this.cache['pem'] = opts.to_pem;
     }
 
     this.build_request = function (format) {
@@ -17,7 +17,7 @@ class CertificatePart {
       }
     };
 
-    this.subject = opts.subject;
+    this.subject = this.opts.subject;
     this.to_pem = this.get_format.bind(this, 'pem');
     this.id = this.opts.id;
   };
@@ -72,7 +72,7 @@ class Certificate extends CertificatePart {
   static from_url(host) {
     var process = function (result) {
       var certs = result.map(function (f) {
-        return new CertificatePart(f);
+        return new Certificate(f);
       });
 
       return resolved_promise(certs);
