@@ -1,7 +1,8 @@
 {
   "Mappings": {
     "EcsAmiIds": {
-      "us-east-1": {"ami": "ami-d0b9acb8"}
+      "us-east-1": {"ami": "ami-8da458e6"},
+      "us-west-2": {"ami": "ami-db0306eb"}
     }
   },
   "Parameters": {
