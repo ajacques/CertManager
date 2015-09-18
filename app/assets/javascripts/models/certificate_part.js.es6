@@ -94,7 +94,7 @@ class Certificate extends CertificatePart {
   }
 
   static find(id) {
-    return new Certificate({id: id});
+    return ModelCache.get(Certificate, id);
   }
 }
 
@@ -104,6 +104,6 @@ class PublicKey extends CertificatePart {
   }
 
   static find(id) {
-    return new PublicKey({id: id});
+    return ModelCache.get(PublicKey, id);
   }
 }
