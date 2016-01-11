@@ -70,27 +70,31 @@ class Certificate extends CertificatePart {
   }
 
   static from_url(host) {
+    var promise = $.Deferred();
     var process = function (result) {
+      if (result.status !== 'done') {
+
+        return;
+      }
+
       var certs = result.map(function (f) {
         return new Certificate(f);
       });
 
-      return resolved_promise(certs);
+      promise.resolve(certs);
     };
-    var ajax = function () {
-      return $.ajax({
-        url: Routes.import_from_url_certificates_path(),
-        method: 'POST',
-        dataType: 'json',
-        data: {
-          host: host,
-          properties: [
-            'to_pem'
-          ]
-        }
-      });
-    };
-    return ajax().done(process);
+    $.ajax({
+      url: Routes.import_from_url_certificates_path(),
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        host: host,
+        properties: [
+          'to_pem'
+        ]
+      }
+    }).success(process);
+    return promise.promise();
   }
 
   static find(id) {
