@@ -8,9 +8,16 @@ class LetsEncryptController < ApplicationController
   end
 
   def prove_ownership
+    # TODO: Persist challenges so we don't keep fetching them from the server
     certificate = Certificate.find params[:id]
-    authorization = acme_client.authorize(domain: certificate.domain_names)
-    @challenge = authorization.http01
+    @challenges = LetsEncryptChallenge.find_by_certificate_id certificate.id
+    unless @challenges
+      domain = certificate.domain_names.first
+      authorization = acme_client.authorize(domain: domain)
+      challenge = authorization.http01
+      @challenges = []
+      @challenges << LetsEncryptChallenge.create!(certificate: certificate, domain_name: domain, private_key: current_user.lets_encrypt_key, token_key: challenge.filename, token_value: challenge.file_content)
+    end
 
   end
 
