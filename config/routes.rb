@@ -32,6 +32,13 @@ Rails.application.routes.draw do
     member do
       get 'csr'
       get 'revocation_check'
+      scope :sign, controller: :signing do
+        scope :lets_encrypt, controller: :lets_encrypt do
+          root to: :index
+          post :register
+          get :prove_ownership
+        end
+      end
       get 'sign/:another_id' => 'signing#configure'
       post 'sign/:another_id' => 'signing#sign_cert'
     end
