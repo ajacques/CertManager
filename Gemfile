@@ -16,7 +16,7 @@ gem 'r509' # SSL certificate utilities
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
-gem 'pg'
+gem 'pg' # Postgres
 
 group :assets, :development do
   # Use jquery as the JavaScript library

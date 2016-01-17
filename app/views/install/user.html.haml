@@ -1,9 +1,11 @@
-%h1 Welcome!
-%h3 Create your account
-= form_tag action: :create_user do
-  = text_field_tag :first_name, nil, placeholder: (t 'account.first_name')
-  = text_field_tag :last_name, nil, placeholder: (t 'account.last_name')
-  = email_field_tag :email, nil, placeholder: (t 'account.username')
-  = password_field_tag :password, nil, placeholder: (t 'account.password')
+%h1= t 'setup.header'
+%h3= t 'setup.sub_header'
+%p= t 'setup.description'
+= bootstrap_form_for :user do |u|
+  = u.text_field :first_name, placeholder: t('account.first_name')
+  = u.text_field :last_name, placeholder: t('account.last_name')
+  = u.email_field :email, placeholder: t('account.username')
+  = u.password_field :password, placeholder: t('account.password')
+  = u.password_field :password_confirm, placeholder: t('account.confirm_password')
   = hidden_field_tag :redirect, url_for(action: :configure)
-  = submit_tag (t 'account.create')
+  = u.submit t('account.create')

@@ -14,15 +14,14 @@ class InstallController < ApplicationController
     params = user_params.merge ({
       can_login: true
     })
-    user = User.create params
+    user = User.create! params
     logger.info params
-    user.save!
     @user = user.id
     redirect_to install_configure_path
   end
 
   private
   def user_params
-    params.permit(:email, :password, :first_name, :last_name)
+    params.require(:user).permit(:email, :password, :first_name, :last_name)
   end
 end
