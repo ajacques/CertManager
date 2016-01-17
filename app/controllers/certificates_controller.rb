@@ -59,17 +59,36 @@ class CertificatesController < ApplicationController
   end
 
   def import_from_url
-    importer = CertificateImporter.new params[:host], 443
+    if params.has_key? :wait_handle
+      value = redis_client.get params[:wait_handle]
+      if value
+        resp = {
+          status: :done,
+          chain: value
+        }
+      else
+        resp = {
+          status: :unfinished,
+          wait_handle: params[:wait_handle]
+        }
+      end
+    else
+      job = FetchCertificateJob.perform_later({ host: params[:host], port: 443 })
+      resp = {
+        status: :unfinished,
+        wait_handle: job.job_id
+      }
+    end
     respond_to do |format|
       format.json {
-        certs = importer.get_certs
+        certs = [] #importer.get_certs
         args = params[:properties]
         args = args & (PublicKey.attribute_names + %w(to_pem subject))
         args.map! {|s| s.to_sym}
         certs.map! do |cert|
           cert.slice(*args)
         end
-        render json: certs
+        render json: resp
       }
     end
   end

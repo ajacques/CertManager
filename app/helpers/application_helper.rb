@@ -13,4 +13,7 @@ module ApplicationHelper
   def bg_refresh_out_of_date
     (Time.now - bg_refresh_last_update) > 10.minute
   end
+  def redis_client
+    CertManager::Configuration.redis_client
+  end
 end

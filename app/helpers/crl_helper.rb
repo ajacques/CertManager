@@ -31,7 +31,4 @@ module CrlHelper
   def redis_key(uri)
     "crl_#{Digest::SHA1.hexdigest(uri)}"
   end
-  def redis_client
-    Redis.new CertManager::Configuration.redis.symbolize_keys
-  end
 end
