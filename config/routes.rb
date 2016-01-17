@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       get 'revocation_check'
       scope :sign, controller: :signing do
         scope :lets_encrypt, controller: :lets_encrypt do
-          root to: :index
+          root to: :index, as: :lets_encrypt
           post :register
           get :prove_ownership
         end
