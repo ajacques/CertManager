@@ -1,6 +1,7 @@
 require 'acme/client'
 
 class LetsEncryptController < ApplicationController
+  skip_before_filter :require_login, only: [:validate_token]
   # Specification: https://letsencrypt.github.io/acme-spec/
   def index
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
@@ -11,14 +12,25 @@ class LetsEncryptController < ApplicationController
     # TODO: Persist challenges so we don't keep fetching them from the server
     @certificate = Certificate.find params[:id]
     @challenges = [LetsEncryptChallenge.find_by_certificate_id(@certificate.id)]
-    unless @challenges
+    unless @challenges.any?
       domain = @certificate.domain_names.first
       authorization = acme_client.authorize(domain: domain)
       challenge = authorization.http01
       @challenges = []
-      @challenges << LetsEncryptChallenge.create!(certificate: @certificate, domain_name: domain, private_key: current_user.lets_encrypt_key, token_key: challenge.filename, token_value: challenge.file_content)
+      @challenges << LetsEncryptChallenge.create!(certificate: @certificate, domain_name: domain, private_key: current_user.lets_encrypt_key, token_key: challenge.token, token_value: challenge.file_content, verification_uri: challenge.uri)
     end
+  end
 
+  def validate_token
+    challenge = LetsEncryptChallenge.find_by_token_key params[:token]
+    return render text: 'Unknown challenge', status: :not_found unless challenge
+    render plain: challenge.token_value
+  end
+
+  def formal_verification
+    @certificate = Certificate.find params[:id]
+    challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
+    render plain: challenge.request_verification(acme_client)
   end
 
   def register

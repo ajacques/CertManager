@@ -37,6 +37,7 @@ Rails.application.routes.draw do
           root action: :index, as: :lets_encrypt
           post :register
           get :prove_ownership
+          post :formal_verification
         end
       end
       get 'sign/:another_id' => 'signing#configure'
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
     end
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
+  get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 
   mount Resque::Server.new, at: '/resque'
 end
