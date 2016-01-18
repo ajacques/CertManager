@@ -10,13 +10,6 @@ class PrivateKeyTest < ActiveSupport::TestCase
     assert_not_nil key.to_openssl
     assert key.valid?
   end
-  test 'generates ec' do
-    key = ECPrivateKey.new curve_name: 'secp384r1'
-    assert key.ec?
-    assert_not_nil key.to_openssl
-    assert_not_nil key.to_pem
-    assert key.valid?
-  end
   test 'generates rsa public key' do
     key = private_keys :rsa_key
     pkey = key.create_public_key
@@ -31,15 +24,6 @@ class PrivateKeyTest < ActiveSupport::TestCase
     assert_instance_of RSAPrivateKey, key
     assert_equal 2048, key.bit_length, 'Incorrect bit length'
     assert_nil key.curve_name
-    assert_equal der, key.to_der
-    assert key.valid?
-  end
-  test 'imports ec' do
-    der = private_key_raw :ec_384
-    key = PrivateKey.import der
-    assert_not_nil key, 'Imported key model should not be nil'
-    assert_instance_of ECPrivateKey, key
-    assert_equal 'secp384r1', key.curve_name
     assert_equal der, key.to_der
     assert key.valid?
   end
