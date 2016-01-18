@@ -53,4 +53,4 @@ group :development do
   gem 'mocha'
 end
 
-gem 'unicorn'
+gem 'unicorn', platform: :mri_19
