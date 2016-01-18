@@ -1,0 +1,7 @@
+%h3 Your Client info
+%h5 Client key
+= form_tag register_certificate_path do
+  = select_tag :client_key, options_for_select(@keys.collect { |p| [p.fingerprint, p.id]})
+  = check_box_tag :terms_agree
+  = label_tag :terms_agree, 'I agree to the Lets Encrypt terms'
+  = submit_tag 'Register'
