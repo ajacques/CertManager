@@ -8,6 +8,7 @@ class Certificate < ActiveRecord::Base
   belongs_to :updated_by, class_name: 'User'
   belongs_to :private_key, autosave: true
   belongs_to :public_key, autosave: true
+  belongs_to :subject, autosave: true
   has_one :csr, class_name: 'CertificateSignRequest'
   accepts_nested_attributes_for :private_key
   accepts_nested_attributes_for :csr
