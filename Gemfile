@@ -25,7 +25,7 @@ group :assets, :development do
   gem 'turbolinks'
 
   gem 'bootstrap-sass'
-  gem 'mustache-js-rails'
+  gem 'mustache-js-rails', '>= 2.0.3'
   gem 'react-rails'
   gem 'js-routes'
 
@@ -52,3 +52,5 @@ group :development do
 end
 
 gem 'unicorn', platform: :mri_19
+
+gem 'nokogiri', '>= 1.6.7.1'
