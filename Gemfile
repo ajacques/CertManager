@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.5'
 
 # User Interface Gems
 gem 'haml'
@@ -26,7 +26,7 @@ group :assets, :development do
   gem 'turbolinks'
 
   gem 'bootstrap-sass'
-  gem 'mustache-js-rails'
+  gem 'mustache-js-rails', '>= 2.0.3'
   gem 'react-rails'
   gem 'js-routes'
 
@@ -48,8 +48,10 @@ group :development do
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
-  gem 'simplecov', platform: :mri_19
+  gem 'simplecov', platform: :ruby
   gem 'mocha'
 end
 
-gem 'unicorn', platform: :mri_19
+gem 'unicorn', platform: :ruby
+
+gem 'nokogiri', '>= 1.6.7.1'
