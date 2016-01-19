@@ -19,17 +19,16 @@ user = User.create!(
 def new_csr!(opts={})
   subject = Subject.new opts.slice(*Subject.safe_attributes)
   private = opts[:key_type].new opts.slice(:bit_length, :curve_name)
-  csr = CertificateSignRequest.new subject: subject, private_key: private
-  csr.update_attributes opts.slice(:subject_alternate_names)
 
   cert_props = opts.slice(:issuer).merge(
    {
     private_key: private,
     created_by: opts[:user],
     updated_by: opts[:user],
-    csr: csr
    })
   cert = Certificate.new(cert_props)
+  csr = CertificateSignRequest.new subject: subject, private_key: private, certificate: cert
+  csr.assign_attributes opts.slice(:subject_alternate_names)
   cert.save!
   cert
 end

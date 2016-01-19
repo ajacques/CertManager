@@ -1,0 +1,4 @@
+ca_cert_sign:
+  public_key: rsa_ca
+  group: basic
+  value: keyCertSign

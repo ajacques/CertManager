@@ -48,8 +48,6 @@ group :development do
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
-  gem 'ruby-debug-ide', platform: :mri_19
-  gem 'debase', platform: :mri_19
   gem 'simplecov', platform: :mri_19
   gem 'mocha'
 end
