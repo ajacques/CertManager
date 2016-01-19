@@ -47,10 +47,10 @@ group :development do
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
-  gem 'simplecov', platform: :mri_19
+  gem 'simplecov', platform: :ruby
   gem 'mocha'
 end
 
-gem 'unicorn', platform: :mri_19
+gem 'unicorn', platform: :ruby
 
 gem 'nokogiri', '>= 1.6.7.1'
