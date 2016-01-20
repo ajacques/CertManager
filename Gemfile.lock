@@ -100,7 +100,7 @@ GEM
     multi_json (1.11.2)
     mustache-js-rails (2.0.3)
       railties (>= 3.1, <= 5.0)
-    nokogiri (1.6.7.1)
+    nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
     r509 (0.10.0)
@@ -223,7 +223,7 @@ DEPENDENCIES
   js-routes
   mocha
   mustache-js-rails (>= 2.0.3)
-  nokogiri (>= 1.6.7.1)
+  nokogiri (>= 1.6.7.2)
   pg
   r509
   rails (= 4.2.5)
