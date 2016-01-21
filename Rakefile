@@ -8,4 +8,7 @@ Rails.application.load_tasks
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new
 
-task default: [:rubocop]
+require 'flay_task'
+FlayTask.new
+
+task default: [:rubocop, :flay]
