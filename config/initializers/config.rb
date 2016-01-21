@@ -11,10 +11,6 @@ if email_delivery
   end
 end
 
-if secret_key
-  Rails.application.config.secret_token = secret_key
-end
+Rails.application.config.secret_token = secret_key if secret_key
 
-if resque
-  Resque.redis = resque
-end
+Resque.redis = resque if resque

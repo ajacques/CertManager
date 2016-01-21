@@ -26,9 +26,9 @@ Rails.application.routes.draw do
     get 'configure'
   end
   resources :certificates, only: [:create, :index, :new, :show], constraints: {
-      id: /[0-9]+/,
-      another_id: /[0-9]+/
-    } do
+    id: /[0-9]+/,
+    another_id: /[0-9]+/
+  } do
     member do
       get 'csr'
       get 'revocation_check'

@@ -50,8 +50,12 @@ group :development do
   gem 'sqlite3'
   gem 'simplecov', platform: :ruby
   gem 'mocha'
+
+  # Coding quality
+  gem 'rubocop', require: false
+  gem 'flay', require: false
 end
 
 gem 'unicorn', platform: :ruby
 
-gem 'nokogiri', '>= 1.6.7.1'
+gem 'nokogiri', '>= 1.6.7.2'

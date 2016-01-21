@@ -8,35 +8,43 @@ class PublicKey < ActiveRecord::Base
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
-  validates :hash_algorithm, presence: true, inclusion: { in: %W(md2 md5 sha1 sha256 sha384 sha512), message: '%{value} is not an expected hash_algorithm' }
+  validates :hash_algorithm, presence: true, inclusion: { in: %w(md2 md5 sha1 sha256 sha384 sha512),
+                                                          message: '%{value} is not an expected hash_algorithm' }
   after_initialize :set_defaults
 
   def to_pem
-    "-----BEGIN CERTIFICATE-----\n#{Base64.encode64(self.body)}-----END CERTIFICATE-----"
+    "-----BEGIN CERTIFICATE-----\n#{Base64.encode64(body)}-----END CERTIFICATE-----"
   end
+
   def to_text
-    OpenSSL::X509::Certificate.new(self.body).to_text
+    OpenSSL::X509::Certificate.new(body).to_text
   end
+
   def to_der
-    self.body
+    body
   end
+
   def rsa?
     false
   end
+
   def ec?
     false
   end
+
   def to_h
     {
-     hash_algorithm: hash_algorithm,
-     key_usage: self.key_usage,
-     subject: subject.to_h,
-     issuer_subject: issuer_subject.to_h
+      hash_algorithm: hash_algorithm,
+      key_usage: key_usage,
+      subject: subject.to_h,
+      issuer_subject: issuer_subject.to_h
     }
   end
-  def as_json(opts={})
+
+  def as_json(_opts = {})
     to_h
   end
+
   def to_openssl
     cert = OpenSSL::X509::Certificate.new
     cert.version = 2
@@ -49,28 +57,28 @@ class PublicKey < ActiveRecord::Base
     cert.add_extension R509::Cert::Extensions::ExtendedKeyUsage.new value: extended_key_usage if extended_key_usage.any?
     cert
   end
+
   def subject_alternate_names
-    self._subject_alternate_names.map do |s|
-      s.name
-    end
+    _subject_alternate_names.map(&:name)
   end
+
   def subject_alternate_names=(sans)
-    orig = self._subject_alternate_names.dup
-    new = sans.map do |usage|
-      first = orig.select {|k| k.value == usage}.first
+    orig = _subject_alternate_names.dup
+    new = sans.map { |usage|
+      first = orig.find { |k| k.value == usage }
       return first if first
       SubjectAlternateName.new name: usage, public_key: self
-    end
+    }
     self._subject_alternate_names = new
   end
 
-  def self.import(pem, &block)
+  def self.import(pem, &_block)
     r509 = R509::Cert.new cert: pem
     name = if r509.rsa?
-      RSAPublicKey
-    elsif r509.ec?
-      ECPublicKey
-    end
+             RSAPublicKey
+           elsif r509.ec?
+             ECPublicKey
+           end
     name.find_or_initialize_by(body: r509.to_der) do |r|
       r.import_from_r509 r509
     end
@@ -79,32 +87,34 @@ class PublicKey < ActiveRecord::Base
   def import_from_r509(r509)
     self.subject = Subject.from_r509(r509.subject)
     %w(not_before not_after).each do |attrib|
-      self.send("#{attrib}=", r509.send(attrib))
+      send("#{attrib}=", r509.send(attrib))
     end
     self.issuer_subject = Subject.from_r509 r509.issuer
     self.is_ca = r509.basic_constraints.try(:is_ca?) || false
     self.key_usage = r509.key_usage.allowed_uses if r509.key_usage
-    self.subject_alternate_names = r509.subject_alt_name.names.map {|n| n.value} if r509.subject_alt_name
+    self.subject_alternate_names = r509.subject_alt_name.names.map(&:value) if r509.subject_alt_name
   end
 
-  private
   def self.generate_key_usage_accessors(name, group)
     plural = name.to_s.pluralize
     define_method(name) do
-      self.send(plural).map do |usage|
+      send(plural).map do |usage|
         usage.value.to_sym
       end
     end
     define_method("#{name}=") do |usages|
-      orig = self.send(plural).dup
-      new = usages.map do |usage|
-        first = orig.select {|k| k.value == usage}.first
+      orig = send(plural).dup
+      new = usages.map { |usage|
+        first = orig.find { |k| k.value == usage }
         return first if first
         KeyUsage.new value: usage, public_key: self, group: group
-      end
-      self.send("#{plural}=", new)
+      }
+      send("#{plural}=", new)
     end
   end
+
+  private
+
   def set_defaults
     rand = OpenSSL::BN.rand 63
     self.serial ||= rand.to_i
