@@ -40,7 +40,7 @@ GEM
     autoprefixer-rails (6.3.1)
       execjs
       json
-    babel-source (5.8.34)
+    babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
