@@ -40,12 +40,14 @@ ActiveRecord::Schema.define(version: 20160117215333) do
   end
 
   create_table "lets_encrypt_challenges", force: :cascade do |t|
-    t.integer "certificate_id", null: false
-    t.string  "domain_name",    null: false
-    t.integer "private_key_id", null: false
-    t.string  "type",           null: false
-    t.string  "token_key",      null: false
-    t.string  "token_value",    null: false
+    t.integer  "certificate_id",   null: false
+    t.string   "domain_name",      null: false
+    t.integer  "private_key_id",   null: false
+    t.string   "token_key",        null: false
+    t.string   "token_value",      null: false
+    t.string   "verification_uri", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "expires_at",       null: false
   end
 
   create_table "private_keys", force: :cascade do |t|

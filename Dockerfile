@@ -6,7 +6,7 @@ ADD Gemfile /rails-app/Gemfile
 ADD Gemfile.lock /rails-app/Gemfile.lock
 WORKDIR /rails-app
 RUN /usr/bin/env bundle install
-RUN /usr/bin/apt-get -qy purge ruby-dev g++ make patch && /usr/bin/apt-get -qy autoremove
+RUN /usr/bin/apt-get -qy purge libsqlite3-dev zlib1g-dev libghc-zlib-dev ruby-dev g++ make patch && /usr/bin/apt-get -qy autoremove
 RUN /bin/rm -rf /var/lib/gems/2.1.0/cache /var/cache/ /var/lib/apt/lists/*
 ADD . /rails-app
 RUN find public -mindepth 1 -not -name 'assets' -not -name '.sprockets-manifest-*.json' -print -delete

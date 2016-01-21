@@ -17,7 +17,15 @@ class LetsEncryptController < ApplicationController
       authorization = acme_client.authorize(domain: domain)
       challenge = authorization.http01
       @challenges = []
-      @challenges << LetsEncryptChallenge.create!(certificate: @certificate, domain_name: domain, private_key: current_user.lets_encrypt_key, token_key: challenge.token, token_value: challenge.file_content, verification_uri: challenge.uri)
+      @challenges << LetsEncryptChallenge.create!({
+        certificate: @certificate,
+        domain_name: domain,
+        private_key: current_user.lets_encrypt_key,
+        token_key: challenge.token,
+        token_value: challenge.file_content,
+        verification_uri: challenge.uri,
+        expires_at: authorization.expires
+      })
     end
   end
 
@@ -30,7 +38,7 @@ class LetsEncryptController < ApplicationController
   def formal_verification
     @certificate = Certificate.find params[:id]
     challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
-    render plain: challenge.request_verification(acme_client)
+    raise 'Failed to verify' unless challenge.request_verification(acme_client)
   end
 
   def register
