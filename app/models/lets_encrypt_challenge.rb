@@ -8,11 +8,13 @@ class LetsEncryptChallenge < ActiveRecord::Base
   end
 
   def request_verification(client)
-    inner_challenge = Acme::Client::Resources::Challenges::HTTP01.new client, { 'uri' => verification_uri, 'token' => token_key }
+    inputs = { uri: verification_uri, token: token_key }.stringify_keys
+    inner_challenge = Acme::Client::Resources::Challenges::HTTP01.new client, inputs
     inner_challenge.request_verification
   end
 
   private
+
   def after_create
     @created_at = Time.now
   end

@@ -41,6 +41,7 @@ class Certificate < ActiveRecord::Base
   def domain_names
     [subject.CN]
   end
+
   def subject
     base = public_key || csr
     base.subject

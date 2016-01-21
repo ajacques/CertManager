@@ -1,7 +1,7 @@
 require 'acme/client'
 
 class LetsEncryptController < ApplicationController
-  skip_before_filter :require_login, only: [:validate_token]
+  skip_before_action :require_login, only: [:validate_token]
   # Specification: https://letsencrypt.github.io/acme-spec/
   def index
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
@@ -17,7 +17,7 @@ class LetsEncryptController < ApplicationController
       authorization = acme_client.authorize(domain: domain)
       challenge = authorization.http01
       @challenges = []
-      @challenges << LetsEncryptChallenge.create!({
+      @challenges << LetsEncryptChallenge.create!(
         certificate: @certificate,
         domain_name: domain,
         private_key: current_user.lets_encrypt_key,
@@ -25,7 +25,7 @@ class LetsEncryptController < ApplicationController
         token_value: challenge.file_content,
         verification_uri: challenge.uri,
         expires_at: authorization.expires
-      })
+      )
     end
   end
 
@@ -38,7 +38,7 @@ class LetsEncryptController < ApplicationController
   def formal_verification
     @certificate = Certificate.find params[:id]
     challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
-    raise 'Failed to verify' unless challenge.request_verification(acme_client)
+    fail 'Failed to verify' unless challenge.request_verification(acme_client)
   end
 
   def register
@@ -55,9 +55,11 @@ class LetsEncryptController < ApplicationController
   end
 
   private
+
   def redirect_to_ownership
     redirect_to action: :prove_ownership
   end
+
   def acme_client
     @acme_client ||= Acme::Client.new private_key: current_user.lets_encrypt_key.to_openssl, endpoint: 'http://acme-test.devvm'
   end
