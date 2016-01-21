@@ -4,6 +4,7 @@ class UserMailerPreview < ActionMailer::Preview
     user.create_confirm_token
     UserMailer.new_account user
   end
+
   def recover_account
     user = User.first
     user.create_reset_token

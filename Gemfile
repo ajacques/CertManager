@@ -49,6 +49,7 @@ group :development do
   gem 'sqlite3'
   gem 'simplecov', platform: :ruby
   gem 'mocha'
+  gem 'rubocop', require: false
 end
 
 gem 'unicorn', platform: :ruby

@@ -4,6 +4,7 @@ module SaltHelper
     salt.login
     salt.get_minions
   end
+
   def salt_stat_file(file)
     salt = SaltClient.new
     salt.stat_file('*', file)

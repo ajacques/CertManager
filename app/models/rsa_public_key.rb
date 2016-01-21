@@ -19,6 +19,7 @@ class RSAPublicKey < PublicKey
   end
 
   private
+
   def compute_fingerprint
     unless fingerprint
       raw = OpenSSL::X509::Certificate.new(to_der).public_key.params['n'].to_i.to_s
