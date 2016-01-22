@@ -54,6 +54,7 @@ group :development do
   # Coding quality
   gem 'rubocop', require: false
   gem 'flay', require: false
+  gem 'reek', require: false
 end
 
 gem 'unicorn', platform: :ruby

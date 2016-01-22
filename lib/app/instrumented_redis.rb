@@ -1,4 +1,5 @@
 module CertManager
+  # Redis wrapper class that logs all Redis requests
   class InstrumentedRedis
     def initialize(options = {})
       ActiveSupport::Notifications.instrument 'connect.redis', command: 'CONNECT' do

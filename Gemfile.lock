@@ -169,6 +169,11 @@ GEM
     redis-session-store (0.8.0)
       actionpack (>= 3, < 5)
       redis
+    reek (1.4.0)
+      rainbow (>= 1.99, < 3.0)
+      ruby2ruby (>= 2.0.8, < 3.0)
+      ruby_parser (>= 3.5.0, < 4.0)
+      sexp_processor (~> 4.4)
     resque (1.25.2)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -186,6 +191,9 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
     ruby-progressbar (1.7.5)
+    ruby2ruby (2.2.0)
+      ruby_parser (~> 3.1)
+      sexp_processor (~> 4.0)
     ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
     rufus-scheduler (3.2.0)
@@ -261,6 +269,7 @@ DEPENDENCIES
   react-rails
   redis
   redis-session-store
+  reek
   resque
   resque-scheduler
   rubocop

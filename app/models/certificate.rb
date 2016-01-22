@@ -131,13 +131,14 @@ class Certificate < ActiveRecord::Base
     cert2 = Certificate.find_by_private_key_id priv.id if priv
     cert3 = Certificate.find_by_subject_id pub.subject.id if pub
     cert = cert1 || cert2 || cert3
-    if !cert && pub
-      cert = Certificate.joins(:private_key).find_by(private_keys: { fingerprint: pub.fingerprint })
+    unless cert
+      if pub
+        cert = Certificate.joins(:private_key).find_by(private_keys: { fingerprint: pub.fingerprint })
+      elsif priv
+        cert = Certificate.joins(:public_key).find_by(public_keys: { fingerprint: priv.fingerprint })
+      end
     end
-    if !cert && priv
-      cert = Certificate.joins(:public_key).find_by(public_keys: { fingerprint: priv.fingerprint })
-    end
-    cert = Certificate.new unless cert
+    cert ||= Certificate.new
     cert.public_key = pub if pub
     cert.private_key = priv if priv
     cert
