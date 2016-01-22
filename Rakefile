@@ -11,4 +11,7 @@ RuboCop::RakeTask.new
 require 'flay_task'
 FlayTask.new
 
-task default: [:rubocop, :flay]
+require 'reek/rake/task'
+Reek::Rake::Task.new
+
+task default: [:rubocop, :flay, :reek]

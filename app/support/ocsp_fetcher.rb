@@ -23,11 +23,6 @@ module OcspFetcher
       client.get(key)
     end
 
-    def cache_crl(uri, crl)
-      time = (crl.next_update - Time.now).to_i
-      redis_client.setex(redis_key(uri), time, crl.to_s)
-    end
-
     def redis_key(_cert)
       "ocsp_#{Digest::SHA1.hexdigest(uri)}"
     end
