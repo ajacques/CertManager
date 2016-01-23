@@ -1,4 +1,5 @@
 module CertManager
+  # Exposes configuration values for the the system
   module Configuration
     @config = nil
 
