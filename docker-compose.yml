@@ -26,7 +26,6 @@ web:
   user: www-data
   environment:
     RAILS_ENV: development
-    GEM_HOME: /gem-store
 
 nginx:
   build: dockers/nginx
@@ -65,16 +64,16 @@ worker:
     QUEUE: '*'
 
 scheduler:
-  extends:
-    file: common.yml
-    service: scheduler
+  build: .
+  command: bin/bundle exec bin/rake resque:scheduler
   volumes:
     - .:/rails-app
+  volumes_from:
+    - gems-2.1
   links:
     - 'redis:redis'
   environment:
     RAILS_ENV: development
-    GEM_HOME: /gem-store
 
 browsersync:
   build: dockers/browsersync
