@@ -11,22 +11,7 @@ class LetsEncryptController < ApplicationController
   def prove_ownership
     # TODO: Persist challenges so we don't keep fetching them from the server
     @certificate = Certificate.find params[:id]
-    @challenges = [LetsEncryptChallenge.find_by_certificate_id(@certificate.id)]
-    unless @challenges.any?
-      domain = @certificate.domain_names.first
-      authorization = acme_client.authorize(domain: domain)
-      challenge = authorization.http01
-      @challenges = []
-      @challenges << LetsEncryptChallenge.create!(
-        certificate: @certificate,
-        domain_name: domain,
-        private_key: current_user.lets_encrypt_key,
-        token_key: challenge.token,
-        token_value: challenge.file_content,
-        verification_uri: challenge.uri,
-        expires_at: authorization.expires
-      )
-    end
+    @challenges = [LetsEncryptChallenge.for_certificate(@certificate, current_user.lets_encrypt_key)]
   end
 
   def validate_token
@@ -38,7 +23,10 @@ class LetsEncryptController < ApplicationController
   def formal_verification
     @certificate = Certificate.find params[:id]
     challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
-    fail 'Failed to verify' unless challenge.request_verification(acme_client)
+    status = challenge.status
+    if status.pending?
+      fail 'Failed to verify' unless challenge.request_verification
+    end
   end
 
   def register
