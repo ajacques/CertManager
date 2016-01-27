@@ -3,12 +3,10 @@ class LetsEncryptChallenge < ActiveRecord::Base
   belongs_to :private_key
   after_create :after_create
 
+  delegate :request_verification, to: :inner_challenge
+
   def full_path
     "http://#{domain_name}/.well-known/acme-challenge/#{token_key}"
-  end
-
-  def request_verification
-    inner_challenge.request_verification
   end
 
   def status
@@ -16,19 +14,18 @@ class LetsEncryptChallenge < ActiveRecord::Base
   end
 
   def self.for_certificate(cert, private_key)
-    challenge = self.find_by_certificate_id(cert.id)
+    challenge = find_by_certificate_id(cert.id)
     unless challenge.any?
       domain = cert.domain_names.first
       authorization = acme_client.authorize(domain: domain)
       challenge = authorization.http01
-      challenge = self.create!(
+      challenge = create!(
         certificate: cert,
         domain_name: domain,
         private_key: private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,
-        verification_uri: challenge.uri,
-        #expires_at: authorization.expires
+        verification_uri: challenge.uri
       )
     end
     challenge

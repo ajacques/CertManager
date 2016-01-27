@@ -25,7 +25,7 @@ def new_csr!(opts = {})
     updated_by: opts[:user])
   cert = Certificate.new(cert_props)
   csr = CertificateSignRequest.new subject: subject, private_key: private, certificate: cert
-#  csr.assign_attributes opts.slice(:subject_alternate_names)
+  # csr.assign_attributes opts.slice(:subject_alternate_names)
   csr.save!
   csr
 end

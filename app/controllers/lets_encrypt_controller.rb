@@ -9,7 +9,6 @@ class LetsEncryptController < ApplicationController
   end
 
   def prove_ownership
-    # TODO: Persist challenges so we don't keep fetching them from the server
     @certificate = Certificate.find params[:id]
     @challenges = [LetsEncryptChallenge.for_certificate(@certificate, current_user.lets_encrypt_key)]
   end
