@@ -14,19 +14,18 @@
             %td File Name
             %td Contents
         %tbody
-          - @challenges.each do |challenge|
-            %tr
-              %td
-                %input{type: :text, value: challenge.full_path, readonly: true}
-              %td
-                %input{type: :text, value: challenge.token_value, readonly: true}
+          %tr
+            %td
+              %input{type: :text, value: @challenge.full_path, readonly: true}
+            %td
+              %input{type: :text, value: @challenge.token_value, readonly: true}
       %h3 Or automatically authorize
       %p This will proxy requests for ACME certificates to CertManager to automatically handle everything.
       %h4 NGINX Example:
       %pre
         :preserve
           location /.well-known/acme-challenge {
-            rewrite ^/.well-known/acme-challenge(/.*)$ /acme-challenge-responder/$1 break;
+            rewrite ^/.well-known/acme-challenge/(.*)$ /acme-challenge-responder/$1 break;
             proxy_pass http://#{request.host}:#{request.port};
             proxy_set_header Host #{request.host}:#{request.port};
           }

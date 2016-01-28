@@ -38,6 +38,8 @@ Rails.application.routes.draw do
           post :register
           get :prove_ownership
           post :formal_verification
+          get :verify_done
+          post :sign_csr
         end
       end
       get 'sign/:another_id' => 'signing#configure'

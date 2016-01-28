@@ -10,7 +10,8 @@ class LetsEncryptController < ApplicationController
 
   def prove_ownership
     @certificate = Certificate.find params[:id]
-    @challenges = [LetsEncryptChallenge.for_certificate(@certificate, current_user.lets_encrypt_key)]
+    @challenge = LetsEncryptChallenge.for_certificate(@certificate, current_user.lets_encrypt_key)
+    redirect_to action: :verify_done if @challenge.status.valid?
   end
 
   def validate_token
@@ -23,9 +24,21 @@ class LetsEncryptController < ApplicationController
     @certificate = Certificate.find params[:id]
     challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
     status = challenge.status
-    if status.pending?
+    if status.valid?
+      redirect_to action: :verify_done
+    elsif status.pending?
       fail 'Failed to verify' unless challenge.request_verification
     end
+  end
+
+  def sign_csr
+    certificate = Certificate.find params[:id]
+    signed = acme_client.new_certificate certificate.csr
+    public_key = PublicKey.import signed.to_pem
+    certificate.public_key = public_key
+    public_key.private_key = certificate.private_key
+    certificate.save!
+    render plain: public_key.inspect
   end
 
   def register

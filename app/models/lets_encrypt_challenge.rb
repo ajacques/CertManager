@@ -15,9 +15,9 @@ class LetsEncryptChallenge < ActiveRecord::Base
 
   def self.for_certificate(cert, private_key)
     challenge = find_by_certificate_id(cert.id)
-    unless challenge.any?
+    unless challenge
       domain = cert.domain_names.first
-      authorization = acme_client.authorize(domain: domain)
+      authorization = acme_client(private_key).authorize(domain: domain)
       challenge = authorization.http01
       challenge = create!(
         certificate: cert,
@@ -29,6 +29,10 @@ class LetsEncryptChallenge < ActiveRecord::Base
       )
     end
     challenge
+  end
+
+  def self.acme_client(private_key)
+    Acme::Client.new private_key: private_key.to_openssl, endpoint: 'http://acme-test.devvm'
   end
 
   private
@@ -43,6 +47,6 @@ class LetsEncryptChallenge < ActiveRecord::Base
   end
 
   def acme_client
-    Acme::Client.new private_key: private_key.to_openssl, endpoint: 'http://acme-test.devvm'
+    LetsEncryptChallenge.acme_client(private_key)
   end
 end
