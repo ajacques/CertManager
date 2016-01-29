@@ -14,4 +14,5 @@ RUN chown www-data:www-data db && chown -R www-data:www-data tmp
 RUN chmod 755 db && find tmp -type d -print -exec chmod 755 {} \;
 RUN find bin -type f -print -exec chmod 544 {} \;
 USER www-data
+EXPOSE 8080
 CMD unicorn -o 0.0.0.0 -p 8080 -c unicorn.rb

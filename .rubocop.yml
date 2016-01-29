@@ -13,6 +13,9 @@ Metrics/LineLength:
 Style/BlockDelimiters:
   EnforcedStyle: semantic
 
+Style/FormatString:
+  EnforcedStyle: percent
+
 # GOAL: Work to lower these limits
 Metrics/MethodLength:
   Max: 50
