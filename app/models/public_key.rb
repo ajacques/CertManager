@@ -42,8 +42,10 @@ class PublicKey < ActiveRecord::Base
     }
   end
 
-  def as_json(_opts = {})
-    to_h.as_json(_opts)
+  delegate :as_json, to: :to_h
+
+  def as_json(opts = {})
+    to_h.as_json(opts)
   end
 
   def to_openssl
