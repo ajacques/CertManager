@@ -1,6 +1,6 @@
 var CertBodyDialog = React.createClass({
   getDefaultProps: function() {
-    return {formats: ['pem', 'text', 'yaml', 'json']};
+    return {formats: ['pem', 'text', 'json']};
   },
   getInitialState: function() {
     return {format: 'pem', include_chain: false};

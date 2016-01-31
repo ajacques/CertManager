@@ -15,7 +15,7 @@ var CertificatesShow = function() {
   var clickHistoryLink = function(event) {
     var id = event.currentTarget.dataset.id;
     var pubkey = PublicKey.find(id);
-    var elem = React.render(React.createElement(CertBodyDialog, {modal: pubkey, close: closeModal}), modalPoint);
+    var elem = ReactDOM.render(React.createElement(CertBodyDialog, {modal: pubkey, close: closeModal}), modalPoint);
     elem.changeFormat(elem.state.format);
     event.preventDefault();
     return false;
