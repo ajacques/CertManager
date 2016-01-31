@@ -9,11 +9,11 @@ class ECPublicKey < PublicKey
     super
     algo = r509.signature_algorithm
     i = algo.rindex('-')
-    if i
-      self.hash_algorithm = algo[i + 1, algo.length - i].downcase
-    else
-      self.hash_algorithm = algo[0, algo.index('With')]
-    end
+    self.hash_algorithm = if i
+                            algo[i + 1, algo.length - i].downcase
+                          else
+                            algo[0, algo.index('With')]
+                          end
     self.curve_name = r509.curve_name
   end
 end

@@ -3,31 +3,34 @@ class Subject < ActiveRecord::Base
   after_initialize :prune_empty
 
   def to_s
-    if self.CN then self.CN else self.OU end
+    self.CN ? self.CN : self.OU
   end
+
   def to_r509
     subj = R509::Subject.new
     Subject.safe_attributes.each do |k|
-      val = self.send(k)
+      val = send(k)
       subj.send("#{k}=", val) if val
     end
     subj
   end
+
   def to_openssl
     subject = OpenSSL::X509::Name.new
     Subject.safe_attributes.each do |k|
-      val = self.send(k)
-      subject.add_entry(k.to_s, val) if val and not val.empty?
+      val = send(k)
+      subject.add_entry(k.to_s, val) if val && !val.empty?
     end
     subject
   end
+
   def to_h
     {
-     CN: self.CN,
-     O: self.O,
-     OU: self.OU,
-     ST: self.ST,
-     C: self.C
+      CN: self.CN,
+      O: self.O,
+      OU: self.OU,
+      ST: self.ST,
+      C: self.C
     }
   end
 
@@ -36,7 +39,7 @@ class Subject < ActiveRecord::Base
   end
 
   def self.filter_params(params)
-    params.slice(*Subject.attribute_names.map {|s| s.to_sym})
+    params.slice(*Subject.attribute_names.map(&:to_sym))
   end
 
   def self.safe_attributes
@@ -44,11 +47,10 @@ class Subject < ActiveRecord::Base
   end
 
   private
+
   def prune_empty
     Subject.safe_attributes.each do |attrib|
-      if self.send(attrib) == ''
-        self.send("#{attrib}=", nil)
-      end
+      send("#{attrib}=", nil) if send(attrib) == ''
     end
   end
 end

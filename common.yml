@@ -1,5 +1,7 @@
 saltmaster:
   build: dockers/salt-master
+  cap_drop:
+    - ALL
   expose:
     - 8000
     - 4506
@@ -7,20 +9,28 @@ saltmaster:
 
 saltminion:
   build: dockers/salt-minion
+  cap_drop:
+    - ALL
 
 web:
   build: .
+  cap_drop:
+    - ALL
   expose:
     - 3000
 
 redis:
   image: redis:3.0
+  cap_drop:
+    - ALL
   expose:
     - 6379
 
 worker:
   build: .
   command: bin/bundle exec bin/rake resque:work
+  cap_drop:
+    - ALL
   volumes:
     - .:/rails-app
   environment:
@@ -30,5 +40,7 @@ worker:
 scheduler:
   build: .
   command: bundle exec rake resque:scheduler
+  cap_drop:
+    - ALL
   volumes:
     - .:/rails-app

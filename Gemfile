@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '~> 4.2.5.1'
 
 # User Interface Gems
 gem 'haml'
@@ -13,10 +13,11 @@ gem 'redis'
 gem 'redis-session-store'
 
 gem 'r509' # SSL certificate utilities
+gem 'acme-client'
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
-gem 'pg'
+gem 'pg' # Postgres
 
 group :assets, :development do
   # Use jquery as the JavaScript library
@@ -25,9 +26,12 @@ group :assets, :development do
   gem 'turbolinks'
 
   gem 'bootstrap-sass'
-  gem 'mustache-js-rails'
+  gem 'mustache-js-rails', '>= 2.0.3'
   gem 'react-rails'
   gem 'js-routes'
+
+  gem 'sprockets'
+  gem 'sprockets-es6'
 end
 
 group :assets do
@@ -44,10 +48,17 @@ group :development do
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'
-  gem 'ruby-debug-ide'
-  gem 'debase'
-  gem 'simplecov'
+  gem 'simplecov', platform: :ruby
   gem 'mocha'
+
+  # Coding quality
+  gem 'rubocop', require: false
+  gem 'flay', require: false
+  gem 'reek', require: false
 end
 
-gem 'unicorn'
+gem 'unicorn', platform: :ruby
+
+gem 'nokogiri', '>= 1.6.7.2'
+
+gem 'rails-html-sanitizer', '~> 1.0.3'

@@ -7,22 +7,22 @@ class CertificatesController < ApplicationController
     if query
       @certs = @certs.joins(public_key: :subject).where('("subjects"."CN" LIKE ?)', "%#{query}%")
     end
-    @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.has_key? :issuer
-    @expiring = [] #@certs.expiring_in(30.days).order('not_after asc')
-    @certs = @certs.expiring_in params[:expiring_in].to_i.seconds if params.has_key? :expiring_in
+    @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.key? :issuer
+    @expiring = [] # @certs.expiring_in(30.days).order('not_after asc')
+    @certs = @certs.expiring_in params[:expiring_in].to_i.seconds if params.key? :expiring_in
   end
 
   def show
     @cert = Certificate.eager_load(:public_key, :private_key).includes(:services).find(params[:id])
     self.model_id = @cert.id
     respond_to do |format|
-      format.pem {
+      format.pem do
         render body: @cert.public_key.to_pem, content_type: Mime::Type.lookup_by_extension(:pem)
-      }
-      format.der {
+      end
+      format.der do
         render body: @cert.public_key.to_der, content_type: Mime::Type.lookup_by_extension(:der)
-      }
-      format.html {
+      end
+      format.html do
         if @cert.public_key
           render 'show'
         elsif @cert.stub?
@@ -31,13 +31,13 @@ class CertificatesController < ApplicationController
           @sign_candidates = Certificate.owned.signed.can_sign
           render 'show_csr'
         end
-      }
-      format.yaml {
+      end
+      format.yaml do
         render plain: @cert.to_h.stringify_keys.to_yaml
-      }
-      format.json {
+      end
+      format.json do
         render json: @cert
-      }
+      end
       format.text {
         render text: @cert.public_key.to_text
       }
@@ -59,17 +59,29 @@ class CertificatesController < ApplicationController
   end
 
   def import_from_url
-    importer = CertificateImporter.new params[:host], 443
+    if params.key? :wait_handle
+      value = CertManager::Configuration.redis_client.get params[:wait_handle]
+      resp = if value
+               {
+                 status: :done,
+                 chain: Marshal.load(value) # TODO: Security review this
+               }
+             else
+               {
+                 status: :unfinished,
+                 wait_handle: params[:wait_handle]
+               }
+             end
+    else
+      job = FetchCertificateJob.perform_later(host: params[:host], port: 443)
+      resp = {
+        status: :unfinished,
+        wait_handle: job.job_id
+      }
+    end
     respond_to do |format|
       format.json {
-        certs = importer.get_certs
-        args = params[:properties]
-        args = args & (PublicKey.attribute_names + %w(to_pem subject))
-        args.map! {|s| s.to_sym}
-        certs.map! do |cert|
-          cert.slice(*args)
-        end
-        render json: certs
+        render json: resp
       }
     end
   end
@@ -81,16 +93,16 @@ class CertificatesController < ApplicationController
 
     public_keys.uniq!
     ActiveRecord::Base.transaction do
-      public_keys = public_keys.map do |raw|
+      public_keys = public_keys.map { |raw|
         key = PublicKey.import raw
         key.save!
         key
-      end
-      private_keys = private_keys.map do |raw|
+      }
+      private_keys = private_keys.map { |raw|
         key = PrivateKey.import raw
         key.save!
         key
-      end
+      }
       @certs = []
       public_keys.each do |pub|
         certificate = Certificate.find_for_key_pair pub, nil
@@ -106,7 +118,7 @@ class CertificatesController < ApplicationController
       end
       @certs.each do |cert|
         issuer = cert if cert.public_key.issuer_subject_id == cert.public_key.subject_id
-        issuer = issuer || Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
+        issuer ||= Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
         if issuer
           cert.issuer = issuer
           cert.save!
@@ -115,9 +127,9 @@ class CertificatesController < ApplicationController
     end
 
     respond_to do |format|
-      format.json {
+      format.json do
         render json: @certs.to_json
-      }
+      end
       format.html {
         if params[:return_url]
           redirect_to params[:return_url]
@@ -144,9 +156,10 @@ class CertificatesController < ApplicationController
   end
 
   private
+
   def certificate_params
     params.require(:certificate)
-      .permit(csr_attributes: [subject_alternate_names: [], subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
-              private_key_attributes: [:bit_length, :type, :curve_name])
+          .permit(csr_attributes: [subject_alternate_names: [], subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
+                  private_key_attributes: [:bit_length, :type, :curve_name])
   end
 end

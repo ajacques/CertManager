@@ -14,9 +14,20 @@ en:
       your_new_account: CertManager - Your Account
       recover_account: CertManager - Recover Account
     change_password: Change password
+  setup:
+    header: Welcome!
+    sub_header: Create your account
+    description: First you'll need to create an account that you'll use to authenticate next time, but don't worry you'll be on your way soon
   login:
     error:
       no_match: Incorrect username or password
+  signing:
+    lets_encrypt:
+      header: Sign with Let's Encrypt
+      terms: Terms and Conditions
+      what_is:
+        header: What is Let's Encrypt?
+        body: Let's Encrypt is a free service that generates signed and trusted certificates
   users:
     list: Users
     new: New user
@@ -46,3 +57,4 @@ en:
   time:
     formats:
       month_day_time: '%B %e at %l:%M %p'
+      lifetime: '%B %e, %Y'

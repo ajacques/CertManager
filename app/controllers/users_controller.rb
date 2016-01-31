@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find params[:id]
-    raise NotAuthorized unless current_user.can? :update_user, user
+    fail NotAuthorized unless current_user.can? :update_user, user
     user.update! user_update_params
     flash[:action] = :activated_account
     redirect_to user
@@ -29,10 +29,10 @@ class UsersController < ApplicationController
     @validations = flash[:validations]
     data = flash.try(:[], :data)
     @user = if data
-      User.create data
-    else
-      User.new
-    end
+              User.create data
+            else
+              User.new
+            end
   end
 
   def create
@@ -68,16 +68,19 @@ class UsersController < ApplicationController
   end
 
   protected
+
   def validates?(selector, if_true)
     if_true if @validations
-      .try(:[], selector.to_s)
-      .try(:any?)
+               .try(:[], selector.to_s)
+               .try(:any?)
   end
 
   private
+
   def user_params
     params[:user].permit(:first_name, :last_name, :email)
   end
+
   def user_update_params
     params.require(:user).permit(:first_name, :last_name, :email, :confirmation_token_confirmation, :password, :password_confirmation)
   end

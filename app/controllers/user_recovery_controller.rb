@@ -22,7 +22,7 @@ class UserRecoveryController < ApplicationController
 
   def prompt
     @user = User.find params[:id]
-    if params.has_key? :disavow
+    if params.key? :disavow
       @user.reset_token :reset_password
       redirect_to action: :after_disavow
     else
@@ -31,9 +31,11 @@ class UserRecoveryController < ApplicationController
   end
 
   private
+
   def reject_authenticated
     render text: '', status: :forbidden if user_signed_in?
   end
+
   def password_params
     params.require(:user).permit(:reset_password_token, :password, :password_confirmation)
   end

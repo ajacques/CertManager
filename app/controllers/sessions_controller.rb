@@ -1,17 +1,16 @@
 class SessionsController < ApplicationController
-  skip_before_filter :require_login, only: [:new, :create]
+  skip_before_action :require_login, only: [:new, :create]
 
   def new
     redirect_to root_path if current_user
     @error_message = flash[:error]
     @username = flash[:username]
-    unless User.any?
-      redirect_to install_user_path
-    end
+    redirect_to install_user_path unless User.any?
   end
 
   def create
-    unless user = User.authenticate!(params[:email], params[:password])
+    user = User.authenticate!(params[:email], params[:password])
+    unless user
       logger.info "#{params[:email]} did not match any known users"
       flash[:username] = params[:email]
       flash[:error] = :no_match

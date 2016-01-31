@@ -4,31 +4,36 @@ class RSAPrivateKey < PrivateKey
   def rsa?
     true
   end
+
   def to_openssl
     OpenSSL::PKey::RSA.new body
   end
+
   def to_pem
-    "-----BEGIN RSA PRIVATE KEY-----\n#{Base64.encode64(self.body)}-----END RSA PRIVATE KEY-----"
+    "-----BEGIN RSA PRIVATE KEY-----\n#{Base64.encode64(body)}-----END RSA PRIVATE KEY-----"
   end
+
   def create_public_key
-    key = RSAPublicKey.new self.slice(:bit_length)
+    key = RSAPublicKey.new slice(:bit_length)
     key.private_key = self
     key
   end
+
   def self.import(src)
-    self.find_or_initialize_by(body: src.to_der) do |r|
+    find_or_initialize_by(body: src.to_der) do |r|
       r.bit_length = src.bit_length
       r.body = src.to_der
     end
   end
 
   private
+
   def generate_key
     return unless valid?
     if body
       key = R509::PrivateKey.new key: to_openssl
     else
-      key = R509::PrivateKey.new self.slice(:bit_length)
+      key = R509::PrivateKey.new slice(:bit_length)
       self.body = key.to_der
     end
     self.fingerprint = Digest::SHA256.hexdigest(key.key.params['n'].to_s)

@@ -6,7 +6,14 @@ var CertificatesImport = function() {
   var import_component;
   var certificates = [];
   var append_certs = function(keys) {
-    result.value = keys.map(function(f) { return f.to_pem; }).join('\r\n');
+    var array = [];
+    // ?!
+    keys.forEach(function(f) {
+      f.to_pem().done(function(g) {
+        array.push(g);
+      });
+    });
+    result.value = array.join('\r\n');
   };
   var import_click = function(evt) {
     evt.preventDefault();

@@ -11,7 +11,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new output: {comments: :none}
+  config.assets.js_compressor = Uglifier.new output: { comments: :none }
   config.assets.css_compressor = :sass
 
   # Generate digests for assets URLs.
