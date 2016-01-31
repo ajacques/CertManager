@@ -21,6 +21,13 @@ en:
   login:
     error:
       no_match: Incorrect username or password
+  signing:
+    lets_encrypt:
+      header: Sign with Let's Encrypt
+      terms: Terms and Conditions
+      what_is:
+        header: What is Let's Encrypt?
+        body: Let's Encrypt is a free service that generates signed and trusted certificates
   users:
     list: Users
     new: New user

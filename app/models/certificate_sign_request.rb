@@ -5,6 +5,12 @@ class CertificateSignRequest < ActiveRecord::Base
   accepts_nested_attributes_for :subject
   has_many :_subject_alternate_names, class_name: 'SubjectAlternateName'
 
+  delegate :signature_algorithm, to: :to_openssl
+  delegate :rsa?, to: :private_key
+  delegate :bit_length, to: :private_key
+  delegate :to_pem, to: :to_openssl
+  delegate :to_der, to: :to_openssl
+
   def self.from_cert(cert)
     csr = new
     csr.subject = cert.subject
@@ -26,17 +32,13 @@ class CertificateSignRequest < ActiveRecord::Base
     @csr = OpenSSL::X509::Request.new
     @csr.subject = subject.to_openssl
     @csr.public_key = private_key.to_openssl.public_key
-    san_attribute
+    @csr.sign private_key.to_openssl, hash_algorithm.new
     @csr
   end
 
-  delegate :signature_algorithm, to: :to_openssl
-
-  delegate :rsa?, to: :private_key
-
-  delegate :bit_length, to: :private_key
-
-  delegate :to_pem, to: :to_openssl
+  def hash_algorithm
+    OpenSSL::Digest::SHA256
+  end
 
   private
 

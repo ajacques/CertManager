@@ -13,6 +13,7 @@ gem 'redis'
 gem 'redis-session-store'
 
 gem 'r509' # SSL certificate utilities
+gem 'acme-client'
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
