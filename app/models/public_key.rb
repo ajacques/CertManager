@@ -37,12 +37,13 @@ class PublicKey < ActiveRecord::Base
       hash_algorithm: hash_algorithm,
       key_usage: key_usage,
       subject: subject.to_h,
-      issuer_subject: issuer_subject.to_h
+      issuer_subject: issuer_subject.to_h,
+      pem: to_pem
     }
   end
 
   def as_json(_opts = {})
-    to_h
+    to_h.as_json(_opts)
   end
 
   def to_openssl

@@ -60,11 +60,11 @@ class CertificatesController < ApplicationController
 
   def import_from_url
     if params.key? :wait_handle
-      value = redis_client.get params[:wait_handle]
+      value = CertManager::Configuration.redis_client.get params[:wait_handle]
       resp = if value
                {
                  status: :done,
-                 chain: value
+                 chain: Marshal.load(value) # TODO: Security review this
                }
              else
                {
@@ -81,13 +81,6 @@ class CertificatesController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        certs = [] # importer.fetch_certs
-        args = params[:properties]
-        args &= (PublicKey.attribute_names + %w(to_pem subject))
-        args.map!(&:to_sym)
-        certs.map! do |cert|
-          cert.slice(*args)
-        end
         render json: resp
       }
     end

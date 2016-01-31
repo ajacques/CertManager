@@ -4,7 +4,7 @@ class FetchCertificateJob < ActiveJob::Base
   def perform(opts)
     importer = CertificateImporter.new opts[:host], opts[:port]
     redis = CertManager::Configuration.redis_client
-    certs = importer.get_certs
-    redis.set job_id, certs.inspect
+    certs = importer.fetch_certs
+    redis.set job_id, Marshal.dump(certs)
   end
 end

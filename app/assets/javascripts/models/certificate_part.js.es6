@@ -4,8 +4,8 @@ class CertificatePart {
     this.opts = opts.opts;
     this.show_url = opts.show_url;
 
-    if (opts.hasOwnProperty('to_pem')) {
-      this.cache['pem'] = opts.to_pem;
+    if (this.opts.hasOwnProperty('pem')) {
+      this.cache['pem'] = this.opts.pem;
     }
 
     this.build_request = function (format) {
@@ -69,31 +69,39 @@ class Certificate extends CertificatePart {
     return $.ajax(this._analyze_req(input)).then(parse_cert_data);
   }
 
-  static from_url(host) {
-    var promise = $.Deferred();
-    var process = function (result) {
-      if (result.status !== 'done') {
-
+  // TODO: Extract this async job out into common class
+  static _handle_async_process(url_func, promise, parser) {
+    return function(result) {
+      if (result.status === 'unfinished') {
+        window.setTimeout(function() {
+          $.ajax({
+            url: url_func({wait_handle: result.wait_handle}),
+            method: 'GET'
+          }).success(Certificate._handle_async_process(url_func, promise, parser));
+        }, 500);
         return;
       }
 
-      var certs = result.map(function (f) {
-        return new Certificate(f);
-      });
-
-      promise.resolve(certs);
+      promise.resolve(parser(result));
     };
+  }
+
+  static _parse_result(result) {
+    return result.chain.map(function (f) {
+      return new Certificate(f);
+    });
+  }
+
+  static from_url(host) {
+    var promise = $.Deferred();
     $.ajax({
       url: Routes.import_from_url_certificates_path(),
       method: 'POST',
       dataType: 'json',
       data: {
-        host: host,
-        properties: [
-          'to_pem'
-        ]
+        host: host
       }
-    }).success(process);
+    }).success(this._handle_async_process(Routes.import_from_url_certificates_path, promise, this._parse_result));
     return promise.promise();
   }
 
