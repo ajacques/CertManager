@@ -11,7 +11,7 @@ module RedisInstrumentation
     def query(event)
       return unless logger.debug?
 
-      name = 'Redis Query (%.1fms)'. % duration
+      name = 'Redis Query (%.1fms)'. % event.duration
 
       command = event.payload[:command]
       args = event.payload[:args].join(' ')
