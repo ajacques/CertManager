@@ -65,8 +65,15 @@ class Certificate extends CertificatePart {
     }
   }
 
+  static _from_expanded(blob) {
+    var deferred = $.Deferred();
+
+    deferred.resolve(new Certificate(blob));
+    return deferred.promise();
+  }
+
   static analyze(input) {
-    return $.ajax(this._analyze_req(input)).then(parse_cert_data);
+    return $.ajax(this._analyze_req(input)).then(this._from_expanded);
   }
 
   // TODO: Extract this async job out into common class

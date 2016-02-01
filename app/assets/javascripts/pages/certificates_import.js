@@ -9,11 +9,12 @@ var CertificatesImport = function() {
     var array = [];
     // ?!
     keys.forEach(function(f) {
+      import_component.appendCertificate(f);
       f.to_pem().done(function(g) {
         array.push(g);
       });
     });
-    result.value = array.join('\r\n');
+    //result.value = array.join('\r\n');
   };
   var import_click = function(evt) {
     evt.preventDefault();
@@ -42,7 +43,9 @@ var CertificatesImport = function() {
     }
   };
 
-  import_component = React.constructAndRenderComponentByID(CertImportBox, {update: update}, 'import-box-attach');
+  import_component = React.createElement(CertImportBox, {update: update});
+
+  import_component = ReactDOM.render(import_component, document.getElementById('import-box-attach'));
 
   button.addEventListener('click', import_click);
 };

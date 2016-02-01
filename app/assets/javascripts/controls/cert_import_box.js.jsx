@@ -7,9 +7,11 @@
         body = <span>[Analyzing...]</span>;
       }
       if (this.props.hasOwnProperty('parsed')) {
-        body = <div>
+        body = (
+          <div>
             <div>Subject: {this.props.parsed.subject.CN}</div>
-          </div>;
+          </div>
+        );
       }
       return (
         <div className="cert-chunk" contentEditable="false">
@@ -50,6 +52,9 @@
         }
       }
     },
+    appendCertificate: function(cert) {
+
+    },
     getInitialState: function() {
       return {certificates: [], text: [], bundle: []};
     },
@@ -73,9 +78,9 @@
           elems.push(React.createElement(UnrecognizedTyping, {text: cert.values}));
         }
       });
-      var content_html = React.renderToStaticMarkup(React.createElement('span', {}, elems));
+      var content_html = ReactDOMServer.renderToStaticMarkup(React.createElement('span', {}, elems));
       return (
-        <ContentEditable tagName="span" onChange={this.handleType} html={content_html} preventStyling className="cert-input-span" editing={true} />
+        <ContentEditable tagName="span" onChange={this.handleType} html={content_html} preventStyling className="cert-input-span" editing />
       );
     }
   });

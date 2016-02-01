@@ -38,7 +38,7 @@ var ContentEditable = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps) {
-    var el = React.findDOMNode(this);
+    var el = ReactDOM.findDOMNode(this);
     if (nextProps.html !== el.innerHTML) {
       if (nextProps.html) {
         this._range = selectionRange(el);
@@ -67,13 +67,13 @@ var ContentEditable = React.createClass({
     }
 
     if (this._range) {
-      selectionRange(React.findDOMNode(this), this._range);
+      selectionRange(ReactDOM.findDOMNode(this), this._range);
       delete this._range
     }
   },
 
   autofocus: function(){
-    React.findDOMNode(this).focus();
+    ReactDOM.findDOMNode(this).focus();
   },
 
   render: function() {
@@ -126,17 +126,18 @@ var ContentEditable = React.createClass({
   },
 
   setCursorToStart: function(){
-    React.findDOMNode(this).focus();
+    var node = ReactDOM.findDOMNode(this);
+    node.focus();
     var sel = window.getSelection();
     var range = document.createRange();
-    range.setStart(React.findDOMNode(this), 0);
+    range.setStart(node, 0);
     range.collapse(true);
     sel.removeAllRanges();
     sel.addRange(range);
   },
 
   setCursorToEnd: function() {
-    var el = React.findDOMNode(this);
+    var el = ReactDOM.findDOMNode(this);
     el.focus();
     var range = document.createRange();
     range.selectNodeContents(el);
@@ -255,7 +256,7 @@ var ContentEditable = React.createClass({
       return;
     }
 
-    var target = React.findDOMNode(this);
+    var target = ReactDOM.findDOMNode(this);
     var self = this;
 
     if (!target.textContent.trim().length) {
