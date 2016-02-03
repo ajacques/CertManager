@@ -14,7 +14,7 @@
         );
       }
       return (
-        <div className="cert-chunk" contentEditable="false">
+        <div className="cert-chunk">
           <div className="cert-boundary">-----BEGIN {this.props.type}-----</div>
           <div className="cert-boundary">{this.props.values.length} lines hidden</div>
           {body}
@@ -52,35 +52,26 @@
         }
       }
     },
-    appendCertificate: function(cert) {
-
-    },
     getInitialState: function() {
       return {certificates: [], text: [], bundle: []};
     },
-    removeChunk: function(chunk) {
-      var text = this.state.text;
-      //text = text.replace(chunk.value, '');
-      //this.setState({text: text});
-    },
-    handleType: function(target) {
-      var text = [];
-      this.flattenDOM(target, text);
+    handleType: function(event) {
+      var text = event.target.value.split('\n');
       this.props.update.call(this, text);
       this.setState({text: text});
     },
-    render: function () {
+    render: function() {
       var elems = [];
+      var value = this.state.text;
       this.state.bundle.forEach(function(cert) {
         if (cert.type === 'CERTIFICATE') {
-          elems.push(React.createElement(CertificateChunk, cert));
-        } else {
-          elems.push(React.createElement(UnrecognizedTyping, {text: cert.values}));
+          elems.push(React.createElement(CertificateChunk, cert))
         }
       });
-      var content_html = ReactDOMServer.renderToStaticMarkup(React.createElement('span', {}, elems));
-      return (
-        <ContentEditable tagName="span" onChange={this.handleType} html={content_html} preventStyling className="cert-input-span" editing />
+      return (<span>
+          <div>{elems}</div>
+          <textarea onChange={this.handleType} className="cert-input-span" />
+        </span>
       );
     }
   });
