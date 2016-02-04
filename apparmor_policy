@@ -1,0 +1,40 @@
+# vim:syntax=apparmor
+#include <tunables/global>
+
+profile certmanager/web flags=(attach_disconnected,mediate_deleted) {
+  #include <abstractions/base>
+  #include <abstractions/ruby>
+
+  # Undo some base abstractions
+  deny owner @{HOME}/.Private/** mrw,
+  deny owner @{HOMEDIRS}/.ecryptfs/*/.Private/** mrw,
+  deny ptrace (readby),
+
+  deny @{PROC}/sys/kernel/version r,
+
+  deny capability,
+  deny mount,
+
+  deny /rails-app/[^tmp] wx,
+  /rails-app/bin/** rix,
+  /rails-app/unicorn.rb rix,
+  /rails-app/tmp/ rw,
+
+  network inet tcp,
+  file,
+
+  deny @{PROC}/sys/fs/** wklx,
+  deny @{PROC}/sysrq-trigger rwklx,
+  deny @{PROC}/mem rwklx,
+  deny @{PROC}/kmem rwklx,
+  deny @{PROC}/sys/kernel/[^s][^h][^m]* wklx,
+  deny @{PROC}/sys/kernel/*/** wklx,
+
+  deny /sys/[^f]*/** wklx,
+  deny /sys/f[^s]*/** wklx,
+  deny /sys/fs/[^c]*/** wklx,
+  deny /sys/fs/c[^g]*/** wklx,
+  deny /sys/fs/cg[^r]*/** wklx,
+  deny /sys/firmware/efi/efivars/** rwklx,
+  deny /sys/kernel/security/** rwklx,
+}
