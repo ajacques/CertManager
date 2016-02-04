@@ -15,4 +15,4 @@ RUN chmod 755 db && find tmp -type d -print -exec chmod 755 {} \;
 RUN find bin -type f -print -exec chmod 544 {} \;
 USER www-data
 EXPOSE 8080
-CMD unicorn -o 0.0.0.0 -p 8080 -c unicorn.rb
+CMD /usr/bin/ruby /usr/local/bin/unicorn -o 0.0.0.0 -p 8080 -c unicorn.rb
