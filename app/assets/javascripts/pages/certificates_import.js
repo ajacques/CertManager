@@ -24,23 +24,17 @@ var CertificatesImport = function() {
     }
     return false;
   };
-  var handle_analyze = function(bundle, match) {
+  var handle_analyze = function(match) {
     return function(result) {
       match['parsed'] = result;
       delete match.fetching;
-      import_component.setState({bundle: bundle.all});
       //import_component.removeChunk(match);
     };
   };
   var update = function(body) {
-    var bundle = new CertBundle(body);
-    var certs = bundle.certs;
-    this.setState({bundle: bundle.all}); // TODO: Encapsulate this with a public method
-    for (var i = 0; i < certs.length; i++) {
-      certs[i]['fetching'] = true;
-      var cert = Certificate.analyze(certs[i].values.join('\n'));
-      cert.then(handle_analyze(bundle, certs[i]));
-    }
+    body['fetching'] = true;
+    var cert = Certificate.analyze(body.value);
+    cert.then(handle_analyze(body));
   };
 
   import_component = React.createElement(CertImportBox, {update: update});

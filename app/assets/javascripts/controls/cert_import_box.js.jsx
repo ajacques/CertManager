@@ -21,9 +21,9 @@
     }
   });
 
-  var TextBox = React.createClass({
+  var CertificateTextBox = React.createClass({
     propTypes: {
-      onChange: React.PropTypes.func.isRequired
+      onDetect: React.PropTypes.func.isRequired
     },
     handleType: function(event) {
       var string = event.target.value;
@@ -31,6 +31,7 @@
       for (var i = bundle.certs.length - 1; i >= 0; i--) {
         var cert = bundle.certs[i];
         string = string.substring(0, cert.index) + string.substring(cert.end);
+        this.props.onDetect(cert);
       }
       this.setState({text: string});
     },
@@ -41,19 +42,23 @@
 
   root.CertImportBox = React.createClass({
     getInitialState: function() {
-      return {certificates: [], text: [], bundle: []};
+      return {certificates: []};
+    },
+    handleCertificate: function(body) {
+      var certs = this.state.certificates;
+      certs.push(body);
+      this.props.update(body);
+      this.setState({certificates: certs});
     },
     render: function() {
       var elems = [];
-      var value = this.state.text;
-      this.state.bundle.forEach(function(cert) {
-        if (cert.type === 'CERTIFICATE') {
-          elems.push(React.createElement(CertificateChunk, cert))
-        }
-      });
-      return (<span>
-          <div>{elems}</div>
-          <TextBox onChange={this.handleType} />
+      for (var i in this.state.certificates) {
+        elems.push(React.createElement(CertificateChunk, this.state.certificates[i]));
+      }
+      return (
+        <span>
+          {elems}
+          <CertificateTextBox onDetect={this.handleCertificate} />
         </span>
       );
     }
