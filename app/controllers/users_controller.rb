@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find params[:id]
-    fail NotAuthorized unless current_user.can? :update_user, user
+    raise NotAuthorized unless current_user.can? :update_user, user
     user.update! user_update_params
     flash[:action] = :activated_account
     redirect_to user

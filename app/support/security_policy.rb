@@ -8,7 +8,7 @@ module SecurityPolicy
     def method_missing(method, *_args, &_block)
       load_file unless @config && !Rails.env.development?
       set = @config.send(:[], method.to_s)
-      fail "No policy for '#{method}'" unless set.present?
+      raise "No policy for '#{method}'" unless set.present?
       if set['type'] == 'array'
         ArrayPolicyChecker.new(set)
       elsif set['type'] == 'integer'

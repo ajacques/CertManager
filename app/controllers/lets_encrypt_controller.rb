@@ -27,7 +27,7 @@ class LetsEncryptController < ApplicationController
     if status.valid?
       redirect_to action: :verify_done
     elsif status.pending?
-      fail 'Failed to verify' unless challenge.request_verification
+      raise 'Failed to verify' unless challenge.request_verification
     end
   end
 
