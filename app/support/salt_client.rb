@@ -96,7 +96,7 @@ class SaltClient
   end
 
   def map_response(resp)
-    fail "Salt returned error: #{resp.inspect}" if resp.key?('status')
+    raise "Salt returned error: #{resp.inspect}" if resp.key?('status')
     Hash[*resp['return'].map(&:to_a).flatten]
   end
 end

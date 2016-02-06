@@ -38,8 +38,8 @@ class User < ActiveRecord::Base
   end
 
   def validate_reset_token!(token)
-    fail 'Invalid token' unless reset_password_token == token
-    fail 'Expired token' unless Time.now < (reset_password_sent_at + 6.hours)
+    raise 'Invalid token' unless reset_password_token == token
+    raise 'Expired token' unless Time.now < (reset_password_sent_at + 6.hours)
   end
 
   def self.authenticate!(username, password)
