@@ -24,20 +24,29 @@ var CertificatesImport = function() {
     }
     return false;
   };
+  var handle_remove = function(key) {
+    var index = certificates.findIndex(function(f) { return f.key === key; });
+    certificates.splice(index, 1);
+    import_component.setState({certificates: certificates});
+  };
   var handle_analyze = function(match) {
     return function(result) {
       match['parsed'] = result;
-      delete match.fetching;
-      //import_component.removeChunk(match);
+      match['state'] = 'loaded';
+      import_component.setState({certificates: certificates});
     };
   };
   var update = function(body) {
-    body['fetching'] = true;
+    if (certificates.find(function(f) { return body.value === f.value}) !== undefined) {
+      return;
+    }
+    body['state'] = 'fetching';
+    certificates.push(body);
     var cert = Certificate.analyze(body.value);
     cert.then(handle_analyze(body));
   };
 
-  import_component = React.createElement(CertImportBox, {update: update});
+  import_component = React.createElement(CertImportBox, {update: update, onRemove: handle_remove});
 
   import_component = ReactDOM.render(import_component, document.getElementById('import-box-attach'));
 

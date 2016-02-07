@@ -38,7 +38,8 @@ class PublicKey < ActiveRecord::Base
       key_usage: key_usage,
       subject: subject.to_h,
       issuer_subject: issuer_subject.to_h,
-      pem: to_pem
+      pem: to_pem,
+      fingerprint: fingerprint
     }
   end
 
