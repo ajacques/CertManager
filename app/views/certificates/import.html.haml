@@ -1,7 +1,7 @@
 .well.well-lg
   %h3 Import from another server
   %p This will import an entire certificate chain from an existing public website. The private key will have to be imported manually
-  = form_tag action: :import_from_url do
+  = form_tag controller: :import, action: :import_from_url do
     = text_field_tag :host, nil, id: 'import-url', placeholder: 'example.com'
     = submit_tag 'Import', id: 'import-button'
 .well.well-lg
