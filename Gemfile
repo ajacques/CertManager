@@ -26,7 +26,6 @@ group :assets, :development do
   gem 'turbolinks'
 
   gem 'bootstrap-sass'
-  gem 'mustache-js-rails', '>= 2.0.3'
   gem 'react-rails'
   gem 'js-routes'
 

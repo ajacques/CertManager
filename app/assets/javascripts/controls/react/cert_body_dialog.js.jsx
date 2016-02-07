@@ -1,6 +1,7 @@
 (function() {
+  'use strict';
   var modalPoint;
-  (on_pageload || []).push(function() {
+  (window.on_pageload || []).push(function() {
     modalPoint = document.createElement('div');
     document.body.appendChild(modalPoint);
   });
