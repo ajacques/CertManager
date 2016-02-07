@@ -12,7 +12,7 @@ Metrics/LineLength:
   Max: 150
 
 Style/BlockDelimiters:
-  EnforcedStyle: semantic
+  Enabled: false
 
 Style/FormatString:
   EnforcedStyle: percent
