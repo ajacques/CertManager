@@ -4,21 +4,21 @@ class ImportController < ApplicationController
       value = CertManager::Configuration.redis_client.get params[:wait_handle]
       resp = if value
                {
-                status: :done,
-                chain: Marshal.load(value) # TODO: Security review this
+                 status: :done,
+                 chain: Marshal.load(value) # TODO: Security review this
                }
              else
                {
-                status: :unfinished,
-                wait_handle: params[:wait_handle]
+                 status: :unfinished,
+                 wait_handle: params[:wait_handle]
                }
              end
     else
       raise 'Must specify hostname' if params[:host].empty?
       job = FetchCertificateJob.perform_later(host: params[:host], port: 443)
       resp = {
-       status: :unfinished,
-       wait_handle: job.job_id
+        status: :unfinished,
+        wait_handle: job.job_id
       }
     end
     respond_to do |format|
