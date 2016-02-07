@@ -47,9 +47,11 @@ Rails.application.routes.draw do
     end
     collection do
       get 'import'
-      get 'import/from_url', action: :import_from_url
-      post 'import/from_url', action: :import_from_url
-      post 'import', action: :do_import
+      scope :import, controller: :import do
+        get 'from_url', action: :import_from_url
+        post 'from_url', action: :import_from_url
+        post '', action: :do_import
+      end
       post 'analyze'
     end
   end
