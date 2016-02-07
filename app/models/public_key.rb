@@ -34,6 +34,7 @@ class PublicKey < ActiveRecord::Base
 
   def to_h
     {
+      id: id,
       hash_algorithm: hash_algorithm,
       key_usage: key_usage,
       subject: subject.to_h,

@@ -2,7 +2,6 @@ var CertificatesImport = function() {
   'use strict';
   var button = document.getElementById('import-button');
   var box = document.getElementById('import-url');
-  var result = document.getElementById('cert-body');
   var import_component;
   var certificates = [];
   var append_certs = function(keys) {
@@ -37,9 +36,6 @@ var CertificatesImport = function() {
     };
   };
   var update = function(body) {
-    if (certificates.find(function(f) { return body.value === f.value}) !== undefined) {
-      return;
-    }
     body['state'] = 'fetching';
     certificates.push(body);
     var cert = Certificate.analyze(body.value);

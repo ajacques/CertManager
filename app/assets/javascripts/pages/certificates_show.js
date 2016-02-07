@@ -4,7 +4,7 @@ var CertificatesShow = function() {
   var closure = {};
   var cert = Certificate.find(document.body.getAttribute('data-id'));
   var closeModal = function() {
-    React.unmountComponentAtNode(modalPoint);
+    ReactDOM.unmountComponentAtNode(modalPoint);
   };
   var popCertWindow = function(evt) {
     var elem = React.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
@@ -21,6 +21,7 @@ var CertificatesShow = function() {
     return false;
   };
   closure.install = function() {
+    // Deprecated
     var link = document.getElementById('cert-data-popup-link');
     modalPoint = document.getElementById('modal');
     link.addEventListener('click', popCertWindow);

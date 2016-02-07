@@ -65,6 +65,10 @@ class Certificate extends CertificatePart {
     }
   }
 
+  openInfoWindow() {
+
+  }
+
   static _from_expanded(blob) {
     var deferred = $.Deferred();
 
