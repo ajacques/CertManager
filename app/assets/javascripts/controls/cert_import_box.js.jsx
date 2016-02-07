@@ -4,7 +4,7 @@
   var CertificateChunk = React.createClass({
     propTypes: {
       onRemove: React.PropTypes.func.isRequired,
-      id: React.PropTypes.number.isRequired,
+      id: React.PropTypes.node.isRequired,
       state: React.PropTypes.string.isRequired,
       parsed: React.PropTypes.object
     },
@@ -56,11 +56,13 @@
         string = string.substring(0, cert.index) + string.substring(cert.end);
         this.props.onDetect(cert);
       }
+      return string;
     },
     handleType: function(event) {
       var string = event.target.value;
       var bundle = new CertBundle(string);
-      this._ingestChunkSet(string, bundle.certs);
+      string = this._ingestChunkSet(string, bundle.certs);
+      string = this._ingestChunkSet(string, bundle.keys);
       this.setState({text: string});
     },
     render: function() {

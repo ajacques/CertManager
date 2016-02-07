@@ -16,13 +16,13 @@ class CertificatesController < ApplicationController
     @cert = Certificate.eager_load(:public_key, :private_key).includes(:services).find(params[:id])
     self.model_id = @cert.id
     respond_to do |format|
-      format.pem do
+      format.pem {
         render body: @cert.public_key.to_pem, content_type: Mime::Type.lookup_by_extension(:pem)
-      end
-      format.der do
+      }
+      format.der {
         render body: @cert.public_key.to_der, content_type: Mime::Type.lookup_by_extension(:der)
-      end
-      format.html do
+      }
+      format.html {
         if @cert.public_key
           render 'show'
         elsif @cert.stub?
@@ -31,13 +31,13 @@ class CertificatesController < ApplicationController
           @sign_candidates = Certificate.owned.signed.can_sign
           render 'show_csr'
         end
-      end
-      format.yaml do
+      }
+      format.yaml {
         render plain: @cert.to_h.stringify_keys.to_yaml
-      end
-      format.json do
+      }
+      format.json {
         render json: @cert
-      end
+      }
       format.text {
         render text: @cert.public_key.to_text
       }
@@ -73,6 +73,7 @@ class CertificatesController < ApplicationController
                }
              end
     else
+      raise 'Must specify hostname' if params[:host].empty?
       job = FetchCertificateJob.perform_later(host: params[:host], port: 443)
       resp = {
         status: :unfinished,

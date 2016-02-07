@@ -15,13 +15,10 @@ class PrivateKey < ActiveRecord::Base
   end
 
   delegate :to_text, to: :to_openssl
+  delegate :as_json, to: :to_h
 
   def to_h
     key_attribs
-  end
-
-  def as_json(opts = nil)
-    to_h.as_json(opts)
   end
 
   def self.import(pem)

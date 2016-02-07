@@ -4,16 +4,17 @@ var CertificatesImport = function() {
   var box = document.getElementById('import-url');
   var import_component;
   var certificates = [];
+  var id = 0;
   var append_certs = function(keys) {
-    var array = [];
-    // ?!
     keys.forEach(function(f) {
-      import_component.appendCertificate(f);
-      f.to_pem().done(function(g) {
-        array.push(g);
+      certificates.push({
+        key: 'i' + (id++),
+        state: 'loaded',
+        parsed: f,
+        value: f.opts.pem + '\n'
       });
     });
-    //result.value = array.join('\r\n');
+    import_component.setState({certificates: certificates});
   };
   var import_click = function(evt) {
     evt.preventDefault();
@@ -36,10 +37,14 @@ var CertificatesImport = function() {
     };
   };
   var update = function(body) {
-    body['state'] = 'fetching';
-    certificates.push(body);
-    var cert = Certificate.analyze(body.value);
-    cert.then(handle_analyze(body));
+    if (body.type === 'CERTIFICATE') {
+      body['state'] = 'fetching';
+      certificates.push(body);
+      var cert = Certificate.analyze(body.value);
+      cert.then(handle_analyze(body));
+    } else if (body.type === 'RSA PRIVATE KEY') {
+
+    }
   };
 
   import_component = React.createElement(CertImportBox, {update: update, onRemove: handle_remove});
