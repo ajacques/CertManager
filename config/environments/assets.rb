@@ -11,7 +11,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new output: { comments: :none }
   config.assets.css_compressor = :sass
 
   # Generate digests for assets URLs.
@@ -31,4 +31,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Use Production built version of React
+  config.react.variant = :production
 end

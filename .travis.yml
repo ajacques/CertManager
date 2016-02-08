@@ -1,0 +1,5 @@
+language: ruby
+rvm:
+  - 2.1.2
+#  - jruby-19mode # JRuby in 1.9 mode
+cache: bundler

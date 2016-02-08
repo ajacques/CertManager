@@ -10,8 +10,6 @@ Rails.application.routes.draw do
     id: /[0-9]+/
   } do
     member do
-      post 'lock'
-      post 'unlock'
       get 'activate'
       get 'recover' => 'user_recovery#prompt', as: :reset
       post 'recover' => 'user_recovery#recover'
@@ -32,21 +30,36 @@ Rails.application.routes.draw do
     get 'configure'
   end
   resources :certificates, only: [:create, :index, :new, :show], constraints: {
-      id: /[0-9]+/,
-      another_id: /[0-9]+/
-    } do
+    id: /[0-9]+/,
+    another_id: /[0-9]+/
+  } do
     member do
       get 'csr'
       get 'revocation_check'
+      scope :sign, controller: :signing do
+        scope :lets_encrypt, controller: :lets_encrypt do
+          root action: :index, as: :lets_encrypt
+          post :register
+          get :prove_ownership
+          post :formal_verification
+          get :verify_done
+          post :sign_csr
+        end
+      end
       get 'sign/:another_id' => 'signing#configure'
       post 'sign/:another_id' => 'signing#sign_cert'
     end
     collection do
       get 'import'
-      post 'import/from_url', action: :import_from_url
-      post 'import', action: :do_import
+      scope :import, controller: :import do
+        get 'from_url', action: :import_from_url
+        post 'from_url', action: :import_from_url
+        post '', action: :do_import
+      end
+      post 'analyze'
     end
   end
+  resources :public_keys, only: [:show]
   resources :services, constraints: {
     id: /[0-9]+/
   } do
@@ -60,7 +73,12 @@ Rails.application.routes.draw do
       end
     end
   end
+  scope :private_keys, controller: :private_keys do
+    post :analyze
+  end
+  resource :settings, only: [:show, :update]
   post 'jobs/refresh_all' => 'jobs#refresh_all'
+  get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 
   mount Resque::Server.new, at: '/resque'
 end

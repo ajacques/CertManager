@@ -11,8 +11,10 @@ saltminion:
     - 'saltmaster:salt'
 
 web:
-  build: .
-  command: bin/bundle exec bin/spring rails s -b 0.0.0.0 -p 8080 --pid /tmp/rails_s.pid
+  extends:
+    file: common.yml
+    service: web
+  command: bin/bundle exec /usr/bin/ruby bin/spring rails s -b 0.0.0.0 -p 8080 --pid /tmp/rails_s.pid
   volumes:
     - .:/rails-app
   expose:
@@ -26,7 +28,6 @@ web:
   user: www-data
   environment:
     RAILS_ENV: development
-    GEM_HOME: /gem-store
 
 nginx:
   build: dockers/nginx
@@ -38,7 +39,7 @@ nginx:
     VIRTUAL_HOST: certmgr.devvm
 
 redis:
-  image: redis:3.0.2
+  image: redis:3.0.7-alpine
   expose:
     - 6379
 
@@ -65,16 +66,16 @@ worker:
     QUEUE: '*'
 
 scheduler:
-  extends:
-    file: common.yml
-    service: scheduler
+  build: .
+  command: bin/bundle exec bin/rake resque:scheduler
   volumes:
     - .:/rails-app
+  volumes_from:
+    - gems-2.1
   links:
     - 'redis:redis'
   environment:
     RAILS_ENV: development
-    GEM_HOME: /gem-store
 
 browsersync:
   build: dockers/browsersync

@@ -1,24 +1,21 @@
-default:
-  redis: &redis_config
-    host: redis
-  resque: redis:6379/resque
-  salt_stack:
-    user: saltdev
-    pass: saltdev
-    eauth: auto
-    host: http://salt:8000
-  session:
-    - :redis_session_store
-    -
-      key: _CertManager_session
-      redis:
-        host: redis
-  auth:
-    mailer_sender: user@example.com
-
-development:
-  email_delivery:
-    delivery_method: :smtp
-    smtp_settings:
-      address: 172.17.42.1
-      port: 587
+redis: &redis_config
+  host: redis
+resque: redis:6379/resque
+salt_stack:
+  user: saltdev
+  pass: saltdev
+  eauth: auto
+  host: http://salt:8000
+session:
+  - :redis_session_store
+  -
+    key: _CertManager_session
+    redis:
+      host: redis
+auth:
+  mailer_sender: certmgr@example.com
+email_delivery:
+  delivery_method: :smtp
+  smtp_settings:
+    address: 172.17.42.1
+    port: 587

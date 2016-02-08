@@ -15,8 +15,8 @@
       = sb.text_field :C, label: 'Country', placeholder: 'US or UK'
     .form-group
       %label.col-sm-2.control-label Alternate Names (SAN)
-      .col-sm-10
-        #subject-alt-list
+      #subject-alt-list.col-sm-10
+        = react_component 'SubjectAltNameList', {}, {prerender: true}
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
@@ -30,5 +30,3 @@
       - SecurityPolicy.elliptic_curve.secure.each do |curve|
         = pk.radio_button :curve_name, curve, label: curve
   = f.submit 'Create Certificate', class: 'btn btn-primary'
-%script#subject-alt-name-body{type: 'x-tmpl-mustache'}
-  %input.san-textbox.form-control{type: :text, data: {name: 'certificate[csr_attributes][subject_alternate_names][]'}}

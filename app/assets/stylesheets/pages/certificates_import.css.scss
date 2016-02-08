@@ -1,18 +1,7 @@
 #import-box-attach {
   width: 100%;
-  height: 300px;
   background-color: white;
-  border: dashed 2px black;
   overflow: auto;
-
-  .cert-boundary {
-    padding: 5px 0;
-    text-align: center;
-  }
-  .cert-chunk {
-    background-color: lightblue;
-    padding: 10px;
-  }
 
   .cert-input-container {
     width: 100%;
@@ -21,8 +10,11 @@
   .cert-input-span {
     font-family: monospace;
     width: 100%;
-    height: 100%;
+    max-width: 100%;
+    height: 300px;
     display: block;
     outline: none;
+    border-radius: 5px;
+    border: dashed 1px black;
   }
 }

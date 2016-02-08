@@ -1,11 +1,15 @@
 class CertificateMailer < BaseMailer
-  def expiration_notice(email, cert_list)
+  def expiration_notice(user, cert_list)
     @certificates = cert_list
+    @user = user
     headers 'Importance' => 'High',
-      'X-Notify-Type' => 'Certificate-Expiration',
-      'X-Priority' => '1'
+            'X-Notify-Type' => 'Certificate-Expiration',
+            'X-Priority' => '1'
 
-    mail to: email, subject: 'Certificate Expiration Notice' do |format|
+    mail to: user.email_addr, subject: 'Certificate Expiration Notice' do |format|
+      format.html do
+        render layout: 'mailers/single_column'
+      end
       format.text
     end
   end

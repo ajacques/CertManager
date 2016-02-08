@@ -1,0 +1,8 @@
+%h2 History
+%table.table.table-striped
+  %thead
+    %tr
+      %td Label
+      %td Updated At
+  %tbody
+    = render partial: 'certificates/history/public_key_item', collection: @cert.public_keys.order(updated_at: :desc), as: :event

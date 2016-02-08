@@ -19,3 +19,10 @@ function escapeHtml(html) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 }
+
+var resolved_promise = function (result) {
+  var deferred = $.Deferred();
+
+  deferred.resolve(result);
+  return deferred.promise();
+};

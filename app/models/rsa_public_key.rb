@@ -7,9 +7,9 @@ class RSAPublicKey < PublicKey
   end
 
   def to_h
-    h = super
-    h[:bit_length] = bit_length
-    h
+    hash = super
+    hash[:bit_length] = bit_length
+    hash
   end
 
   def import_from_r509(r509)
@@ -19,6 +19,7 @@ class RSAPublicKey < PublicKey
   end
 
   private
+
   def compute_fingerprint
     unless fingerprint
       raw = OpenSSL::X509::Certificate.new(to_der).public_key.params['n'].to_i.to_s
