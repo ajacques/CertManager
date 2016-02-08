@@ -97,7 +97,15 @@ class Certificate extends CertificatePart {
 }
 
 class PrivateKey extends CertificatePart {
-
+  static analyze(input) {
+    $.ajax({
+      url: Routes.analyze_private(),
+      dataType: 'json',
+      method: 'POST',
+      contentType: 'application/x-pem',
+      data: body
+    })
+  }
 }
 
 class PublicKey extends CertificatePart {

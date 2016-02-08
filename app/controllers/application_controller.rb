@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def settings
+    @settings ||= SettingSet.new
+  end
+
   def user_signed_in?
     session.key?(:user_id)
   end

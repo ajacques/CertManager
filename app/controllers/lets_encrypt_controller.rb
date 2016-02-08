@@ -10,7 +10,8 @@ class LetsEncryptController < ApplicationController
 
   def prove_ownership
     @certificate = Certificate.find params[:id]
-    @challenge = LetsEncryptChallenge.for_certificate(@certificate, current_user.lets_encrypt_key)
+    settings = Settings::LetsEncrypt.new current_user.lets_encrypt_key, settings.acme_client
+    @challenge = LetsEncryptChallenge.for_certificate(@certificate, settings)
     redirect_to action: :verify_done if @challenge.status.valid?
   end
 
@@ -61,6 +62,10 @@ class LetsEncryptController < ApplicationController
   end
 
   def acme_client
-    @acme_client ||= Acme::Client.new private_key: current_user.lets_encrypt_key.to_openssl, endpoint: 'http://acme-test.devvm'
+    @acme_client ||= Acme::Client.new private_key: acme_settings.private_key.to_openssl, endpoint: acme_settings.endpoint
+  end
+
+  def acme_settings
+    Settings::LetsEncrypt.new current_user.lets_encrypt_key, settings.endpoint
   end
 end

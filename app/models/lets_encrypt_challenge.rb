@@ -13,16 +13,16 @@ class LetsEncryptChallenge < ActiveRecord::Base
     ActiveSupport::StringInquirer.new inner_challenge.verify_status
   end
 
-  def self.for_certificate(cert, private_key)
+  def self.for_certificate(cert, settings)
     challenge = find_by_certificate_id(cert.id)
     unless challenge
       domain = cert.domain_names.first
-      authorization = acme_client(private_key).authorize(domain: domain)
+      authorization = acme_client(settings).authorize(domain: domain)
       challenge = authorization.http01
       challenge = create!(
         certificate: cert,
         domain_name: domain,
-        private_key: private_key,
+        private_key: settings.private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,
         verification_uri: challenge.uri
@@ -31,8 +31,8 @@ class LetsEncryptChallenge < ActiveRecord::Base
     challenge
   end
 
-  def self.acme_client(private_key)
-    Acme::Client.new private_key: private_key.to_openssl, endpoint: 'http://acme-test.devvm'
+  def self.acme_client(settings)
+    Acme::Client.new private_key: settings.private_key.to_openssl, endpoint: settings.endpoint
   end
 
   private
