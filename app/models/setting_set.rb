@@ -8,20 +8,20 @@ class SettingSet
     @changed_attributes = []
   end
 
-  def method_missing(meth, *args, &block)
+  def method_missing(meth, *args)
     if meth[-1] == '='
       setting = Setting.find_by_key(meth[0...-1]) || Setting.new
       setting.key = meth[0...-1]
       setting.value = args[0]
       @changed_attributes << setting
-      puts @changed_attributes.inspect
     else
       setting = Setting.find_by_key(meth)
       setting.value if setting
     end
   end
+
   def save!
-    @changed_attributes.each &:save!
+    @changed_attributes.each(&:save!)
   end
 
   def assign_attributes(values)
