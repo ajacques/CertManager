@@ -84,7 +84,7 @@ class Certificate extends CertificatePart {
 
   static from_url(host) {
     return AsyncTask.start({
-      url: Routes.import_from_url_certificates_path,
+      url: Routes.from_url_certificates_path,
       data: {
         host: host
       }

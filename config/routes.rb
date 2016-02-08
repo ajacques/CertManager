@@ -48,8 +48,8 @@ Rails.application.routes.draw do
     collection do
       get 'import'
       scope :import, controller: :import do
-        get 'from_url', action: :import_from_url
-        post 'from_url', action: :import_from_url
+        get 'from_url', action: :from_url
+        post 'from_url', action: :from_url
         post '', action: :do_import
       end
       post 'analyze'

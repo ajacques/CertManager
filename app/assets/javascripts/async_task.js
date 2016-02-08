@@ -1,5 +1,5 @@
 var AsyncTask = (function() {
-
+  'use strict';
   var handle_loop = function(url_func, promise) {
     return function(result) {
       if (result.status === 'unfinished') {
