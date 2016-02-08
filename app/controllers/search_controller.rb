@@ -6,9 +6,9 @@ class SearchController < ApplicationController
       params[:query], certs.map(&:to_s)
     ]
     respond_to do |format|
-     format.json {
-       render json: resp
-     }
+      format.json {
+        render json: resp
+      }
     end
   end
 end

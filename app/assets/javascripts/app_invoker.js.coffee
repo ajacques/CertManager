@@ -9,6 +9,10 @@ func = () ->
     page_obj()
   else if "object" == typeof page_obj
     page_obj
+  for element in document.querySelectorAll('div[data-react-mount=true]')
+    className = element.getAttribute('data-react-class')
+    clazz = window[name] || eval.call(window, className)
+    ReactDOM.render(React.createElement(clazz), element)
 if document.readyState == "complete" || document.readyState == "loaded"
   page_inst = func()
 else

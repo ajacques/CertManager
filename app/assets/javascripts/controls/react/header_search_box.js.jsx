@@ -1,8 +1,14 @@
 (function() {
   this.HeaderSearchBox = React.createClass({
+    requestSuggestions: function() {
+
+    },
+    getInitialState: function() {
+      return {debounce: debounce(this.requestSuggestions, 500, false)};
+    },
     render: function() {
       return (
-        <input type="search" name="query" className="form-control" placeholder="Search" />
+        <input onChange={this.state.debounce} type="search" name="query" className="form-control" placeholder="Search" />
       );
     }
   });
