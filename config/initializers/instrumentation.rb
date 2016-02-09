@@ -14,10 +14,18 @@ module RedisInstrumentation
       name = 'Redis Query (%.1fms)'. % event.duration
 
       command = event.payload[:command]
-      args = event.payload[:args].join(' ')
+      args = event.payload[:args]
       LogSubscriber.inc_runtime(event.duration)
 
-      debug "  #{color(name, YELLOW, true)} #{command} #{args}"
+      reduced = args.map do |arg|
+        if arg.ascii_only?
+          arg
+        else
+          '[Binary]'
+        end
+      end.join(' ')
+
+      debug "  #{color(name, YELLOW, true)} #{command} #{reduced}"
     end
 
     def self.inc_runtime(inc)
