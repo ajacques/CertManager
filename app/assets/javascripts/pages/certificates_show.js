@@ -7,7 +7,7 @@ var CertificatesShow = function() {
     ReactDOM.unmountComponentAtNode(modalPoint);
   };
   var popCertWindow = function(evt) {
-    var elem = React.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
+    var elem = ReactDOM.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
     elem.changeFormat(elem.state.format);
     evt.preventDefault();
     return false;
