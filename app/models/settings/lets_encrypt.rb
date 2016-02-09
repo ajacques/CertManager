@@ -1,4 +1,4 @@
-class Settings::LetsEncrypt < Group
+class Settings::LetsEncrypt < Settings::Group
   attr_reader :private_key, :endpoint
 
   def initialize(key, endpoint)

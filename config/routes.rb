@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
   end
   scope :search, controller: :search, as: :search do
+    get :results
     get :manifest
     get :suggest
   end

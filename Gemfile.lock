@@ -58,6 +58,7 @@ GEM
       sass (>= 3.3.4)
     bootstrap_form (2.3.0)
     builder (3.2.2)
+    classnames-rails (2.1.5)
     codeclimate-engine-rb (0.3.1)
       virtus (~> 1.0)
     coercible (1.0.0)
@@ -270,6 +271,7 @@ DEPENDENCIES
   acme-client
   bootstrap-sass
   bootstrap_form
+  classnames-rails
   coffee-rails
   flay
   haml

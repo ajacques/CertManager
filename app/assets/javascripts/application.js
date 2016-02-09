@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require react
+//= require classnames
 //= require react-server
 //= require js-routes
 //= require_tree .

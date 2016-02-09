@@ -25,6 +25,8 @@ group :assets, :development do
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem 'turbolinks'
 
+  gem 'classnames-rails'
+
   gem 'bootstrap-sass'
   gem 'react-rails'
   gem 'js-routes'
