@@ -6,6 +6,10 @@
         return;
       }
       this.setState({query: query});
+      if (query === '') {
+        this.setState({suggestions: []});
+        return;
+      }
       $.ajax({
         url: Routes.search_results_path(),
         method: 'GET',
@@ -61,7 +65,7 @@
         </div>);
       }
       var panelStyle = {};
-      if (!this.state.float_open) {
+      if (!this.state.float_open && this.state.suggestions.length > 0) {
         panelStyle['display'] = 'none';
       }
       return (

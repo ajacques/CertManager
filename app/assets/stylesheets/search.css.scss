@@ -18,10 +18,14 @@
 }
 
 .search-option {
-  padding: 5px;
   cursor: pointer;
+
+  > a {
+    padding: 5px;
+    display: block;
+  }
 }
 
-.search-highlighted-option {
+.search-highlighted-option,.search-option:hover {
   background-color: #20b5ff;
 }
