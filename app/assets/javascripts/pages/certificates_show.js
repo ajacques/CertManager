@@ -6,12 +6,6 @@ var CertificatesShow = function() {
   var closeModal = function() {
     ReactDOM.unmountComponentAtNode(modalPoint);
   };
-  var popCertWindow = function(evt) {
-    var elem = ReactDOM.render(React.createElement(CertBodyDialog, {modal: cert, close: closeModal}), modalPoint);
-    elem.changeFormat(elem.state.format);
-    evt.preventDefault();
-    return false;
-  };
   var clickHistoryLink = function(event) {
     var id = event.currentTarget.dataset.id;
     var pubkey = PublicKey.find(id);
@@ -22,9 +16,7 @@ var CertificatesShow = function() {
   };
   closure.install = function() {
     // Deprecated
-    var link = document.getElementById('cert-data-popup-link');
     modalPoint = document.getElementById('modal');
-    link.addEventListener('click', popCertWindow);
     closure.attach_history_links();
   };
   closure.attach_history_links = function() {

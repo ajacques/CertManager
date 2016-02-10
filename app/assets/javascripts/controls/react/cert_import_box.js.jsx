@@ -22,7 +22,7 @@
       if (this.props.state === 'loaded') {
         var already_imported;
         if (this.props.parsed.id !== null) {
-          already_imported = <CertBodyDialogLink certificate={this.props.parsed} />;
+          already_imported = <CertBodyDialogLink certificate={this.props.parsed}>[View existing]</CertBodyDialogLink>;
         }
         body = (
           <div>
