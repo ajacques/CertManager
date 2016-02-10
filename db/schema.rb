@@ -97,10 +97,11 @@ ActiveRecord::Schema.define(version: 20160207084158) do
   end
 
   create_table "settings", force: :cascade do |t|
-    t.string   "key",        null: false
-    t.string   "value",      null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "config_group", null: false
+    t.string   "key",          null: false
+    t.string   "value",        null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|
@@ -145,5 +146,6 @@ ActiveRecord::Schema.define(version: 20160207084158) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "certificates", "public_keys", name: "certificates_public_keys_id_fk", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "certificates", "private_keys"
+  add_foreign_key "certificates", "public_keys"
 end

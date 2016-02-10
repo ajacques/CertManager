@@ -23,5 +23,7 @@ class CreatePublicKeys < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_foreign_key :certificates, :public_keys
   end
 end

@@ -18,7 +18,7 @@ module RedisInstrumentation
       LogSubscriber.inc_runtime(event.duration)
 
       reduced = args.map do |arg|
-        if arg.ascii_only?
+        if arg.to_s.ascii_only?
           arg
         else
           '[Binary]'
