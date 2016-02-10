@@ -68,14 +68,18 @@
       ReactDOM.unmountComponentAtNode(modalPoint)
     },
     openWindow: function(event) {
-      var elem = ReactDOM.render(<CertBodyDialog modal={this.props.certificate} close={this.close} />, modalPoint);
+      var cert = this.props.certificate;
+      if (!this.props.certificate.hasOwnProperty('get_format')) {
+        cert = Certificate.find(this.props.certificate.id)
+      }
+      var elem = ReactDOM.render(<CertBodyDialog modal={cert} close={this.close} />, modalPoint);
       elem.changeFormat(elem.state.format);
       event.preventDefault();
       return false;
     },
     render: function() {
       return (
-        <a onClick={this.openWindow} href={Routes.public_key_path(this.props.certificate.id)}>[View existing]</a>
+        <a onClick={this.openWindow} href={Routes.public_key_path(this.props.certificate.id)}>{this.props.children}</a>
       );
     }
   })

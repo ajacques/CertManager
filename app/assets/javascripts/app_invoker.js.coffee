@@ -12,7 +12,8 @@ func = () ->
   for element in document.querySelectorAll('div[data-react-mount=true]')
     className = element.getAttribute('data-react-class')
     clazz = window[name] || eval.call(window, className)
-    ReactDOM.render(React.createElement(clazz), element)
+    props = JSON.parse(element.getAttribute('data-react-props'))
+    ReactDOM.render(React.createElement(clazz, props), element)
 if document.readyState == "complete" || document.readyState == "loaded"
   page_inst = func()
 else
