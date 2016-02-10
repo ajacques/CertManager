@@ -131,7 +131,7 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    parser (2.3.0.2)
+    parser (2.3.0.3)
       ast (~> 2.2)
     pg (0.18.4)
     powerpack (0.1.1)
@@ -182,7 +182,7 @@ GEM
     redis-session-store (0.8.1)
       actionpack (>= 3, < 5.1)
       redis
-    reek (3.10.0)
+    reek (3.10.1)
       codeclimate-engine-rb (~> 0.3.1)
       parser (~> 2.3)
       private_attr (~> 1.1)
