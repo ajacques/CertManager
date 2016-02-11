@@ -12,6 +12,7 @@ class CreateUsers < ActiveRecord::Migration
       t.boolean :lets_encrypt_accepted_terms, null: false, default: false
 
       # GitHub authentication
+      t.string :github_username
       t.string :github_access_token
       t.string :github_scope
 

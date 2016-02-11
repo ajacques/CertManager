@@ -19,8 +19,7 @@ class SessionsController < ApplicationController
     end
 
     url = session[:return_url] || root_path
-    reset_session
-    session[:user_id] = user.ids
+    assume_user(user)
     redirect_to url
   end
 
@@ -37,20 +36,13 @@ class SessionsController < ApplicationController
     client_id = settings.client_id
     secret = settings.client_secret
 
-    uri = URI.parse('https://github.com/login/oauth/access_token')
-    props = {
-      client_id: client_id,
-      client_secret: secret,
-      code: params[:code],
-      redirect_to: root_url,
-      state: params[:state]
-    }
-    result = RestClient.post('https://github.com/login/oauth/access_token', props, {accept: :json})
-    body = JSON.parse(result)
+    token_info = User.fetch_access_token(client_id, root_path, params[:code])
+    access_token = token_info['access_token']
 
     raise 'Need access to user email scope' unless body['scope'].split(',').include?(user:email)
 
-
+    user_info = JSON.parse(RestClient.get('https://github.com/user?access_token=' + access_token, {accept: :json}))
+    user = User.authenticate_with_github_user(user_info)
 
     render plain: body.inspect
   end
@@ -70,6 +62,11 @@ class SessionsController < ApplicationController
       state: state
     }.to_query
     url.to_s
+  end
+
+  def assume_user(user)
+    reset_session
+    session[:user_id] = user.id
   end
 
   def secure_token
