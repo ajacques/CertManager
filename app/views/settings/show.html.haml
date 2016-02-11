@@ -1,0 +1,13 @@
+%h3 Settings
+.well.well-large
+  %h4 Let's Encrypt
+  = bootstrap_form_for SettingSet.new, url: url_for do |f|
+    = f.text_field :acme_client, label: t('settings.lets_encrypt_endpoint')
+    = f.submit 'Save', class: 'btn btn-default'
+
+.well.well-large
+  %h4 SMTP Settings
+  = bootstrap_form_for Settings::EmailServer.new, url: url_for do |f|
+    = f.text_field :server, label: 'Server Address', placeholder: '127.0.0.1'
+    = f.text_field :port, label: 'Port', placeholder: 587
+    = f.submit 'Save', class: 'btn btn-default'
