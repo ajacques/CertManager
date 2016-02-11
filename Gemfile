@@ -19,6 +19,8 @@ gem 'resque' # Background job execution
 gem 'resque-scheduler'
 gem 'pg' # Postgres
 
+gem 'rest-client'
+
 group :assets, :development do
   # Use jquery as the JavaScript library
   gem 'jquery-rails'

@@ -5,6 +5,14 @@ Rails.application.routes.draw do
   get 'ping' => 'health_check#ping'
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
+  scope :login do
+    scope :sso do
+      scope :github do
+        root to: 'sessions#github', as: :login_with_github
+        get 'finalize' => 'sessions#github_finalize'
+      end
+    end
+  end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
   resources :users, only: [:create, :index, :new, :show, :update], constraints: {
     id: /[0-9]+/
