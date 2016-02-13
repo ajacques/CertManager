@@ -40,6 +40,7 @@ class SessionsController < ApplicationController
 
     raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
 
+    session.destroy
     reset_session
     session[:access_token] = access_token
     redirect_to action: :github_authenticate
@@ -51,10 +52,27 @@ class SessionsController < ApplicationController
     user_info = JSON.parse(RestClient.get('https://api.github.com/user?access_token=' + access_token, accept: :json))
     user = User.authenticate_with_github_user(user_info)
 
-    render plain: user.inspect
+    if user.nil?
+      # TODO: This won't split all names correctly.
+      name_split_attempt = user_info['name'].split(' ')
+      user_props = {
+        first_name: name_split_attempt[0],
+        last_name: name_split_attempt[1],
+        email: user_info['email'],
+        github_access_token: session[:access_token],
+        github_username: user_info['login']
+      }
+      user = User.new user_props
+      user.randomize_password
+      user.save!
+    end
+
+    assume_user user
+    redirect_to root_path
   end
 
   def destroy
+    session.destroy
     reset_session
     redirect_to new_user_session_path
   end
