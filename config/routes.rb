@@ -9,7 +9,8 @@ Rails.application.routes.draw do
     scope :sso do
       scope :github do
         root to: 'sessions#github', as: :login_with_github
-        get 'finalize' => 'sessions#github_finalize'
+        get 'receive' => 'sessions#github_finalize'
+        get 'authenticate' => 'sessions#github_authenticate'
       end
     end
   end

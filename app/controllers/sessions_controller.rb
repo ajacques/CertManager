@@ -9,10 +9,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.authenticate!(params[:email], params[:password])
+    email = params[:email]
+    user = User.authenticate!(email, params[:password])
     unless user
-      logger.info "#{params[:email]} did not match any known users"
-      flash[:username] = params[:email]
+      logger.info "#{email} did not match any known users"
+      flash[:username] = email
       flash[:error] = :no_match
       redirect_to action: :new
       return
@@ -33,18 +34,24 @@ class SessionsController < ApplicationController
   def github_finalize
     raise 'Failed to verify security token' unless session[:github_auth_token] == params[:state]
     settings = Settings::GitHubAuth.new
-    client_id = settings.client_id
-    secret = settings.client_secret
 
-    token_info = User.fetch_access_token(client_id, root_path, params[:code])
+    token_info = User.fetch_access_token(settings, root_path, params[:code], params[:state])
     access_token = token_info['access_token']
 
-    raise 'Need access to user email scope' unless body['scope'].split(',').include?(user:email)
+    raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
 
-    user_info = JSON.parse(RestClient.get('https://github.com/user?access_token=' + access_token, {accept: :json}))
+    reset_session
+    session[:access_token] = access_token
+    redirect_to action: :github_authenticate
+  end
+
+  def github_authenticate
+    raise 'Need access token' unless session.key? :access_token
+    access_token = session[:access_token]
+    user_info = JSON.parse(RestClient.get('https://api.github.com/user?access_token=' + access_token, accept: :json))
     user = User.authenticate_with_github_user(user_info)
 
-    render plain: body.inspect
+    render plain: user.inspect
   end
 
   def destroy

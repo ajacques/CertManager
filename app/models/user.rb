@@ -1,7 +1,7 @@
 require 'securerandom'
 
 class User < ActiveRecord::Base
-  include GitHubAuthentication
+  include OauthAuthentication
   attr_accessor :password, :password_confirmation, :confirmation_token_confirmation
   attr_reader :reset_password_token_confirmation
   validates :first_name, :last_name, presence: true
