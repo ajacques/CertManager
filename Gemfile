@@ -8,6 +8,9 @@ gem 'haml'
 gem 'haml-rails'
 gem 'bootstrap_form'
 gem 'will_paginate'
+gem 'react-rails'
+
+gem 'therubyracer'
 
 gem 'redis'
 gem 'redis-session-store'
@@ -30,7 +33,6 @@ group :assets, :development do
   gem 'classnames-rails'
 
   gem 'bootstrap-sass'
-  gem 'react-rails'
   gem 'js-routes'
 
   gem 'sprockets'
