@@ -17,7 +17,9 @@ gem 'acme-client'
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
-gem 'pg' # Postgres
+gem 'pg', platform: :ruby # Postgres
+
+gem 'rest-client'
 
 group :assets, :development do
   # Use jquery as the JavaScript library
@@ -48,7 +50,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'sqlite3', platform: :ruby
   gem 'simplecov', platform: :ruby
   gem 'mocha'
 

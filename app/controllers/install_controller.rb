@@ -1,7 +1,14 @@
 class InstallController < ApplicationController
-  skip_before_action :require_login
+  public_endpoint
+
   def user
     redirect_to root_path if User.any?
+  end
+
+  def create_provider
+    OAuthProvider.create!(params.require(:o_auth_provider)
+                           .permit(:name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret))
+    redirect_to new_user_session_path
   end
 
   def create_user

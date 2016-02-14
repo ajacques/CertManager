@@ -1,6 +1,8 @@
 .row.vertical-center.modal-centered-form
   .login-form-container.col-sm-12.col-lg-4.well.well-lg.center-block
     %h1 Sign in
+    .form-group
+      %a.btn.center-block.btn-info{href: login_with_github_path} Login with GitHub
     .form-error-message
       - if @error_message
         = t "login.error.#{@error_message}"

@@ -75,6 +75,8 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     docile (1.1.5)
+    domain_name (0.5.20160128)
+      unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -99,6 +101,8 @@ GEM
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     ice_nine (0.11.2)
     jquery-rails (4.1.0)
@@ -129,6 +133,7 @@ GEM
     mono_logger (1.1.0)
     multi_json (1.11.2)
     multipart-post (2.0.0)
+    netrc (0.11.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     parser (2.3.0.4)
@@ -198,6 +203,10 @@ GEM
       redis (~> 3.0)
       resque (~> 1.25)
       rufus-scheduler (~> 3.0)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rubocop (0.37.2)
       parser (>= 2.3.0.4, < 3.0)
       powerpack (~> 0.1)
@@ -249,6 +258,9 @@ GEM
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     unicode-display_width (0.3.1)
     unicorn (5.0.1)
       kgio (~> 2.6)
@@ -290,6 +302,7 @@ DEPENDENCIES
   reek
   resque
   resque-scheduler
+  rest-client
   rubocop
   sass-rails
   simplecov

@@ -10,12 +10,13 @@ class SettingSet
 
   def method_missing(meth, *args)
     if meth[-1] == '='
-      setting = Setting.find_by_key(meth[0...-1]) || Setting.new
-      setting.key = meth[0...-1]
+      method = meth[0...-1]
+      setting = Setting.find_by_key(method) || Setting.new
+      setting.key = method
       setting.value = args[0]
       @changed_attributes << setting
     elsif meth.to_s.end_with? '_changed?'
-      @changed_attributes.include? meth[0...-('_changed?'.size)].to_sym
+      @changed_attributes.include? meth[0...-9].to_sym
     else
       setting = Setting.find_by_key(meth)
       setting.value if setting

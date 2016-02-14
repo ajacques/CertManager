@@ -18,7 +18,7 @@ class Settings::Group
   private
 
   def config_value(key)
-    val = Setting.where(config_group: class_name, key: key).first
+    val = Setting.find_by(config_group: class_name, key: key)
     val.value if val
   end
 end
