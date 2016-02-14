@@ -25,20 +25,17 @@ class SessionsController < ApplicationController
   end
 
   def github
-    client_id = Settings::GitHubAuth.new.client_id
+    provider = OAuthProvider.find_by_name(:github)
     state = secure_token
-    session[:github_auth_token] = state
-    redirect_to github_authorize_url(client_id, state)
+    session[:oauth_state] = state
+
+    redirect_to provider.authorize_uri(state)
   end
 
   def github_finalize
-    raise 'Failed to verify security token' unless session[:github_auth_token] == params[:state]
-    settings = Settings::GitHubAuth.new
-
-    token_info = User.fetch_access_token(settings, root_path, params[:code], params[:state])
-    access_token = token_info['access_token']
-
-    raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
+    raise 'Failed to verify security token' unless session[:oauth_state] == params[:state]
+    provider = OAuthProvider.find_by_name(:github)
+    access_token = provider.fetch_token params.permit(:code, :state)
 
     session.destroy
     reset_session
@@ -49,23 +46,8 @@ class SessionsController < ApplicationController
   def github_authenticate
     raise 'Need access token' unless session.key? :access_token
     access_token = session[:access_token]
-    user_info = JSON.parse(RestClient.get('https://api.github.com/user?access_token=' + access_token, accept: :json))
-    user = User.authenticate_with_github_user(user_info)
-
-    if user.nil?
-      # TODO: This won't split all names correctly.
-      name_split_attempt = user_info['name'].split(' ')
-      user_props = {
-        first_name: name_split_attempt[0],
-        last_name: name_split_attempt[1],
-        email: user_info['email'],
-        github_access_token: session[:access_token],
-        github_username: user_info['login']
-      }
-      user = User.new user_props
-      user.randomize_password
-      user.save!
-    end
+    provider = OAuthProvider.find_by_name(:github)
+    user = provider.login access_token: access_token
 
     assume_user user
     redirect_to root_path
@@ -78,16 +60,6 @@ class SessionsController < ApplicationController
   end
 
   private
-
-  def github_authorize_url(client_id, state)
-    url = URI('https://github.com/login/oauth/authorize')
-    url.query = {
-      client_id: client_id,
-      scope: 'user:email,read:org',
-      state: state
-    }.to_query
-    url.to_s
-  end
 
   def assume_user(user)
     reset_session

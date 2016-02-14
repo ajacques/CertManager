@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207084158) do
+ActiveRecord::Schema.define(version: 20160214015933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(version: 20160207084158) do
     t.string   "verification_uri", null: false
     t.datetime "created_at",       null: false
     t.datetime "expires_at",       null: false
+  end
+
+  create_table "o_auth_providers", force: :cascade do |t|
+    t.string "name",                          null: false
+    t.string "authorize_uri_base",            null: false
+    t.string "token_uri_base",                null: false
+    t.string "client_id"
+    t.string "client_secret"
+    t.string "requested_scopes",   limit: 64
   end
 
   create_table "private_keys", force: :cascade do |t|
@@ -141,6 +150,9 @@ ActiveRecord::Schema.define(version: 20160207084158) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "github_access_token",         limit: 128
+    t.string   "github_scope",                limit: 64
+    t.string   "github_username",             limit: 64
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

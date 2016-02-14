@@ -84,3 +84,5 @@ new_csr!(
 )
 
 Service.create! certificate: leaf, cert_path: '/tmp/fintech.com', after_rotate: 'exit 0', deploy_strategy: :salt, node_group: '*'
+
+OAuthProvider.create! name: :github, authorize_uri_base: 'https://github.com/login/oauth/authorize', token_uri_base: 'https://github.com/login/oauth/access_token'
