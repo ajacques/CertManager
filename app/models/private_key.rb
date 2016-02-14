@@ -1,5 +1,6 @@
 class PrivateKey < ActiveRecord::Base
   has_one :certificate
+  has_many :public_keys, -> { readonly }, foreign_key: :fingerprint, primary_key: :fingerprint
   after_initialize :generate_key
 
   def rsa?
@@ -18,7 +19,12 @@ class PrivateKey < ActiveRecord::Base
   delegate :as_json, to: :to_h
 
   def to_h
-    key_attribs
+    {
+      bit_length: bit_length,
+      type: type,
+      fingerprint: fingerprint,
+      public_keys: public_keys
+    }
   end
 
   def self.import(pem)

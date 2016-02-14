@@ -37,13 +37,18 @@ var CertificatesImport = function() {
     };
   };
   var update = function(body) {
+    body['state'] = 'fetching';
+    var cert = {
+      state: 'fetching',
+      key: body.key
+    };
+    certificates.push(cert);
     if (body.type === 'CERTIFICATE') {
-      body['state'] = 'fetching';
-      certificates.push(body);
-      var cert = Certificate.analyze(body.value);
-      cert.then(handle_analyze(body));
+      cert['certificate'] = body;
+      Certificate.analyze(body.value).then(handle_analyze(body));
     } else if (body.type === 'RSA PRIVATE KEY') {
-
+      cert['private_key'] = body;
+      PrivateKey.analyze(body.value).then(handle_analyze(body));
     }
   };
 

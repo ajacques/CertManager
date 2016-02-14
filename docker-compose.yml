@@ -9,6 +9,8 @@ saltminion:
     service: saltminion
   links:
     - 'saltmaster:salt'
+  volumes_from:
+    - hopeful_morse
 
 web:
   extends:

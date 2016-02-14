@@ -8,34 +8,50 @@
       state: React.PropTypes.string.isRequired,
       parsed: React.PropTypes.object
     },
-    shouldComponentUpdate: function(nextProps) {
-      return !(this.props.state === nextProps.state && this.props.parsed === nextProps.parsed && this.props.flash === nextProps.flash)
-    },
     handleRemove: function() {
       this.props.onRemove(this.props.id);
     },
     render: function() {
-      var body = null;
-      if (this.props.state === 'fetching') {
-        body = <span>[Analyzing...]</span>;
-      }
-      if (this.props.state === 'loaded') {
-        var already_imported;
-        if (this.props.parsed.id !== null) {
-          already_imported = <CertBodyDialogLink certificate={this.props.parsed}>[View existing]</CertBodyDialogLink>;
+      var certificate, private_key;
+      if (this.props.certificate !== undefined) {
+        if (this.props.certificate.state === 'fetching') {
+          certificate = <span>[Analyzing certificate...]</span>
+        } else {
+          var cert = this.props.certificate;
+          var already_imported;
+          if (cert.id !== undefined) {
+            already_imported = <CertBodyDialogLink certificate={cert.parsed}>[View existing]</CertBodyDialogLink>;
+          }
+          certificate = (
+            <span>
+              <span>Subject: {cert.parsed.subject.CN}</span>
+              {already_imported}
+              <button onClick={this.handleRemove} type="button" className="close" aria-label="Close"
+                      style={{float: 'inherit'}}>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </span>
+          );
         }
-        body = (
-          <div>
-            <span>Subject: {this.props.parsed.subject.CN}</span>
-            {already_imported}
-            <button onClick={this.handleRemove} type="button" className="close" aria-label="Close" style={{float: 'inherit'}}>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        );
+      }
+      if (this.props.private_key !== undefined) {
+        var key = this.props.private_key;
+        if (key.state === 'fetching') {
+          private_key = <span>[Analyzing private key</span>;
+        } else {
+          private_key = (
+            <span>
+              <b>Private Key:</b>
+              {key.parsed.opts.bit_length} Bits
+            </span>
+          );
+        }
       }
       return (
-        <div className="cert-chunk">{body}</div>
+        <div className="cert-chunk">
+          {certificate}
+          {private_key}
+        </div>
       );
     }
   });
@@ -61,8 +77,7 @@
     handleType: function(event) {
       var string = event.target.value;
       var bundle = new CertBundle(string);
-      string = this._ingestChunkSet(string, bundle.certs);
-      string = this._ingestChunkSet(string, bundle.keys);
+      string = this._ingestChunkSet(string, bundle.all);
       this.setState({text: string});
     },
     render: function() {
@@ -75,11 +90,6 @@
       return {certificates: []};
     },
     handleCertificate: function(body) {
-      var dupe = this.state.certificates.find(function(f) { return body.value === f.value});
-      if (dupe !== undefined) {
-        dupe['flash'] = true;
-        return;
-      }
       body['key'] = id++;
       this.props.update(body);
     },
@@ -113,7 +123,8 @@
       for (var i in this.state.certificates) {
         var cert = this.state.certificates[i];
         text += cert.value;
-        elems.push(<CertificateChunk key={cert.key} id={cert.key} parsed={cert.parsed} state={cert.state} onRemove={this.props.onRemove} />);
+        elems.push(<CertificateChunk key={cert.key} id={cert.key} certificate={cert.certificate}
+                                     private_key={cert.private_key} state={cert.state} onRemove={this.props.onRemove} />);
       }
       return (
         <span onDragOver={this.dragOver} onDrop={this.handleDrop}>

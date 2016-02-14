@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     end
   end
   scope :private_keys, controller: :private_keys do
-    post :analyze
+    post :analyze, as: :analyze_private_key
   end
   resource :settings, only: [:show, :update]
   post 'jobs/refresh_all' => 'jobs#refresh_all'
