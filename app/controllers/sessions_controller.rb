@@ -1,11 +1,11 @@
 class SessionsController < ApplicationController
-  skip_before_action :require_login
+  public_endpoint
 
   def new
     redirect_to root_path if current_user
     @error_message = flash[:error]
     @username = flash[:username]
-    redirect_to install_user_path unless User.any?
+    redirect_to install_user_path unless User.any? || OAuthProvider.any?
   end
 
   def create

@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     get :suggest
   end
   scope :install, controller: :install, as: :install do
+    get 'oauth'
+    post 'oauth', action: :create_provider
     get 'user'
     post 'user', action: :create_user
     get 'configure'

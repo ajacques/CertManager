@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
+  attr_accessor :model_id
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  attr_accessor :model_id
   protect_from_forgery with: :exception
   before_action :require_login
   append_before_action :initialize_user
@@ -30,5 +30,13 @@ class ApplicationController < ActionController::Base
 
   def user_signed_in?
     session.key?(:user_id)
+  end
+
+  class << self
+    protected
+
+    def self.public_endpoint
+      skip_before_action :require_login
+    end
   end
 end

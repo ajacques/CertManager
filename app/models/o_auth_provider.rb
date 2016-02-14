@@ -10,7 +10,13 @@ class OAuthProvider < ActiveRecord::Base
   end
 
   def fetch_token(params)
-    token_info = User.fetch_access_token(settings, root_path, params[:code], params[:state])
+    props = {
+      client_id: client_id,
+      client_secret: client_secret,
+      code: params[:code],
+      state: params[:state]
+    }
+    token_info = JSON.parse(RestClient.post('https://github.com/login/oauth/access_token', props, accept: :json))
     access_token = token_info['access_token']
 
     raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
@@ -29,14 +35,14 @@ class OAuthProvider < ActiveRecord::Base
         first_name: name_split_attempt[0],
         last_name: name_split_attempt[1],
         email: user_info['email'],
-        github_access_token: session[:access_token],
+        github_access_token: params[:access_token],
         github_username: user_info['login'],
         can_login: true
       }
       user = User.new user_props
       user.randomize_password
     end
-    user.github_access_token = access_token
+    user.github_access_token = params[:access_token]
     user.save!
     user
   end
