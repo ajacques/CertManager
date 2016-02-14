@@ -1,9 +1,13 @@
 class SettingsController < ApplicationController
   def update
-    set = SettingSet.new
-    set.assign_attributes params.require(:setting_set).permit(:acme_client, :smtp_address, :smtp_port)
-    ActionMailer::Base.smtp_settings['address'] = set.smtp_address if set.smtp_address_changed?
-    ActionMailer::Base.smtp_settings['port'] = set.smtp_port if set.smtp_port_changed?
+    set = Settings::LetsEncrypt.new
+    set.assign_attributes params.permit(settings_lets_encrypt: [:endpoint, :private_key])[:settings_lets_encrypt]
+    set.save!
+
+    set = Settings::EmailServer.new
+    set.assign_attributes params.permit(settings_email_server: [:server, :port])[:settings_email_server]
+    ActionMailer::Base.smtp_settings['address'] = set.server if set.server_changed?
+    ActionMailer::Base.smtp_settings['port'] = set.port if set.port_changed?
     set.save!
 
     redirect_to settings_path

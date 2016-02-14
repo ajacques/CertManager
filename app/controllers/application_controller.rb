@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :model_id
 
+  def self.public_endpoint
+    skip_before_action :require_login
+  end
+
   protected
 
   attr_reader :current_user
@@ -24,19 +28,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def settings
-    @settings ||= SettingSet.new
-  end
-
   def user_signed_in?
     session.key?(:user_id)
-  end
-
-  class << self
-    protected
-
-    def self.public_endpoint
-      skip_before_action :require_login
-    end
   end
 end

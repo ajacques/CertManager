@@ -1,5 +1,6 @@
 class RSAPrivateKey < PrivateKey
   validates :bit_length, numericality: { only_integer: true, greater_than_or_equal_to: 512 }
+  after_initialize :generate_key
 
   def rsa?
     true

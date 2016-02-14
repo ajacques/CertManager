@@ -1,8 +1,9 @@
 %h3 Settings
 .well.well-large
   %h4 Let's Encrypt
-  = bootstrap_form_for SettingSet.new, url: url_for do |f|
-    = f.text_field :acme_client, label: t('settings.lets_encrypt_endpoint')
+  = bootstrap_form_for Settings::LetsEncrypt.new, url: url_for do |f|
+    = f.select :private_key, PrivateKey.select(:id).joins(:certificate).map { |key| [key.certificate.subject, key.id] }
+    = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint')
     = f.submit 'Save', class: 'btn btn-default'
 
 .well.well-large

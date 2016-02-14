@@ -2,6 +2,11 @@ class Settings::Group
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations
+  include ActiveModel::ForbiddenAttributesProtection
+
+  def initialize
+    @changed_attributes = []
+  end
 
   def class_name
     self.class.name.split('::').last.underscore
@@ -12,6 +17,31 @@ class Settings::Group
       define_method(key) do
         config_value(key)
       end
+      define_method("#{key}=") do |value|
+        setting = Setting.find_by_key(key) || Setting.new
+        setting.key = key
+        setting.config_group = class_name
+        setting.value = value
+        @changed_attributes << setting
+      end
+      define_method("#{key}_changed?") do
+        @changed_attributes.include? key
+      end
+    end
+  end
+
+  def save!
+    @changed_attributes.each(&:save!)
+  end
+
+  def persisted?
+    true
+  end
+
+  def assign_attributes(values)
+    return unless values
+    sanitize_for_mass_assignment(values).each do |k, v|
+      send("#{k}=", v)
     end
   end
 

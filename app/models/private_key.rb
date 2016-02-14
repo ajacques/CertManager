@@ -1,7 +1,6 @@
 class PrivateKey < ActiveRecord::Base
   has_one :certificate
   has_many :public_keys, -> { readonly }, foreign_key: :fingerprint, primary_key: :fingerprint
-  after_initialize :generate_key
 
   def rsa?
     false
