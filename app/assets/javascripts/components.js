@@ -1,4 +1,4 @@
 //= require react-server
-//= require common
+//= require common/common.js
 //= require js-routes
 //= require_tree ./controls/react
