@@ -48,8 +48,8 @@ class CertificatesController < ApplicationController
     cert = Certificate.eager_load(:public_key, :private_key).find(params[:id])
     respond_to do |format|
       format.pem {
-        render plain: cert.chain.map { |cert|
-          cert.public_key.to_pem
+        render plain: cert.chain.map { |item|
+          item.public_key.to_pem
         }.join("\n")
       }
     end
