@@ -84,4 +84,3 @@ new_csr!(
 )
 
 Service.create! certificate: leaf, cert_path: '/tmp/fintech.com', after_rotate: 'exit 0', deploy_strategy: :salt, node_group: '*'
-
