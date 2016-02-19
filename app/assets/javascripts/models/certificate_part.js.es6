@@ -65,11 +65,18 @@ class Certificate extends CertificatePart {
     }
   }
 
-  static _from_expanded(blob) {
-    var deferred = $.Deferred();
+  _from_chain(result) {
+    return resolved_promise(this);
+  }
 
-    deferred.resolve(new Certificate(blob));
-    return deferred.promise();
+  getChain(format) {
+    return $.ajax({
+      url: Routes.chain_certificate_path({id: this.id}, {format: format})
+    }).success(this._from_chain);
+  }
+
+  static _from_expanded(blob) {
+    return resolved_promise(Certificate(blob));
   }
 
   static analyze(input) {

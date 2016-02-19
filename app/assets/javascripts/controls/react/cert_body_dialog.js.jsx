@@ -16,15 +16,23 @@
       event.preventDefault();
       this.changeFormat(format);
     },
+    triggerBodyUpdate: function(format, include_chain) {
+      if (include_chain) {
+        this.props.modal.getChain(format).then(this.changeBody);
+      } else {
+        this.props.modal.get_format(format).then(this.changeBody);
+      }
+    },
     changeFormat: function(format) {
       this.setState({format: format});
-      this.props.modal.get_format(format).then(this.changeBody);
+      this.triggerBodyUpdate(format, this.state.include_chain);
     },
     changeBody: function(body) {
       this.setState({text: body});
     },
     handleIncludeChain: function(event) {
       this.setState({include_chain: event.target.checked});
+      this.triggerBodyUpdate(this.state.format, event.target.checked);
     },
     render: function() {
       var formatElems = [];

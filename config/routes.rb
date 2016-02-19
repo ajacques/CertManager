@@ -48,6 +48,7 @@ Rails.application.routes.draw do
     member do
       get 'csr'
       get 'revocation_check'
+      get 'chain'
       scope :sign, controller: :signing do
         scope :lets_encrypt, controller: :lets_encrypt do
           root action: :index, as: :lets_encrypt

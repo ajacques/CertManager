@@ -44,6 +44,17 @@ class CertificatesController < ApplicationController
     end
   end
 
+  def chain
+    cert = Certificate.eager_load(:public_key, :private_key).find(params[:id])
+    respond_to do |format|
+      format.pem {
+        render plain: cert.chain.map { |cert|
+          cert.public_key.to_pem
+        }.join("\n")
+      }
+    end
+  end
+
   def create
     cert = Certificate.new certificate_params
     cert.csr.private_key = cert.private_key
