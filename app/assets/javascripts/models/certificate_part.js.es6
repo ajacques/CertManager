@@ -76,7 +76,7 @@ class Certificate extends CertificatePart {
   }
 
   static _from_expanded(blob) {
-    return resolved_promise(Certificate(blob));
+    return resolved_promise(new Certificate(blob));
   }
 
   static analyze(input) {

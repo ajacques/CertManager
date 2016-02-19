@@ -87,7 +87,7 @@
     },
     render: function() {
       return (
-        <a onClick={this.openWindow} href={Routes.public_key_path(this.props.certificate.id)}>{this.props.children}</a>
+        <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.certificate.id})}>{this.props.children}</a>
       );
     }
   })

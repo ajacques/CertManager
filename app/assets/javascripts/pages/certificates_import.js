@@ -29,27 +29,76 @@ var CertificatesImport = function() {
     certificates.splice(index, 1);
     import_component.setState({certificates: certificates});
   };
-  var handle_analyze = function(match) {
+  function handle_analyze(root, match) {
     return function(result) {
+      if (result.opts.id !== undefined) {
+        root['cert_id'] = result.opts.id;
+      }
       match['parsed'] = result;
       match['state'] = 'loaded';
       import_component.setState({certificates: certificates});
     };
-  };
+  }
+  function findCertById(id) {
+    for (var i = 0; i < certificates.length; i++) {
+      if (certificates[i].cert_id === id) {
+        return certificates[i];
+      }
+    }
+    return null;
+  }
+  function findCertByFingerprint(fingerprint) {
+    for (var i = 0; i < certificates.length; i++) {
+      if (certificates[i].fingerprint === fingerprint) {
+        return certificates[i];
+      }
+    }
+    return null;
+  }
+  function handlePrivateKeyAnalyze(root) {
+    var private_key = root['private_key'];
+    return function(result) {
+      if (result.opts.public_keys.length >= 1) {
+        var cert = findCertById(result.opts.public_keys[0].id);
+        if (cert === null) {
+          cert = findCertByFingerprint(result.opts.fingerprint);
+        }
+        if (cert !== null) {
+          // Race condition. use filter
+          certificates = certificates.filter(function(f) {
+            return f !== root;
+          });
+          private_key = cert['private_key'] = {
+            value: private_key.value
+          };
+        } else {
+          root['cert_id'] = result.opts.public_keys[0].id;
+        }
+      }
+      private_key['parsed'] = result;
+      private_key['state'] = 'loaded';
+      import_component.setState({certificates: certificates});
+    };
+  }
   var update = function(body) {
-    body['state'] = 'fetching';
+    var item = {
+      state: 'fetching',
+      value: body.value
+    };
     var cert = {
       state: 'fetching',
-      key: body.key
+      key: body.key,
+      certificate: undefined,
+      private_key: undefined
     };
-    certificates.push(cert);
     if (body.type === 'CERTIFICATE') {
-      cert['certificate'] = body;
-      Certificate.analyze(body.value).then(handle_analyze(body));
+      cert['certificate'] = item;
+      Certificate.analyze(body.value).then(handle_analyze(cert, item));
     } else if (body.type === 'RSA PRIVATE KEY') {
-      cert['private_key'] = body;
-      PrivateKey.analyze(body.value).then(handle_analyze(body));
+      cert['private_key'] = item;
+      PrivateKey.analyze(body.value).then(handlePrivateKeyAnalyze(cert));
     }
+    certificates.push(cert);
   };
 
   import_component = React.createElement(CertImportBox, {update: update, onRemove: handle_remove});

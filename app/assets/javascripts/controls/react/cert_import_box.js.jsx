@@ -19,17 +19,13 @@
         } else {
           var cert = this.props.certificate;
           var already_imported;
-          if (cert.id !== undefined) {
+          if (cert.parsed.id !== null) {
             already_imported = <CertBodyDialogLink certificate={cert.parsed}>[View existing]</CertBodyDialogLink>;
           }
           certificate = (
             <span>
               <span>Subject: {cert.parsed.subject.CN}</span>
               {already_imported}
-              <button onClick={this.handleRemove} type="button" className="close" aria-label="Close"
-                      style={{float: 'inherit'}}>
-                <span aria-hidden="true">&times;</span>
-              </button>
             </span>
           );
         }
@@ -42,7 +38,7 @@
           private_key = (
             <span>
               <b>Private Key:</b>
-              {key.parsed.opts.bit_length} Bits
+              <span>{key.parsed.opts.bit_length} Bits</span>
             </span>
           );
         }
@@ -51,6 +47,10 @@
         <div className="cert-chunk">
           {certificate}
           {private_key}
+          <button onClick={this.handleRemove} type="button" className="close" aria-label="Close"
+                  style={{float: 'inherit'}}>
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
       );
     }
@@ -122,7 +122,12 @@
       var text = '';
       for (var i in this.state.certificates) {
         var cert = this.state.certificates[i];
-        text += cert.value;
+        if (cert.certificate !== undefined) {
+          text += cert.certificate.value;
+        }
+        if (cert.private_key !== undefined) {
+          text += cert.private_key.value;
+        }
         elems.push(<CertificateChunk key={cert.key} id={cert.key} certificate={cert.certificate}
                                      private_key={cert.private_key} state={cert.state} onRemove={this.props.onRemove} />);
       }
