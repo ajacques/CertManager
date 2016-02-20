@@ -3,12 +3,12 @@
   %h4 Let's Encrypt
   = bootstrap_form_for Settings::LetsEncrypt.new, url: url_for do |f|
     = f.select :private_key, PrivateKey.select(:id).joins(:certificate).map { |key| [key.certificate.subject, key.id] }
-    = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint')
-    = f.submit 'Save', class: 'btn btn-default'
+    = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint'), description: 'test'
+    = f.submit t('form_controls.save'), class: 'btn btn-default'
 
 .well.well-large
   %h4 SMTP Settings
   = bootstrap_form_for Settings::EmailServer.new, url: url_for do |f|
     = f.text_field :server, label: 'Server Address', placeholder: '127.0.0.1'
     = f.text_field :port, label: 'Port', placeholder: 587
-    = f.submit 'Save', class: 'btn btn-default'
+    = f.submit t('form_controls.save'), class: 'btn btn-default'

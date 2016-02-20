@@ -6,6 +6,8 @@ class Settings::Group
 
   def initialize
     @changed_attributes = []
+
+    load_values # Pre-load setting values
   end
 
   def class_name
@@ -47,7 +49,16 @@ class Settings::Group
 
   private
 
+  def load_values
+    settings = Setting.where(config_group: class_name)
+    @settings = {}
+    settings.each do |setting|
+      @settings[setting.key] = setting.value
+    end
+  end
+
   def config_value(key)
+    return @settings[key] if @settings.has_key? key.to_s
     val = Setting.find_by(config_group: class_name, key: key)
     val.value if val
   end

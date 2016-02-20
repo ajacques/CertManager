@@ -63,3 +63,5 @@ en:
       lifetime: '%B %e, %Y'
   settings:
     lets_encrypt_endpoint: Server endpoint
+  form_controls:
+    save: "Save"
