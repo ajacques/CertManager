@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  include Authenticator
   public_endpoint
 
   def new
@@ -28,12 +29,5 @@ class SessionsController < ApplicationController
     session.destroy
     reset_session
     redirect_to new_user_session_path
-  end
-
-  private
-
-  def assume_user(user)
-    reset_session
-    session[:user_id] = user.id
   end
 end

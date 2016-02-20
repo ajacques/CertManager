@@ -1,4 +1,5 @@
 class OAuthController < ApplicationController
+  include Authenticator
   public_endpoint
 
   def begin
