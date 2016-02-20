@@ -24,35 +24,6 @@ class SessionsController < ApplicationController
     redirect_to url
   end
 
-  def github
-    provider = OAuthProvider.find_by_name(:github)
-    state = secure_token
-    session[:oauth_state] = state
-
-    redirect_to provider.authorize_uri(state)
-  end
-
-  def github_finalize
-    raise 'Failed to verify security token' unless session[:oauth_state] == params[:state]
-    provider = OAuthProvider.find_by_name(:github)
-    access_token = provider.fetch_token params.permit(:code, :state)
-
-    session.destroy
-    reset_session
-    session[:access_token] = access_token
-    redirect_to action: :github_authenticate
-  end
-
-  def github_authenticate
-    raise 'Need access token' unless session.key? :access_token
-    access_token = session[:access_token]
-    provider = OAuthProvider.find_by_name(:github)
-    user = provider.login access_token: access_token
-
-    assume_user user
-    redirect_to root_path
-  end
-
   def destroy
     session.destroy
     reset_session
@@ -64,9 +35,5 @@ class SessionsController < ApplicationController
   def assume_user(user)
     reset_session
     session[:user_id] = user.id
-  end
-
-  def secure_token
-    SecureRandom.hex
   end
 end

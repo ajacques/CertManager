@@ -16,7 +16,7 @@ class OAuthProvider < ActiveRecord::Base
       code: params[:code],
       state: params[:state]
     }
-    token_info = JSON.parse(RestClient.post('https://github.com/login/oauth/access_token', props, accept: :json))
+    token_info = JSON.parse(RestClient.post(token_uri_base, props, accept: :json))
     access_token = token_info['access_token']
 
     raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')

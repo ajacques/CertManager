@@ -6,12 +6,10 @@ Rails.application.routes.draw do
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
   scope :login do
-    scope :sso do
-      scope :github do
-        root to: 'sessions#github', as: :login_with_github
-        get 'receive' => 'sessions#github_finalize'
-        get 'authenticate' => 'sessions#github_authenticate'
-      end
+    scope 'sso/:provider', controller: :o_auth, as: :oauth do
+      root action: :begin, as: :login
+      get :receive
+      get :authenticate
     end
   end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session

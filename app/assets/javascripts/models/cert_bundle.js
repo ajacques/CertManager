@@ -1,10 +1,6 @@
 (function(root) {
   'use strict';
 
-  var chunk_valid = function(chunk) {
-    return chunk[1] == chunk[3];
-  };
-
   root.CertBundle = function(data) {
     var regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}[a-zA-Z0-9=/+\r\n]+-----END ([A-Z ]+)-----[\r\n]{1,2}/g;
     var groups = [];
