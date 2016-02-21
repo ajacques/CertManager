@@ -15,7 +15,7 @@ func = () ->
     page_obj()
   else if "object" == typeof page_obj
     page_obj.init()
-  initializeReact
+  initializeReact()
 if document.readyState == "complete" || document.readyState == "loaded"
   page_inst = func()
 else
