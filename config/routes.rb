@@ -87,7 +87,11 @@ Rails.application.routes.draw do
   scope :private_keys, controller: :private_keys do
     post :analyze, as: :analyze_private_key
   end
-  resource :settings, only: [:show, :update]
+  resource :settings, only: [:show, :update] do
+    member do
+      post 'validate/mail_server', action: 'validate_mail_server'
+    end
+  end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
   get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 

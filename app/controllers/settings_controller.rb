@@ -12,10 +12,13 @@ class SettingsController < ApplicationController
 
     set = Settings::EmailServer.new
     set.assign_attributes params.permit(settings_email_server: [:server, :port])[:settings_email_server]
-    ActionMailer::Base.smtp_settings['address'] = set.server if set.server_changed?
-    ActionMailer::Base.smtp_settings['port'] = set.port if set.port_changed?
     set.save!
 
     redirect_to settings_path
+  end
+
+  def validate_mail_server
+    TestMailer.validate_mail_server(current_user).deliver_now
+    render nothing: true
   end
 end
