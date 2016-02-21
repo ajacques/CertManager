@@ -65,6 +65,8 @@ class Settings::Group
     end
   end
 
+  private_class_method :define_setting_method
+
   def config_value(key)
     key = key.to_s
     return @settings[key] if @settings.key? key
