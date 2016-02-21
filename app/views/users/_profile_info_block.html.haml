@@ -6,4 +6,5 @@
       = f.text_field :first_name
       = f.text_field :last_name
       = f.email_field :email
+      = f.select :time_zone, User::TIME_ZONES
       = f.submit 'Update profile', class: 'btn center-block'

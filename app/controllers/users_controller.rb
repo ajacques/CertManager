@@ -79,10 +79,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params[:user].permit(:first_name, :last_name, :email)
+    params[:user].permit(:first_name, :last_name, :email, :time_zone)
   end
 
   def user_update_params
-    params.require(:user).permit(:first_name, :last_name, :email, :confirmation_token_confirmation, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :email, :time_zone, :confirmation_token_confirmation, :password, :password_confirmation)
   end
 end

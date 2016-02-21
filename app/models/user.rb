@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
   before_save :update_password
   belongs_to :lets_encrypt_key, class_name: 'PrivateKey'
 
+  TIME_ZONES = ActiveSupport::TimeZone::MAPPING.map do |_key, value|
+    [value]
+  end
+
   def password_matches?(pwd)
     password_hash == User.hash_password(pwd, password_salt)
   end
