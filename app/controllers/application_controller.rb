@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
 
   def initialize_user
     @current_user = User.find session[:user_id] if session.key? :user_id
+  rescue ActiveRecord::RecordNotFound
+    @current_user = nil
   end
 
   def require_login
