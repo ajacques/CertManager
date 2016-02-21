@@ -16,4 +16,13 @@ class UserMailer < BaseMailer
 
     mail to: user.email_addr, subject: subject, &:text
   end
+
+  def validate_mail_server(user)
+    @user = user
+    subject = t 'account.mailers.test_mail_serve'
+
+    mail to: user.email_addr, subject: subject do |format|
+      format.text
+    end
+  end
 end
