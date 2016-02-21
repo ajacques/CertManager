@@ -21,8 +21,6 @@ class UserMailer < BaseMailer
     @user = user
     subject = t 'account.mailers.test_mail_serve'
 
-    mail to: user.email_addr, subject: subject do |format|
-      format.text
-    end
+    mail to: user.email_addr, subject: subject, &:text
   end
 end
