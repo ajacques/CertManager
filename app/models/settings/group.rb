@@ -16,20 +16,12 @@ class Settings::Group
 
   def self.config_keys(*keys)
     keys.each do |key|
-      define_method(key) do
-        config_value(key)
-      end
-      define_method("#{key}=") do |value|
-        setting = Setting.find_by_key(key) || Setting.new
-        setting.key = key
-        setting.config_group = class_name
-        setting.value = value
-        @changed_attributes << setting
-      end
-      define_method("#{key}_changed?") do
-        @changed_attributes.include? key
-      end
+      define_setting_method(key)
     end
+  end
+
+  def save
+    @changed_attributes.each(&:save)
   end
 
   def save!
@@ -42,8 +34,8 @@ class Settings::Group
 
   def assign_attributes(values)
     return unless values
-    sanitize_for_mass_assignment(values).each do |k, v|
-      send("#{k}=", v)
+    sanitize_for_mass_assignment(values).each do |key, value|
+      send("#{key}=", value)
     end
   end
 
@@ -57,8 +49,25 @@ class Settings::Group
     end
   end
 
+  def self.define_setting_method(key)
+    define_method(key) do
+      config_value(key)
+    end
+    define_method("#{key}=") do |value|
+      setting = Setting.find_by_key(key) || Setting.new
+      setting.key = key
+      setting.config_group = class_name
+      setting.value = value
+      @changed_attributes << setting
+    end
+    define_method("#{key}_changed?") do
+      @changed_attributes.include? key
+    end
+  end
+
   def config_value(key)
-    return @settings[key.to_s] if @settings.key? key.to_s
+    key = key.to_s
+    return @settings[key] if @settings.key? key
     val = Setting.find_by(config_group: class_name, key: key)
     val.value if val
   end
