@@ -11,5 +11,6 @@ class CreatePrivateKeys < ActiveRecord::Migration
     end
 
     add_foreign_key :certificates, :private_keys
+    add_index :private_keys, :fingerprint
   end
 end

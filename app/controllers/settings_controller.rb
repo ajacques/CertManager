@@ -1,4 +1,10 @@
 class SettingsController < ApplicationController
+  def show
+    @signing_keys = PrivateKey.with_subjects.map { |key|
+      [key.CN, key.id]
+    }
+  end
+
   def update
     set = Settings::LetsEncrypt.new
     set.assign_attributes params.permit(settings_lets_encrypt: [:endpoint, :private_key])[:settings_lets_encrypt]

@@ -51,12 +51,12 @@ ActiveRecord::Schema.define(version: 20160214015933) do
   end
 
   create_table "o_auth_providers", force: :cascade do |t|
-    t.string "name",                          null: false
-    t.string "authorize_uri_base",            null: false
-    t.string "token_uri_base",                null: false
+    t.string "name",               null: false
+    t.string "requested_scopes",   null: false
+    t.string "authorize_uri_base", null: false
+    t.string "token_uri_base",     null: false
     t.string "client_id"
     t.string "client_secret"
-    t.string "requested_scopes",   limit: 64
   end
 
   create_table "private_keys", force: :cascade do |t|
@@ -68,6 +68,8 @@ ActiveRecord::Schema.define(version: 20160214015933) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "private_keys", ["fingerprint"], name: "index_private_keys_on_fingerprint", using: :btree
 
   create_table "public_keys", force: :cascade do |t|
     t.integer  "subject_id",                                  null: false
@@ -87,6 +89,8 @@ ActiveRecord::Schema.define(version: 20160214015933) do
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
+
+  add_index "public_keys", ["fingerprint"], name: "index_public_keys_on_fingerprint", using: :btree
 
   create_table "revocation_endpoints", force: :cascade do |t|
     t.integer "public_key_id", null: false
@@ -137,6 +141,9 @@ ActiveRecord::Schema.define(version: 20160214015933) do
     t.string   "time_zone",                   default: "Europe/London", null: false
     t.integer  "lets_encrypt_key_id"
     t.boolean  "lets_encrypt_accepted_terms", default: false,           null: false
+    t.string   "github_username"
+    t.string   "github_access_token"
+    t.string   "github_scope"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.string   "reset_password_token"
@@ -150,9 +157,6 @@ ActiveRecord::Schema.define(version: 20160214015933) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "github_access_token",         limit: 128
-    t.string   "github_scope",                limit: 64
-    t.string   "github_username",             limit: 64
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

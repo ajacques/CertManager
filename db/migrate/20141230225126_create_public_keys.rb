@@ -25,5 +25,6 @@ class CreatePublicKeys < ActiveRecord::Migration
     end
 
     add_foreign_key :certificates, :public_keys
+    add_index :public_keys, :fingerprint
   end
 end

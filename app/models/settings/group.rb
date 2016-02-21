@@ -58,7 +58,7 @@ class Settings::Group
   end
 
   def config_value(key)
-    return @settings[key] if @settings.has_key? key.to_s
+    return @settings[key.to_s] if @settings.key? key.to_s
     val = Setting.find_by(config_group: class_name, key: key)
     val.value if val
   end
