@@ -41,9 +41,8 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     ast (2.2.0)
-    autoprefixer-rails (6.3.3)
+    autoprefixer-rails (6.3.3.1)
       execjs
-      json
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -75,7 +74,7 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     docile (1.1.5)
-    domain_name (0.5.20160128)
+    domain_name (0.5.20160216)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
     erubis (2.7.0)
@@ -126,7 +125,7 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     metaclass (0.0.4)
-    mime-types (2.99)
+    mime-types (2.99.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     mocha (1.1.0)
@@ -243,7 +242,7 @@ GEM
       babel-source (>= 5.8.11)
       babel-transpiler
       sprockets (>= 3.0.0)
-    sprockets-rails (3.0.1)
+    sprockets-rails (3.0.2)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
