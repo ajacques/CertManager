@@ -24,6 +24,8 @@ gem 'pg', platform: :ruby # Postgres
 
 gem 'rest-client'
 
+gem 'aws-sdk'
+
 group :assets, :development do
   # Use jquery as the JavaScript library
   gem 'jquery-rails'
