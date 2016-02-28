@@ -19,6 +19,10 @@ class AgentsController < ActionController::Base
   private
 
   def iot_url
+    # TODO: All of this is temporary code
+    # Pull from the credentials provider
+    access_key = ENV['AWS_ACCESS_KEY']
+    secret_key = ENV['AWS_SECRET_KEY']
     createEndpoint('a1bqd389926wie.iot.us-east-1.amazonaws.com', 'us-east-1', access_key, secret_key)
   end
 
