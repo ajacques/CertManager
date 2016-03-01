@@ -92,9 +92,10 @@ Rails.application.routes.draw do
       post 'validate/mail_server', action: 'validate_mail_server'
     end
   end
-  scope :agents, controller: :agents do
-    get 'register/:token', action: :register
+  scope :agents, controller: :agents, as: :agent do
+    get 'register/:token', action: :register, as: :register
     get :bootstrap
+    get :stream
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
   get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
