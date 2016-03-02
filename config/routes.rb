@@ -95,7 +95,8 @@ Rails.application.routes.draw do
   scope :agents, controller: :agents, as: :agent do
     get 'register/:token', action: :register, as: :register
     get :bootstrap
-    get :stream
+    get :command_stream
+    get 'service/:id', action: :cert_chain, as: :service
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
   get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
