@@ -14,7 +14,7 @@ class AgentsController < ActionController::Base
     response = {
       transport: :http_poll,
       endpoints: {
-        command_stream: agent_command_stream_url(host: 'certmgr.devvm', port: 80)
+        sync: agent_sync_path
       }
     }
     render json: response
@@ -27,13 +27,13 @@ class AgentsController < ActionController::Base
     render json: response
   end
 
-  def command_stream
+  def sync
     services = agent.services
 
     service_manifest = services.map do |service|
       {
         id: service.id,
-        url: agent_service_url(service, host: 'certmgr.devvm', port: 80),
+        url: agent_service_path(service),
         path: service.cert_path,
         after_action: {
           type: :docker,
@@ -54,7 +54,11 @@ class AgentsController < ActionController::Base
       },
       services: service_manifest
     }
-    render json: response
+    respond_to do |format|
+      format.json {
+        render json: response
+      }
+    end
   end
 
   private

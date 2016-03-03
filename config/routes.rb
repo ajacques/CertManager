@@ -95,7 +95,7 @@ Rails.application.routes.draw do
   scope :agents, controller: :agents, as: :agent do
     get 'register/:token', action: :register, as: :register
     get :bootstrap
-    get :command_stream
+    get :sync
     get 'service/:id', action: :cert_chain, as: :service
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
