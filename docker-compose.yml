@@ -37,6 +37,8 @@ nginx:
     - 80
   links:
     - 'browsersync:web'
+  volumes:
+    - dockers/nginx:/etc/nginx/conf.d
   environment:
     VIRTUAL_HOST: certmgr.devvm
 
