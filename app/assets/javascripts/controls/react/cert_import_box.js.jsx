@@ -47,8 +47,7 @@
         <div className="cert-chunk">
           {certificate}
           {private_key}
-          <button onClick={this.handleRemove} type="button" className="close" aria-label="Close"
-                  style={{float: 'inherit'}}>
+          <button onClick={this.handleRemove} type="button" className="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>

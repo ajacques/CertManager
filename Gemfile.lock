@@ -111,6 +111,9 @@ GEM
     js-routes (1.2.4)
       railties (>= 3.2)
       sprockets-rails
+    js_assets (0.1.1)
+      rails
+      sprockets (>= 3.0)
     json (1.8.3)
     json-jwt (1.5.2)
       activesupport
@@ -292,6 +295,7 @@ DEPENDENCIES
   haml-rails
   jquery-rails
   js-routes
+  js_assets
   mocha
   nokogiri (>= 1.6.7.2)
   pg

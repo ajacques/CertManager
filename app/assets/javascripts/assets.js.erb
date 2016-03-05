@@ -1,0 +1,8 @@
+// Temporary file
+var image_path = (function() {
+  'use strict';
+  var dict = {'loading_indicator': '<%= image_path('loading_indicator') %>'};
+  return function(image) {
+    return dict[image];
+  };
+})();
