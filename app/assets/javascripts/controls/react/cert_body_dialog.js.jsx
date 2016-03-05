@@ -55,12 +55,14 @@
               </div>
               <ul className="nav nav-tabs nav-justified">{formatElems}</ul>
               <pre className="certificate modal-body">{this.state.text}</pre>
-              <div className="modal-footer">
-                <label>
-                  <input type="checkbox" onChange={this.handleIncludeChain} checked={this.state.include_chain} />
-                  Include chain
-                </label>
-                <button className="close-button btn btn-default" onClick={this.props.close}>Close</button>
+              <div>
+                <div className="modal-footer">
+                  <label>
+                    <input type="checkbox" onChange={this.handleIncludeChain} checked={this.state.include_chain} />
+                    Include chain
+                  </label>
+                  <button className="close-button btn btn-default" onClick={this.props.close}>Close</button>
+                </div>
               </div>
             </div>
           </div>

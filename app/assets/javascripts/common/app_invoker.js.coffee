@@ -2,7 +2,7 @@ window.on_pageload = window.on_pageload || []
 initializeReact = () ->
   for element in document.querySelectorAll('div[data-react-mount=true]')
     className = element.getAttribute('data-react-class')
-    clazz = window[name] || eval.call(window, className)
+    clazz = window[name] || window[className]
     props = JSON.parse(element.getAttribute('data-react-props'))
     ReactDOM.render(React.createElement(clazz, props), element)
 func = () ->

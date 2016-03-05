@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.5.1'
+gem 'rails', '~> 4.2.5.2'
 
 # User Interface Gems
 gem 'haml'
@@ -39,6 +39,7 @@ group :assets, :development do
 
   gem 'sprockets'
   gem 'sprockets-es6'
+  gem 'js_assets'
 end
 
 group :assets do

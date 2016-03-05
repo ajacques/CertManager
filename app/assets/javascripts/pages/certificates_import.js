@@ -2,16 +2,21 @@ var CertificatesImport = function() {
   'use strict';
   var button = document.getElementById('import-button');
   var box = document.getElementById('import-url');
+  var indicator = document.getElementById('import-indicator');
   var import_component;
   var certificates = [];
   var id = 0;
   var append_certs = function(keys) {
+    indicator.classList.add('hidden');
     keys.forEach(function(f) {
       certificates.push({
         key: 'i' + (id++),
         state: 'loaded',
-        parsed: f,
-        value: f.opts.pem + '\n'
+        certificate: {
+          state: 'loaded',
+          parsed: f,
+          value: f.opts.pem + '\n'
+        }
       });
     });
     import_component.setState({certificates: certificates});
@@ -20,6 +25,7 @@ var CertificatesImport = function() {
     evt.preventDefault();
     var url = box.value;
     if (url !== '') {
+      indicator.classList.remove('hidden');
       Certificate.from_url(url).then(append_certs);
     }
     return false;
