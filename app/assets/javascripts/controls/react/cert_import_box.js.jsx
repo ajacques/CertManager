@@ -14,8 +14,11 @@
     render: function() {
       var certificate, private_key;
       if (this.props.certificate !== undefined) {
-        if (this.props.certificate.state === 'fetching') {
+        var state = this.props.certificate.state;
+        if (state === 'fetching') {
           certificate = <span>[Analyzing certificate...]</span>
+        } else if (state === 'errored') {
+          certificate = <span className="error">[Failed to analyze. Certificate may not be valid.]</span>;
         } else {
           var cert = this.props.certificate;
           var already_imported;
@@ -73,14 +76,22 @@
       }
       return string;
     },
-    handleType: function(event) {
-      var string = event.target.value;
-      var bundle = new CertBundle(string);
-      string = this._ingestChunkSet(string, bundle.all);
+    _processTextBlob: function(text) {
+      var bundle = new CertBundle(text);
+      var string = this._ingestChunkSet(text, bundle.all);
       this.setState({text: string});
     },
+    handlePaste: function(event) {
+      // Bypass expensive DOM render by directly accessing the clipboard
+      event.preventDefault();
+      var text = event.clipboardData.getData('text/plain');
+      this._processTextBlob(text);
+    },
+    handleType: function(event) {
+      this._processTextBlob(event.target.value);
+    },
     render: function() {
-      return <textarea onChange={this.handleType} className="cert-input-span" value={this.state.text} />;
+      return <textarea onPaste={this.handlePaste} onChange={this.handleType} className="cert-input-span" value={this.state.text} />;
     }
   });
 
