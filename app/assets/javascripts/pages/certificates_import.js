@@ -19,7 +19,7 @@ var CertificatesImport = function() {
         }
       });
     });
-    import_component.setState({certificates: certificates});
+    repaintImportControl();
   };
   var import_click = function(evt) {
     evt.preventDefault();
@@ -35,14 +35,23 @@ var CertificatesImport = function() {
     certificates.splice(index, 1);
     import_component.setState({certificates: certificates});
   };
+  function repaintImportControl() {
+    import_component.setState({certificates: certificates});
+  }
   function handle_analyze(root, match) {
-    return function(result) {
-      if (result.opts.id !== undefined) {
-        root['cert_id'] = result.opts.id;
+    return {
+      success: function(result) {
+        if (result.opts.id !== undefined) {
+          root['cert_id'] = result.opts.id;
+        }
+        match['parsed'] = result;
+        match['state'] = 'loaded';
+        repaintImportControl();
+      },
+      fail: function(result) {
+        match['state'] = 'errored';
+        match['error'] = result.responseText;repaintImportControl();
       }
-      match['parsed'] = result;
-      match['state'] = 'loaded';
-      import_component.setState({certificates: certificates});
     };
   }
   function findCertById(id) {
@@ -83,7 +92,7 @@ var CertificatesImport = function() {
       }
       private_key['parsed'] = result;
       private_key['state'] = 'loaded';
-      import_component.setState({certificates: certificates});
+      repaintImportControl();
     };
   }
   var update = function(body) {
@@ -99,12 +108,14 @@ var CertificatesImport = function() {
     };
     if (body.type === 'CERTIFICATE') {
       cert['certificate'] = item;
-      Certificate.analyze(body.value).then(handle_analyze(cert, item));
+      var functors = handle_analyze(cert, item);
+      Certificate.analyze(body.value).then(functors.success, functors.fail);
     } else if (body.type === 'RSA PRIVATE KEY') {
       cert['private_key'] = item;
       PrivateKey.analyze(body.value).then(handlePrivateKeyAnalyze(cert));
     }
     certificates.push(cert);
+    repaintImportControl();
   };
 
   import_component = React.createElement(CertImportBox, {update: update, onRemove: handle_remove});

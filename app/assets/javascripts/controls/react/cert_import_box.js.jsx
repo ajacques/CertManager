@@ -14,8 +14,11 @@
     render: function() {
       var certificate, private_key;
       if (this.props.certificate !== undefined) {
-        if (this.props.certificate.state === 'fetching') {
+        var state = this.props.certificate.state;
+        if (state === 'fetching') {
           certificate = <span>[Analyzing certificate...]</span>
+        } else if (state === 'errored') {
+          certificate = <span className="error">[Failed to analyze. Certificate may not be valid.]</span>;
         } else {
           var cert = this.props.certificate;
           var already_imported;
