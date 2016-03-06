@@ -23,7 +23,7 @@ label span {
 .loading-indicator {
   width: 32px;
   height: 32px;
-  transform: translateY(10px);
+  transform: translate3d(0, 10px, 0);
 }
 
 .loading-indicator-spinner {
@@ -34,9 +34,9 @@ label span {
 
 @keyframes spinner {
   0% {
-    transform: rotate(0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
   }
   100% {
-    transform: rotate(-360deg);
+    transform: rotate3d(0, 0, 1,-360deg);
   }
 }
