@@ -14,7 +14,8 @@ class AgentsController < ActionController::Base
     response = {
       transport: :http_poll,
       endpoints: {
-        sync: agent_sync_path
+        sync: agent_sync_path,
+        report: agent_report_path
       }
     }
     render json: response
@@ -27,6 +28,21 @@ class AgentsController < ActionController::Base
     render json: response
   end
 
+  def report
+    body = JSON.parse(request.body.read)
+    # TODO: So insecure
+    body.each do |service_id, value|
+      record = {
+        update: Time.now,
+        exists: true,
+        valid: true
+      }
+      CertManager::Configuration.redis_client.hset("SERVICE_#{service_id}_NODESTATUS", agent.id, record.to_json)
+    end
+
+    render nothing: true
+  end
+
   def sync
     services = agent.services
 
@@ -35,11 +51,10 @@ class AgentsController < ActionController::Base
         id: service.id,
         url: agent_service_path(service),
         path: service.cert_path,
-        after_action: {
+        after_action: [{
           type: :docker,
-          container_name: 'nginx',
-          signal: 'HUP'
-        },
+          container_name: 'nginx'
+        }],
         hash: {
           algorithm: :sha256,
           value: service.certificate.chain_hash

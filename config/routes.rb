@@ -96,6 +96,7 @@ Rails.application.routes.draw do
     get 'register/:token', action: :register, as: :register
     get :bootstrap
     get :sync
+    post :report
     get 'service/:id', action: :cert_chain, as: :service
   end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
