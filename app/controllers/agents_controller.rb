@@ -1,9 +1,8 @@
 class AgentsController < ActionController::Base
   attr_reader :agent
-  before_filter :check_agent_key, except: [:register]
+  before_action :check_agent_key, except: [:register]
 
   def register
-    agent = Agent.find_by_registration_token(params[:token])
     response = {
       access_token: SecureRandom.hex
     }
@@ -31,7 +30,7 @@ class AgentsController < ActionController::Base
   def report
     body = JSON.parse(request.body.read)
     # TODO: So insecure
-    body.each do |service_id, value|
+    body.each do |service_id|
       record = {
         update: Time.now,
         exists: true,
@@ -65,7 +64,7 @@ class AgentsController < ActionController::Base
     response = {
       continuation: {
         abort: false,
-        refresh: 10
+        refresh: 60
       },
       services: service_manifest
     }
