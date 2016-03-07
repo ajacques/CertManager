@@ -4,15 +4,27 @@
   %li= link_to 'Services', action: :index
   %li.active New
 %h2 Create service
-= bootstrap_form_for @service, layout: :horizontal do |f|
-  = f.select :certificate_id, options_for_certificate_list(Certificate.signed)
-  = f.form_group :deploy_strategy do
-    = f.radio_button :deploy_strategy, :salt, label: 'Salt stack', checked: true
-    = f.radio_button :deploy_strategy, :aws, label: 'AWS IAM'
-  .select-group-set{data: {parent: 'service[deploy_strategy]'}}
-    .select-group{data: {key: 'salt'}}
-      = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
-      = f.text_field :after_rotate, placeholder: 'service nginx reload'
-      = f.text_field :node_group
-    .select-group.hidden{data: {key: 'aws'}}
-  = f.submit 'Create service', class: 'btn btn-primary'
+= bootstrap_form_tag url: services_path, layout: :horizontal do |g|
+  = g.fields_for :service do |f|
+    = f.select :certificate_id, options_for_certificate_list(Certificate.signed)
+    = f.form_group :deploy_strategy do
+      = f.radio_button :type, Service::Salt.to_s, label: 'Salt stack', checked: true
+      = f.radio_button :type, :agent, label: 'Docker agent'
+    .select-group-set{data: {parent: 'service[type]'}}
+      .select-group{data: {key: 'salt'}}
+        = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
+        = f.text_field :after_rotate, placeholder: 'service nginx reload'
+        = f.text_field :node_group
+      .select-group.hidden{data: {key: 'agent'}}
+        = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
+        .form-group
+          %label.col-sm-2.control-label After rotation
+          .col-sm-10
+            %label
+              %input{type: 'checkbox'}
+              %span Perform rotation
+        .form-group
+          %label.col-sm-2.control-label Container name
+          .col-sm-10
+            %input.form-control{type: 'text', }
+  = g.submit 'Create service', class: 'btn btn-primary'

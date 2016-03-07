@@ -32,7 +32,7 @@ class ServicesController < ApplicationController
   def nodes
     salt = SaltClient.new
     salt.login
-    render json: salt.get_minions("#{params[:query]}*")['return'].first.map { |k, _v| k }
+    render json: salt.get_minions("#{params[:query]}*")['return'].first.map { |key, _v| key }
   end
 
   def create
@@ -53,6 +53,6 @@ class ServicesController < ApplicationController
   private
 
   def service_params
-    params[:service].permit(:certificate_id, :cert_path, :after_rotate, :node_group, :deploy_strategy)
+    params[:service].permit(:certificate_id, :cert_path, :after_rotate, :node_group, :type)
   end
 end

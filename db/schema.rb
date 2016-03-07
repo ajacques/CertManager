@@ -109,14 +109,12 @@ ActiveRecord::Schema.define(version: 20160301201801) do
   end
 
   create_table "services", force: :cascade do |t|
-    t.integer  "certificate_id",  null: false
-    t.string   "cert_path",       null: false
-    t.string   "after_rotate",    null: false
-    t.string   "deploy_strategy", null: false
-    t.string   "node_group",      null: false
+    t.string   "type",           null: false
+    t.integer  "certificate_id", null: false
+    t.json     "properties",     null: false
     t.datetime "last_deployed"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "settings", force: :cascade do |t|
