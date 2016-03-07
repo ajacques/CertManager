@@ -9,10 +9,10 @@
   = f.form_group :deploy_strategy do
     = f.radio_button :deploy_strategy, :salt, label: 'Salt stack', checked: true
     = f.radio_button :deploy_strategy, :aws, label: 'AWS IAM'
-  .select-group-set{data: {parent: 'service[deploy_strategy'}}
+  .select-group-set{data: {parent: 'service[deploy_strategy]'}}
     .select-group{data: {key: 'salt'}}
       = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
       = f.text_field :after_rotate, placeholder: 'service nginx reload'
       = f.text_field :node_group
-    .select-group{data: {key: 'aws'}}
+    .select-group.hidden{data: {key: 'aws'}}
   = f.submit 'Create service', class: 'btn btn-primary'
