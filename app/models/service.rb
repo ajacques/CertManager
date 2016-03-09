@@ -24,4 +24,18 @@ class Service < ActiveRecord::Base
   def model_name
     ActiveModel::Name.new(Service)
   end
+
+  protected
+
+  def self.service_prop(*properties)
+    properties.each do |property|
+      prop = property.to_s
+      define_method(property) do
+        self.properties[prop]
+      end
+      define_method("#{property}=") do |value|
+        self.properties[prop] = value
+      end
+    end
+  end
 end

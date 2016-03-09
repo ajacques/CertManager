@@ -1,0 +1,14 @@
+%h1 Add Agent
+%p Add an Agent to use the SoteriaAgent transport system to deploy certificates to machines
+%ol
+  %li
+    %h4 Firewall/networking
+    %div Ensure that the container is permitted to access port 443
+    %code Container -> #{root_url}
+  %li
+    %h4 Add a tag
+    %p A tag is required by a service to specify which agents a service should be deployed to.
+  %li
+    %h4 Execute the following command
+    %code sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock #{@agent.image_name} #{agent_bootstrap_url(token: @agent.registration_token)}
+  %li

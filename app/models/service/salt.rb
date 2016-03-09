@@ -1,15 +1,5 @@
 class Service::Salt < Service
-  def cert_path=(path)
-    properties['cert_path'] = path
-  end
-
-  def after_rotate=(cmd)
-    properties['after_rotate'] = cmd
-  end
-
-  def node_group=(group)
-    properties['node_group'] = group
-  end
+  service_prop :cert_path, :after_rotate, :node_group
 
   def deploy
     chain = certificate.full_chain(true)
@@ -39,7 +29,7 @@ class Service::Salt < Service
       node.hash = json['hash']
       node.valid = json['valid']
       node.exists = json['exists']
-      node.updated_at = Time.parse json['update']
+      node.updated_at = Time.parse(json['update'])
       node
     }
   end
