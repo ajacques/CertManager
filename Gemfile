@@ -37,7 +37,6 @@ group :assets, :development do
 
   gem 'sprockets'
   gem 'sprockets-es6'
-  gem 'js_assets'
 end
 
 group :assets do
