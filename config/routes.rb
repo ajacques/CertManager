@@ -92,7 +92,7 @@ Rails.application.routes.draw do
       post 'validate/mail_server', action: 'validate_mail_server'
     end
   end
-  resources :agents, as: :agent, only: [:new]
+  resources :agents, as: :agent, only: [:new, :update]
   scope :agents, controller: :agents_api, as: :agent do
     get 'register/:token', action: :register, as: :register
     get :bootstrap

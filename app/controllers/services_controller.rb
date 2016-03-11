@@ -36,7 +36,13 @@ class ServicesController < ApplicationController
   end
 
   def create
-    redirect_to Service.create service_params
+    # TODO: Clean this up
+    p = if params[:service][:type] == 'Service::Salt'
+          params.require(:service).permit(:type, :certificate_id, :cert_path, :after_rotate, :node_group)
+        elsif params[:service][:type] == 'Service::SoteriaAgent'
+          params.require(:service).permit(:type, :certificate_id, :cert_path)
+        end
+    redirect_to Service.create p
   end
 
   def destroy
@@ -48,11 +54,5 @@ class ServicesController < ApplicationController
   def deployment
     redis = CertManager::Configuration.redis_client
     @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
-  end
-
-  private
-
-  def service_params
-    params[:service].permit(:certificate_id, :cert_path, :after_rotate, :node_group, :type)
   end
 end

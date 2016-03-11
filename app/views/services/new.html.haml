@@ -8,14 +8,14 @@
   = g.fields_for :service do |f|
     = f.select :certificate_id, options_for_certificate_list(Certificate.signed)
     = f.form_group :deploy_strategy do
-      = f.radio_button :type, 'Service::Salt', label: 'Salt stack', checked: true
-      = f.radio_button :type, 'Service::Agent', label: 'Docker agent'
+      = f.radio_button :type, Service::Salt.to_s, label: 'Salt stack', checked: true
+      = f.radio_button :type, Service::SoteriaAgent.to_s, label: 'Docker agent'
     .select-group-set{data: {parent: '[service][type]'}}
       .select-group{data: {key: 'Service::Salt'}}
         = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
         = f.text_field :after_rotate, placeholder: 'service nginx reload'
         = f.text_field :node_group
-      .select-group.hidden{data: {key: 'Service::Agent'}}
+      .select-group.hidden{data: {key: 'Service::SoteriaAgent'}}
         = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
         .form-group
           %label.col-sm-2.control-label After rotation
