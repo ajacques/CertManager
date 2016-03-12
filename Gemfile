@@ -26,6 +26,7 @@ gem 'rest-client'
 
 gem 'logstash-logger'
 gem 'lograge'
+gem 'request_store'
 
 group :assets, :development do
   # Use jquery as the JavaScript library

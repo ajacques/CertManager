@@ -12,10 +12,6 @@ if email_delivery
   end
 end
 
-Rails.logger = ActiveSupport::TaggedLogging.new LogStashLogger.new type: :udp, host: 'logstash', port: 5228
-config.log_level = :debug
-config.lograge.enabled = true
-
 Rails.application.config.secret_token = secret_key if secret_key
 
 Resque.redis = resque if resque

@@ -1,3 +1,3 @@
-FROM logstash:1.5.2
+FROM logstash:latest
 
 ADD logstash.conf /etc/logstash/conf.d/logstash.conf
