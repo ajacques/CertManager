@@ -3,10 +3,11 @@ require 'socket'
 
 class CertificateImporter
   def initialize(host, port)
-    @host, @port = host, port
+    @host = host
+    @port = port
   end
 
-  def get_certs
+  def fetch_certs
     connect
     certs = grab_cert
     disconnect
@@ -16,6 +17,7 @@ class CertificateImporter
   end
 
   private
+
   def connect
     @socket = TCPSocket.new @host, @port
     @ssl_context = OpenSSL::SSL::SSLContext.new
@@ -23,6 +25,7 @@ class CertificateImporter
     @ssl_socket.hostname = @host
     @ssl_socket.connect
   end
+
   def disconnect
     @ssl_socket.close
   end

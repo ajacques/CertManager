@@ -7,17 +7,17 @@ module CsrHelper
         description.each do |line|
           indent = '&nbsp;' * (line.size - line.lstrip.size)
           command = line[0, line.index(':')].lstrip
-          if command == 'Subject' 
+          if command == 'Subject'
             if errors.include?(:subject)
               hclass = 'bg-danger'
               error = '(Empty subject. May be rejected by the authority)'
             else
               hclass = 'bg-success'
             end
-          elsif command == 'Signature Algorithm' and errors.include?(:hash_algorithm)
+          elsif command == 'Signature Algorithm' && errors.include?(:hash_algorithm)
             hclass = 'bg-danger'
             error = '(Insecure hash algorithm)'
-          elsif command == 'Public-Key' and errors.include?(:bit_length)
+          elsif command == 'Public-Key' && errors.include?(:bit_length)
             hclass = 'bg-danger'
             error = '(Insecure bit length)'
           end
@@ -29,21 +29,26 @@ module CsrHelper
       end
     end
   end
+
   def validate_csr(csr)
     hash = csr.signature_algorithm
     errors = []
     errors << :subject if csr.subject.to_s == ''
     errors << :hash_algorithm if SecurityPolicy.hash_algorithm.insecure?(hash)
-    errors << :bit_length if csr.rsa? and SecurityPolicy.bit_length.insecure?(csr.bit_length)
+    errors << :bit_length if csr.rsa? && SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end
+
   def key_usage_option_tag(name)
     key_usage_option_tag_impl 'key_usage', name
   end
+
   def extended_key_usage_option_tag(name)
     key_usage_option_tag_impl 'extended_key_usage', name
   end
+
   private
+
   def key_usage_option_tag_impl(group, name)
     capture_haml do
       haml_tag :div, class: 'checkbox' do

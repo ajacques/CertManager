@@ -1,7 +1,8 @@
 {
   "Mappings": {
     "EcsAmiIds": {
-      "us-east-1": {"ami": "ami-d0b9acb8"}
+      "us-east-1": {"ami": "ami-2b3b6041"},
+      "us-west-2": {"ami": "ami-bfe095df"}
     }
   },
   "Parameters": {
@@ -18,25 +19,63 @@
       ],
       "Type": "String"
     },
+    "DatabaseStorageSize": {
+      "Type": "Number",
+      "Description": "The allocated storage size specified in gigabytes (GB).",
+      "Default": 5
+    },
+    "RDSInstanceType": {
+      "Type": "String",
+      "Description": "The name of the compute and memory capacity class of the DB instance.",
+      "Default": "db.t1.micro"
+    },
     "FrontendAppServerType": {
       "Description": "Application server instance type",
       "Default": "t1.micro",
       "Type": "String"
     },
-    "IamRoleInstanceProfile" : {
-      "Type" : "String",
-      "Description" : "Name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance"
-    },
     "EcsClusterName" : {
       "Type": "String",
-      "Description": "ECS Cluster Name",
-      "Default": "default"
+      "Description": "ECS Cluster Name"
     },
     "AsgMaxSize" : {
       "Type" : "Number",
       "Description" : "Maximum size and initial Desired Capacity of ECS Auto Scaling Group",
       "Default" : "1"
+    },
+    "StaticFileS3BucketName": {
+      "Type": "String",
+      "Description": "Name of the S3 bucket that will be created where static files, such as JS and CSS, will be stored."
+    },
+    "OriginAccessIdentityID": {
+      "Type": "String",
+      "Description": "Identity for CloudFront to connect to the static file S3 bucket. ID (ex. E1YXXXXXX)"
+    },
+    "DatabaseUsername": {
+      "Type": "String",
+      "Description": "Master username for RDS instance"
+    },
+    "DatabasePassword": {
+      "Type": "String",
+      "NoEcho": true,
+      "MinLength": 6,
+      "MaxLength": 41,
+      "Description": "Master password for RDS instance"
+    },
+    "ToProd": {
+      "Type": "String",
+      "Default": "No",
+      "AllowedValues": [
+        "Yes",
+        "No"
+      ]
+    },
+    "DBSnapshotID": {
+      "Type": "String"
     }
+  },
+  "Conditions": {
+    "CreateProdResources": { "Fn::Equals": [{"Ref": "ToProd"}, "Yes"]}
   },
   "Resources": {
     "RootVPC": {
@@ -53,7 +92,36 @@
         "VpcId": { "Ref": "RootVPC" }
       }
     },
+    "FrontendCacheSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.5.0/26",
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
+    "RDSSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.10.0/26",
+        "AvailabilityZone": { "Fn::Select": [0, {"Fn::GetAZs": {"Ref": "AWS::Region"}}]},
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
+    "RDSSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.10.64/26",
+        "AvailabilityZone": { "Fn::Select": [1, {"Fn::GetAZs": {"Ref": "AWS::Region"}}]},
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
     "MainRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": { "Ref": "RootVPC" }
+      }
+    },
+    "InternalRouteTable": {
       "Type": "AWS::EC2::RouteTable",
       "Properties": {
         "VpcId": { "Ref": "RootVPC" }
@@ -95,6 +163,27 @@
       "Properties": {
         "SubnetId": { "Ref": "FrontendSubnet1" },
         "RouteTableId": { "Ref": "MainRouteTable" }
+      }
+    },
+    "Cache1RouteTableAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "FrontendCacheSubnet1" },
+        "RouteTableId": { "Ref": "InternalRouteTable" }
+      }
+    },
+    "RDS1RouteTableAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "RDSSubnet1" },
+        "RouteTableId": { "Ref": "InternalRouteTable" }
+      }
+    },
+    "RDS2RouteTableAssoc": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "RDSSubnet2" },
+        "RouteTableId": { "Ref": "InternalRouteTable" }
       }
     },
     "FrontendACLPermitHTTPIn": {
@@ -175,22 +264,8 @@
     "AppServerSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Permit HTTP access",
+        "GroupDescription": "Frontend web application",
         "VpcId": {"Ref": "RootVPC"},
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": 80,
-            "ToPort": 80,
-            "CidrIp": "0.0.0.0/0"
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": 443,
-            "ToPort": 443,
-            "CidrIp": "0.0.0.0/0"
-          }
-        ],
         "SecurityGroupEgress": [
           {
             "IpProtocol": "tcp",
@@ -207,15 +282,154 @@
         ]
       }
     },
+    "DBSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "RDS instances",
+        "VpcId": {"Ref": "RootVPC"}
+      }
+    },
+    "FrontEndToDbSecurityRule": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Condition": "CreateProdResources",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "FromPort": { "Fn::GetAtt": ["RDSInstance", "Endpoint.Port"]},
+        "ToPort": { "Fn::GetAtt": ["RDSInstance", "Endpoint.Port"]},
+        "SourceSecurityGroupId": { "Ref": "AppServerSecurityGroup" },
+        "GroupId": { "Fn::GetAtt": ["DBSecurityGroup", "GroupId"] }
+      }
+    },
+    "FrontEndToLBToAppSecurityRuleHttp": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "FromPort": 8080,
+        "ToPort": 8080,
+        "SourceSecurityGroupId": { "Fn::GetAtt": ["FrontendLBSecurityGroup", "GroupId"] },
+        "GroupId": { "Fn::GetAtt": ["AppServerSecurityGroup", "GroupId"] }
+      }
+    },
+    "FrontEndLBToAppSecurityRuleHttps": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "FromPort": 8443,
+        "ToPort": 8443,
+        "SourceSecurityGroupId": { "Fn::GetAtt": ["FrontendLBSecurityGroup", "GroupId"] },
+        "GroupId": { "Fn::GetAtt": ["AppServerSecurityGroup", "GroupId"] }
+      }
+    },
+    "LBToAppServerSecurityRule": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Condition": "CreateProdResources",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "FromPort": { "Fn::GetAtt": ["RDSInstance", "Endpoint.Port"]},
+        "ToPort": { "Fn::GetAtt": ["RDSInstance", "Endpoint.Port"]},
+        "DestinationSecurityGroupId": { "Fn::GetAtt": ["DBSecurityGroup", "GroupId"] },
+        "GroupId": { "Fn::GetAtt": ["AppServerSecurityGroup", "GroupId"] }
+      }
+    },
+    "StaticFileS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketName": { "Ref": "StaticFileS3BucketName" }
+      }
+    },
+    "CloudFrontS3Permission": {
+      "Type": "AWS::S3::BucketPolicy",
+      "DependsOn": ["StaticFileS3Bucket"],
+      "Properties": {
+        "Bucket": { "Ref": "StaticFileS3BucketName" },
+        "PolicyDocument": {
+          "Statement": [{
+            "Action": [
+              "s3:GetObject"
+            ],
+            "Effect": "Allow",
+            "Resource": { "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "StaticFileS3BucketName" }, "/web_content/*"]]},
+            "Condition": {
+              "Bool": {
+                "aws:SecureTransport": "true"
+              }
+            },
+            "Principal": {
+              "AWS": { "Fn::Join": ["", ["arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ", { "Ref": "OriginAccessIdentityID" }]]}
+            }
+          }]
+        }
+      }
+    },
+    "ExternalCloudFront": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Condition": "CreateProdResources",
+      "Properties": {
+        "DistributionConfig": {
+          "Enabled": true,
+          "PriceClass": "PriceClass_100",
+          "Restrictions": {
+            "GeoRestriction": {
+              "RestrictionType": "whitelist",
+              "Locations": ["US"]
+            }
+          },
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "webAppOrigin",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "AllowedMethods": ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"],
+            "ForwardedValues": {
+              "QueryString": true,
+              "Headers": ["Host"],
+              "Cookies": {
+                "Forward": "whitelist",
+                "WhitelistedNames": ["rack.session"]
+              }
+            }
+          },
+          "Origins": [
+            {
+              "Id": "staticAssetOrigin",
+              "DomainName": { "Fn::Join": ["", [{ "Ref": "StaticFileS3BucketName"}, ".s3.amazonaws.com"]]},
+              "OriginPath": "/web_content",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": { "Fn::Join": ["", ["origin-access-identity/cloudfront/", { "Ref": "OriginAccessIdentityID" }]]}
+              }
+            },
+            {
+              "Id": "webAppOrigin",
+              "DomainName": { "Fn::GetAtt": ["FrontendLoadBalancer", "DNSName"]},
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "http-only"
+              }
+            }
+          ],
+          "CacheBehaviors": [
+            {
+              "TargetOriginId": "staticAssetOrigin",
+              "PathPattern": "assets/*",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "ForwardedValues": {
+                "QueryString": false,
+                "Cookies": {
+                  "Forward": "none"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "HostInstance": {
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
         "ImageId": { "Fn::FindInMap": ["EcsAmiIds", {"Ref": "AWS::Region"}, "ami" ] },
         "InstanceType": { "Ref": "FrontendAppServerType" },
         "AssociatePublicIpAddress": false,
-        "IamInstanceProfile": { "Ref": "IamRoleInstanceProfile" },
         "KeyName": { "Ref": "KeyName" },
         "InstanceMonitoring": false,
+        "IamInstanceProfile": { "Ref": "FrontendIAMInstanceRole" },
         "SecurityGroups": [ {"Ref": "AppServerSecurityGroup" } ],
         "UserData": { "Fn::Base64": { "Fn::Join" : ["", [
           "#!/bin/sh\n",
@@ -225,12 +439,16 @@
       }
     },
     "EcsInstanceAsg": {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Condition": "CreateProdResources",
       "Properties" : {
         "VPCZoneIdentifier": [ { "Ref" : "FrontendSubnet1" } ],
         "MinSize": "0",
         "MaxSize": { "Ref" : "AsgMaxSize" },
-        "LaunchConfigurationName": { "Ref": "HostInstance" }
+        "LaunchConfigurationName": { "Ref": "HostInstance" },
+        "LoadBalancerNames": [
+          { "Ref": "FrontendLoadBalancer" }
+        ]
       }
     },
     "CacheSecurityGroup": {
@@ -238,6 +456,153 @@
       "Properties": {
         "Description": "Lock the cluster down"
       }
+    },
+    "FrontendLBSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ELB security group",
+        "VpcId": { "Ref": "RootVPC" },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8080,
+            "ToPort": 8080,
+            "DestinationSecurityGroupId": { "Fn::GetAtt": ["AppServerSecurityGroup", "GroupId"] }
+          }
+        ]
+      }
+    },
+    "RDSInstance": {
+      "Type": "AWS::RDS::DBInstance",
+      "Condition": "CreateProdResources",
+      "Properties": {
+        "Engine": "postgres",
+        "PubliclyAccessible": false,
+        "DBName": "certmanager",
+        "MultiAZ": false,
+        "MasterUsername": {"Ref": "DatabaseUsername"},
+        "MasterUserPassword": {"Ref": "DatabasePassword"},
+        "AllocatedStorage": {"Ref": "DatabaseStorageSize"},
+        "DBInstanceClass": {"Ref": "RDSInstanceType"},
+        "DBSubnetGroupName": {"Ref": "DBSubnetGroup"},
+        "VPCSecurityGroups": [{"Ref": "DBSecurityGroup"}],
+        "DBSnapshotIdentifier": {"Ref": "DBSnapshotID"}
+      }
+    },
+    "DBSubnetGroup": {
+      "Type": "AWS::RDS::DBSubnetGroup",
+      "Properties": {
+        "DBSubnetGroupDescription": "Main data store",
+        "SubnetIds": [
+          {"Ref": "RDSSubnet1"},
+          {"Ref": "RDSSubnet2"}
+        ]
+      }
+    },
+    "CacheSubnetGroup": {
+      "Type": "AWS::ElastiCache::SubnetGroup",
+      "Properties": {
+        "Description": "Front-end cache group",
+        "SubnetIds": [ { "Ref": "FrontendCacheSubnet1" }]
+      }
+    },
+    "FrontendLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Condition": "CreateProdResources",
+      "Properties": {
+        "Scheme": "internet-facing",
+        "Subnets": [{"Ref": "FrontendSubnet1"}],
+        "SecurityGroups": [{ "Ref": "FrontendLBSecurityGroup" }],
+        "ConnectionDrainingPolicy": {
+          "Enabled": true
+        },
+        "HealthCheck": {
+          "HealthyThreshold": 5,
+          "Interval": 5,
+          "Target": "HTTP:8080/ping",
+          "Timeout": 2,
+          "UnhealthyThreshold": 3
+        },
+        "Listeners": [
+          {
+            "InstancePort": 8080,
+            "InstanceProtocol": "HTTP",
+            "LoadBalancerPort": 80,
+            "Protocol": "HTTP"
+          }
+        ]
+      }
+    },
+    "FrontendIAMRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": ["ec2.amazonaws.com"]
+              },
+              "Action": ["sts:AssumeRole"]
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Resource": {"Fn::Join": [":", ["arn:aws:ecs", {"Ref": "AWS::Region"}, {"Ref": "AWS::AccountId"}, "cluster/*"]]},
+                  "Action": [
+                    "ecs:DeregisterContainerInstance",
+                    "ecs:DiscoverPollEndpoint",
+                    "ecs:Poll",
+                    "ecs:RegisterContainerInstance",
+                    "ecs:Submit*"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "FrontendIAMInstanceRole": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [{ "Ref": "FrontendIAMRole" }]
+      }
+    }
+  },
+  "Outputs": {
+    "URL": {
+      "Description": "Raw CloudFront hostname",
+      "Condition": "CreateProdResources",
+      "Value": { "Fn::GetAtt": ["ExternalCloudFront", "DomainName"] }
+    },
+    "WebLoadBalancer": {
+      "Description": "Internal ELB for the web frontend",
+      "Condition": "CreateProdResources",
+      "Value": { "Fn::GetAtt": ["FrontendLoadBalancer", "DNSName"]}
+    },
+    "RDSInstanceUrl": {
+      "Description": "Endpoint for the RDS store",
+      "Condition": "CreateProdResources",
+      "Value": { "Fn::GetAtt": ["RDSInstance", "Endpoint.Address"]}
     }
   }
 }

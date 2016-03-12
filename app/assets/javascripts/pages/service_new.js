@@ -1,5 +1,4 @@
 var ServiceNew = new function() {
-  var self = this;
   var refresh_nodes = function(evt) {
     $.ajax({
       url: location.origin + '/services/nodes?query=' + this.value,
@@ -16,7 +15,7 @@ var ServiceNew = new function() {
     });
   };
 
-  self.init = function() {
+  this.init = function() {
     var target_nodes = document.getElementById('node_group');
     target_nodes.addEventListener('keyup', refresh_nodes);
   };

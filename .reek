@@ -1,0 +1,6 @@
+IrresponsibleModule:
+  enabled: false
+
+# Already handled by Rubocop
+TooManyStatements:
+  enabled: false

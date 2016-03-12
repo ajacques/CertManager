@@ -12,11 +12,12 @@ class SigningController < ApplicationController
 
   def sign_cert
     signer = Certificate.find(params[:id])
-    if params[:id] == params[:another_id]
-     signee = signer
-    else
-     signee = Certificate.find(params[:another_id])
-    end
+
+    signee = if params[:id] == params[:another_id]
+               signer
+             else
+               Certificate.find(params[:another_id])
+             end
     signee.public_key = public_key = signee.private_key.create_public_key
     public_key.assign_attributes certificate_params
     signer.sign(signee)
@@ -27,17 +28,18 @@ class SigningController < ApplicationController
   end
 
   private
+
   def certificate_params
     params.require(:public_key)
-      .permit(
-       :hash_algorithm,
-       :not_before,
-       :not_after,
-       :is_ca,
-       extended_key_usage: [],
-       key_usage: [],
-       subject_attributes: Subject.safe_attributes,
-       extensions_attributes: [:name, :value]
-      )
+          .permit(
+            :hash_algorithm,
+            :not_before,
+            :not_after,
+            :is_ca,
+            extended_key_usage: [],
+            key_usage: [],
+            subject_attributes: Subject.safe_attributes,
+            extensions_attributes: [:name, :value]
+          )
   end
 end

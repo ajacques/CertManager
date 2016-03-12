@@ -1,7 +1,4 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 rsa_ca:
-  subject: ca_subject
   private_key: rsa_key
   public_key: rsa_ca
   chain_hash: invalid

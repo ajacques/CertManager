@@ -1,28 +1,30 @@
 class InstallController < ApplicationController
-  skip_before_filter :require_login
+  public_endpoint
+
   def user
-    if User.any?
-      redirect_to root_path
-    end
+    redirect_to root_path if User.any?
+  end
+
+  def create_provider
+    OAuthProvider.create!(params.require(:o_auth_provider)
+                           .permit(:name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret))
+    redirect_to new_user_session_path
   end
 
   def create_user
-    if User.any?
-      redirect_to root_path
-    end
+    redirect_to root_path if User.any?
     reset_session
-    params = user_params.merge ({
-      can_login: true
-    })
-    user = User.create params
+    params = user_params
+    params[:can_login] = true
+    user = User.create! params
     logger.info params
-    user.save!
     @user = user.id
     redirect_to install_configure_path
   end
 
   private
+
   def user_params
-    params.permit(:email, :password, :first_name, :last_name)
+    params.require(:user).permit(:email, :password, :first_name, :last_name)
   end
 end

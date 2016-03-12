@@ -1,6 +1,6 @@
 # Override module that will strip all whitespace from the HTML in production
 module Haml
-  class Parser 
+  class Parser
     def parse_tag_with_nuked_whitespace(line)
       result = parse_tag_without_nuked_whitespace line
       unless result.size == 9 && [false, true].include?(result[4]) && [false, true].include?(result[5])

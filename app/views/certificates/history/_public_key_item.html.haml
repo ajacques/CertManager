@@ -1,0 +1,11 @@
+%tr.public-key
+  %td
+    = react_component 'CertBodyDialogLink', {certificate: {id: event.id}, children: 'Public Key'}, {prerender: true}
+    %a.history-link{href: public_key_path(event), data: {id: event.id}} Public Key
+    - if event == @cert.public_key
+      %span (Current version)
+    %div
+      %span= l event.not_before, format: :lifetime
+      %span ->
+      %span= l event.not_after, format: :lifetime
+  %td= event.updated_at

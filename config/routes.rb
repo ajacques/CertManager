@@ -5,6 +5,13 @@ Rails.application.routes.draw do
   get 'ping' => 'health_check#ping'
   get 'login' => 'sessions#new', as: :new_user_session
   post 'login' => 'sessions#create', as: :user_session
+  scope :login do
+    scope 'sso/:provider', controller: :o_auth, as: :oauth do
+      root action: :begin, as: :login
+      get :receive
+      get :authenticate
+    end
+  end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
   resources :users, only: [:create, :index, :new, :show, :update], constraints: {
     id: /[0-9]+/
@@ -20,27 +27,50 @@ Rails.application.routes.draw do
       get 'recover_after' => 'user_recovery#after_send'
     end
   end
+  scope :search, controller: :search, as: :search do
+    get :results
+    get :manifest
+    get :suggest
+  end
   scope :install, controller: :install, as: :install do
+    get 'oauth'
+    post 'oauth', action: :create_provider
     get 'user'
     post 'user', action: :create_user
     get 'configure'
   end
   resources :certificates, only: [:create, :index, :new, :show], constraints: {
-      id: /[0-9]+/,
-      another_id: /[0-9]+/
-    } do
+    id: /[0-9]+/,
+    another_id: /[0-9]+/
+  } do
     member do
       get 'csr'
       get 'revocation_check'
+      get 'chain'
+      scope :sign, controller: :signing do
+        scope :lets_encrypt, controller: :lets_encrypt do
+          root action: :index, as: :lets_encrypt
+          post :register
+          get :prove_ownership
+          post :formal_verification
+          get :verify_done
+          post :sign_csr
+        end
+      end
       get 'sign/:another_id' => 'signing#configure'
       post 'sign/:another_id' => 'signing#sign_cert'
     end
     collection do
       get 'import'
-      post 'import/from_url', action: :import_from_url
-      post 'import', action: :do_import
+      scope :import, controller: :import do
+        get 'from_url', action: :from_url
+        post 'from_url', action: :from_url
+        post '', action: :do_import
+      end
+      post 'analyze'
     end
   end
+  resources :public_keys, only: [:show]
   resources :services, constraints: {
     id: /[0-9]+/
   } do
@@ -54,7 +84,16 @@ Rails.application.routes.draw do
       end
     end
   end
+  scope :private_keys, controller: :private_keys do
+    post :analyze, as: :analyze_private_key
+  end
+  resource :settings, only: [:show, :update] do
+    member do
+      post 'validate/mail_server', action: 'validate_mail_server'
+    end
+  end
   post 'jobs/refresh_all' => 'jobs#refresh_all'
+  get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 
   mount Resque::Server.new, at: '/resque'
 end

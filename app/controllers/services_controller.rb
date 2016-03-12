@@ -32,7 +32,7 @@ class ServicesController < ApplicationController
   def nodes
     salt = SaltClient.new
     salt.login
-    render json: salt.get_minions("#{params[:query]}*")['return'].first.map { |k, v| k }
+    render json: salt.get_minions("#{params[:query]}*")['return'].first.map { |k, _v| k }
   end
 
   def create
@@ -47,11 +47,11 @@ class ServicesController < ApplicationController
 
   def deployment
     redis = CertManager::Configuration.redis_client
-    service_id = redis.get("job_#{params[:id]}_service").to_i
     @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
   end
 
   private
+
   def service_params
     params[:service].permit(:certificate_id, :cert_path, :after_rotate, :node_group, :deploy_strategy)
   end

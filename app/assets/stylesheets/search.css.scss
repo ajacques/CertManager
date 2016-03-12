@@ -1,0 +1,31 @@
+@import "bootstrap/variables";
+
+.search-suggest-container {
+  position: relative;
+
+  > input {
+    border-radius: $input-border-radius $input-border-radius 0 0;
+  }
+
+  > .float {
+    background-color: $input-border;
+    position: absolute;
+    left: 0;
+    top: $input-height-base;
+    width: 100%;
+    border-radius: 0 0 2px 2px;
+  }
+}
+
+.search-option {
+  cursor: pointer;
+
+  > a {
+    padding: 5px;
+    display: block;
+  }
+}
+
+.search-highlighted-option,.search-option:hover {
+  background-color: #20b5ff;
+}

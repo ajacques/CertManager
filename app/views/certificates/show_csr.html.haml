@@ -7,6 +7,10 @@
     %p Create a certificate signing request that can be submitted to an external party to be signed
     = link_to 'Generate CSR', action: :csr
   %li
+    %h5 Let's encrypt
+    %p Sign the certificate for free using Let's encrypt
+    = link_to 'Sign', lets_encrypt_certificate_path
+  %li
     %h5 Sign with existing private key
     %p If you already have a certificate capable of signing other certificates, you can sign this certificate without going to an external party
     %ul

@@ -7,8 +7,5 @@
 .row
   .col-md-6
     = render partial: 'profile_info_block'
-  - if current_user == @user
-    .col-md-6
-      = render partial: 'change_password_block'
   .col-md-6
     = render partial: 'account_status_block'

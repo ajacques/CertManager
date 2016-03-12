@@ -1,23 +1,33 @@
 module RedisInstrumentation
   class LogSubscriber < ActiveSupport::LogSubscriber
-    def self.runtime
-      @runtime
+    class << self
+      attr_reader :runtime
     end
+
     def self.reset_runtime
       @runtime = 0.0
     end
+
     def query(event)
       return unless logger.debug?
 
-      name = '%s (%.1fms)' % ['Redis Query', event.duration]
+      name = 'Redis Query (%.1fms)'. % event.duration
 
       command = event.payload[:command]
-      args = event.payload[:args].join(' ')
+      args = event.payload[:args]
       LogSubscriber.inc_runtime(event.duration)
 
-      debug "  #{color(name, YELLOW, true)} #{command} #{args}"
+      reduced = args.map do |arg|
+        if arg.to_s.ascii_only?
+          arg
+        else
+          '[Binary]'
+        end
+      end.join(' ')
+
+      debug "  #{color(name, YELLOW, true)} #{command} #{reduced}"
     end
-    private
+
     def self.inc_runtime(inc)
       @runtime = (@runtime || 0.0) + inc
     end
@@ -35,8 +45,9 @@ module RedisInstrumentation
 
     module ClassMethods
       def log_process_action(payload)
-        messages, runtime = super, payload[:redis_runtime]
-        messages << ('Redis: %.1fms' % runtime.to_f) if runtime
+        messages = super
+        runtime = payload[:redis_runtime]
+        messages << 'Redis: %.1fms' % runtime if runtime
         messages
       end
     end

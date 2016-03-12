@@ -1,4 +1,4 @@
-# CertManager
+# CertManager [![Build Status](https://travis-ci.org/ajacques/CertManager.svg?branch=master)](https://travis-ci.org/ajacques/CertManager)
 Web application designed to simplify SSL certificate management
 
 ## Setup

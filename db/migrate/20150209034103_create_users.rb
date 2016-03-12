@@ -8,6 +8,13 @@ class CreateUsers < ActiveRecord::Migration
       t.binary :password_salt, null: false
       t.boolean :can_login, null: false, default: false
       t.string :time_zone, null: false, default: 'Europe/London'
+      t.integer :lets_encrypt_key_id
+      t.boolean :lets_encrypt_accepted_terms, null: false, default: false
+
+      # GitHub authentication
+      t.string :github_username
+      t.string :github_access_token
+      t.string :github_scope
 
       t.timestamps null: false
     end

@@ -1,0 +1,47 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  Exclude:
+    - 'bin/*'
+    - 'vendor/**/*'
+    - 'db/schema.rb'
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Max: 150
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+# GOAL: Work to lower these limits
+Metrics/MethodLength:
+  Max: 50
+
+Metrics/ClassLength:
+  Max: 150
+
+# High Priority fix
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 50
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Rails/TimeZone:
+ Enabled: false
+
+Style/GuardClause:
+  MinBodyLength: 5
