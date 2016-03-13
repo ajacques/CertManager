@@ -38,5 +38,6 @@ class ApplicationController < ActionController::Base
   def annotate_logs
     RequestStore.store[:actor] = current_user
     RequestStore.store[:request] = request
+    RequestStore.store[:response] = response
   end
 end
