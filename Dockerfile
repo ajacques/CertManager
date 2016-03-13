@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM ubuntu:16.04
 
 RUN /usr/bin/apt-get update && /usr/bin/apt-get install --no-install-recommends -qy ruby ruby-dev make g++ libsqlite3-dev libsqlite3-0 patch zlib1g-dev libpq5 libpq-dev libghc-zlib-dev && gem install bundler --no-ri --no-rdoc
 ADD Gemfile /rails-app/Gemfile
