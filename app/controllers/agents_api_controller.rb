@@ -3,9 +3,12 @@ class AgentsApiController < ActionController::Base
   before_action :check_agent_key, except: [:register]
 
   def register
+    agent = Agent.find_by_registration_token(params[:token])
     response = {
-      access_token: SecureRandom.hex
+      access_token: agent.bootstrap(params[:token])
     }
+    agent.save!
+
     render json: response
   end
 

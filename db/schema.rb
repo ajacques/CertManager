@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
 
   create_table "agents", force: :cascade do |t|
     t.string "registration_token"
-    t.string "access_token",       limit: 64
+    t.string "access_token"
   end
 
   create_table "agents_services", force: :cascade do |t|

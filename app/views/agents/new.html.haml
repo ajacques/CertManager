@@ -13,6 +13,6 @@
         = t.text_field :tag
     %li
       %h4 Execute the following command
-      %code sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock #{@agent.image_name} #{agent_bootstrap_url(token: @agent.registration_token)}
+      %code sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock #{@agent.image_name} register #{agent_register_url(token: @agent.registration_token)}
     %li
       = f.submit 'Close'
