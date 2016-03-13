@@ -25,8 +25,6 @@ class Service < ActiveRecord::Base
     ActiveModel::Name.new(Service)
   end
 
-  protected
-
   def self.service_prop(*properties)
     properties.each do |property|
       prop = property.to_s

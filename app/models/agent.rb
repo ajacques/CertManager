@@ -4,7 +4,7 @@ class Agent < ActiveRecord::Base
   has_many :tags, class_name: 'AgentTag'
   after_initialize :randomize_token
 
-  scope :with_tag, -> (*tags) { joins(:tags).where(tags: {tag: tags}) }
+  scope :with_tag, -> (*tags) { joins(:tags).where(tags: { tag: tags }) }
 
   def image_name
     'soteria-agent:latest'
@@ -14,7 +14,7 @@ class Agent < ActiveRecord::Base
     raise 'Incorrect token' unless token == registration_token
     self.registration_token = nil
     self.access_token = SecureRandom.hex
-    self.access_token
+    access_token
   end
 
   private
