@@ -25,7 +25,6 @@ gem 'pg', platform: :ruby # Postgres
 gem 'rest-client'
 
 gem 'logstash-logger'
-gem 'lograge'
 gem 'request_store'
 
 group :assets, :development do
