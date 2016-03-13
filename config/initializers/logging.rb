@@ -1,12 +1,12 @@
 config = Rails.application.config
 
 logstash = LogStashLogger.new type: :udp, host: 'logstash', port: 5228
-Rails.logger = ActiveSupport::TaggedLogging.new logstash
+# Rails.logger = ActiveSupport::TaggedLogging.new logstash
 config.log_level = :debug
 
 class RequestSubscriber < ActiveSupport::LogSubscriber
-  def self.logstash=(logstash)
-    @@logstash = logstash
+  class << self
+    attr_accessor :logstash
   end
 
   def process_action(event)
@@ -46,22 +46,19 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
         username: actor.email
       }
     end
-    @@logstash.info(output.to_json)
+    RequestSubscriber.logstash.info(output.to_json)
   end
 end
 
 RequestSubscriber.logstash = logstash
 RequestSubscriber.attach_to(:action_controller)
 
-LogStashLogger.configure do |config|
-  config.customize_event do |event|
+LogStashLogger.configure do |lconfig|
+  lconfig.customize_event do |event|
     if event[:request]
       request = RequestStore.store[:request]
-      actor = RequestStore.store[:actor]
       if request
-        event[:request].merge!({
-          id: request.env['action_dispatch.request_id']
-        })
+        event[:request].merge!(id: request.env['action_dispatch.request_id'])
       end
     end
   end

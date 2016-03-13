@@ -5,7 +5,6 @@ email_delivery = CertManager::Configuration.email_delivery
 secret_key = CertManager::Configuration.secret_key
 resque = CertManager::Configuration.resque
 
-config = Rails.application.config
 if email_delivery
   email_delivery.each do |key, value|
     ActionMailer::Base.send("#{key}=", value)
