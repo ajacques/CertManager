@@ -13,9 +13,7 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
     data = event.payload
     output = LogStash::Event.new
     output.type = 'http_request'
-    output[:response] = {
-      status: data[:status]
-    }
+    output[:response] = extract_status(data)
     output[:timing] = {
       total: event.duration,
       view: data[:view_runtime],
@@ -48,6 +46,22 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
       }
     end
     RequestSubscriber.logstash.info(output.to_json)
+  end
+
+  def extract_status(payload)
+    if (status = payload[:status])
+      { status: status.to_i }
+    elsif (error = payload[:exception])
+      exception, message = error
+      { status: get_error_status_code(exception) }
+    else
+      { status: 0 }
+    end
+  end
+
+  def get_error_status_code(exception)
+    status = ActionDispatch::ExceptionWrapper.rescue_responses[exception]
+    Rack::Utils.status_code(status)
   end
 end
 
