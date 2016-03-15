@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
   create_table "services", force: :cascade do |t|
     t.string   "type",           null: false
     t.integer  "certificate_id", null: false
-    t.json     "properties",     null: false
+    t.string     "properties",     null: false
     t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
