@@ -24,6 +24,9 @@ gem 'pg', platform: :ruby # Postgres
 
 gem 'rest-client'
 
+gem 'logstash-logger'
+gem 'request_store'
+
 group :assets, :development do
   # Use jquery as the JavaScript library
   gem 'jquery-rails'

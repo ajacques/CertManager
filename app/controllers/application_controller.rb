@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :require_login
   append_before_action :initialize_user
+  append_before_action :annotate_logs
   helper_method :user_signed_in?
   helper_method :current_user
   helper_method :model_id
@@ -32,5 +33,11 @@ class ApplicationController < ActionController::Base
 
   def user_signed_in?
     session.key?(:user_id)
+  end
+
+  def annotate_logs
+    RequestStore.store[:actor] = current_user
+    RequestStore.store[:request] = request
+    RequestStore.store[:response] = response
   end
 end

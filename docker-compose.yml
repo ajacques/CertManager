@@ -24,6 +24,7 @@ web:
   links:
     - 'saltmaster:salt'
     - 'redis:redis'
+    - logstash
     - db
   volumes_from:
     - gems-2.1
@@ -66,6 +67,7 @@ worker:
     - 'saltmaster:salt'
     - 'redis:redis'
     - db
+    - logstash
   environment:
     RAILS_ENV: development
     QUEUE: '*'
@@ -91,3 +93,9 @@ browsersync:
     - 8080
   volumes:
     - .:/app:ro
+
+logstash:
+  build: dockers/logstash
+  command: logstash -f /etc/logstash/conf.d/logstash.conf
+  external_links:
+    - elasticsearch

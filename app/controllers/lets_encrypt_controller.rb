@@ -10,7 +10,7 @@ class LetsEncryptController < ApplicationController
 
   def prove_ownership
     @certificate = Certificate.find params[:id]
-    settings = Settings::LetsEncrypt.new current_user.lets_encrypt_key, settings.acme_client
+    settings = Settings::LetsEncrypt.new
     @challenge = LetsEncryptChallenge.for_certificate(@certificate, settings)
     redirect_to action: :verify_done if @challenge.status.valid?
   end
