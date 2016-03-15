@@ -29,7 +29,8 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
     }
     output[:routing] = {
       controller: data[:controller],
-      action: data[:action]
+      action: data[:action],
+      resource: "#{data[:controller]}##{data[:action]}"
     }
     request = RequestStore.store[:request]
     actor = RequestStore.store[:actor]
@@ -52,14 +53,3 @@ end
 
 RequestSubscriber.logstash = logstash
 RequestSubscriber.attach_to(:action_controller)
-
-LogStashLogger.configure do |lconfig|
-  lconfig.customize_event do |event|
-    if event[:request]
-      request = RequestStore.store[:request]
-      if request
-        event[:request].merge!(id: request.env['action_dispatch.request_id'])
-      end
-    end
-  end
-end
