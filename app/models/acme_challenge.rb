@@ -1,4 +1,4 @@
-class LetsEncryptChallenge < ActiveRecord::Base
+class AcmeChallenge < ActiveRecord::Base
   belongs_to :certificate
   belongs_to :private_key
   after_create :after_create
@@ -25,7 +25,9 @@ class LetsEncryptChallenge < ActiveRecord::Base
         private_key: settings.private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,
-        verification_uri: challenge.uri
+        verification_uri: challenge.uri,
+        expires_at: authorization.expires,
+        acme_endpoint: settings.endpoint
       )
     end
     challenge
@@ -47,6 +49,6 @@ class LetsEncryptChallenge < ActiveRecord::Base
   end
 
   def acme_client
-    LetsEncryptChallenge.acme_client(private_key)
+    Acme::Client.new private_key: private_key, endpoint: acme_endpoint
   end
 end

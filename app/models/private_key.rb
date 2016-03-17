@@ -33,6 +33,8 @@ class PrivateKey < ActiveRecord::Base
     body
   end
 
+  delegate :sign, to: :to_openssl
+  delegate :public_key, to: :to_openssl
   delegate :to_text, to: :to_openssl
   delegate :as_json, to: :to_h
 

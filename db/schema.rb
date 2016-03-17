@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.string   "token_key",        null: false
     t.string   "token_value",      null: false
     t.string   "verification_uri", null: false
+    t.string   "acme_endpoint",    null: false
     t.datetime "created_at",       null: false
     t.datetime "expires_at",       null: false
   end

@@ -1,0 +1,343 @@
+{
+  "http_request": {
+    "dynamic_templates": [
+      {
+        "string_fields": {
+          "mapping": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "index": "analyzed",
+            "omit_norms": true,
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string",
+                "doc_values": true
+              }
+            }
+          },
+          "match_mapping_type": "string",
+          "match": "*"
+        }
+      },
+      {
+        "float_fields": {
+          "mapping": {
+            "type": "float",
+            "doc_values": true
+          },
+          "match_mapping_type": "float",
+          "match": "*"
+        }
+      },
+      {
+        "double_fields": {
+          "mapping": {
+            "type": "double",
+            "doc_values": true
+          },
+          "match_mapping_type": "double",
+          "match": "*"
+        }
+      },
+      {
+        "byte_fields": {
+          "mapping": {
+            "type": "byte",
+            "doc_values": true
+          },
+          "match_mapping_type": "byte",
+          "match": "*"
+        }
+      },
+      {
+        "short_fields": {
+          "mapping": {
+            "type": "short",
+            "doc_values": true
+          },
+          "match_mapping_type": "short",
+          "match": "*"
+        }
+      },
+      {
+        "integer_fields": {
+          "mapping": {
+            "type": "integer",
+            "doc_values": true
+          },
+          "match_mapping_type": "integer",
+          "match": "*"
+        }
+      },
+      {
+        "long_fields": {
+          "mapping": {
+            "type": "long",
+            "doc_values": true
+          },
+          "match_mapping_type": "long",
+          "match": "*"
+        }
+      },
+      {
+        "date_fields": {
+          "mapping": {
+            "type": "date",
+            "doc_values": true
+          },
+          "match_mapping_type": "date",
+          "match": "*"
+        }
+      }
+    ],
+    "_all": {
+      "omit_norms": true,
+      "enabled": true
+    },
+    "properties": {
+      "severity": {
+        "fielddata": {
+          "format": "disabled"
+        },
+        "norms": {
+          "enabled": false
+        },
+        "type": "string",
+        "fields": {
+          "raw": {
+            "ignore_above": 256,
+            "index": "not_analyzed",
+            "type": "string"
+          }
+        }
+      },
+      "request": {
+        "properties": {
+          "path": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "method": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "format": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "id": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "user_agent": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "routing": {
+        "properties": {
+          "controller": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "index": "not_analyzed",
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "resource": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "action": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "@timestamp": {
+        "format": "strict_date_optional_time||epoch_millis",
+        "type": "date"
+      },
+      "response": {
+        "properties": {
+          "status": {
+            "type": "long"
+          }
+        }
+      },
+      "timing": {
+        "properties": {
+          "total": {
+            "type": "double"
+          },
+          "view": {
+            "type": "double"
+          },
+          "db": {
+            "type": "double"
+          },
+          "redis": {
+            "type": "double"
+          }
+        }
+      },
+      "@version": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "host": {
+        "fielddata": {
+          "format": "disabled"
+        },
+        "norms": {
+          "enabled": false
+        },
+        "type": "string",
+        "fields": {
+          "raw": {
+            "ignore_above": 256,
+            "index": "not_analyzed",
+            "type": "string"
+          }
+        }
+      },
+      "type": {
+        "fielddata": {
+          "format": "disabled"
+        },
+        "norms": {
+          "enabled": false
+        },
+        "type": "string",
+        "fields": {
+          "raw": {
+            "ignore_above": 256,
+            "index": "not_analyzed",
+            "type": "string"
+          }
+        }
+      },
+      "user": {
+        "properties": {
+          "id": {
+            "type": "long"
+          },
+          "username": {
+            "fielddata": {
+              "format": "disabled"
+            },
+            "norms": {
+              "enabled": false
+            },
+            "type": "string",
+            "fields": {
+              "raw": {
+                "ignore_above": 256,
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

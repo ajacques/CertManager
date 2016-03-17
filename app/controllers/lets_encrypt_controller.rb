@@ -11,19 +11,19 @@ class LetsEncryptController < ApplicationController
   def prove_ownership
     @certificate = Certificate.find params[:id]
     settings = Settings::LetsEncrypt.new
-    @challenge = LetsEncryptChallenge.for_certificate(@certificate, settings)
+    @challenge = AcmeChallenge.for_certificate(@certificate, settings)
     redirect_to action: :verify_done if @challenge.status.valid?
   end
 
   def validate_token
-    challenge = LetsEncryptChallenge.find_by_token_key params[:token]
+    challenge = AcmeChallenge.find_by_token_key params[:token]
     return render text: 'Unknown challenge', status: :not_found unless challenge
     render plain: challenge.token_value
   end
 
   def formal_verification
     @certificate = Certificate.find params[:id]
-    challenge = LetsEncryptChallenge.find_by_certificate_id @certificate.id
+    challenge = AcmeChallenge.find_by_certificate_id @certificate.id
     status = challenge.status
     if status.valid?
       redirect_to action: :verify_done
@@ -66,6 +66,6 @@ class LetsEncryptController < ApplicationController
   end
 
   def acme_settings
-    Settings::LetsEncrypt.new current_user.lets_encrypt_key, settings.endpoint
+    Settings::LetsEncrypt.new
   end
 end

@@ -2,7 +2,7 @@
 .well.well-large
   %h4 Let's Encrypt
   = bootstrap_form_for Settings::LetsEncrypt.new, url: url_for do |f|
-    = f.select :private_key, @signing_keys
+    = f.select :private_key_id, @signing_keys
     = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint'), description: 'test'
     = f.submit t('form_controls.save'), class: 'btn btn-default'
 
