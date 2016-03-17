@@ -52,7 +52,7 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
     if (status = payload[:status])
       { status: status.to_i }
     elsif (error = payload[:exception])
-      exception, message = error
+      exception, _message = error
       { status: get_error_status_code(exception) }
     else
       { status: 0 }
