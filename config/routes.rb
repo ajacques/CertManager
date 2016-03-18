@@ -53,6 +53,7 @@ Rails.application.routes.draw do
           post :register
           get :prove_ownership
           get :formal_verification
+          get :verification_failed
           get :verify_done
           post :sign_csr
         end

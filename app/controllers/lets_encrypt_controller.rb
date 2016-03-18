@@ -38,8 +38,14 @@ class LetsEncryptController < ApplicationController
     elsif status.pending?
       raise 'Failed to verify' unless challenge.request_verification
     else
-      raise "Unknown state #{status} #{status.error['detail']}"
+      redirect_to verification_failed_certificate_path
     end
+  end
+
+  def verification_failed
+    @certificate = Certificate.find params[:id]
+    challenge = AcmeChallenge.find_by_certificate_id @certificate.id
+    @status = challenge.status
   end
 
   def sign_csr
