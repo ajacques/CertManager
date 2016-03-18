@@ -27,7 +27,6 @@
           location /.well-known/acme-challenge {
             rewrite ^/.well-known/acme-challenge/(.*)$ /acme-challenge-responder/$1 break;
             proxy_pass http://#{request.host}:#{request.port};
-            proxy_set_header Host #{request.host}:#{request.port};
           }
       = form_tag action: :formal_verification do
         = submit_tag 'Attempt verification'

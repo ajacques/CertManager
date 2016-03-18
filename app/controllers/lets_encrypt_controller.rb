@@ -20,6 +20,10 @@ class LetsEncryptController < ApplicationController
       end
     end
     redirect_to action: :verify_done if @challenge.status.valid?
+  rescue Acme::Client::Error::NotFound
+    @challenge.delete
+    # Possible infinite redirect loop?
+    return redirect_to_ownership
   end
 
   def validate_token
@@ -36,6 +40,8 @@ class LetsEncryptController < ApplicationController
       redirect_to action: :verify_done
     elsif status.pending?
       raise 'Failed to verify' unless challenge.request_verification
+    else
+      raise "Unknown state #{status} #{status.error['detail']}"
     end
   end
 

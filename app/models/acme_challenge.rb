@@ -10,7 +10,8 @@ class AcmeChallenge < ActiveRecord::Base
   end
 
   def status
-    ActiveSupport::StringInquirer.new inner_challenge.verify_status
+    challenge = inner_challenge
+    StatusError.new challenge.verify_status, challenge.error
   end
 
   def expired?
