@@ -52,7 +52,7 @@ Rails.application.routes.draw do
           root action: :index, as: :lets_encrypt
           post :register
           get :prove_ownership
-          post :formal_verification
+          get :formal_verification
           get :verify_done
           post :sign_csr
         end
