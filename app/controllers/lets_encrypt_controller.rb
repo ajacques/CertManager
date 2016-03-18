@@ -11,7 +11,14 @@ class LetsEncryptController < ApplicationController
   def prove_ownership
     @certificate = Certificate.find params[:id]
     settings = Settings::LetsEncrypt.new
-    @challenge = AcmeChallenge.for_certificate(@certificate, settings)
+    2.times do
+      @challenge = AcmeChallenge.for_certificate(@certificate, settings)
+      if @challenge.expired?
+        @challenge.delete
+      else
+        break
+      end
+    end
     redirect_to action: :verify_done if @challenge.status.valid?
   end
 
@@ -56,6 +63,11 @@ class LetsEncryptController < ApplicationController
   end
 
   private
+
+  def invalid_challenge(challenge)
+    challenge.delete!
+    redirect_to
+  end
 
   def redirect_to_ownership
     redirect_to action: :prove_ownership

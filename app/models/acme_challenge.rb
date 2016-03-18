@@ -13,6 +13,10 @@ class AcmeChallenge < ActiveRecord::Base
     ActiveSupport::StringInquirer.new inner_challenge.verify_status
   end
 
+  def expired?
+    expires_at < Time.now
+  end
+
   def self.for_certificate(cert, settings)
     challenge = find_by_certificate_id(cert.id)
     unless challenge
