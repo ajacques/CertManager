@@ -13,11 +13,8 @@ class LetsEncryptController < ApplicationController
     settings = Settings::LetsEncrypt.new
     2.times do
       @challenge = AcmeChallenge.for_certificate(@certificate, settings)
-      if @challenge.expired?
-        @challenge.delete
-      else
-        break
-      end
+      break unless @challenge.expired?
+      @challenge.delete
     end
     redirect_to action: :verify_done if @challenge.status.valid?
   rescue Acme::Client::Error::NotFound
