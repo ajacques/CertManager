@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
   create_table "services", force: :cascade do |t|
     t.string   "type",           null: false
     t.integer  "certificate_id", null: false
-    t.string     "properties",     null: false
+    t.json     "properties",     null: false
     t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
@@ -153,7 +153,6 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.binary   "password_salt",                                         null: false
     t.boolean  "can_login",                   default: false,           null: false
     t.string   "time_zone",                   default: "Europe/London", null: false
-    t.integer  "lets_encrypt_key_id"
     t.boolean  "lets_encrypt_accepted_terms", default: false,           null: false
     t.string   "github_username"
     t.string   "github_access_token"

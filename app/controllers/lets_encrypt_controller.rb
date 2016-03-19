@@ -63,8 +63,6 @@ class LetsEncryptController < ApplicationController
   def register
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
 
-    private_key = PrivateKey.find params[:client_key]
-    current_user.lets_encrypt_key = private_key
     registration = acme_client.register contact: "mailto:#{current_user.email}"
     registration.agree_terms
     current_user.lets_encrypt_accepted_terms = true

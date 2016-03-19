@@ -10,7 +10,6 @@ class User < ActiveRecord::Base
   validates :confirmation_token, confirmation: true
   validates :reset_password_token, confirmation: true
   before_save :update_password
-  belongs_to :lets_encrypt_key, class_name: 'PrivateKey'
 
   TIME_ZONES = ActiveSupport::TimeZone::MAPPING.map do |_key, value|
     [value]
