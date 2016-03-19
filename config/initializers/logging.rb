@@ -28,7 +28,9 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
     output[:request] = {
       method: data[:method],
       path: data[:path],
-      format: data[:format]
+      format: data[:format],
+      proxy_ip: request.remote_ip,
+      client_ip: request.env['HTTP_X_FORWARDED_FOR']
     }
     output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
     output[:routing] = {
