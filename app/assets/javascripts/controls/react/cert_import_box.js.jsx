@@ -23,7 +23,7 @@
           var cert = this.props.certificate;
           var already_imported;
           if (cert.parsed.id !== null) {
-            already_imported = <CertBodyDialogLink certificate={cert.parsed}>[View existing]</CertBodyDialogLink>;
+            already_imported = <CertBodyDialogLink model={cert.parsed}>[View existing]</CertBodyDialogLink>;
           }
           certificate = (
             <span>

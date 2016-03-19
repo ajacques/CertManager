@@ -70,26 +70,33 @@
       );
     }
   });
+  var self = this;
   this.CertBodyDialogLink = React.createClass({
     propTypes: {
-      certificate: React.PropTypes.object.isRequired
+      model: React.PropTypes.object.isRequired
     },
     close: function() {
       ReactDOM.unmountComponentAtNode(modalPoint)
     },
-    openWindow: function(event) {
-      var cert = this.props.certificate;
-      if (!this.props.certificate.hasOwnProperty('get_format')) {
-        cert = Certificate.find(this.props.certificate.id)
+    _getModel: function() {
+      var model = this.props.model;
+      if (model.hasOwnProperty('get_format')) {
+        return model;
       }
-      var elem = ReactDOM.render(<CertBodyDialog modal={cert} close={this.close} />, modalPoint);
+      if (self[model.type] === undefined) {
+        return model;
+      }
+      return self[model.type].find(model.id);
+    },
+    openWindow: function(event) {
+      var elem = ReactDOM.render(<CertBodyDialog modal={this._getModel()} close={this.close} />, modalPoint);
       elem.changeFormat(elem.state.format);
       event.preventDefault();
       return false;
     },
     render: function() {
       return (
-        <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.certificate.id})}>{this.props.children}</a>
+        <a onClick={this.openWindow} href={Routes.public_key_path({id: this._getModel().id})}>{this.props.children}</a>
       );
     }
   })

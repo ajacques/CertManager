@@ -54,6 +54,8 @@ class LetsEncryptController < ApplicationController
     public_key = PublicKey.import signed.to_pem
     certificate.public_key = public_key
     public_key.private_key = certificate.private_key
+    challenge = AcmeChallenge.find_by_certificate_id @certificate.id
+    challenge.delete
     certificate.save!
     redirect_to certificate
   end
