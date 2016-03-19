@@ -12,8 +12,13 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
   def process_action(event)
     data = event.payload
     output = LogStash::Event.new
+    request = RequestStore.store[:request]
+    actor = RequestStore.store[:actor]
+    response = RequestStore.store[:response]
     output.type = 'http_request'
     output[:response] = extract_status(data)
+    output[:response][:redirect_location] = response.headers['Location'] if response.headers.key? 'Location'
+    output[:response][:content_type] = response.content_type
     output[:timing] = {
       total: event.duration,
       view: data[:view_runtime],
@@ -25,13 +30,12 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
       path: data[:path],
       format: data[:format]
     }
+    output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
     output[:routing] = {
       controller: data[:controller],
       action: data[:action],
       resource: "#{data[:controller]}##{data[:action]}"
     }
-    request = RequestStore.store[:request]
-    actor = RequestStore.store[:actor]
     if request
       mg = {
         id: request.env['action_dispatch.request_id'],
@@ -52,8 +56,14 @@ class RequestSubscriber < ActiveSupport::LogSubscriber
     if (status = payload[:status])
       { status: status.to_i }
     elsif (error = payload[:exception])
-      exception, _message = error
-      { status: get_error_status_code(exception) }
+      exception, message = error
+      {
+        status: get_error_status_code(exception),
+        error: {
+          class: exception,
+          message: message
+        }
+      }
     else
       { status: 0 }
     end

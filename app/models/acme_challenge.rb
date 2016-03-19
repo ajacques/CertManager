@@ -18,6 +18,10 @@ class AcmeChallenge < ActiveRecord::Base
     expires_at < Time.now
   end
 
+  def valid_challenge?
+    not status.invalid?
+  end
+
   def self.for_certificate(cert, settings)
     challenge = find_by_certificate_id(cert.id)
     unless challenge
