@@ -19,7 +19,7 @@ class AcmeChallenge < ActiveRecord::Base
   end
 
   def valid_challenge?
-    not status.invalid?
+    !status.invalid?
   end
 
   def self.for_certificate(cert, settings)
