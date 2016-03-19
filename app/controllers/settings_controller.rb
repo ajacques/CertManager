@@ -18,7 +18,7 @@ class SettingsController < ApplicationController
   end
 
   def validate_mail_server
-    TestMailer.validate_mail_server(current_user).deliver_now
+    UserMailer.validate_mail_server(current_user).deliver_now
     render nothing: true
   end
 end
