@@ -55,7 +55,7 @@ class LetsEncryptController < ApplicationController
     certificate.public_key = public_key
     public_key.private_key = certificate.private_key
     certificate.save!
-    render plain: public_key.inspect
+    redirect_to certificate
   end
 
   def register
