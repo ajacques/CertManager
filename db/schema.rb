@@ -16,6 +16,18 @@ ActiveRecord::Schema.define(version: 20160309122805) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "acme_challenges", force: :cascade do |t|
+    t.integer  "certificate_id",   null: false
+    t.string   "domain_name",      null: false
+    t.integer  "private_key_id",   null: false
+    t.string   "token_key",        null: false
+    t.string   "token_value",      null: false
+    t.string   "verification_uri", null: false
+    t.string   "acme_endpoint",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "expires_at",       null: false
+  end
+
   create_table "agent_tags", force: :cascade do |t|
     t.integer "agent_id", null: false
     t.string  "tag",      null: false
@@ -52,18 +64,6 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.integer "public_key_id", null: false
     t.string  "value",         null: false
     t.string  "group",         null: false
-  end
-
-  create_table "lets_encrypt_challenges", force: :cascade do |t|
-    t.integer  "certificate_id",   null: false
-    t.string   "domain_name",      null: false
-    t.integer  "private_key_id",   null: false
-    t.string   "token_key",        null: false
-    t.string   "token_value",      null: false
-    t.string   "verification_uri", null: false
-    t.string   "acme_endpoint",    null: false
-    t.datetime "created_at",       null: false
-    t.datetime "expires_at",       null: false
   end
 
   create_table "o_auth_providers", force: :cascade do |t|
