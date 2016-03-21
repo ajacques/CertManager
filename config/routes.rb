@@ -52,10 +52,9 @@ Rails.application.routes.draw do
           root action: :index, as: :lets_encrypt
           post :register
           get :prove_ownership
-          get :formal_verification
+          post :start_import
+          get :import_status
           get :verification_failed
-          get :verify_done
-          post :sign_csr
         end
       end
       get 'sign/:another_id' => 'signing#configure'

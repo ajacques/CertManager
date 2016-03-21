@@ -1,5 +1,5 @@
 class AcmeChallenge < ActiveRecord::Base
-  belongs_to :certificate
+  belongs_to :certificate, autosave: true
   belongs_to :private_key
   after_create :after_create
 
@@ -10,8 +10,25 @@ class AcmeChallenge < ActiveRecord::Base
   end
 
   def status
+    ActiveSupport::StringInquirer.new last_status
+  end
+
+  def domain_name
+    certificate.subject.CN
+  end
+
+  def fetch_signed
+    signed = acme_client.new_certificate certificate.csr
+    public_key = PublicKey.import signed.to_pem
+    certificate.public_key = public_key
+    public_key.private_key = certificate.private_key
+    public_key
+  end
+
+  def refresh_status
     challenge = inner_challenge
-    StatusError.new challenge.verify_status, challenge.error
+    self.last_status = challenge.verify_status
+    self.error_message = challenge.error
   end
 
   def expired?
@@ -30,7 +47,6 @@ class AcmeChallenge < ActiveRecord::Base
       challenge = authorization.http01
       challenge = create!(
         certificate: cert,
-        domain_name: domain,
         private_key: settings.private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,

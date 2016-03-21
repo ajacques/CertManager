@@ -28,7 +28,7 @@ en:
   signing:
     lets_encrypt:
       header: Sign with Let's Encrypt
-      terms: Terms and Conditions
+      terms: Let's Encrypt terms and conditions
       what_is:
         header: What is Let's Encrypt?
         body: Let's Encrypt is a free service that generates signed and trusted certificates

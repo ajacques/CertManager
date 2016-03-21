@@ -13,7 +13,7 @@ FlayTask.new
 
 require 'reek/rake/task'
 reek = Reek::Rake::Task.new
-reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb']
+reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
 reek.fail_on_error = false
 
 task default: [:rubocop, :flay, :reek]
