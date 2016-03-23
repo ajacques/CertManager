@@ -41,7 +41,7 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     ast (2.2.0)
-    autoprefixer-rails (6.3.3.1)
+    autoprefixer-rails (6.3.4)
       execjs
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -190,7 +190,7 @@ GEM
     redis-session-store (0.8.1)
       actionpack (>= 3, < 5.1)
       redis
-    reek (3.11)
+    reek (4.0.0)
       codeclimate-engine-rb (~> 0.3.1)
       parser (~> 2.3, >= 2.3.0.6)
       rainbow (~> 2.0)
@@ -263,9 +263,8 @@ GEM
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.2)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
+    uglifier (3.0.0)
+      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
