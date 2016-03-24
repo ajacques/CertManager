@@ -34,7 +34,7 @@ module CsrHelper
     hash = csr.signature_algorithm
     errors = []
     errors << :subject if csr.subject.to_s == ''
-    errors << :hash_algorithm if SecurityPolicy.hash_algorithm.insecure?(hash)
+    errors << :hash_algorithm if SecurityPolicy.hash_algorithm.insecure?(hash.gsub('WithRSAEncryption', ''))
     errors << :bit_length if csr.rsa? && SecurityPolicy.bit_length.insecure?(csr.bit_length)
     errors
   end

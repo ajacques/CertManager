@@ -4,7 +4,9 @@ class PublicKey < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
-  has_many :_subject_alternate_names, class_name: 'SubjectAlternateName', autosave: true, dependent: :delete_all
+  has_many :_subject_alternate_names,
+           through: :san_records, source: :subject_alternate_name, class_name: 'SubjectAlternateName', dependent: :delete_all
+  has_many :san_records, class_name: 'PublicKeysSan', autosave: true
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
@@ -67,12 +69,12 @@ class PublicKey < ActiveRecord::Base
     _subject_alternate_names.map(&:name)
   end
 
-  def subject_alternate_names=(sans)
+  def subject_alternate_names=(sans_list)
     orig = _subject_alternate_names.dup
-    new = sans.map { |usage|
+    new = sans_list.map { |usage|
       first = orig.find { |k| k.value == usage }
       return first if first
-      SubjectAlternateName.new name: usage, public_key: self
+      SubjectAlternateName.new name: usage
     }
     self._subject_alternate_names = new
   end

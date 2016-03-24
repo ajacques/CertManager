@@ -10,7 +10,7 @@
     _inputBox: function(text) {
       var name = undefined;
       if (text !== '') {
-        name = "certificate[csr_attributes][subject_alternate_names][]";
+        name = "certificate[csr_attributes][sans][]";
       }
       return (
         <input name={name} onChange={this.handleChange} type="text" className="san-textbox form-control" />

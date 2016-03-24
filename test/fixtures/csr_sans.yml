@@ -1,0 +1,3 @@
+one_san:
+  certificate_sign_request: csr_with_one_san
+  subject_alternate_name: test_san

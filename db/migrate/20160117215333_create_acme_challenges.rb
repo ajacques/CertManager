@@ -3,6 +3,7 @@ class CreateAcmeChallenges < ActiveRecord::Migration
     create_table :acme_challenges do |t|
       t.integer :certificate_id, null: false
       t.integer :private_key_id, null: false
+      t.string :domain_name, null: false
 
       t.string :last_status, null: false, default: 'unchecked'
       t.string :error_message

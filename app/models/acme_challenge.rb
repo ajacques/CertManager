@@ -13,10 +13,6 @@ class AcmeChallenge < ActiveRecord::Base
     ActiveSupport::StringInquirer.new last_status
   end
 
-  def domain_name
-    certificate.subject.CN
-  end
-
   def fetch_signed
     signed = acme_client.new_certificate certificate.csr
     public_key = PublicKey.import signed.to_pem
@@ -40,13 +36,23 @@ class AcmeChallenge < ActiveRecord::Base
   end
 
   def self.for_certificate(cert, settings)
-    challenge = find_by_certificate_id(cert.id)
+    challenge = where(certificate_id: cert.id)
     unless challenge
-      domain = cert.domain_names.first
+      challenge = cert.domain_names.map do |domain|
+        for_domain(cert, settings, domain)
+      end
+    end
+    challenge
+  end
+
+  def self.for_domain(cert, settings, domain)
+    challenge = find_by(certificate_id: cert.id, domain_name: domain)
+    unless challenge
       authorization = acme_client(settings).authorize(domain: domain)
       challenge = authorization.http01
       challenge = create!(
         certificate: cert,
+        domain_name: domain,
         private_key: settings.private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,

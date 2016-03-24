@@ -11,22 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309122805) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20160321212800) do
 
   create_table "acme_challenges", force: :cascade do |t|
-    t.integer  "certificate_id",   null: false
-    t.integer  "private_key_id",   null: false
-    t.string   "last_status",      null: false, default: 'unchecked'
+    t.integer  "certificate_id",                         null: false
+    t.integer  "private_key_id",                         null: false
+    t.string   "domain_name",                            null: false
+    t.string   "last_status",      default: "unchecked", null: false
     t.string   "error_message"
-    t.string   "token_key",        null: false
-    t.string   "token_value",      null: false
-    t.string   "verification_uri", null: false
-    t.string   "acme_endpoint",    null: false
-    t.datetime "created_at",       null: false
-    t.datetime "expires_at",       null: false
+    t.string   "token_key",                              null: false
+    t.string   "token_value",                            null: false
+    t.string   "verification_uri",                       null: false
+    t.string   "acme_endpoint",                          null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "expires_at",                             null: false
   end
 
   create_table "agent_tags", force: :cascade do |t|
@@ -61,6 +59,11 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.datetime "updated_at"
   end
 
+  create_table "csr_sans", force: :cascade do |t|
+    t.integer "certificate_sign_request_id", null: false
+    t.integer "subject_alternate_name_id",   null: false
+  end
+
   create_table "key_usages", force: :cascade do |t|
     t.integer "public_key_id", null: false
     t.string  "value",         null: false
@@ -86,7 +89,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "private_keys", ["fingerprint"], name: "index_private_keys_on_fingerprint", using: :btree
+  add_index "private_keys", ["fingerprint"], name: "index_private_keys_on_fingerprint"
 
   create_table "public_keys", force: :cascade do |t|
     t.integer  "subject_id",                                  null: false
@@ -107,7 +110,12 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.datetime "updated_at",                                  null: false
   end
 
-  add_index "public_keys", ["fingerprint"], name: "index_public_keys_on_fingerprint", using: :btree
+  add_index "public_keys", ["fingerprint"], name: "index_public_keys_on_fingerprint"
+
+  create_table "public_keys_sans", force: :cascade do |t|
+    t.integer "public_key_id",             null: false
+    t.integer "subject_alternate_name_id", null: false
+  end
 
   create_table "revocation_endpoints", force: :cascade do |t|
     t.integer "public_key_id", null: false
@@ -118,7 +126,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
   create_table "services", force: :cascade do |t|
     t.string   "type",           null: false
     t.integer  "certificate_id", null: false
-    t.string     "properties",     null: false
+    t.string   "properties",     null: false
     t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
@@ -133,8 +141,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
   end
 
   create_table "subject_alternate_names", force: :cascade do |t|
-    t.integer "public_key_id", null: false
-    t.string  "name",          null: false
+    t.string "name", null: false
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -173,9 +180,7 @@ ActiveRecord::Schema.define(version: 20160309122805) do
     t.datetime "confirmation_sent_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
-  add_foreign_key "certificates", "private_keys"
-  add_foreign_key "certificates", "public_keys"
 end

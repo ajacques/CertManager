@@ -10,8 +10,8 @@ class LetsEncryptController < ApplicationController
   def prove_ownership
     @certificate = Certificate.find params[:id]
     settings = Settings::LetsEncrypt.new
-    @challenge = AcmeChallenge.for_certificate(@certificate, settings)
-    redirect_to @certificate if @challenge.status.imported?
+    @attempt = AcmeSignAttempt.find_by_certificate(@certificate, settings)
+    redirect_to @certificate if @attempt.status.imported?
   end
 
   def validate_token

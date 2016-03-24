@@ -1,0 +1,9 @@
+csr_with_one_san:
+  certificate: rsa_ca
+  subject: example
+  private_key: rsa_key
+
+basic_csr:
+  certificate: rsa_ca
+  subject: example
+  private_key: rsa_key

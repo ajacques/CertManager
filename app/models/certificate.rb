@@ -39,7 +39,7 @@ class Certificate < ActiveRecord::Base
   end
 
   def domain_names
-    [subject.CN]
+    ([subject.CN] + subject_alternate_names).uniq
   end
 
   def subject

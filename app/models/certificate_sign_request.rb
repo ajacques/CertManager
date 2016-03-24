@@ -3,7 +3,8 @@ class CertificateSignRequest < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :subject
   accepts_nested_attributes_for :subject
-  has_many :_subject_alternate_names, class_name: 'SubjectAlternateName'
+  has_many :_subject_alternate_names, through: :san_records, source: :subject_alternate_name, class_name: 'SubjectAlternateName'
+  has_many :san_records, class_name: 'CsrSan', autosave: true
 
   delegate :signature_algorithm, to: :to_openssl
   delegate :rsa?, to: :private_key
@@ -18,9 +19,13 @@ class CertificateSignRequest < ActiveRecord::Base
     csr
   end
 
-  def subject_alternate_names=(sans)
-    orig = _subject_alternate_names.dup
-    new = sans.map { |usage|
+  def subject_alternate_names
+    _subject_alternate_names.map(&:name)
+  end
+
+  def subject_alternate_names=(san_list)
+    orig = _subject_alternate_names
+    new = san_list.map { |usage|
       first = orig.find { |k| k.value == usage }
       return first if first
       SubjectAlternateName.new name: usage
@@ -33,6 +38,7 @@ class CertificateSignRequest < ActiveRecord::Base
     @csr.subject = subject.to_openssl
     @csr.public_key = private_key.to_openssl.public_key
     @csr.sign private_key.to_openssl, hash_algorithm.new
+    san_attribute
     @csr
   end
 
@@ -43,8 +49,8 @@ class CertificateSignRequest < ActiveRecord::Base
   private
 
   def san_attribute
-    return if _subject_alternate_names.empty?
-    sans = _subject_alternate_names.map { |s|
+    return if subject_alternate_names.empty?
+    sans = subject_alternate_names.map { |s|
       "DNS:#{s.name}"
     }.join(', ')
     factory = OpenSSL::X509::ExtensionFactory.new
