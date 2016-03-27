@@ -18,6 +18,13 @@ class ElasticsearchJobLogger < ActiveSupport::LogSubscriber
       type: job.class.to_s,
       queue: job.queue_name
     }
+    if (error = payload[:exception])
+      exception, message = error
+      output[:job][:error] = {
+        class: exception,
+        message: message
+      }
+    end
 
     ElasticsearchJobLogger.logstash.info(output.to_json)
   end
