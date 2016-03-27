@@ -64,8 +64,8 @@ class CertificatesController < ApplicationController
   end
 
   def csr
-    @cert = Certificate.find params[:id]
-    @csr = @cert.new_csr
+    @csr = CertificateSignRequest.find_by_certificate_id params[:id]
+    @csr = CertificateSignRequest.from_cert(Certificate.find(params[:id])) unless @csr
     render 'csr/show'
   end
 
@@ -88,7 +88,7 @@ class CertificatesController < ApplicationController
 
   def certificate_params
     params.require(:certificate)
-          .permit(csr_attributes: [sans: [], subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
+          .permit(csr_attributes: [subject_alternate_names: [], subject_attributes: [:O, :OU, :S, :C, :CN, :L, :ST]],
                   private_key_attributes: [:bit_length, :type, :curve_name])
   end
 end

@@ -1,0 +1,185 @@
+{
+  "template": "logstash",
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "hostname_analyzer": {
+          "type": "custom",
+          "tokenizer": "hostname_tokenizer"
+        },
+        "directory_analyzer": {
+          "type": "custom",
+          "tokenizer": "path_tokenizer"
+        }
+      },
+      "tokenizer": {
+        "hostname_tokenizer": {
+          "type": "pattern",
+          "pattern": "\\."
+        },
+        "path_tokenizer": {
+          "type": "path_hierarchy"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "string_fields": {
+            "mapping": {
+              "fielddata": {
+                "format": "disabled"
+              },
+              "index": "analyzed",
+              "omit_norms": true,
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "ignore_above": 256,
+                  "index": "not_analyzed",
+                  "type": "string",
+                  "doc_values": true
+                }
+              }
+            },
+            "match_mapping_type": "string",
+            "match": "*"
+          }
+        },
+        {
+          "float_fields": {
+            "mapping": {
+              "type": "float",
+              "doc_values": true
+            },
+            "match_mapping_type": "float",
+            "match": "*"
+          }
+        },
+        {
+          "double_fields": {
+            "mapping": {
+              "type": "double",
+              "doc_values": true
+            },
+            "match_mapping_type": "double",
+            "match": "*"
+          }
+        },
+        {
+          "byte_fields": {
+            "mapping": {
+              "type": "byte",
+              "doc_values": true
+            },
+            "match_mapping_type": "byte",
+            "match": "*"
+          }
+        },
+        {
+          "short_fields": {
+            "mapping": {
+              "type": "short",
+              "doc_values": true
+            },
+            "match_mapping_type": "short",
+            "match": "*"
+          }
+        },
+        {
+          "integer_fields": {
+            "mapping": {
+              "type": "integer",
+              "doc_values": true
+            },
+            "match_mapping_type": "integer",
+            "match": "*"
+          }
+        },
+        {
+          "long_fields": {
+            "mapping": {
+              "type": "long",
+              "doc_values": true
+            },
+            "match_mapping_type": "long",
+            "match": "*"
+          }
+        },
+        {
+          "date_fields": {
+            "mapping": {
+              "type": "date",
+              "doc_values": true
+            },
+            "match_mapping_type": "date",
+            "match": "*"
+          }
+        }
+      ],
+      "_all": {
+        "omit_norms": true,
+        "enabled": true
+      }
+    },
+    "http_request": {
+      "properties": {
+        "request": {
+          "properties": {
+            "path": {
+              "type": "string",
+              "analyzer": "directory_analyzer"
+            },
+            "method": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "format": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "id": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "routing": {
+          "properties": {
+            "controller": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "resource": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            "action": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        },
+        "host": {
+          "type": "string",
+          "analyzer": "hostname_analyzer"
+        },
+        "user": {
+          "properties": {
+            "id": {
+              "type": "long"
+            },
+            "username": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      }
+    }
+  }
+}

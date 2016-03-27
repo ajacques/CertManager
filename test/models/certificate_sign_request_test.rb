@@ -7,8 +7,11 @@ class CertificateSignRequestTest < ActiveSupport::TestCase
   end
 
   test 'can create san' do
-    csr = certificate_sign_requests :basic_csr
-    csr.subject_alternate_names = ['baz.example']
+    csr = CertificateSignRequest.new
+    csr.certificate = certificates :rsa_ca
+    csr.subject = subjects :example
+    csr.private_key = private_keys :rsa_key
+    csr.subject_alternate_names << 'baz.example'
     csr.save!
     assert_equal ['baz.example'], csr.subject_alternate_names
   end

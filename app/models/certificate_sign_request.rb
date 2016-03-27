@@ -3,8 +3,9 @@ class CertificateSignRequest < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :subject
   accepts_nested_attributes_for :subject
-  has_many :_subject_alternate_names, through: :san_records, source: :subject_alternate_name, class_name: 'SubjectAlternateName'
-  has_many :san_records, class_name: 'CsrSan', autosave: true
+  has_and_belongs_to_many :_subject_alternate_names, join_table: 'csr_sans', class_name: 'SubjectAlternateName'
+  # has_many :subject_alternate_names, through: :csr_sans, autosave: true
+  # has_many :csr_sans, autosave: true
 
   delegate :signature_algorithm, to: :to_openssl
   delegate :rsa?, to: :private_key
@@ -16,6 +17,7 @@ class CertificateSignRequest < ActiveRecord::Base
     csr = new
     csr.subject = cert.subject
     csr.private_key = cert.private_key
+    csr.subject_alternate_names = cert.public_key.subject_alternate_names
     csr
   end
 
@@ -34,12 +36,15 @@ class CertificateSignRequest < ActiveRecord::Base
   end
 
   def to_openssl
-    @csr = OpenSSL::X509::Request.new
-    @csr.subject = subject.to_openssl
-    @csr.public_key = private_key.to_openssl.public_key
-    @csr.sign private_key.to_openssl, hash_algorithm.new
-    san_attribute
-    @csr
+    csr = OpenSSL::X509::Request.new
+    csr.subject = subject.to_openssl
+    csr.public_key = private_key.to_openssl.public_key
+    csr.sign private_key.to_openssl, hash_algorithm.new
+    exts = []
+    exts << san_attribute if san_attribute
+    ext_req = OpenSSL::ASN1::Set [OpenSSL::ASN1::Sequence(exts)]
+    csr.add_attribute(OpenSSL::X509::Attribute.new('extReq', ext_req))
+    csr
   end
 
   def hash_algorithm
@@ -51,12 +56,9 @@ class CertificateSignRequest < ActiveRecord::Base
   def san_attribute
     return if subject_alternate_names.empty?
     sans = subject_alternate_names.map { |s|
-      "DNS:#{s.name}"
+      "DNS:#{s}"
     }.join(', ')
     factory = OpenSSL::X509::ExtensionFactory.new
-    exts = []
-    exts << factory.create_extension('subjectAltName', sans, false)
-    ext_req = OpenSSL::ASN1::Set [OpenSSL::ASN1::Sequence(exts)]
-    @csr.add_attribute OpenSSL::X509::Attribute.new 'extReq', ext_req
+    factory.create_extension('subjectAltName', sans, false)
   end
 end

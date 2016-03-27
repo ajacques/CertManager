@@ -4,9 +4,10 @@ class PublicKey < ActiveRecord::Base
   belongs_to :private_key
   belongs_to :issuer_subject, class_name: 'Subject', autosave: true
   has_many :revocation_endpoints, autosave: true
-  has_many :_subject_alternate_names,
-           through: :san_records, source: :subject_alternate_name, class_name: 'SubjectAlternateName', dependent: :delete_all
-  has_many :san_records, class_name: 'PublicKeysSan', autosave: true
+  has_and_belongs_to_many :_subject_alternate_names, join_table: 'public_keys_sans', class_name: 'SubjectAlternateName'
+  # has_many :_subject_alternate_names,
+  #          through: :san_records, source: :subject_alternate_name, class_name: 'SubjectAlternateName', dependent: :delete_all
+  # has_many :san_records, class_name: 'PublicKeysSan', autosave: true
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject

@@ -17,6 +17,10 @@ Style/BlockDelimiters:
 Style/FormatString:
   EnforcedStyle: percent
 
+# Disabling because I wasn't able to get a certain association to work
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
 # GOAL: Work to lower these limits
 Metrics/MethodLength:
   Max: 50

@@ -12,6 +12,10 @@ class LetsEncryptController < ApplicationController
     settings = Settings::LetsEncrypt.new
     @attempt = AcmeSignAttempt.find_by_certificate(@certificate, settings)
     redirect_to @certificate if @attempt.status.imported?
+  rescue Acme::Client::Error::Unauthorized
+    current_user.lets_encrypt_accepted_terms = false
+    current_user.save!
+    redirect_to action: :index
   end
 
   def validate_token
