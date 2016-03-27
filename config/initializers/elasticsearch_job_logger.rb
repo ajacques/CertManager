@@ -12,7 +12,7 @@ class ElasticsearchJobLogger < ActiveSupport::LogSubscriber
     output[:timing] = {
       start: event.time,
       end: event.end,
-      duration: event.end - event.time
+      duration: (event.end - event.time) * 1000
     }
     output[:job] = {
       type: job.class.to_s,
