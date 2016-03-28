@@ -13,7 +13,7 @@ class AcmeSignAttempt
   def self.find_by_certificate(certificate, settings)
     challenges = AcmeChallenge.where(certificate_id: certificate.id)
     unless challenges.any?
-      challenges = certificate.domain_names.map do |name|
+      challenges = certificate.csr.domain_names.map do |name|
         AcmeChallenge.for_domain(certificate, settings, name)
       end
     end

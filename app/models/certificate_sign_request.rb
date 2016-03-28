@@ -21,6 +21,10 @@ class CertificateSignRequest < ActiveRecord::Base
     csr
   end
 
+  def domain_names
+    ([subject.CN] + subject_alternate_names).uniq
+  end
+
   def subject_alternate_names
     _subject_alternate_names.map(&:name)
   end
