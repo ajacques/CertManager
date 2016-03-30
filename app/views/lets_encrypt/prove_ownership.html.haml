@@ -5,7 +5,7 @@
     .panel-body
       %p This method will require access to the web servers for:
       %ul
-        - @certificate.domain_names.each do |domain|
+        - @csr.domain_names.each do |domain|
           %li= domain
       %h3 Create the files:
       %table

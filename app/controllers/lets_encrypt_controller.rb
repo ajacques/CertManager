@@ -8,9 +8,10 @@ class LetsEncryptController < ApplicationController
   end
 
   def prove_ownership
-    @certificate = Certificate.find params[:id]
+    certificate = Certificate.find params[:id]
+    @csr = certificate.csr
     settings = Settings::LetsEncrypt.new
-    @attempt = AcmeSignAttempt.find_by_certificate(@certificate, settings)
+    @attempt = AcmeSignAttempt.find_by_certificate(certificate, settings)
     redirect_to @certificate if @attempt.status.imported?
   rescue Acme::Client::Error::Unauthorized
     current_user.lets_encrypt_accepted_terms = false
