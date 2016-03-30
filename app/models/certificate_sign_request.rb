@@ -43,11 +43,11 @@ class CertificateSignRequest < ActiveRecord::Base
     csr = OpenSSL::X509::Request.new
     csr.subject = subject.to_openssl
     csr.public_key = private_key.to_openssl.public_key
-    csr.sign private_key.to_openssl, hash_algorithm.new
     exts = []
     exts << san_attribute if san_attribute
     ext_req = OpenSSL::ASN1::Set [OpenSSL::ASN1::Sequence(exts)]
     csr.add_attribute(OpenSSL::X509::Attribute.new('extReq', ext_req))
+    csr.sign private_key.to_openssl, hash_algorithm.new
     csr
   end
 
