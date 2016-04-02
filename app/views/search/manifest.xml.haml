@@ -3,6 +3,5 @@
   %ShortName= t 'brand'
   %Description Search for certificates
   %InputEncoding UTF-8
-  %Url{type: 'application/rss+xml', template: "#{certificates_url(format: 'axd')}?query={searchTerms}"}/
   %Url{type: 'text/html', template: "#{certificates_url}?query={searchTerms}"}/
   %Url{type: 'application/x-suggestions+json', template: "#{search_suggest_url(format: 'json')}?query={searchTerms}"}/

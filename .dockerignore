@@ -1,8 +1,10 @@
 # Rails stuff
 docker-compose.yml
-README.md
+*.md
+.gitignore
+.reek
 
-dev
+test
 log/*
 tmp/cache/*
 tmp/pids/*
@@ -10,9 +12,11 @@ tmp/sockets/*
 db/*.sqlite3
 
 # Development Environment
+dev
 dockers
 .idea
 .git
+Dockerfile
 
 cloudformation.json
 ecs-manifest.json

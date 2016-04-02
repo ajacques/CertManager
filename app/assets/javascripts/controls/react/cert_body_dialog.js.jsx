@@ -6,6 +6,10 @@
     document.body.appendChild(modalPoint);
   });
   this.CertBodyDialog = React.createClass({
+    propTypes: {
+      model: React.PropTypes.object.isRequired,
+      onClose: React.PropTypes.func.isRequired
+    },
     getDefaultProps: function() {
       return {formats: ['pem', 'text', 'json']};
     },
@@ -18,9 +22,9 @@
     },
     triggerBodyUpdate: function(format, include_chain) {
       if (include_chain) {
-        this.props.modal.getChain(format).then(this.changeBody);
+        this.props.model.getChain(format).then(this.changeBody);
       } else {
-        this.props.modal.get_format(format).then(this.changeBody);
+        this.props.model.get_format(format).then(this.changeBody);
       }
     },
     changeFormat: function(format) {
@@ -38,7 +42,7 @@
       var formatElems = [];
       var self = this;
       this.props.formats.forEach(function(format) {
-        var link = <a href={Routes.certificate_path({id: self.props.modal.id}, {format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
+        var link = <a href={Routes.certificate_path({id: self.props.model.id}, {format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
         if (format === self.state.format) {
           formatElems.push(<li className="active" key={format}>{link}</li>);
         } else {
@@ -50,7 +54,7 @@
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <button className="close close-button" onClick={this.props.close}>&times;</button>
+                <button className="close close-button" onClick={this.props.onClose}>&times;</button>
                 <h4 className="modal-title">Certificate Details</h4>
               </div>
               <ul className="nav nav-tabs nav-justified">{formatElems}</ul>
@@ -89,14 +93,14 @@
       return self[model.type].find(model.id);
     },
     openWindow: function(event) {
-      var elem = ReactDOM.render(<CertBodyDialog modal={this._getModel()} close={this.close} />, modalPoint);
+      var elem = ReactDOM.render(<CertBodyDialog model={this._getModel()} onClose={this.close} />, modalPoint);
       elem.changeFormat(elem.state.format);
       event.preventDefault();
       return false;
     },
     render: function() {
       return (
-        <a onClick={this.openWindow} href={Routes.public_key_path({id: this._getModel().id})}>{this.props.children}</a>
+        <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.model.id})}>{this.props.children}</a>
       );
     }
   })
