@@ -7,7 +7,7 @@ class Agent < ActiveRecord::Base
   scope :with_tag, -> (*tags) { joins(:tags).where(tags: { tag: tags }) }
 
   def image_name
-    'soteria-agent:latest'
+    'docker.technowizardry.net/soteria-agent:1'
   end
 
   def bootstrap(token)

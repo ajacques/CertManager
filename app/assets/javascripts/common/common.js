@@ -1,6 +1,6 @@
 function debounce(func, wait, immediate, maxWait) {
   var timeout;
-  var maxWait = maxWait || 30 * 1000;
+  maxWait = maxWait || 30 * 1000;
   var lastTrigger = null;
   return function() {
     var now = new Date();

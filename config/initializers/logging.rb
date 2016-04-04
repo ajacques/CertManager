@@ -1,5 +1,3 @@
-config = Rails.application.config
-
 if ENV['LOGSTASH_ENABLED']
   logstash = LogStashLogger.new type: :udp, host: 'logstash', port: 5228
 

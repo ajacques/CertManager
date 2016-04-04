@@ -44,7 +44,8 @@ class Certificate < ActiveRecord::Base
 
   def subject
     base = public_key || csr
-    base.subject
+    return base.subject if base
+    'Private Key'
   end
 
   def public_keys

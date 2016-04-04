@@ -5,7 +5,9 @@ class AgentsApiController < ActionController::Base
   def register
     agent = Agent.find_by_registration_token(params[:token])
     response = {
-      access_token: agent.bootstrap(params[:token])
+      bootstrap_url: agent_bootstrap_url(token: params[:token]),
+      access_token: agent.bootstrap(params[:token]),
+      image_name: agent.image_name
     }
     agent.save!
 

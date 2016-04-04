@@ -59,6 +59,7 @@ class ImportController < ApplicationController
         @certs << certificate
       end
       @certs.each do |cert|
+        next unless cert.public_key
         issuer = cert if cert.public_key.issuer_subject_id == cert.public_key.subject_id
         issuer ||= Certificate.find_by_subject_id(cert.public_key.issuer_subject_id)
         if issuer
