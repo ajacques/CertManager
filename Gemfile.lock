@@ -190,7 +190,7 @@ GEM
     redis-session-store (0.8.1)
       actionpack (>= 3, < 5.1)
       redis
-    reek (4.0.0)
+    reek (4.0.1)
       codeclimate-engine-rb (~> 0.3.1)
       parser (~> 2.3, >= 2.3.0.6)
       rainbow (~> 2.0)
@@ -239,7 +239,7 @@ GEM
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    spring (1.6.4)
+    spring (1.7.0)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
