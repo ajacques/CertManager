@@ -3,6 +3,8 @@ docker-compose.yml
 *.md
 .gitignore
 .reek
+.rubocop.yml
+.travis.yml
 
 test
 log/*

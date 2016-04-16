@@ -37,6 +37,6 @@ class RSAPrivateKey < PrivateKey
       key = R509::PrivateKey.new slice(:bit_length)
       self.body = key.to_der
     end
-    self.fingerprint = Digest::SHA256.hexdigest(key.key.params['n'].to_s)
+    self.fingerprint = fingerprint_hash_algorithm.hexdigest(key.key.params['n'].to_s)
   end
 end

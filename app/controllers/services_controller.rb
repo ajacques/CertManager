@@ -55,4 +55,11 @@ class ServicesController < ApplicationController
     redis = CertManager::Configuration.redis_client
     @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
   end
+
+  private
+
+  def service_params
+    acceptable_params = Service.subclasses.map {|subclass| subclass}
+    params.require(:service).permit()
+  end
 end

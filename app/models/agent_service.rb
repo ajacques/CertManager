@@ -3,4 +3,8 @@ class AgentService < ActiveRecord::Base
 
   belongs_to :service
   belongs_to :agent
+
+  def deployable?
+    false
+  end
 end
