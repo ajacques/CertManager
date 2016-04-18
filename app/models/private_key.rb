@@ -52,6 +52,12 @@ class PrivateKey < ActiveRecord::Base
     RSAPrivateKey.import ossl if ossl.rsa?
   end
 
+  protected
+
+  def fingerprint_hash_algorithm
+    Digest::SHA256
+  end
+
   private
 
   def key_attribs

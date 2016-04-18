@@ -54,6 +54,7 @@ class PublicKey < ActiveRecord::Base
   end
 
   def to_openssl
+    return OpenSSL::X509::Certificate.new(body) if body
     cert = OpenSSL::X509::Certificate.new
     cert.version = 2
     cert.subject = subject.to_openssl
@@ -119,6 +120,12 @@ class PublicKey < ActiveRecord::Base
       }
       send("#{plural}=", new)
     end
+  end
+
+  protected
+
+  def fingerprint_hash_algorithm
+    Digest::SHA256
   end
 
   private

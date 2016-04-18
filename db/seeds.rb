@@ -6,10 +6,11 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# Since we're now SSO, this user is just a dummy account to associate with the following certs
 user = User.create!(
   email: 'user@example.com',
   password: 'testtest',
-  can_login: true,
+  can_login: false,
   first_name: 'John-Paul',
   last_name: 'Jones',
   time_zone: 'America/Los_Angeles' # PST
@@ -25,7 +26,7 @@ def new_csr!(opts = {})
     updated_by: opts[:user])
   cert = Certificate.new(cert_props)
   csr = CertificateSignRequest.new subject: subject, private_key: private, certificate: cert
-  # csr.assign_attributes opts.slice(:subject_alternate_names)
+  csr.assign_attributes opts.slice(:subject_alternate_names)
   csr.save!
   csr
 end
@@ -70,7 +71,7 @@ leaf = new_key_pair!(CN: 'fintech.com',
                      issuer: ca,
                      key_usage: [:keyEncipherment],
                      extended_key_usage: [:serverAuth])
-# new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: ECPrivateKey, curve_name: 'secp384r1', user: user, issuer: ca
+new_key_pair! CN: 'ec.fintech.com', O: 'Fintech, Inc.', OU: 'Web Services', key_type: ECPrivateKey, curve_name: 'secp384r1', user: user, issuer: ca
 
 new_csr!(
   CN: 'new.fintech.com',

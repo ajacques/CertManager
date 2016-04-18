@@ -44,6 +44,11 @@ nginx:
   environment:
     VIRTUAL_HOST: certmgr.devvm
 
+acmetestproxy:
+  build: dockers/acme-test-proxy
+  environment:
+    VIRTUAL_HOST: '*.xfinity'
+
 redis:
   image: redis:3.0.7-alpine
   expose:

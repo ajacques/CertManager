@@ -4,7 +4,10 @@
   %li.active Edit
 %h2 Edit #{@service.certificate}
 = bootstrap_form_for @service, layout: :horizontal do |f|
-  = f.text_field :cert_path
-  = f.text_field :after_rotate
-  = f.text_field :node_group
+  - if @service.is_a? Service::SoteriaAgent
+    = render partial: 'edit_agent', locals: {f: f}
+  - else
+    = f.text_field :cert_path
+    = f.text_field :after_rotate
+    = f.text_field :node_group
   = f.submit

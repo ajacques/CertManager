@@ -1,5 +1,7 @@
 class ECPrivateKey < PrivateKey
-  validates :curve_name, presence: true
+  validates :curve_name, presence: true, inclusion: { in: %w(secp384r1) }
+  after_initialize :generate_key
+  before_save :update_fingerprint, if: :body_changed?
 
   def ec?
     true
@@ -7,6 +9,19 @@ class ECPrivateKey < PrivateKey
 
   def to_openssl
     OpenSSL::PKey::EC.new body
+  end
+
+  delegate :group, to: :to_openssl
+  delegate :dsa_sign_asn1, to: :to_openssl
+
+  def to_pem
+    "-----BEGIN EC PRIVATE KEY-----\n#{Base64.encode64(body)}-----END EC PRIVATE KEY-----"
+  end
+
+
+  def public_key
+    opub = to_openssl.public_key.group.to_der
+    pub = ECPublicKey.new private_key: self, curve_name: curve_name, body: opub
   end
 
   def create_public_key
@@ -19,9 +34,13 @@ class ECPrivateKey < PrivateKey
 
   def generate_key
     if valid? && new_record?
-      key = R509::PrivateKey.new slice(:bit_length, :curve_name)
+      key = OpenSSL::PKey::EC.new curve_name
+      key.generate_key
       self.body = key.to_der
-      self.fingerprint = Digest::SHA1.hexdigest(key.key.public_key.to_bn.to_s)
     end
+  end
+
+  def update_fingerprint
+    self.fingerprint = fingerprint_hash_algorithm.hexdigest(key.public_key.to_bn.to_s)
   end
 end
