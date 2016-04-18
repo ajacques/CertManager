@@ -1,8 +1,8 @@
 {
   "Mappings": {
     "EcsAmiIds": {
-      "us-east-1": {"ami": "ami-2b3b6041"},
-      "us-west-2": {"ami": "ami-bfe095df"}
+      "us-east-1": {"ami": "ami-67a3a90d"},
+      "us-west-2": {"ami": "ami-c7a451a7"}
     }
   },
   "Parameters": {
@@ -320,7 +320,7 @@
         "GroupId": { "Fn::GetAtt": ["AppServerSecurityGroup", "GroupId"] }
       }
     },
-    "LBToAppServerSecurityRule": {
+    "AppServerToDBSecurityRule": {
       "Type": "AWS::EC2::SecurityGroupEgress",
       "Condition": "CreateProdResources",
       "Properties": {
@@ -364,7 +364,6 @@
     },
     "ExternalCloudFront": {
       "Type": "AWS::CloudFront::Distribution",
-      "Condition": "CreateProdResources",
       "Properties": {
         "DistributionConfig": {
           "Enabled": true,
@@ -376,18 +375,31 @@
             }
           },
           "DefaultCacheBehavior": {
-            "TargetOriginId": "webAppOrigin",
+            "TargetOriginId": "staticAssetOrigin",
             "ViewerProtocolPolicy": "redirect-to-https",
-            "AllowedMethods": ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"],
             "ForwardedValues": {
-              "QueryString": true,
-              "Headers": ["Host"],
+              "QueryString": false,
               "Cookies": {
                 "Forward": "whitelist",
                 "WhitelistedNames": ["rack.session"]
               }
             }
           },
+          "CacheBehaviors": [
+            {
+              "TargetOriginId": "staticAssetOrigin",
+              "ViewerProtocolPolicy": "redirect-to-https",
+              "PathPattern": "/favicon.ico",
+              "AllowedMethods": ["HEAD", "GET"],
+              "ForwardedValues": {
+                "QueryString": false,
+                "Cookies": {
+                  "Forward": "none"
+                },
+                "Headers": []
+              }
+            }
+          ],
           "Origins": [
             {
               "Id": "staticAssetOrigin",
@@ -395,26 +407,6 @@
               "OriginPath": "/web_content",
               "S3OriginConfig": {
                 "OriginAccessIdentity": { "Fn::Join": ["", ["origin-access-identity/cloudfront/", { "Ref": "OriginAccessIdentityID" }]]}
-              }
-            },
-            {
-              "Id": "webAppOrigin",
-              "DomainName": { "Fn::GetAtt": ["FrontendLoadBalancer", "DNSName"]},
-              "CustomOriginConfig": {
-                "OriginProtocolPolicy": "http-only"
-              }
-            }
-          ],
-          "CacheBehaviors": [
-            {
-              "TargetOriginId": "staticAssetOrigin",
-              "PathPattern": "assets/*",
-              "ViewerProtocolPolicy": "redirect-to-https",
-              "ForwardedValues": {
-                "QueryString": false,
-                "Cookies": {
-                  "Forward": "none"
-                }
               }
             }
           ]
@@ -580,6 +572,33 @@
         ]
       }
     },
+    "AssetUploadUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:PutObject"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": { "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "StaticFileS3BucketName" }, "/web_content/*"]]},
+                  "Condition": {
+                    "Bool": {
+                      "aws:SecureTransport": "true"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "FrontendIAMInstanceRole": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
@@ -591,7 +610,6 @@
   "Outputs": {
     "URL": {
       "Description": "Raw CloudFront hostname",
-      "Condition": "CreateProdResources",
       "Value": { "Fn::GetAtt": ["ExternalCloudFront", "DomainName"] }
     },
     "WebLoadBalancer": {
