@@ -16,4 +16,4 @@ reek = Reek::Rake::Task.new
 reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
 reek.fail_on_error = false
 
-task default: [:test, :rubocop, :flay, :reek]
+task default: [:test, :rubocop, :flay]

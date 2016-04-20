@@ -18,10 +18,9 @@ class ECPrivateKey < PrivateKey
     "-----BEGIN EC PRIVATE KEY-----\n#{Base64.encode64(body)}-----END EC PRIVATE KEY-----"
   end
 
-
   def public_key
     opub = to_openssl.public_key.group.to_der
-    pub = ECPublicKey.new private_key: self, curve_name: curve_name, body: opub
+    ECPublicKey.new private_key: self, curve_name: curve_name, body: opub
   end
 
   def create_public_key

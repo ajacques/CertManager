@@ -12,12 +12,12 @@ class Agent < ActiveRecord::Base
 
   def register_token
     key = PrivateKey.find(1)
-    JWT.encode({host: 'foobar.devvm', date: Time.now.utc, tags: {test: true}}, key, 'RS256')
+    JWT.encode({ host: 'foobar.devvm', date: Time.now.utc, tags: { test: true } }, key, 'RS256')
   end
 
   def bootstrap(token)
     raise 'Incorrect token' unless token == registration_token
-    #self.registration_token = nil
+    # self.registration_token = nil
     self.access_token = SecureRandom.hex
     access_token
   end

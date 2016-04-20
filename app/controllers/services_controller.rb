@@ -59,7 +59,6 @@ class ServicesController < ApplicationController
   private
 
   def service_params
-    acceptable_params = Service.subclasses.map {|subclass| subclass}
-    params.require(:service).permit()
+    params.require(:service).permit
   end
 end
