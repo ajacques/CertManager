@@ -1,0 +1,7 @@
+en:
+  errors:
+    not_found:
+      title: Soteria | Not Found
+      message: Page not found
+      links:
+        go_home: Main Page

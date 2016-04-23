@@ -1,0 +1,19 @@
+!!!
+%html
+  %head
+    %title= t('errors.not_found.title')
+    %meta{charset: 'utf-8'}
+    %meta{content: 'IE=edge,chrome=1', http: {equiv: 'X-UA-Compatible'}}
+    %meta{content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport'}
+    = stylesheet_link_tag    'application', media: 'all', data: {turbolinks_track: true}
+    = javascript_include_tag 'application', data: {turbolinks_track: true}, defer: true
+  %body{data: {page: 'ErrorsNotFound'}}
+    .page-wrap
+      %nav.navbar.navbar-default
+        .container
+          .navbar-header
+            = link_to t('brand'), root_path, class: 'navbar-brand'
+      .content-pane.container
+        %h1= t('errors.not_found.message')
+        %ul
+          %li= link_to t('errors.not_found.links.go_home'), root_path
