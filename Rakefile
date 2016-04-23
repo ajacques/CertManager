@@ -21,5 +21,4 @@ SCSSLint::RakeTask.new do |t|
   t.files = ['app/assets/stylesheets']
 end
 
-
 task default: [:test, :rubocop, :scss_lint, :flay]
