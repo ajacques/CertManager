@@ -1,18 +1,18 @@
-.certificate {
-  font-family: monospace;
-}
+$light-color: #eee;
+$border-color: #000;
 
-div.certificate {
-  border: solid thin black;
+.certificate {
+  background-color: $light-color;
+  border: solid thin $border-color;
   border-radius: 5px;
-  background-color: #eee;
+  font-family: monospace;
 
   span {
-    padding: 0.5em;
+    padding: .5em;
   }
 
   ul {
-    list-style-type: none
+    list-style-type: none;
   }
 
   > ul {
@@ -20,21 +20,21 @@ div.certificate {
   }
 }
 
-ul.subject {
+.subject {
   list-style-type: none;
   padding: 0;
 
   li {
+    border-left: dotted thin $border-color;
     float: left;
-    padding: 0.4em 1em;
-    border-left: dotted thin black;
+    padding: .4em 1em;
 
     &:last-child {
-      border-right: dotted thin black;
+      border-right: dotted thin $border-color;
     }
 
     &:nth-child(odd) {
-      background-color: #eee;
+      background-color: $light-color;
     }
 
     label {

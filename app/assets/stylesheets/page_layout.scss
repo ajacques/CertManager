@@ -1,15 +1,16 @@
-@import "bootstrap/variables";
+@import 'bootstrap/variables';
 
-html, body {
+html,
+body {
   height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 .page-wrap {
-  min-height: 100%;
   margin-bottom: -41px;
+  min-height: 100%;
 }
 
 .content-pane {

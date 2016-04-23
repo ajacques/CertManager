@@ -19,24 +19,3 @@ body:not(.modal-visible) {
 label span {
   @include vendor-prefix(user-select, none);
 }
-
-.loading-indicator {
-  width: 32px;
-  height: 32px;
-  transform: translate3d(0, 10px, 0);
-}
-
-.loading-indicator-spinner {
-  fill: #59ebff;
-  transform-origin: 50% 0%;
-  animation: spinner 3s infinite linear;
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate3d(0, 0, 1, 0deg);
-  }
-  100% {
-    transform: rotate3d(0, 0, 1,-360deg);
-  }
-}

@@ -1,4 +1,6 @@
-@import "bootstrap/variables";
+@import 'bootstrap/variables';
+
+$highlight-accent: #20b5ff;
 
 .search-suggest-container {
   position: relative;
@@ -9,11 +11,11 @@
 
   > .float {
     background-color: $input-border;
-    position: absolute;
+    border-radius: 0 0 2px 2px;
     left: 0;
+    position: absolute;
     top: $input-height-base;
     width: 100%;
-    border-radius: 0 0 2px 2px;
   }
 }
 
@@ -21,11 +23,12 @@
   cursor: pointer;
 
   > a {
-    padding: 5px;
     display: block;
+    padding: 5px;
   }
 }
 
-.search-highlighted-option,.search-option:hover {
-  background-color: #20b5ff;
+.search-highlighted-option,
+.search-option:hover {
+  background-color: $highlight-accent;
 }

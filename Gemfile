@@ -65,6 +65,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'flay', require: false
   gem 'reek', require: false
+  gem 'scss_lint', require: false
 end
 
 gem 'unicorn', platform: :ruby

@@ -2,6 +2,5 @@
 %p Import one or more certificates by pasting the the raw Base64-encoded data below
 %div{data: {drop: {type: :textbox, target: :key}}}
   = bootstrap_form_for :certificate, url: url_for(action: :import) do |f|
-    #import-box-attach
-      = react_component 'CertImportBox', {}, {prerender: true}
+    #import-box-attach.import-box= react_component 'CertImportBox', {}, {prerender: true}
     = f.submit 'Import certificate', class: 'btn btn-primary'

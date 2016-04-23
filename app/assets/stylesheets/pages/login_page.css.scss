@@ -1,9 +1,9 @@
 .vertical-center {
-  display: flex;
   align-items: center;
-  min-height: 100vh;
-  margin-top: -72px;
+  display: flex;
   margin-bottom: -41px;
+  margin-top: -72px;
+  min-height: 100vh;
 }
 
 .login-form {
@@ -19,17 +19,18 @@
 @media screen and (max-device-width: 350px) {
   .modal-centered-form {
     .login-form-container {
-      width: 100%;
       background-color: transparent;
-      border: none;
+      border: 0;
       box-shadow: none;
+      width: 100%;
     }
   }
 }
+
 @media screen and (min-device-width: 350px) {
   .modal-centered-form {
     .login-form-container {
-      transition: background-color 0.1s, border 0.1s;
+      transition: background-color .1s, border .1s;
       width: 350px;
     }
   }

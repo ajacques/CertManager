@@ -16,4 +16,8 @@ reek = Reek::Rake::Task.new
 reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
 reek.fail_on_error = false
 
-task default: [:test, :rubocop, :flay]
+require 'scss_lint/rake_task'
+
+SCSSLint::RakeTask.new
+
+task default: [:test, :rubocop, :scss_lint, :flay]

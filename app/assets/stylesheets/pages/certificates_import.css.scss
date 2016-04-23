@@ -1,21 +1,25 @@
-#import-box-attach {
-  width: 100%;
-  background-color: white;
+$border-color: #000;
+$background: #fff;
+
+.import-box {
+  background-color: $background;
   overflow: auto;
+  width: 100%;
 
   .cert-input-container {
-    width: 100%;
     height: 100%;
-  }
-  .cert-input-span {
-    font-family: monospace;
     width: 100%;
-    max-width: 100%;
-    height: 300px;
-    display: block;
-    outline: none;
+  }
+
+  .cert-input-span {
+    border: dashed 1px $border-color;
     border-radius: 5px;
-    border: dashed 1px black;
+    display: block;
+    font-family: monospace;
+    height: 300px;
+    max-width: 100%;
+    outline: none;
+    width: 100%;
   }
 }
 

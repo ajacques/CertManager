@@ -229,6 +229,9 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    scss_lint (0.48.0)
+      rake (>= 0.9, < 12)
+      sass (~> 3.4.15)
     securecompare (1.0.0)
     sexp_processor (4.7.0)
     simplecov (0.11.2)
@@ -315,6 +318,7 @@ DEPENDENCIES
   rest-client
   rubocop
   sass-rails
+  scss_lint
   simplecov
   spring
   sprockets
