@@ -17,7 +17,9 @@ reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
 reek.fail_on_error = false
 
 require 'scss_lint/rake_task'
+SCSSLint::RakeTask.new do |t|
+  t.files = ['app/assets/stylesheets']
+end
 
-SCSSLint::RakeTask.new
 
 task default: [:test, :rubocop, :scss_lint, :flay]
