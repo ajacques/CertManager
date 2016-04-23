@@ -42,15 +42,15 @@ var CertificatesImport = function() {
     return {
       success: function(result) {
         if (result.opts.id !== undefined) {
-          root['cert_id'] = result.opts.id;
+          root.cert_id = result.opts.id;
         }
-        match['parsed'] = result;
-        match['state'] = 'loaded';
+        match.parsed = result;
+        match.state = 'loaded';
         repaintImportControl();
       },
       fail: function(result) {
-        match['state'] = 'errored';
-        match['error'] = result.responseText;repaintImportControl();
+        match.state = 'errored';
+        match.error = result.responseText;repaintImportControl();
       }
     };
   }
@@ -71,7 +71,7 @@ var CertificatesImport = function() {
     return null;
   }
   function handlePrivateKeyAnalyze(root) {
-    var private_key = root['private_key'];
+    var private_key = root.private_key;
     return function(result) {
       if (result.opts.public_keys.length >= 1) {
         var cert = findCertById(result.opts.public_keys[0].id);
@@ -83,15 +83,15 @@ var CertificatesImport = function() {
           certificates = certificates.filter(function(f) {
             return f !== root;
           });
-          private_key = cert['private_key'] = {
+          private_key = cert.private_key = {
             value: private_key.value
           };
         } else {
-          root['cert_id'] = result.opts.public_keys[0].id;
+          root.cert_id = result.opts.public_keys[0].id;
         }
       }
-      private_key['parsed'] = result;
-      private_key['state'] = 'loaded';
+      private_key.parsed = result;
+      private_key.state = 'loaded';
       repaintImportControl();
     };
   }
@@ -107,11 +107,11 @@ var CertificatesImport = function() {
       private_key: undefined
     };
     if (body.type === 'CERTIFICATE') {
-      cert['certificate'] = item;
+      cert.certificate = item;
       var functors = handle_analyze(cert, item);
       Certificate.analyze(body.value).then(functors.success, functors.fail);
     } else if (body.type === 'RSA PRIVATE KEY') {
-      cert['private_key'] = item;
+      cert.private_key = item;
       PrivateKey.analyze(body.value).then(handlePrivateKeyAnalyze(cert));
     }
     certificates.push(cert);

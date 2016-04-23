@@ -6,7 +6,7 @@
     var groups = [];
 
     var rmatch;
-    while (rmatch = regex.exec(data)) {
+    while ((rmatch = regex.exec(data)) !== null) {
       groups.push({
         index: rmatch.index,
         end: rmatch.index + rmatch[0].length,

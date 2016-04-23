@@ -1,5 +1,5 @@
-var ServiceNew = new function() {
-  var refresh_nodes = function(evt) {
+var ServiceNew = function() {
+  var refresh_nodes = function() {
     $.ajax({
       url: location.origin + '/services/nodes?query=' + this.value,
       dataType: 'json',
