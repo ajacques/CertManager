@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   root 'overview#index'
   get 'ping' => 'health_check#ping'
   get 'login' => 'sessions#new', as: :new_user_session
-  post 'login' => 'sessions#create', as: :user_session
   scope :login do
     scope 'sso/:provider', controller: :o_auth, as: :oauth do
       root action: :begin, as: :login
@@ -13,18 +12,11 @@ Rails.application.routes.draw do
     end
   end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
-  resources :users, only: [:create, :index, :new, :show, :update], constraints: {
+  resources :users, only: [:index, :new, :show, :update], constraints: {
     id: /[0-9]+/
   } do
     member do
       get 'activate'
-      get 'recover' => 'user_recovery#prompt', as: :reset
-      post 'recover' => 'user_recovery#recover'
-    end
-    collection do
-      get 'recover' => 'user_recovery#start'
-      post 'recover' => 'user_recovery#send_mail'
-      get 'recover_after' => 'user_recovery#after_send'
     end
   end
   scope :search, controller: :search, as: :search do
