@@ -191,7 +191,7 @@ GEM
     redis-session-store (0.8.1)
       actionpack (>= 3, < 5.1)
       redis
-    reek (4.0.1)
+    reek (4.0.2)
       codeclimate-engine-rb (~> 0.3.1)
       parser (~> 2.3, >= 2.3.0.6)
       rainbow (~> 2.0)
