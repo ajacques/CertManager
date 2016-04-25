@@ -48,6 +48,10 @@ class Certificate < ActiveRecord::Base
     'Private Key'
   end
 
+  def in_trust_store
+    chain.map(&:public_key).map(&:certificate_bundles).map(&:all).flatten.uniq
+  end
+
   def public_keys
     PublicKey.where subject_id: public_key.subject_id
   end

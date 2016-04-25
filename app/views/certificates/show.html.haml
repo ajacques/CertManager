@@ -16,6 +16,13 @@
     %li Can't sign other certificates
   - if @cert.expired?
     %li Expired
+  - stores = @cert.in_trust_store
+  - if stores.any?
+    %li
+      %span Anchored to trusted certificate
+      %ul
+        - stores.each do |store|
+          %li= store.name
 %aside
   %ul
     %li= react_component 'CertBodyDialogLink', {model: {id: @cert.id, type: 'Certificate'}, children: 'Show certificate'}, {prerender: true, data: {react_mount: true}}

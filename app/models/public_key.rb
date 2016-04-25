@@ -11,6 +11,7 @@ class PublicKey < ActiveRecord::Base
   has_many :key_usages, -> { where(group: 'basic') }, autosave: true, dependent: :destroy
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
+  has_and_belongs_to_many :certificate_bundles
   validates :hash_algorithm, presence: true, inclusion: { in: %w(md2 md5 sha1 sha256 sha384 sha512),
                                                           message: '%{value} is not an expected hash_algorithm' }
   after_initialize :set_defaults
@@ -81,7 +82,7 @@ class PublicKey < ActiveRecord::Base
     self._subject_alternate_names = new
   end
 
-  def self.import(pem, &_block)
+  def self.import(pem)
     r509 = R509::Cert.new cert: pem
     name = if r509.rsa?
              RSAPublicKey
