@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20160424182306) do
     t.datetime "updated_at"
   end
 
-  create_table "csr_san", force: :cascade do |t|
+  create_table "csr_sans", force: :cascade do |t|
     t.integer "certificate_sign_request_id", null: false
     t.integer "subject_alternate_name_id",   null: false
   end
