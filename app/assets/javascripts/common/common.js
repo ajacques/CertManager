@@ -25,15 +25,6 @@ function debounce(func, wait, immediate, maxWait) {
   };
 }
 
-function escapeHtml(html) {
-  return String(html)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
 var resolved_promise = function (result) {
   var deferred = $.Deferred();
 

@@ -1,5 +1,5 @@
 .row.vertical-center.modal-centered-form
   .login-form-container.col-sm-12.col-lg-4.well.well-lg.center-block
-    %h1 Sign in
+    %h1= t 'views.sessions.new.header'
     .form-group
-      %a.btn.center-block.btn-info{href: oauth_login_path(provider: 'github')} Login with GitHub
+      %a.btn.center-block.btn-info{href: oauth_login_path(provider: 'github')}= t 'views.sessions.new.oauth_providers.github'

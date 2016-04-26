@@ -22,9 +22,6 @@ en:
     oauth:
       sub_header: Configure an OAuth2 provider
       description: An OAuth2 provider enables you to login using another account service.
-  login:
-    error:
-      no_match: Incorrect username or password
   signing:
     lets_encrypt:
       header: Sign with Let's Encrypt

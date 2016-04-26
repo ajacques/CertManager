@@ -1,0 +1,10 @@
+en:
+  views:
+    sessions:
+      new:
+        header: Sign in
+        oauth_providers:
+          github: Login with GitHub
+  login:
+    error:
+      no_match: Incorrect username or password
