@@ -8,6 +8,10 @@ initializeReact = () ->
 func = () ->
   for d, i in window.on_pageload
     d()
+  # Automatically call any late load handlers
+  window.on_pageload = {
+    push: (item) -> item()
+  }
   page_name = document.body.getAttribute('data-page')
   page_obj = window[page_name]
   console.info "Invoking registered page load handler"
