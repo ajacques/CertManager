@@ -3,6 +3,7 @@ en:
     sessions:
       new:
         header: Sign in
+        description: Soteria uses OAuth authentication to manage access.
         oauth_providers:
           github: Login with GitHub
   login:
