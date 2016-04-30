@@ -18,7 +18,7 @@ module CertManager
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
     config.action_dispatch.rescue_responses.merge!(
-        'NotAuthorized' => :unauthorized
+      'NotAuthorized' => :unauthorized
     )
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
