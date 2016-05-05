@@ -40,6 +40,6 @@ class ECPrivateKey < PrivateKey
   end
 
   def update_fingerprint
-    self.fingerprint = fingerprint_hash_algorithm.hexdigest(key.public_key.to_bn.to_s)
+    self.fingerprint = fingerprint_hash_algorithm.hexdigest(to_openssl.public_key.to_bn.to_s)
   end
 end
