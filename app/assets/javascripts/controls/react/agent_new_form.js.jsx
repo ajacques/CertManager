@@ -5,48 +5,97 @@
       imageName: React.PropTypes.string.isRequired
     },
     getInitialState: function() {
-      return {tags: {}, loading: true};
+      return {tags: [], loading: true, dirty: false, inflightRequest: null, refreshData: debounce(this.refreshData, 1000, false)};
+    },
+    refreshData: function() {
+      if (this.state.inflightRequest !== null) {
+        this.state.inflightRequest.abort();
+      }
+      var reconciled_tags = {};
+      for (var i = 0; i < this.state.tags.length; i++) {
+        var tag_record = this.state.tags[i];
+        reconciled_tags[tag_record.key] = tag_record.value;
+      }
+      var req = $.ajax(Routes.generate_token_agent_index_path(), {
+        type: 'POST',
+        dataType: 'text',
+        contentType: 'json',
+        data: JSON.stringify({
+          tags: reconciled_tags
+        })
+      }).success(this.handleToken);
+      this.setState({loading: true, inflightRequest: req});
     },
     componentWillUpdate: function(newProps, newState) {
       if (this.state.tags !== newState.tags) {
-        this.setState({loading: true});
-        $.ajax(Routes.generate_token_agent_index_path(), {
-          type: 'POST',
-          dataType: 'text',
-          contentType: 'json',
-          data: JSON.stringify({
-            tags: this.state.tags
-          })
-        }).success(this.handleToken);
+        this.state.refreshData();
       }
     },
     handleToken: function(response) {
       this.setState({auth_token: response, loading: false});
-    },
-    updateTag: function(event) {
-      var newTags = $.extend({}, this.state.tags, {foo: event.currentTarget.value});
-      this.setState({tags: newTags});
     },
     handleTokenClick: function(event) {
       event.preventDefault();
       // Automatically highlight the entire text
       event.currentTarget.select(0, event.currentTarget.value.length);
     },
+    handlePossibleEquals: function(event) {
+      var index = event.currentTarget.dataset.index;
+      var valueBox = this.refs['tag-row-' + index];
+      if (event.keyCode === 187) { // Equals sign
+        event.preventDefault();
+        valueBox.focus();
+      }
+    },
+    upsertTagAt: function(index, props) {
+      var newTags = this.state.tags.slice();
+      if (this.state.tags.length < index) {
+        newTags.push($.extend({}, {
+          key: null,
+          value: null
+        }, props));
+      } else {
+        var oldTag = this.state.tags[index];
+        newTags[index] = $.extend({}, oldTag, props);
+      }
+      if (!newTags[index].key && !newTags[index].value) {
+        newTags.slice(index);
+      }
+      this.setState({tags: newTags, dirty: true});
+    },
+    handleTagKeyChange: function(event) {
+      var index = event.currentTarget.dataset.index;
+      this.upsertTagAt(index, {key: event.currentTarget.value});
+    },
+    handleTagValueChange: function(event) {
+      var index = event.currentTarget.dataset.index;
+      this.upsertTagAt(index, {value: event.currentTarget.value});
+    },
     registrationUrl: function() {
       return window.location.host + Routes.agent_register_path(this.state.auth_token);
     },
     launchCommand: function() {
-      if (this.state.loading && !this.state.auth_token) {
+      if (!(this.state.dirty || this.state.auth_token)) {
         return '';
       }
       return "sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock " + this.props.imageName + " register " + this.registrationUrl();
+    },
+    renderTagRow: function(index) {
+      return (
+        <li>
+          <input onKeyDown={this.handlePossibleEquals} onChange={this.handleTagKeyChange} data-index={index} type="text" />
+          <input onChange={this.handleTagValueChange} data-index={index} type="text" />
+        </li>
+      );
     },
     render: function() {
       return (
         <div>
           <li>
             <h4>Tag</h4>
-            <input type="text" onChange={this.updateTag} />
+            <ul className="list-unstyled">
+              {this.renderTagRow(0)}
+            </ul>
           </li>
           <li>
             <h4>Launch</h4>
