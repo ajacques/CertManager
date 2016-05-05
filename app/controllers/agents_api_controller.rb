@@ -1,6 +1,7 @@
 class AgentsApiController < ActionController::Base
   attr_reader :agent
-  before_action :check_agent_key, except: [:register]
+  append_before_action :check_agent_key, except: [:register]
+  include RequestLogging
 
   def register
     agent = Agent.find_by_registration_token(params[:token])

@@ -11,8 +11,6 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
     response = RequestStore.store[:response]
     output.type = 'http_request'
     output[:response] = extract_status(data)
-    output[:response][:redirect_location] = response.headers['Location'] if response.headers.key? 'Location'
-    output[:response][:content_type] = response.content_type
     output[:timing] = {
       total: event.duration,
       view: data[:view_runtime],
@@ -26,7 +24,11 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
       proxy_ip: request.remote_ip,
       client_ip: request.env['HTTP_X_FORWARDED_FOR']
     }
-    output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
+    if response
+      output[:response][:redirect_location] = response.headers['Location'] if response.headers.key? 'Location'
+      output[:response][:content_type] = response.content_type
+      output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
+    end
     output[:routing] = {
       controller: data[:controller],
       action: data[:action],
