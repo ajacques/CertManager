@@ -27,14 +27,19 @@
       var newTags = $.extend({}, this.state.tags, {foo: event.currentTarget.value});
       this.setState({tags: newTags});
     },
+    handleTokenClick: function(event) {
+      event.preventDefault();
+      // Automatically highlight the entire text
+      event.currentTarget.select(0, event.currentTarget.value.length);
+    },
     registrationUrl: function() {
       return window.location.host + Routes.agent_register_path(this.state.auth_token);
     },
-    renderLaunchCommand: function() {
-      if (this.state.loading) {
-      } else {
-        return <code>sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock {this.props.imageName} register {this.registrationUrl()}</code>;
+    launchCommand: function() {
+      if (this.state.loading && !this.state.auth_token) {
+        return '';
       }
+      return "sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock " + this.props.imageName + " register " + this.registrationUrl();
     },
     render: function() {
       return (
@@ -44,7 +49,9 @@
             <input type="text" onChange={this.updateTag} />
           </li>
           <li>
-            {this.renderLaunchCommand()}
+            <h4>Launch</h4>
+            <p>Execute the following command on the remote host</p>
+            <input onClick={this.handleTokenClick} readOnly="readonly" type="text" value={this.launchCommand()} />
           </li>
         </div>
       );

@@ -70,8 +70,8 @@
       }
       return (
         <div className="search-suggest-container">
-          <input tabIndex="1" onKeyDown={this.handleScroll} onBlur={this.handleBlur} onFocus={this.handleFocus} onChange={this.state.debouncer} type="search" name="query" className="form-control" placeholder="Search" autoComplete="off" />
-          <div onMouseOver={this.handleMouseOverSuggestions} onMouseOut={this.handleMouseOutSuggestions} className="float" style={panelStyle}>{suggests}</div>
+          <input autoComplete="off" className="form-control" name="query" onBlur={this.handleBlur} onChange={this.state.debouncer} onFocus={this.handleFocus} onKeyDown={this.handleScroll} placeholder="Search" tabIndex="1" type="search" value="" />
+          <div className="float" onMouseOut={this.handleMouseOutSuggestions} onMouseOver={this.handleMouseOverSuggestions} style={panelStyle}>{suggests}</div>
         </div>
       );
     }

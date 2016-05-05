@@ -7,10 +7,4 @@
       %h4 Firewall/networking
       %div Ensure that the container is permitted to access port 443.
       %code Container -> #{root_url}
-    = react_component 'AgentNewForm', {imageName: @agent.image_name}, {prerender: true, data: {react_mount: true}}
-    %li
-      %h4 Add a tag
-      %p A tag is required by a service to specify which agents a service should be deployed to.
-    %li
-      %h4 Execute the following command
-      %code sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock #{@agent.image_name} register #{agent_register_url(token: @agent.register_token)}
+    = react_component 'AgentNewForm', {imageName: @agent.image_name}, {prerender: true, data: {react_mount: true, initialToken: 'foo'}}
