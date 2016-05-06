@@ -24,7 +24,7 @@ end
 require 'haml_lint/rake_task'
 
 HamlLint::RakeTask.new do |t|
-  t.files = ['app/views', 'app/templates']
+  t.files = %w(app/views app/assets/templates)
 end
 
 task default: [:test, :rubocop, :scss_lint, :flay, :haml_lint]
