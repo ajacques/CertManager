@@ -1,6 +1,6 @@
 %h1 Certificates
 %ul
-  %li #{pluralize @certs.count, 'total certificate'}
+  %li= pluralize @certs.count, 'total certificate'
   %li #{pluralize @expiring.count, 'certificate'} expiring in the next 30 days
   %li #{pluralize @bad_hashes.count, 'certificate'} with insecure hash algorithms
 .col-md-3

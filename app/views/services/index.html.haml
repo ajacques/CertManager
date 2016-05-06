@@ -2,7 +2,7 @@
   %li.active= link_to 'Services', action: :index
 %h2 Your services
 = link_to 'New service', action: :new
-- if not @services.any?
+- if @services.empty?
   %p You haven't configuration any services yet. A service allows you to automatically deploy certificates to targets
 - else
   %table.table
@@ -13,7 +13,7 @@
         %td Control
     %tbody
       - @services.each do |service|
-        %tr{class: ('bg-danger' if service.certificate.expires_in < 7.days)}
+        %tr{ class: ('bg-danger' if service.certificate.expires_in < 7.days) }
           %td= link_to service.certificate.subject.CN, id: service.id, action: :show
           %td= service.status
           %td Refresh

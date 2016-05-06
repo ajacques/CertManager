@@ -1,5 +1,5 @@
 = bootstrap_form_for @public_key, url: url_for(action: :sign_cert), layout: :horizontal do |f|
-  - if not @allow_subject_changes
+  - unless @allow_subject_changes
     .bg-info These values can't be changed because you're self signing
   = hidden_field_tag 'redirect_to', certificate_path(@signee)
   = render partial: 'subject_form', locals: { f: f }
@@ -10,7 +10,7 @@
       = f.radio_button :hash_algorithm, hash, label: t("hash.#{hash}")
   = f.form_group :extensions_attributes, label: { text: 'Constraints' } do
     = f.check_box :is_ca, label: 'Can sign other certificates'
-    = f.fields_for :key_usage do |ku|
+    = f.fields_for :key_usage do
       = key_usage_option_tag :digitalSignature
       = key_usage_option_tag :keyEncipherment
       = key_usage_option_tag :keyAgreement

@@ -2,7 +2,7 @@
 %div
   %h4 Step 1. Verify your request
   %h5 Inspect the follow to ensure that everything looks correct. This is what your CA will be signing so it's important to be correct.
-  - if validate_csr(@csr).size > 0
+  - if validate_csr(@csr).any?
     .bg-warning Unrecommended parameters detected. Please check carefully
   = explain_csr @csr
   %h4 Step 2. Submit your request

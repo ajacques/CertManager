@@ -1,5 +1,5 @@
 - if @cert.public_key
-  %table{class: 'table'}
+  %table.table
     %thead
       %tr
         %td Name
@@ -27,11 +27,11 @@
       %h4.group-status
       %ul#crl_list
         - @cert.public_key.crl_distribution_points.uris.each_with_index do |crl, index|
-          %li{data: {id: index}}= crl.to_s
+          %li{ data: { id: index } }= crl.to_s
     - if @cert.public_key.policy_constraints
       %h2 Policy Constraints
       %table
-        - @cert.public_key.policy_constraints.to_h.each do |k,v|
+        - @cert.public_key.policy_constraints.to_h.each do |k, v|
           %tr
             %td= k
             %td= v
@@ -54,12 +54,12 @@
     Public Key Bit Length:
     = @cert.public_key.bit_length
     bits
-- if @cert.public_key.nil? and @cert.certificate_request.present? # CSR
+- if @cert.public_key.nil? && @cert.certificate_request.present? # CSR
   %h3 No public key yet, upload one now
   = text_area_tag :csr, @cert.certificate_request.to_pem, class: 'cert-body', readonly: true
   = form_tag action: :do_import do
     = label_tag :key, 'Certificate'
     = text_area_tag :key
     = submit_tag 'Upload certificate'
-- if @cert.private_key.present? and @cert.public_key.present?
+- if @cert.private_key.present? && @cert.public_key.present?
   %p Certificate is ready for deployment

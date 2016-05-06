@@ -1,11 +1,11 @@
 !!!
 %html
   = render partial: 'layouts/head_block'
-  %body{data: {page: [controller_name.capitalize, action_name.capitalize].join, id: model_id}}
+  %body{ data: { page: [controller_name.capitalize, action_name.capitalize].join, id: model_id } }
     .page-wrap
       = render partial: 'layouts/header'
       = render partial: 'layouts/navbar'
-      .content-pane.container{class: [controller_name, '-', action_name].join}
+      .content-pane.container{ class: [controller_name, '-', action_name].join }
         = yield
     .modal-backdrop.in
   = render partial: 'layouts/footer'

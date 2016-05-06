@@ -1,7 +1,7 @@
 !!! XML
-%OpenSearchDescription{xmlns: 'http://a9.com/-/spec/opensearch/1.1/'}
-  %ShortName= t 'brand'
-  %Description Search for certificates
-  %InputEncoding UTF-8
-  %Url{type: 'text/html', template: "#{certificates_url}?query={searchTerms}"}/
-  %Url{type: 'application/x-suggestions+json', template: "#{search_suggest_url(format: 'json')}?query={searchTerms}"}/
+%opensearchdescription{ xmlns: 'http://a9.com/-/spec/opensearch/1.1/' }
+  %shortname= t 'brand'
+  %description Search for certificates
+  %inputencoding UTF-8
+  %url{ type: 'text/html', template: "#{certificates_url}?query={searchTerms}" }/
+  %url{ type: 'application/x-suggestions+json', template: "#{search_suggest_url(format: 'json')}?query={searchTerms}" }/

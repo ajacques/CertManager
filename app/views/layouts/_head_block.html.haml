@@ -1,14 +1,14 @@
 %head
   %title<
     - if content_for? :title
-      = "#{yield :title} | #{t 'brand'}"
+      #{yield :title} | #{t 'brand'}
     - else
       = t 'brand'
-  %meta{charset: 'utf-8'}
-  %meta{content: 'IE=edge,chrome=1', http: {equiv: 'X-UA-Compatible'}}
-  %meta{content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport'}
+  %meta{ charset: 'utf-8' }
+  %meta{ content: 'IE=edge,chrome=1', http: { equiv: 'X-UA-Compatible' } }
+  %meta{ content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport' }
   - if user_signed_in?
-    %link{rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria'}
-  = stylesheet_link_tag    'application', media: 'all', data: {turbolinks_track: true}
-  = javascript_include_tag 'application', data: {turbolinks_track: true}, defer: true
+    %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
+  = stylesheet_link_tag    'application', media: 'all', data: { turbolinks_track: true }
+  = javascript_include_tag 'application', data: { turbolinks_track: true }, defer: true
   = csrf_meta_tags

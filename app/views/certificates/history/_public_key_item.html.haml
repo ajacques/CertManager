@@ -1,6 +1,6 @@
 %tr.public-key
   %td
-    = react_component 'CertBodyDialogLink', {model: {id: event.id, type: 'PublicKey'}, children: 'Public Key'}, {prerender: true, data: {react_mount: true}}
+    = react_component 'CertBodyDialogLink', { model: { id: event.id, type: 'PublicKey' }, children: 'Public Key' }, prerender: true, data: { react_mount: true }
     - if event == @cert.public_key
       %span (Current version)
     %div

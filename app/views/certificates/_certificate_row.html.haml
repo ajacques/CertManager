@@ -1,4 +1,4 @@
-%tr{class: ('bg-danger' if cert.expired? or cert.expires_in < 30.days)}
+%tr{ class: ('bg-danger' if cert.expired? || cert.expires_in < 30.days) }
   %td
     = link_to cert, cert
     - if cert.expired?
@@ -11,5 +11,5 @@
   %td<
     - if cert.expired?
       Expired
-    - else
-      = time_ago_in_words(cert.public_key.not_after) if cert.signed?
+    - elsif cert.signed?
+      = time_ago_in_words(cert.public_key.not_after)

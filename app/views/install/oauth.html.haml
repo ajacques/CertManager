@@ -6,7 +6,7 @@
   = u.hidden_field :authorize_uri_base, value: 'https://github.com/login/oauth/authorize'
   = u.hidden_field :token_uri_base, value: 'https://github.com/login/oauth/access_token'
   = u.hidden_field :requested_scopes, value: 'user:email,read:org'
-  = u.select :name, { 'GitHub' => :github }
+  = u.select :name, 'GitHub' => :github
   = u.text_field :client_id, label: 'Client Id'
   = u.text_field :client_secret, label: 'Client Secret'
   = u.submit 'Create Provider'

@@ -66,6 +66,7 @@ group :development do
   gem 'flay', require: false
   gem 'reek', require: false
   gem 'scss_lint', require: false
+  gem 'haml-lint', require: false
 end
 
 gem 'unicorn', platform: :ruby

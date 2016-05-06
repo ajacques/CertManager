@@ -89,12 +89,19 @@ GEM
       activesupport (>= 4.1.0)
     haml (4.0.7)
       tilt
+    haml-lint (0.999.999)
+      haml_lint
     haml-rails (0.9.0)
       actionpack (>= 4.0.1)
       activesupport (>= 4.0.1)
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
+    haml_lint (0.17.1)
+      haml (~> 4.0)
+      rake (>= 10, < 12)
+      rubocop (>= 0.36.0)
+      sysexits (~> 1.1)
     html2haml (2.0.0)
       erubis (~> 2.7.0)
       haml (~> 4.0.0)
@@ -257,6 +264,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.3.11)
     stud (0.0.22)
+    sysexits (1.2.0)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -297,6 +305,7 @@ DEPENDENCIES
   coffee-rails
   flay
   haml
+  haml-lint
   haml-rails
   jquery-rails
   js-routes

@@ -11,17 +11,17 @@
       if (this.state.inflightRequest !== null) {
         this.state.inflightRequest.abort();
       }
-      var reconciled_tags = {};
+      var reconciledTags = {};
       for (var i = 0; i < this.state.tags.length; i++) {
-        var tag_record = this.state.tags[i];
-        reconciled_tags[tag_record.key] = tag_record.value;
+        var tagRecord = this.state.tags[i];
+        reconciledTags[tagRecord.key] = tagRecord.value;
       }
       var req = $.ajax(Routes.generate_token_agent_index_path(), {
         type: 'POST',
         dataType: 'text',
         contentType: 'json',
         data: JSON.stringify({
-          tags: reconciled_tags
+          tags: reconciledTags
         })
       }).success(this.handleToken);
       this.setState({loading: true, inflightRequest: req});

@@ -11,8 +11,8 @@
       %td
   %tbody
     - @users.each do |user|
-    - color = unless user.can_login? then 'warning' end
-      %tr{class: color}
+    - color = 'warning' unless user.can_login?
+      %tr{ class: color }
         %td= link_to "#{user.first_name} #{user.last_name}", user
         %td= user.email
         %td= user.created_at

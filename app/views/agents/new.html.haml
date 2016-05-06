@@ -7,4 +7,4 @@
       %h4 Firewall/networking
       %div Ensure that the container is permitted to access port 443.
       %code Container -> #{root_url}
-    = react_component 'AgentNewForm', {imageName: @agent.image_name}, {prerender: true, data: {react_mount: true, initialToken: 'foo'}}
+    = react_component 'AgentNewForm', { imageName: @agent.image_name }, prerender: true, data: { react_mount: true, initialToken: 'foo' }

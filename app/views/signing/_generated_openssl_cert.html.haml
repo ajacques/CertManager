@@ -29,7 +29,7 @@
                 %li
                   Modulus:
                   %ul
-                    - @signee.private_key.key.params['n'].to_s(16).rjust(@signee.private_key.bit_length/4, '0').scan(/.{2}/).join(':').scan(/.{45}/).each do |line|
+                    - @signee.private_key.key.params['n'].to_s(16).rjust(@signee.private_key.bit_length / 4, '0').scan(/.{2}/).join(':').scan(/.{45}/).each do |line|
                       %li= line
       %li
         Signature Algorithm [WHAT?!]
