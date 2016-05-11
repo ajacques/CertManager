@@ -23,7 +23,8 @@ def new_csr!(opts = {})
   cert_props = opts.slice(:issuer).merge(
     private_key: private,
     created_by: opts[:user],
-    updated_by: opts[:user])
+    updated_by: opts[:user]
+  )
   cert = Certificate.new(cert_props)
   csr = CertificateSignRequest.new subject: subject, private_key: private, certificate: cert
   csr.assign_attributes opts.slice(:subject_alternate_names)
