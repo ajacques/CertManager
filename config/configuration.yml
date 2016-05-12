@@ -10,6 +10,7 @@ session:
   - :redis_session_store
   -
     key: _CertManager_session
+    httponly: true
     redis:
       host: redis
 auth:
