@@ -21,3 +21,7 @@
             .text-danger Not activated yet
           - elsif user.last_sign_in_at
             = user.last_sign_in_at
+%h2= t 'views.users.index.authorization_block.header'
+%ul
+  - current_user.oauth_organizations.each do |org_name|
+    %li= org_name

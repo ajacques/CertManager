@@ -6,5 +6,7 @@
       = f.text_field :first_name
       = f.text_field :last_name
       = f.email_field :email
+      - if @user.github_username
+        = f.text_field :github_username, readonly: true
       = f.select :time_zone, User::TIME_ZONES
       = f.submit 'Update profile', class: 'btn center-block'

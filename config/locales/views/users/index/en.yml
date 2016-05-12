@@ -1,0 +1,6 @@
+en:
+  views:
+    users:
+      index:
+        authorization_block:
+          header: Who can login?

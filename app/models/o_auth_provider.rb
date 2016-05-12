@@ -1,4 +1,6 @@
 class OAuthProvider < ActiveRecord::Base
+  scope :github, -> { find_by_name('github') }
+
   def authorize_uri(state)
     url = URI(authorize_uri_base)
     url.query = {
@@ -22,6 +24,16 @@ class OAuthProvider < ActiveRecord::Base
     raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
 
     access_token
+  end
+
+  def fetch_orgs(user)
+    headers = {
+      authorization: "token #{user.github_access_token}"
+    }
+    user_info = JSON.parse(RestClient.get('https://api.github.com/user/orgs', headers))
+    Hash[user_info.map do |org|
+      [org['id'], org['login']]
+    end]
   end
 
   def login(params)

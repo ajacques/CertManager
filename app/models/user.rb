@@ -77,9 +77,8 @@ class User < ActiveRecord::Base
   private
 
   def update_password
-    if password
-      self.password_salt = SecureRandom.random_bytes(32)
-      self.password_hash = User.hash_password(password, password_salt)
-    end
+    return unless password
+    self.password_salt = SecureRandom.random_bytes(32)
+    self.password_hash = User.hash_password(password, password_salt)
   end
 end
