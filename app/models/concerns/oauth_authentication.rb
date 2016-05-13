@@ -22,7 +22,7 @@ module OauthAuthentication
     value = redis.get(redis_key)
     value = JSON.parse(value) if value
     unless value
-      value = block.call
+      value = yield
       redis.setex(redis_key, ttl, value.to_json)
     end
     value
