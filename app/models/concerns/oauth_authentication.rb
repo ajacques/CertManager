@@ -16,7 +16,7 @@ module OauthAuthentication
   private
 
   # TODO: Move this out of here
-  def cached(key:, ttl: 5.minutes, &block)
+  def cached(key:, ttl: 5.minutes)
     redis = CertManager::Configuration.redis_client
     redis_key = "User_#{id}_#{key}"
     value = redis.get(redis_key)
