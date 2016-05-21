@@ -94,7 +94,10 @@ Rails.application.routes.draw do
     post :report
     get 'service/:id', action: :cert_chain, as: :service
   end
-  post 'jobs/refresh_all' => 'jobs#refresh_all'
+  scope :jobs, controller: :jobs, as: :jobs do
+    get :refresh_all
+    post :refresh_cert_bundle
+  end
   get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 
   mount Resque::Server.new, at: '/resque'
