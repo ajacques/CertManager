@@ -30,6 +30,6 @@ class InstallController < ApplicationController
 
   def provider_params
     params.require(:o_auth_provider)
-        .permit(:name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret)
+          .permit(:name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret)
   end
 end
