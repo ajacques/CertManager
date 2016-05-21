@@ -1,0 +1,15 @@
+en:
+  account:
+    first_name: First name
+    last_name: Last name
+    username: Email address
+    password: Password
+    confirm_password: Repeat password
+    login: Login
+    lost_password: Forgot your password?
+    create: Create account
+    mailers:
+      your_new_account: CertManager - Your Account
+      recover_account: CertManager - Recover Account
+      test_mail_serve: CertManager - Test Email
+    change_password: Change password
