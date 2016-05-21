@@ -1,0 +1,8 @@
+extends: 'eslint:recommended'
+
+parserOptions:
+  plugins:
+    - react
+
+env:
+  browser: true

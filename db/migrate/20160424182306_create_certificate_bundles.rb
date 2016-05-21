@@ -1,7 +1,7 @@
 class CreateCertificateBundles < ActiveRecord::Migration
   def change
     create_table :certificate_bundles do |t|
-      t.string :name, null: false
+      t.string :name, null: false, unique: true
     end
     create_table :certificate_bundles_public_keys do |t|
       t.integer :certificate_bundle_id, null: false

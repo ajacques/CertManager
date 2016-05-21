@@ -19,7 +19,7 @@
   %h3= t('views.certificates.import.from_url.header')
   %p= t('views.certificates.import.from_url.sub_header')
   = form_tag import_certificates_path do
-    = text_field_tag :host, nil, id: 'import-url', placeholder: t('views.certificates.import.from_url.url_placeholder')
+    = text_field_tag :host, nil, id: 'import-url', placeholder: t('views.certificates.import.from_url.url_placeholder'), aria: { label: t('views.certificates.import.from_url.url_aria_label') }
     = submit_tag t('operations.import'), id: 'import-button'
     %svg.hidden.loading-indicator#import-indicator{ preserveaspectratio: 'xMidYMid', viewbox: '0 0 100 100', xmlns: 'http://www.w3.org/2000/svg' }
       %defs
@@ -30,3 +30,9 @@
       %path.loading-indicator-spinner{ d: svg, filter: 'url(#uil-ring-shadow)' }
 .well.well-lg
   = render partial: 'import_by_text_form'
+.well.well-lg
+  %h3 Import certificate bundle
+  %p Imports a third-party trusted certificate bundle such as the Firefox certificate store.
+  = form_tag jobs_refresh_cert_bundle_path do
+    = hidden_field_tag :bundle_class, CertificateBundle::Firefox.to_s
+    = submit_tag 'Import', class: 'btn btn-default'

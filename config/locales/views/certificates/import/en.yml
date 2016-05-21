@@ -6,3 +6,4 @@ en:
           header: Import from another server
           sub_header: This will import an entire certificate chain from an existing public website. The private key will have to be imported manually
           url_placeholder: example.com
+          url_aria_label: Server name to import a certificate from

@@ -10,7 +10,7 @@ gem 'bootstrap_form'
 gem 'will_paginate'
 gem 'react-rails'
 
-gem 'therubyracer'
+gem 'therubyracer', platform: :ruby
 
 gem 'redis'
 gem 'redis-session-store'
