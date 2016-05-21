@@ -8,3 +8,6 @@ en:
       service:
         cert_path: An absolute path located inside the target Docker container.
         rotate_container_name: This Docker container will receive a signal after the certificate has been updated.
+  services:
+      name:
+        plural: "Services"
