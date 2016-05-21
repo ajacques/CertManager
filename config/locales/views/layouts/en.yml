@@ -1,4 +1,4 @@
 en:
   layouts:
     footer:
-      copyright_string: Copyright © %{year} Techno Wizardry
+      copyright_string: © %{year} Techno Wizardry

@@ -1,0 +1,6 @@
+en:
+  models:
+    certificate:
+      actions:
+        import: Import certificate
+        new: New certificate
