@@ -1,0 +1,12 @@
+en:
+  activerecord:
+    help:
+      o_auth_provider:
+        client_id: The client id is provided by your OAuth provider as the public component.
+        client_secret: The client secret is provided by your OAuth provider and should be kept secure.
+    errors:
+      models:
+        o_auth_provider:
+          attributes:
+            client_id:
+              blank: The client id must not be blank

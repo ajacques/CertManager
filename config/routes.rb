@@ -27,8 +27,6 @@ Rails.application.routes.draw do
   scope :install, controller: :install, as: :install do
     get 'oauth'
     post 'oauth', action: :create_provider
-    get 'user'
-    post 'user', action: :create_user
     get 'configure'
   end
   resources :certificates, only: [:create, :index, :new, :show], constraints: {

@@ -1,4 +1,6 @@
 class OAuthProvider < ActiveRecord::Base
+  validates :name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret, presence: true
+
   scope :github, -> { find_by_name('github') }
 
   def authorize_uri(state)

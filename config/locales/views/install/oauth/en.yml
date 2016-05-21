@@ -1,0 +1,9 @@
+en:
+  views:
+    install:
+      oauth:
+        sub_header: Configure an OAuth2 provider
+        description: An OAuth2 provider enables you to login using another account service.
+        client_id: Client Id
+        client_secret: Client Secret
+        create: Create Provider

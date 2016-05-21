@@ -19,9 +19,6 @@ en:
     header: Welcome!
     sub_header: Create your account
     description: First you'll need to create an account that you'll use to authenticate next time, but don't worry you'll be on your way soon
-    oauth:
-      sub_header: Configure an OAuth2 provider
-      description: An OAuth2 provider enables you to login using another account service.
   signing:
     lets_encrypt:
       header: Sign with Let's Encrypt
