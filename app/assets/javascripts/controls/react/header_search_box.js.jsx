@@ -1,7 +1,7 @@
 (function() {
   this.HeaderSearchBox = React.createClass({
-    requestSuggestions: function(event) {
-      var query = event.target.value;
+    requestSuggestions: function() {
+      var query = this.state.typedValue;
       if (query === this.state.query) {
         return;
       }
@@ -31,9 +31,14 @@
       this.setState({float_open: true});
     },
     getInitialState: function() {
-      var state = {suggestions: [], float_open: false, mouse_over: false};
+      var state = {
+        suggestions: [],
+        float_open: false,
+        mouse_over: false,
+        typedValue: ''
+      };
       if (window.hasOwnProperty('debounce')) {
-        state['debouncer'] = debounce(this.requestSuggestions, 200, false, 3);
+        state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
       }
       return state;
     },
@@ -45,8 +50,8 @@
         this.setState({selected_index: Math.min(this.state.selected_index + 1, this.state.suggestions.length - 1)});
         event.preventDefault();
       } else if (event.keyCode === 13 && this.state.selected_index >= 0) {
-        var selected_cert = this.state.suggestions[this.state.selected_index];
-        window.location.href = selected_cert.url;
+        var selectedCert = this.state.suggestions[this.state.selected_index];
+        window.location.href = selectedCert.url;
         event.preventDefault();
       }
     },
@@ -55,6 +60,10 @@
     },
     handleMouseOutSuggestions: function() {
       this.setState({mouse_over: false});
+    },
+    typeThunk: function(event) {
+      this.setState({typedValue: event.target.value});
+      this.state.debouncer();
     },
     render: function() {
       var suggests = [];
@@ -66,11 +75,11 @@
       }
       var panelStyle = {};
       if (!this.state.float_open && this.state.suggestions.length > 0) {
-        panelStyle['display'] = 'none';
+        panelStyle.display = 'none';
       }
       return (
         <div className="search-suggest-container">
-          <input autoComplete="off" className="form-control" name="query" onBlur={this.handleBlur} onChange={this.state.debouncer} onFocus={this.handleFocus} onKeyDown={this.handleScroll} placeholder="Search" tabIndex="1" type="search" value="" />
+          <input autoComplete="off" className="form-control" name="query" onBlur={this.handleBlur} onChange={this.typeThunk} onFocus={this.handleFocus} onKeyDown={this.handleScroll} placeholder="Search" tabIndex="1" type="search" value={this.state.typedValue} />
           <div className="float" onMouseOut={this.handleMouseOutSuggestions} onMouseOver={this.handleMouseOverSuggestions} style={panelStyle}>{suggests}</div>
         </div>
       );

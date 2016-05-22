@@ -1,9 +1,9 @@
 %table.table.table-hover.table-condensed
   %thead
     %tr
-      %td Common Name
-      %td Status
-      %td Expiration
+      %td{ scope: 'col' } Common Name
+      %td{ scope: 'col' } Status
+      %td{ scope: 'col' } Expiration
   %tbody
     = render partial: 'certificates/certificate_row', collection: @expiring, as: :cert
     = render partial: 'certificates/certificate_row', collection: @certs, as: :cert

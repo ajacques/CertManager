@@ -1,10 +1,8 @@
 # Rails stuff
-docker-compose.yml
 *.md
 .gitignore
 .reek
-.rubocop.yml
-.travis.yml
+.*.yml
 
 test
 log/*
@@ -20,5 +18,10 @@ dockers
 .git
 Dockerfile
 
+common.yml
+production.yml
+*-compose.yml
+
+apparmor_policy
 cloudformation.json
 ecs-manifest.json

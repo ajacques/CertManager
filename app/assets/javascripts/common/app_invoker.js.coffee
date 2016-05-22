@@ -14,7 +14,6 @@ func = () ->
   }
   page_name = document.body.getAttribute('data-page')
   page_obj = window[page_name]
-  console.info "Invoking registered page load handler"
   if "function" == typeof page_obj
     page_obj()
   else if "object" == typeof page_obj

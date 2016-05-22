@@ -5,8 +5,8 @@ class SessionsController < ApplicationController
   def new
     redirect_to root_path if current_user
     @error_message = flash[:error]
-    @username = flash[:username]
-    redirect_to install_oauth_path unless OAuthProvider.any?
+    @provider = OAuthProvider.github
+    redirect_to install_oauth_path unless @provider
   end
 
   def create
