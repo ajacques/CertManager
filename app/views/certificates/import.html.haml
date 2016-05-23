@@ -19,7 +19,8 @@
   %h3= t('views.certificates.import.from_url.header')
   %p= t('views.certificates.import.from_url.sub_header')
   = form_tag import_certificates_path do
-    = text_field_tag :host, nil, id: 'import-url', placeholder: t('views.certificates.import.from_url.url_placeholder'), aria: { label: t('views.certificates.import.from_url.url_aria_label') }
+    = text_field_tag :host, nil, id: 'import-url', placeholder: t('views.certificates.import.from_url.url_placeholder'),
+      aria: { label: t('views.certificates.import.from_url.url_aria_label') }
     = submit_tag t('operations.import'), id: 'import-button'
     %svg.hidden.loading-indicator#import-indicator{ preserveaspectratio: 'xMidYMid', viewbox: '0 0 100 100', xmlns: 'http://www.w3.org/2000/svg' }
       %defs

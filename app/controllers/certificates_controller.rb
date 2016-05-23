@@ -10,6 +10,7 @@ class CertificatesController < ApplicationController
     @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.key? :issuer
     @expiring = [] # @certs.expiring_in(30.days).order('not_after asc')
     @certs = @certs.expiring_in params[:expiring_in].to_i.seconds if params.key? :expiring_in
+    @certs = @certs.order('"subjects"."CN" ASC')
   end
 
   def show

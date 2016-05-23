@@ -65,7 +65,10 @@ class AcmeChallenge < ActiveRecord::Base
   end
 
   def self.acme_client(settings)
-    Acme::Client.new private_key: settings.private_key.to_openssl, endpoint: settings.endpoint
+    Acme::Client.new(
+      private_key: settings.private_key.to_openssl,
+      endpoint: settings.endpoint
+    )
   end
 
   private
