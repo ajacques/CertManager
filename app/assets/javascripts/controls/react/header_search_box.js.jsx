@@ -1,14 +1,14 @@
 (function() {
   this.HeaderSearchBox = React.createClass({
     propTypes: {
-      query: ''
+      query: React.PropTypes.string
     },
     getInitialState: function() {
       var state = {
         suggestions: [],
         float_open: false,
         mouse_over: false,
-        typedValue: this.props.query
+        typedValue: this.props.query || ''
       };
       if (window.hasOwnProperty('debounce')) {
         state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
@@ -82,8 +82,14 @@
       }
       return (
         <div className="search-suggest-container">
-          <input autoComplete="off" className="form-control" name="query" onBlur={this.handleBlur} onChange={this.typeThunk} onFocus={this.handleFocus} onKeyDown={this.handleScroll} placeholder="Search" tabIndex="1" type="search" value={this.state.typedValue} />
-          <div className="float" onMouseOut={this.handleMouseOutSuggestions} onMouseOver={this.handleMouseOverSuggestions} style={panelStyle}>{suggests}</div>
+          <input autoComplete="off" className="form-control" name="query"
+                 onBlur={this.handleBlur} onChange={this.typeThunk} onFocus={this.handleFocus} onKeyDown={this.handleScroll}
+                 placeholder="Search" tabIndex="1" type="search" value={this.state.typedValue} />
+          <div className="float"
+               onMouseOut={this.handleMouseOutSuggestions} onMouseOver={this.handleMouseOverSuggestions}
+               style={panelStyle}>
+            {suggests}
+          </div>
         </div>
       );
     }
