@@ -39,6 +39,7 @@ group :assets, :development do
 
   gem 'bootstrap-sass'
   gem 'js-routes'
+  gem 'autoprefixer-rails'
 
   gem 'sprockets'
   gem 'sprockets-es6'

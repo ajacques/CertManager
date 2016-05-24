@@ -299,6 +299,7 @@ PLATFORMS
 
 DEPENDENCIES
   acme-client
+  autoprefixer-rails
   bootstrap-sass
   bootstrap_form
   classnames-rails

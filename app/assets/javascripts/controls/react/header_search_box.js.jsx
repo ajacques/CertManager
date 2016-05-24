@@ -1,4 +1,5 @@
 (function() {
+  var outer_context = this;
   this.HeaderSearchBox = React.createClass({
     propTypes: {
       query: React.PropTypes.string
@@ -10,7 +11,7 @@
         mouse_over: false,
         typedValue: this.props.query || ''
       };
-      if (window.hasOwnProperty('debounce')) {
+      if (outer_context.hasOwnProperty('debounce')) {
         state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
       }
       return state;

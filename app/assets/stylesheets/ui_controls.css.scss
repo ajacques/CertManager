@@ -1,11 +1,3 @@
-@mixin vendor-prefix($name, $argument) {
-  -webkit-#{$name}: #{$argument};
-  -ms-#{$name}: #{$argument};
-  -moz-#{$name}: #{$argument};
-  -o-#{$name}: #{$argument};
-  #{$name}: #{$argument};
-}
-
 body:not(.modal-visible) {
   .modal-backdrop {
     display: none;
@@ -17,5 +9,5 @@ body:not(.modal-visible) {
 }
 
 label span {
-  @include vendor-prefix(user-select, none);
+  user-select: none;
 }
