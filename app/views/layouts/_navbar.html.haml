@@ -11,7 +11,7 @@
         %li= link_to User.model_name.human.pluralize, users_path
         %li= link_to Service.model_name.human.pluralize, services_path
       = form_tag certificates_path, method: :get, role: :search, enforce_utf8: false, class: 'center-block col-sm-6 navbar-form' do
-        = react_component 'HeaderSearchBox', {}, prerender: true, data: { react_mount: true }
+        = react_component 'HeaderSearchBox', { query: params[:query] }, prerender: true, data: { react_mount: true }
       %ul.nav.navbar-nav.navbar-right
         %li= link_to 'Settings', settings_path
         %li= link_to current_user.first_name, user_path(current_user)

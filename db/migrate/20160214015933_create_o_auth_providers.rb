@@ -12,5 +12,6 @@ class CreateOAuthProviders < ActiveRecord::Migration
       t.string :client_id
       t.string :client_secret
     end
+    add_index :o_auth_providers, :name, unique: true
   end
 end

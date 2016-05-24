@@ -2,15 +2,10 @@ include CrlHelper
 
 class CertificatesController < ApplicationController
   def index
-    query = params[:query]
-    @certs = Certificate.with_everything.paginate(page: params[:page])
-    if query
-      @certs = @certs.joins(public_key: :subject).where('("subjects"."CN" LIKE ?)', "%#{query}%")
-    end
-    @certs = @certs.where(issuer_id: params[:issuer]).where('certificates.issuer_id != certificates.id') if params.key? :issuer
+    query = CertificateFilter.new params.permit(:query, :page, :issuer, :expiring_in)
+    query.order_by_cn
+    @certs = query.to_results
     @expiring = [] # @certs.expiring_in(30.days).order('not_after asc')
-    @certs = @certs.expiring_in params[:expiring_in].to_i.seconds if params.key? :expiring_in
-    @certs = @certs.order('"subjects"."CN" ASC')
   end
 
   def show

@@ -11,12 +11,12 @@ if Rails.env.test? || Rails.env.development?
   require 'flay_task'
   require 'scss_lint/rake_task'
   require 'haml_lint/rake_task'
+  require 'reek/rake/task'
 
   RuboCop::RakeTask.new
 
   FlayTask.new
 
-  require 'reek/rake/task'
   reek = Reek::Rake::Task.new
   reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
   reek.fail_on_error = false

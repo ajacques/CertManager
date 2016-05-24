@@ -8,5 +8,6 @@ class CreateServices < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_foreign_key :services, :certificates
   end
 end

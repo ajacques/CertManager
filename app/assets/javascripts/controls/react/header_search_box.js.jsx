@@ -1,5 +1,20 @@
 (function() {
   this.HeaderSearchBox = React.createClass({
+    propTypes: {
+      query: ''
+    },
+    getInitialState: function() {
+      var state = {
+        suggestions: [],
+        float_open: false,
+        mouse_over: false,
+        typedValue: this.props.query
+      };
+      if (window.hasOwnProperty('debounce')) {
+        state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
+      }
+      return state;
+    },
     requestSuggestions: function() {
       var query = this.state.typedValue;
       if (query === this.state.query) {
@@ -29,18 +44,6 @@
     },
     handleFocus: function() {
       this.setState({float_open: true});
-    },
-    getInitialState: function() {
-      var state = {
-        suggestions: [],
-        float_open: false,
-        mouse_over: false,
-        typedValue: ''
-      };
-      if (window.hasOwnProperty('debounce')) {
-        state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
-      }
-      return state;
     },
     handleScroll: function(event) {
       if (event.keyCode === 38) {
