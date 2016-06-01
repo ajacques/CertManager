@@ -17,9 +17,7 @@ module CertManager
 
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
-    config.action_dispatch.rescue_responses.merge!(
-      'NotAuthorized' => :unauthorized
-    )
+    config.action_dispatch.rescue_responses['NotAuthorized'] = :unauthorized
 
     # Security headers are injected by the front-end proxy
     config.action_dispatch.default_headers = {}
