@@ -25,9 +25,9 @@ function debounce(func, wait, immediate, maxWait) {
   };
 }
 
-var resolved_promise = function (result) {
+function resolved_promise(result) {
   var deferred = $.Deferred();
 
   deferred.resolve(result);
   return deferred.promise();
-};
+}

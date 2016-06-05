@@ -15,8 +15,3 @@ session:
       host: redis
 auth:
   mailer_sender: certmgr@example.com
-email_delivery:
-  delivery_method: :smtp
-  smtp_settings:
-    address: 172.17.42.1
-    port: 587
