@@ -139,7 +139,7 @@ GEM
       mime-types (>= 1.16, < 4)
     metaclass (0.0.4)
     mime-types (2.99.2)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.9.0)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
@@ -147,12 +147,14 @@ GEM
     multi_json (1.12.1)
     multipart-post (2.0.0)
     netrc (0.11.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     parser (2.3.1.2)
       ast (~> 2.2)
     path_expander (1.0.0)
     pg (0.18.4)
+    pkg-config (1.1.7)
     powerpack (0.1.1)
     r509 (0.10.0)
     rack (1.6.4)
@@ -315,7 +317,7 @@ DEPENDENCIES
   jwt
   logstash-logger
   mocha
-  nokogiri (>= 1.6.7.2)
+  nokogiri (>= 1.6.8)
   pg
   r509
   rails (~> 4.2.6)
