@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20160424182306) do
     t.string "client_secret"
   end
 
+  add_index "o_auth_providers", ["name"], name: "index_o_auth_providers_on_name", unique: true, using: :btree
+
   create_table "private_keys", force: :cascade do |t|
     t.string   "type",        null: false
     t.integer  "bit_length"
@@ -196,6 +198,8 @@ ActiveRecord::Schema.define(version: 20160424182306) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "certificate_bundles_public_keys", "certificate_bundles"
+  add_foreign_key "certificate_bundles_public_keys", "public_keys"
   add_foreign_key "certificates", "private_keys"
   add_foreign_key "certificates", "public_keys"
+  add_foreign_key "services", "certificates"
 end

@@ -1,0 +1,7 @@
+en:
+  views:
+    agents:
+      new:
+        header: Agent agent
+        errors:
+          no_signing_key: No signing key configured.
