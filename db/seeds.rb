@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 def configure_agents
-  cert = RSAPrivateKey.new bit_length: 2048
+  cert = ECPrivateKey.new curve_name: :secp384r1
   cert.save!
   settings = Settings::AgentConfig.new
   settings.private_key_id = cert.id
