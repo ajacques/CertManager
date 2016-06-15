@@ -75,7 +75,7 @@
       return window.location.host + Routes.agent_register_path(this.state.auth_token);
     },
     launchCommand: function() {
-      if (!(this.state.dirty || this.state.auth_token)) {
+      if (!(this.state.dirty && this.state.auth_token)) {
         return '';
       }
       return "sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock " + this.props.imageName + " register " + this.registrationUrl();
