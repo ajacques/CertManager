@@ -54,7 +54,7 @@ class Settings::Group
       config_value(key)
     end
     define_method("#{key}=") do |value|
-      setting = Setting.find_by_key(key) || Setting.new
+      setting = Setting.find_by(config_group: class_name, key: key) || Setting.new
       setting.key = key
       setting.config_group = class_name
       setting.value = value
