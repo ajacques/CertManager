@@ -35,6 +35,8 @@ Rails.application.configure do
   config.log_level = :debug
   config.autoflush_log = true
 
+  config.react.addons = true
+
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.

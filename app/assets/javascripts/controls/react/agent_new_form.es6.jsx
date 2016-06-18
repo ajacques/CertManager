@@ -11,6 +11,8 @@ class AgentNewForm extends React.Component {
     this.handlePossibleEquals = this.handlePossibleEquals.bind(this);
     this.handleTagValueChange = this.handleTagValueChange.bind(this);
     this.handleTagKeyChange = this.handleTagKeyChange.bind(this);
+    this.handleToken = this.handleToken.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
   static propTypes() {
     return {
@@ -41,6 +43,9 @@ class AgentNewForm extends React.Component {
       this.state.refreshData();
     }
   }
+  componentDidMount() {
+    this.refreshData();
+  }
   handleToken(response) {
     this.setState({auth_token: response, loading: false});
   }
@@ -60,13 +65,13 @@ class AgentNewForm extends React.Component {
   upsertTagAt(index, props) {
     var newTags = this.state.tags.slice();
     if (this.state.tags.length < index) {
-      newTags.push($.extend({}, {
+      newTags.push(Object.assign({
         key: null,
         value: null
       }, props));
     } else {
       var oldTag = this.state.tags[index];
-      newTags[index] = $.extend({}, oldTag, props);
+      newTags[index] = Object.assign({}, oldTag, props);
     }
     if (!newTags[index].key && !newTags[index].value) {
       newTags.slice(index);
@@ -85,10 +90,10 @@ class AgentNewForm extends React.Component {
     return window.location.host + Routes.agent_register_path(this.state.auth_token);
   }
   launchCommand() {
-    if (!(this.state.dirty && this.state.auth_token)) {
+    if (!this.state.auth_token) {
       return '';
     }
-    return "sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock " + this.props.imageName + " register " + this.registrationUrl();
+    return `sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock ${this.props.imageName} register ${this.registrationUrl()}`;
   }
   renderTagRow(index) {
     return (
@@ -98,15 +103,18 @@ class AgentNewForm extends React.Component {
       </li>
     );
   }
+  tagListElement() {
+    return <li>
+      <h4>Tag</h4>
+      <ul className="list-unstyled">
+        {this.renderTagRow(0)}
+      </ul>
+    </li>;
+  }
   render() {
     return (
       <div>
-        <li>
-          <h4>Tag</h4>
-          <ul className="list-unstyled">
-            {this.renderTagRow(0)}
-          </ul>
-        </li>
+        {this.tagListElement()}
         <li>
           <h4>Launch</h4>
           <p>Execute the following command on the remote host</p>

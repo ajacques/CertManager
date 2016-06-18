@@ -5,7 +5,7 @@ initializeReact = () ->
     clazz = window[name] || window[className]
     props = JSON.parse(element.getAttribute('data-react-props'))
     ReactDOM.render(React.createElement(clazz, props), element)
-func = () ->
+PageInitializer = () ->
   for d, i in window.on_pageload
     d()
   # Automatically call any late load handlers
@@ -20,6 +20,6 @@ func = () ->
     page_obj.init()
   initializeReact()
 if document.readyState == "complete" || document.readyState == "loaded"
-  page_inst = func()
+  page_inst = PageInitializer()
 else
-  document.addEventListener 'DOMContentLoaded', func
+  document.addEventListener 'DOMContentLoaded', PageInitializer
