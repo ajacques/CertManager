@@ -28,14 +28,14 @@ class AgentNewForm extends React.Component {
       var tagRecord = this.state.tags[i];
       reconciledTags[tagRecord.key] = tagRecord.value;
     }
-    var req = $.ajax(Routes.generate_token_agent_index_path(), {
-      type: 'POST',
-      dataType: 'text',
-      contentType: 'json',
-      data: JSON.stringify({
+    var req = Ajax.post(Routes.generate_token_agent_index_path(), {
+      contentType: 'application/json',
+      acceptType: 'text/plain',
+      data: {
         tags: reconciledTags
-      })
-    }).success(this.handleToken);
+      }
+    });
+    req.then(this.handleToken);
     this.setState({loading: true, inflightRequest: req});
   }
   componentWillUpdate(newProps, newState) {
@@ -56,9 +56,9 @@ class AgentNewForm extends React.Component {
   }
   handlePossibleEquals(event) {
     var index = event.currentTarget.dataset.index;
-    var valueBox = this.refs['tag-row-' + index];
     if (event.keyCode === 187) { // Equals sign
       event.preventDefault();
+      var valueBox = this.refs['tag-row-' + index];
       valueBox.focus();
     }
   }
@@ -99,7 +99,7 @@ class AgentNewForm extends React.Component {
     return (
       <li>
         <input onKeyDown={this.handlePossibleEquals} onChange={this.handleTagKeyChange} data-index={index} type="text" />
-        <input onChange={this.handleTagValueChange} data-index={index} type="text" />
+        <input ref={"tag-row-" + index} onChange={this.handleTagValueChange} data-index={index} type="text" />
       </li>
     );
   }

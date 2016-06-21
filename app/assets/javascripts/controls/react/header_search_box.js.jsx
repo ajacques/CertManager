@@ -1,5 +1,6 @@
 (function() {
-  var outer_context = this;
+  'use strict';
+  var outerContext = this;
   this.HeaderSearchBox = React.createClass({
     propTypes: {
       query: React.PropTypes.string
@@ -11,8 +12,8 @@
         mouse_over: false,
         typedValue: this.props.query || ''
       };
-      if (outer_context.hasOwnProperty('debounce')) {
-        state.debouncer = debounce(this.requestSuggestions, 200, false, 3);
+      if (outerContext.debounce) {
+        state.debouncer = outerContext.debounce(this.requestSuggestions, 200, false, 3);
       }
       return state;
     },
@@ -26,13 +27,13 @@
         this.setState({suggestions: []});
         return;
       }
-      $.ajax({
-        url: Routes.search_results_path(),
-        method: 'GET',
+      var req = Ajax.get(Routes.search_results_path(), {
+        acceptType: 'application/json',
         data: {
           query: query
         }
-      }).success(this._handleSuggestions);
+      });
+      req.then(this._handleSuggestions);
     },
     _handleSuggestions: function(data) {
       this.setState({suggestions: data, float_open: true, selected_index: -1});
