@@ -2,7 +2,7 @@
   = @cert.subject
 %ol.breadcrumb
   = cert_chain_tree(@cert) do |cert|
-    - if cert == @cert
+    - if cert == @cert || cert.stub?
       %li.active= cert
     - else
       %li= link_to cert, cert

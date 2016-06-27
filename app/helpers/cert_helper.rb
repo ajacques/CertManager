@@ -1,8 +1,7 @@
 module CertHelper
   def cert_chain_tree(cert, &block)
-    chain = cert.chain.reverse
     capture_haml do
-      build_chain(chain, &block)
+      build_chain(cert, &block)
     end
   end
 
@@ -28,10 +27,12 @@ module CertHelper
 
   private
 
-  def build_chain(chain, &block)
-    cert = chain.pop
-    return if cert.nil?
+  def build_chain(cert, &block)
+    if cert.issuer
+      build_chain(cert.issuer, &block)
+    else
+      yield StubCertificate.new subject: cert.public_key.issuer_subject
+    end
     yield cert
-    build_chain(chain, &block)
   end
 end

@@ -43,11 +43,8 @@
       var self = this;
       this.props.formats.forEach(function(format) {
         var link = <a href={Routes.certificate_path({id: self.props.model.id}, {format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
-        if (format === self.state.format) {
-          formatElems.push(<li className="active" key={format}>{link}</li>);
-        } else {
-          formatElems.push(<li key={format}>{link}</li>);
-        }
+        var isActive = format === self.state.format;
+        formatElems.push(<li className={classNames({active: isActive})} key={format}>{link}</li>);
       });
       return (
         <div className="modal modal-visible center-block">
