@@ -1,0 +1,6 @@
+en:
+  views:
+    certificates:
+      show:
+        renew:
+          lets_encrypt: Renew with Let's Encrypt
