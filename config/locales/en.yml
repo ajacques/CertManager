@@ -7,8 +7,6 @@ en:
     description: First you'll need to create an account that you'll use to authenticate next time, but don't worry you'll be on your way soon
   signing:
     lets_encrypt:
-      header: Sign with Let's Encrypt
-      terms: Let's Encrypt terms and conditions
       what_is:
         header: What is Let's Encrypt?
         body: Let's Encrypt is a free service that generates signed and trusted certificates

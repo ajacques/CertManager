@@ -51,7 +51,7 @@ class SaltClient
   end
 
   def stat_file(target, file)
-    Hash[execute(target, 'file.lstat', file).map {|key, value|
+    Hash[execute(target, 'file.lstat', file).map { |key, value|
       val = {
         created: Time.at(value['st_ctime']),
         accessed: Time.at(value['st_atime']),

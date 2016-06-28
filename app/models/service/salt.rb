@@ -23,7 +23,7 @@ class Service::Salt < Service
   def node_status
     rkey = "SERVICE_#{id}_NODESTATUS"
     redis = CertManager::Configuration.redis_client
-    redis.hgetall(rkey).map {|key, value|
+    redis.hgetall(rkey).map { |key, value|
       json = JSON.parse value
       node = Node.new key
       node.hash = json['hash']

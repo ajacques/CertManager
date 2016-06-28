@@ -1,0 +1,8 @@
+en:
+  views:
+    lets_encrypt:
+      index:
+        accept_terms: Accept Terms and Conditions
+        header: Sign with Let's Encrypt
+        agree_to_terms_html: I agree to the %{terms_link}
+        terms: Let's Encrypt terms and conditions

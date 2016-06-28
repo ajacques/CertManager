@@ -11,9 +11,7 @@ module HasPublicKey
       .try(:authority_info_access)
       .try(:ocsp)
       .try(:names)
-      .try(:map, proc {|obj|
-                   obj.value
-                 })
+      .try(:map, proc { |obj| obj.value })
   end
 
   def expires_in

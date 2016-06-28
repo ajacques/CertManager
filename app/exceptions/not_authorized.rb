@@ -1,2 +1,2 @@
-class NotAuthorized < Exception
+class NotAuthorized < RuntimeError
 end

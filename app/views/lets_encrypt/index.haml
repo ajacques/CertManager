@@ -1,9 +1,9 @@
-%h1= t 'signing.lets_encrypt.header'
-%h4 Accept Terms and conditions
+%h1= t 'views.lets_encrypt.index.header'
+%h4= t 'views.lets_encrypt.index.accept_terms'
 = form_tag register_certificate_path do
   = check_box_tag :terms_agree
   %label{ for: 'terms_agree' }
-    %span I agree to the
-    %a{ href: 'https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf', target: '_blank', rel: 'noopener' }= t 'signing.lets_encrypt.terms'
+    - terms_link = link_to t('views.lets_encrypt.index.terms'), 'https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf'
+    = t 'views.lets_encrypt.index.agree_to_terms_html', { terms_link: terms_link}
   %br
   = submit_tag 'Register', class: 'btn btn-primary'

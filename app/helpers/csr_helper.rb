@@ -5,7 +5,7 @@ module CsrHelper
     capture_haml do
       haml_tag :div, class: 'csr certificate' do
         description.each do |line|
-          indent = '&nbsp;' * (line.size - line.lstrip.size)
+          indent = ' ' * (line.size - line.lstrip.size)
           command = line[0, line.index(':')].lstrip
           if command == 'Subject'
             if errors.include?(:subject)
@@ -22,7 +22,7 @@ module CsrHelper
             error = '(Insecure bit length)'
           end
           haml_tag :div, class: hclass do
-            haml_tag :span, raw("#{indent}#{line.strip}")
+            haml_tag :span, "#{indent}#{line.strip}"
             haml_tag :span, error if error
           end
         end

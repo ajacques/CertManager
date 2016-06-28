@@ -50,7 +50,7 @@ class CertificateBundle::Firefox < CertificateBundle
     loop do
       line = data.readline
       break if line == "END\n"
-      str += line.split('\\').drop(1).map {|char|
+      str += line.split('\\').drop(1).map { |char|
         Integer(char, 8).chr
       }.join('')
     end
