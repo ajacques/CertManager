@@ -4,6 +4,6 @@
   = check_box_tag :terms_agree
   %label{ for: 'terms_agree' }
     - terms_link = link_to t('views.lets_encrypt.index.terms'), 'https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf'
-    = t 'views.lets_encrypt.index.agree_to_terms_html', { terms_link: terms_link}
+    = t 'views.lets_encrypt.index.agree_to_terms_html', terms_link: terms_link
   %br
   = submit_tag 'Register', class: 'btn btn-primary'
