@@ -6,7 +6,7 @@ class CreateAcmeChallenges < ActiveRecord::Migration
       t.string :domain_name, null: false
 
       t.string :last_status, null: false, default: 'unchecked'
-      t.string :error_message
+      t.json :error_message
 
       t.string :token_key, null: false
       t.string :token_value, null: false

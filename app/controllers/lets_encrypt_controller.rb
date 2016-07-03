@@ -32,8 +32,7 @@ class LetsEncryptController < ApplicationController
   end
 
   def import_status
-    challenge = AcmeChallenge.find_by_certificate_id params[:id]
-    redirect_to challenge.certificate if challenge.status.imported?
+    @challenge = AcmeChallenge.where certificate_id: params[:id]
   end
 
   def verification_failed

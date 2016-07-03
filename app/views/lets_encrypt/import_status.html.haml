@@ -1,1 +1,16 @@
-%h1 ACME Import
+%h1= t 'views.lets_encrypt.import_status.header'
+%table.table.table-striped
+  %tbody
+    %tr
+      %td= t 'views.lets_encrypt.import_status.table.domain'
+      %td Verification URL
+      %td= t 'views.lets_encrypt.import_status.table.acme_status'
+  %tbody
+  - @challenge.each do |challenge|
+    %tr{ class: acme_status_as_css_class(challenge.status) }
+      %td= challenge.domain_name
+      %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path
+      %td
+        %div= challenge.status
+        - if challenge.status.invalid?
+          %div= challenge.error_message['detail']

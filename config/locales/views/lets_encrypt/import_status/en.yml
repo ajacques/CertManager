@@ -1,0 +1,9 @@
+en:
+  views:
+    lets_encrypt:
+      import_status:
+        header: Import Status
+        table:
+          domain: Domain
+          acme_status: ACME Verification Status
+          verify_url: URL
