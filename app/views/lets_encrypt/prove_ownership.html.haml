@@ -13,6 +13,7 @@
           %tr
             %td File Name
             %td Contents
+            %td Status
         %tbody
           - @attempt.challenges.each do |challenge|
             %tr
@@ -20,6 +21,9 @@
                 %input{ type: :text, value: challenge.full_path, readonly: true }
               %td
                 %input{ type: :text, value: challenge.token_value, readonly: true }
+              %td
+                - unless challenge.status.unchecked?
+                  %span= challenge.status
       %h3 Or automatically authorize
       %p This will proxy requests for ACME certificates to CertManager to automatically handle everything.
       %h4 NGINX Example:
