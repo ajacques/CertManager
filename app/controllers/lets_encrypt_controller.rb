@@ -72,7 +72,11 @@ class LetsEncryptController < ApplicationController
     @acme_client ||= Acme::Client.new private_key: acme_settings.private_key.to_openssl, endpoint: acme_settings.endpoint
   end
 
-  def self.acme_settings
-    Settings::LetsEncrypt.new
+  class << self
+    private
+
+    def acme_settings
+      Settings::LetsEncrypt.new
+    end
   end
 end
