@@ -2,7 +2,6 @@
 *.md
 .gitignore
 .reek
-.*.yml
 
 test
 log/*
@@ -18,10 +17,7 @@ dockers
 .git
 Dockerfile
 
-common.yml
-production.yml
-*-compose.yml
+*.yml
+*.json
 
 apparmor_policy
-cloudformation.json
-ecs-manifest.json

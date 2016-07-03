@@ -45,10 +45,21 @@ class LetsEncryptController < ApplicationController
   def register
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
 
-    registration = acme_client.register contact: "mailto:#{current_user.email}"
-    registration.agree_terms
-    current_user.lets_encrypt_accepted_terms = true
-    current_user.save!
+    begin
+      registration = acme_client.register contact: "mailto:#{current_user.email}"
+    rescue Acme::Client::Error::Malformed => e
+      unless e.message == 'Registration key is already in use'
+        raise e
+      end
+      registration = ::Acme::Client::Resources::Registration.new(acme_client, response)
+    end
+    current_user.lets_encrypt_registration_uri = registration.uri
+    begin
+      registration.agree_terms
+      current_user.lets_encrypt_accepted_terms = true
+    ensure
+      current_user.save!
+    end
 
     redirect_to_ownership
   end
