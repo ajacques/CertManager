@@ -11,7 +11,8 @@ class LetsEncryptController < ApplicationController
     certificate = Certificate.find params[:id]
     @csr = certificate.csr
     settings = Settings::LetsEncrypt.new
-    @attempt = AcmeSignAttempt.find_by_certificate(certificate, settings)
+    @attempt = AcmeSignAttempt.for_certificate(certificate, settings)
+    @attempt.save!
     redirect_to @certificate if @attempt.status.imported?
   rescue Acme::Client::Error::Unauthorized
     current_user.lets_encrypt_accepted_terms = false
@@ -32,7 +33,8 @@ class LetsEncryptController < ApplicationController
   end
 
   def import_status
-    @challenge = AcmeChallenge.where certificate_id: params[:id]
+    @certificate = Certificate.find params[:id]
+    @challenge = AcmeChallenge.where certificate_id: @certificate.id
   end
 
   def verification_failed
@@ -71,11 +73,7 @@ class LetsEncryptController < ApplicationController
     @acme_client ||= Acme::Client.new private_key: acme_settings.private_key.to_openssl, endpoint: acme_settings.endpoint
   end
 
-  class << self
-    private
-
-    def acme_settings
-      Settings::LetsEncrypt.new
-    end
+  def acme_settings
+    Settings::LetsEncrypt.new
   end
 end

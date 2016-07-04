@@ -1,6 +1,7 @@
 class AcmeChallenge < ActiveRecord::Base
   belongs_to :certificate, autosave: true
   belongs_to :private_key
+  belongs_to :acme_sign_attempt
   after_create :after_create
 
   delegate :request_verification, to: :inner_challenge
@@ -45,20 +46,18 @@ class AcmeChallenge < ActiveRecord::Base
     challenge
   end
 
-  def self.for_domain(cert, settings, domain)
-    challenge = find_by(certificate_id: cert.id, domain_name: domain)
+  def self.for_domain(attempt, settings, domain)
+    challenge = find_by(acme_sign_attempt_id: attempt.id, domain_name: domain)
     unless challenge
       authorization = acme_client(settings).authorize(domain: domain)
       challenge = authorization.http01
-      challenge = create!(
-        certificate: cert,
+      challenge = new(
         domain_name: domain,
-        private_key: settings.private_key,
         token_key: challenge.token,
         token_value: challenge.file_content,
         verification_uri: challenge.uri,
         expires_at: authorization.expires,
-        acme_endpoint: settings.endpoint
+        acme_sign_attempt_id: attempt.id
       )
     end
     challenge

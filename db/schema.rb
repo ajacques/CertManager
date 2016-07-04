@@ -11,23 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160424182306) do
+ActiveRecord::Schema.define(version: 20160703215600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "acme_challenges", force: :cascade do |t|
-    t.integer  "certificate_id",                         null: false
-    t.integer  "private_key_id",                         null: false
-    t.string   "domain_name",                            null: false
-    t.string   "last_status",      default: "unchecked", null: false
-    t.string   "error_message"
-    t.string   "token_key",                              null: false
-    t.string   "token_value",                            null: false
-    t.string   "verification_uri",                       null: false
-    t.string   "acme_endpoint",                          null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "expires_at",                             null: false
+    t.integer  "certificate_id",                             null: false
+    t.integer  "private_key_id",                             null: false
+    t.integer  "acme_sign_attempt_id",                       null: false
+    t.string   "domain_name",                                null: false
+    t.string   "last_status",          default: "unchecked", null: false
+    t.json     "error_message"
+    t.string   "token_key",                                  null: false
+    t.string   "token_value",                                null: false
+    t.string   "verification_uri",                           null: false
+    t.string   "acme_endpoint",                              null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.datetime "acme_checked_at"
+    t.datetime "expires_at",                                 null: false
+  end
+
+  create_table "acme_sign_attempts", force: :cascade do |t|
+    t.integer  "certificate_id",  null: false
+    t.integer  "private_key_id",  null: false
+    t.string   "acme_endpoint",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.datetime "last_checked_at"
   end
 
   create_table "agent_tags", force: :cascade do |t|
@@ -168,23 +180,23 @@ ActiveRecord::Schema.define(version: 20160424182306) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                                 null: false
-    t.string   "first_name",                                            null: false
-    t.string   "last_name",                                             null: false
-    t.binary   "password_hash",                                         null: false
-    t.binary   "password_salt",                                         null: false
-    t.boolean  "can_login",                   default: false,           null: false
-    t.string   "time_zone",                   default: "Europe/London", null: false
-    t.boolean  "lets_encrypt_accepted_terms", default: false,           null: false
+    t.string   "email",                                                   null: false
+    t.string   "first_name",                                              null: false
+    t.string   "last_name",                                               null: false
+    t.binary   "password_hash",                                           null: false
+    t.binary   "password_salt",                                           null: false
+    t.boolean  "can_login",                     default: false,           null: false
+    t.string   "time_zone",                     default: "Europe/London", null: false
+    t.boolean  "lets_encrypt_accepted_terms",   default: false,           null: false
     t.string   "github_username"
     t.string   "github_access_token"
     t.string   "github_scope"
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               default: 0,               null: false
+    t.integer  "sign_in_count",                 default: 0,               null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -192,6 +204,7 @@ ActiveRecord::Schema.define(version: 20160424182306) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "lets_encrypt_registration_uri"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

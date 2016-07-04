@@ -1,22 +1,25 @@
-class AcmeSignAttempt
-  include ActiveRecord::AttributeAssignment
-  attr_accessor :certificate, :challenges
-
-  def initialize(opts = {})
-    assign_attributes(opts)
-  end
+class AcmeSignAttempt < ActiveRecord::Base
+  has_many :challenges, class_name: 'AcmeChallenge', autosave: true
+  belongs_to :certificate
+  belongs_to :private_key
 
   def status
     ActiveSupport::StringInquirer.new 'unchecked'
   end
 
-  def self.find_by_certificate(certificate, settings)
-    challenges = AcmeChallenge.where(certificate_id: certificate.id)
-    unless challenges.any?
-      challenges = certificate.csr.domain_names.map do |name|
-        AcmeChallenge.for_domain(certificate, settings, name)
+  def self.for_certificate(certificate, settings)
+    attempt = AcmeSignAttempt.find_by_certificate_id(certificate.id)
+    unless attempt
+      attempt = AcmeSignAttempt.new(
+        acme_endpoint: settings.endpoint,
+        certificate: certificate,
+        private_key: certificate.private_key
+      )
+      certificate.csr.domain_names.each do |name|
+        challenge = AcmeChallenge.for_domain(certificate, settings, name)
+        attempt.challenges << challenge
       end
     end
-    new(certificate: certificate, challenges: challenges)
+    attempt
   end
 end

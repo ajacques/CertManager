@@ -9,8 +9,11 @@
   - @challenge.each do |challenge|
     %tr{ class: acme_status_as_css_class(challenge.status) }
       %td= challenge.domain_name
-      %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path
+      %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path, target: '_blank', rel: 'noopener'
       %td
         %div= challenge.status
         - if challenge.status.invalid?
           %div= challenge.error_message['detail']
+- if @certificate.public_key
+  %div Your certificate has been successfully imported!
+  = link_to 'Show', @certificate

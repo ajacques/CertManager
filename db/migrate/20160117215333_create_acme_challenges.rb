@@ -1,8 +1,7 @@
 class CreateAcmeChallenges < ActiveRecord::Migration
   def change
     create_table :acme_challenges do |t|
-      t.integer :certificate_id, null: false
-      t.integer :private_key_id, null: false
+      t.integer :acme_sign_attempt_id, null: false
       t.string :domain_name, null: false
 
       t.string :last_status, null: false, default: 'unchecked'
@@ -12,9 +11,9 @@ class CreateAcmeChallenges < ActiveRecord::Migration
       t.string :token_value, null: false
 
       t.string :verification_uri, null: false
-      t.string :acme_endpoint, null: false
 
-      t.datetime :created_at, null: false
+      t.timestamps null: false
+      t.datetime :acme_checked_at
       t.datetime :expires_at, null: false
     end
   end
