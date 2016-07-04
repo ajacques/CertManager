@@ -9,6 +9,7 @@ class Certificate < ActiveRecord::Base
   belongs_to :private_key, autosave: true
   belongs_to :public_key, autosave: true
   belongs_to :subject, autosave: true
+  belongs_to :inflight_acme_sign_attempt, class_name: 'AcmeSignAttempt'
   has_one :csr, class_name: 'CertificateSignRequest'
   accepts_nested_attributes_for :private_key
   accepts_nested_attributes_for :csr
@@ -36,6 +37,10 @@ class Certificate < ActiveRecord::Base
     else
       'Stub'
     end
+  end
+
+  def csr
+    super || public_key.csr
   end
 
   def domain_names

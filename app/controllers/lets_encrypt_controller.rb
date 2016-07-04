@@ -12,6 +12,7 @@ class LetsEncryptController < ApplicationController
     @csr = certificate.csr
     settings = Settings::LetsEncrypt.new
     @attempt = AcmeSignAttempt.for_certificate(certificate, settings)
+    certificate.save!
   rescue Acme::Client::Error::Unauthorized
     current_user.lets_encrypt_accepted_terms = false
     current_user.save!

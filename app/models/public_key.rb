@@ -48,6 +48,12 @@ class PublicKey < ActiveRecord::Base
     }
   end
 
+  def csr
+    csr = CertificateSignRequest.new private_key: private_key, subject: subject
+    csr.subject_alternate_names = subject_alternate_names
+    csr
+  end
+
   delegate :as_json, to: :to_h
 
   def as_json(opts = {})

@@ -59,7 +59,8 @@ class AcmeImportJob < ActiveJob::Base
   end
 
   def import_cert
-    @attempt.fetch_signed
-    @attempt.last_status = :imported
+    attempt.fetch_signed
+    attempt.certificate.inflight_acme_sign_attempt = nil
+    attempt.last_status = :imported
   end
 end

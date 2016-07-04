@@ -8,6 +8,8 @@ class CreateCertificates < ActiveRecord::Migration
       t.integer :created_by_id, null: false
       t.integer :updated_by_id, null: false
 
+      t.integer :inflight_acme_sign_attempt_id
+
       t.timestamps
     end
   end

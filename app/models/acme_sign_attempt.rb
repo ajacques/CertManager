@@ -1,6 +1,6 @@
 class AcmeSignAttempt < ActiveRecord::Base
   has_many :challenges, class_name: 'AcmeChallenge', autosave: true
-  belongs_to :certificate
+  belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :imported_key, class_name: 'PublicKey', autosave: true
 
@@ -32,13 +32,14 @@ class AcmeSignAttempt < ActiveRecord::Base
   end
 
   def self.for_certificate(certificate, settings)
-    attempt = AcmeSignAttempt.find_by_certificate_id(certificate.id)
-    unless attempt && !attempt.status.imported?
+    attempt = certificate.inflight_acme_sign_attempt
+    unless attempt
       attempt = AcmeSignAttempt.new(
         acme_endpoint: settings.endpoint,
         certificate: certificate,
         private_key: settings.private_key
       )
+      certificate.inflight_acme_sign_attempt = attempt
       certificate.csr.domain_names.each do |name|
         challenge = AcmeChallenge.for_domain(attempt, settings, name)
         attempt.challenges << challenge
