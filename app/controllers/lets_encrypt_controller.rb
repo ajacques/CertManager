@@ -12,8 +12,6 @@ class LetsEncryptController < ApplicationController
     @csr = certificate.csr
     settings = Settings::LetsEncrypt.new
     @attempt = AcmeSignAttempt.for_certificate(certificate, settings)
-    @attempt.save!
-    redirect_to @certificate if @attempt.status.imported?
   rescue Acme::Client::Error::Unauthorized
     current_user.lets_encrypt_accepted_terms = false
     current_user.save!
@@ -37,8 +35,9 @@ class LetsEncryptController < ApplicationController
   end
 
   def import_status
-    @certificate = Certificate.find params[:id]
-    @attempt = AcmeSignAttempt.find_by_certificate_id @certificate.id
+    certificate = Certificate.find params[:id]
+    @attempt = AcmeSignAttempt.find_by_certificate_id certificate.id
+    redirect_to action: :prove_ownership unless @attempt
   end
 
   def verification_failed

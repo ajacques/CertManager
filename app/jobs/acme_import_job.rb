@@ -6,6 +6,10 @@ class AcmeImportJob < ActiveJob::Base
     attempt.last_checked_at = Time.now
     attempt.last_status = 'working'
     refresh_all
+    if attempt.challenges.empty?
+      attempt.last_status = 'failed'
+      return
+    end
     if any_failed?
       attempt.last_status = 'failed'
       return
@@ -50,6 +54,8 @@ class AcmeImportJob < ActiveJob::Base
     challenge.request_verification
   rescue Acme::Client::Error::NotFound
     challenge.delete
+  ensure
+    challenge.save!
   end
 
   def import_cert

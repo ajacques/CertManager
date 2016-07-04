@@ -1,7 +1,7 @@
 class AcmeChallenge < ActiveRecord::Base
   belongs_to :certificate, autosave: true
   belongs_to :private_key
-  belongs_to :acme_sign_attempt
+  belongs_to :sign_attempt, class_name: 'AcmeSignAttempt', foreign_key: 'acme_sign_attempt_id'
   after_create :after_create
 
   delegate :request_verification, to: :inner_challenge
@@ -49,7 +49,7 @@ class AcmeChallenge < ActiveRecord::Base
         token_value: challenge.file_content,
         verification_uri: challenge.uri,
         expires_at: authorization.expires,
-        acme_sign_attempt_id: attempt.id
+        sign_attempt: attempt
       )
     end
     challenge
@@ -73,7 +73,5 @@ class AcmeChallenge < ActiveRecord::Base
     @created_at = Time.now
   end
 
-  def acme_client
-    Acme::Client.new private_key: private_key, endpoint: acme_endpoint
-  end
+  delegate :acme_client, to: :sign_attempt
 end

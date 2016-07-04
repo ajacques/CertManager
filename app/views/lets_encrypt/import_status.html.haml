@@ -14,10 +14,11 @@
     %span.text-warn= @attempt.status
 - if @attempt.status_message
   %div= @attempt.status_message
-%div
-  - tz_adjusted = @attempt.last_checked_at.in_time_zone(current_user.time_zone).to_s(:long)
-  - ago = time_ago_in_words(@attempt.last_checked_at)
-  %span= t 'views.lets_encrypt.import_status.status.last_checked', time: tz_adjusted, ago: ago
+- if @attempt.last_checked_at
+  %div
+    - tz_adjusted = @attempt.last_checked_at.in_time_zone(current_user.time_zone).to_s(:long)
+    - ago = time_ago_in_words(@attempt.last_checked_at)
+    %span= t 'views.lets_encrypt.import_status.status.last_checked', time: tz_adjusted, ago: ago
 %h3 Domains
 %table.table.table-striped
   %tbody
@@ -34,6 +35,8 @@
         %div= challenge.status
         - if challenge.status.invalid?
           %div= challenge.error_message['detail']
-- if @certificate.public_key
+- if @attempt.imported_key_id
   %div Your certificate has been successfully imported!
-  = link_to 'Show', @certificate
+  = link_to 'Show', @attempt.certificate
+- unless @attempt.status_complete?
+  %div (Auto refreshes every 5 seconds)

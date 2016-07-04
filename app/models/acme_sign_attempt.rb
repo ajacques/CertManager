@@ -2,6 +2,7 @@ class AcmeSignAttempt < ActiveRecord::Base
   has_many :challenges, class_name: 'AcmeChallenge', autosave: true
   belongs_to :certificate
   belongs_to :private_key
+  belongs_to :imported_key, class_name: 'PublicKey', autosave: true
 
   def status
     ActiveSupport::StringInquirer.new last_status
@@ -17,25 +18,29 @@ class AcmeSignAttempt < ActiveRecord::Base
     status.failed? || status.errored?
   end
 
+  def acme_client
+    Acme::Client.new private_key: private_key, endpoint: acme_endpoint
+  end
+
   def fetch_signed
     signed = acme_client.new_certificate certificate.csr
     public_key = PublicKey.import signed.to_pem
     certificate.public_key = public_key
     public_key.private_key = certificate.private_key
-    self.imported_key_id = public_key.id
+    self.imported_key = public_key
     public_key
   end
 
   def self.for_certificate(certificate, settings)
     attempt = AcmeSignAttempt.find_by_certificate_id(certificate.id)
-    unless attempt
+    unless attempt && !attempt.status.imported?
       attempt = AcmeSignAttempt.new(
         acme_endpoint: settings.endpoint,
         certificate: certificate,
-        private_key: certificate.private_key
+        private_key: settings.private_key
       )
       certificate.csr.domain_names.each do |name|
-        challenge = AcmeChallenge.for_domain(certificate, settings, name)
+        challenge = AcmeChallenge.for_domain(attempt, settings, name)
         attempt.challenges << challenge
       end
     end
