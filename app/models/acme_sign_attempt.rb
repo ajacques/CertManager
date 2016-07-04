@@ -4,7 +4,16 @@ class AcmeSignAttempt < ActiveRecord::Base
   belongs_to :private_key
 
   def status
-    ActiveSupport::StringInquirer.new 'unchecked'
+    ActiveSupport::StringInquirer.new last_status
+  end
+
+  def fetch_signed
+    signed = acme_client.new_certificate certificate.csr
+    public_key = PublicKey.import signed.to_pem
+    certificate.public_key = public_key
+    public_key.private_key = certificate.private_key
+    self.imported_key_id = public_key.id
+    public_key
   end
 
   def self.for_certificate(certificate, settings)

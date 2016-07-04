@@ -28,7 +28,8 @@ class LetsEncryptController < ApplicationController
 
   def start_import
     certificate = Certificate.find params[:id]
-    AcmeImportJob.perform_later(certificate)
+    attempt = AcmeSignAttempt.find_by_certificate_id(certificate.id)
+    AcmeImportJob.perform_later(attempt)
     redirect_to action: :import_status
   end
 

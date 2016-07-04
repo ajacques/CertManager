@@ -52,6 +52,10 @@ class Certificate < ActiveRecord::Base
     chain.map(&:public_key).map(&:certificate_bundles).map(&:all).flatten.uniq
   end
 
+  def generate_csr
+    self.csr = CertificateSignRequest.from_cert self
+  end
+
   def public_keys
     PublicKey.where subject_id: public_key.subject_id
   end

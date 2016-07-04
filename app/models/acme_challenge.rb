@@ -14,14 +14,6 @@ class AcmeChallenge < ActiveRecord::Base
     ActiveSupport::StringInquirer.new last_status
   end
 
-  def fetch_signed
-    signed = acme_client.new_certificate certificate.csr
-    public_key = PublicKey.import signed.to_pem
-    certificate.public_key = public_key
-    public_key.private_key = certificate.private_key
-    public_key
-  end
-
   def refresh_status
     challenge = inner_challenge
     self.last_status = challenge.verify_status

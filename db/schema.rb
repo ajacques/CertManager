@@ -17,16 +17,13 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   enable_extension "plpgsql"
 
   create_table "acme_challenges", force: :cascade do |t|
-    t.integer  "certificate_id",                             null: false
-    t.integer  "private_key_id",                             null: false
     t.integer  "acme_sign_attempt_id",                       null: false
     t.string   "domain_name",                                null: false
     t.string   "last_status",          default: "unchecked", null: false
-    t.string     "error_message"
+    t.string   "error_message"
     t.string   "token_key",                                  null: false
     t.string   "token_value",                                null: false
     t.string   "verification_uri",                           null: false
-    t.string   "acme_endpoint",                              null: false
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.datetime "acme_checked_at"
@@ -34,11 +31,12 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   end
 
   create_table "acme_sign_attempts", force: :cascade do |t|
-    t.integer  "certificate_id",  null: false
-    t.integer  "private_key_id",  null: false
-    t.string   "acme_endpoint",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "certificate_id",                      null: false
+    t.integer  "private_key_id",                      null: false
+    t.string   "last_status",     default: "unknown", null: false
+    t.string   "acme_endpoint",                       null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.datetime "last_checked_at"
   end
 
