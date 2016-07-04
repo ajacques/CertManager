@@ -13,13 +13,6 @@ en:
   users:
     list: Users
     new: New user
-  subject:
-    C: Country
-    CN: Common Name
-    L: Locality
-    O: Organization
-    OU: Organizational Unit
-    ST: State/Province
   hash:
     md5: MD5
     sha1: SHA-1
