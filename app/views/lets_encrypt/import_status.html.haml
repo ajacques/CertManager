@@ -1,4 +1,24 @@
+- unless @attempt.status_complete?
+  - content_for :head do
+    %meta{ content: 5, http: { equiv: 'refresh' } }
 %h1= t 'views.lets_encrypt.import_status.header'
+%div
+  %span Status:
+  - if @attempt.errored?
+    %span.text-danger Errored
+    = form_tag action: :start_import do
+      %input.btn-link{ type: :submit, value: 'Retry' }
+  - elsif @attempt.problem?
+    %span.text-danger Failed
+  - else
+    %span.text-warn= @attempt.status
+- if @attempt.status_message
+  %div= @attempt.status_message
+%div
+  - tz_adjusted = @attempt.last_checked_at.in_time_zone(current_user.time_zone).to_s(:long)
+  - ago = time_ago_in_words(@attempt.last_checked_at)
+  %span= t 'views.lets_encrypt.import_status.status.last_checked', time: tz_adjusted, ago: ago
+%h3 Domains
 %table.table.table-striped
   %tbody
     %tr
@@ -6,7 +26,7 @@
       %td Verification URL
       %td= t 'views.lets_encrypt.import_status.table.acme_status'
   %tbody
-  - @challenge.each do |challenge|
+  - @attempt.challenges.each do |challenge|
     %tr{ class: acme_status_as_css_class(challenge.status) }
       %td= challenge.domain_name
       %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path, target: '_blank', rel: 'noopener'

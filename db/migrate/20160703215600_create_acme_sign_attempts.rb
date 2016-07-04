@@ -6,6 +6,7 @@ class CreateAcmeSignAttempts < ActiveRecord::Migration
       t.integer :imported_key_id
 
       t.string :last_status, default: 'unknown', null: false
+      t.string :status_message
 
       t.string :acme_endpoint, null: false
 

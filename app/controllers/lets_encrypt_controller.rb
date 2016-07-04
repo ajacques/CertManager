@@ -29,13 +29,16 @@ class LetsEncryptController < ApplicationController
   def start_import
     certificate = Certificate.find params[:id]
     attempt = AcmeSignAttempt.find_by_certificate_id(certificate.id)
+    attempt.last_status = 'unchecked'
+    attempt.status_message = nil
+    attempt.save!
     AcmeImportJob.perform_later(attempt)
     redirect_to action: :import_status
   end
 
   def import_status
     @certificate = Certificate.find params[:id]
-    @challenge = AcmeChallenge.where certificate_id: @certificate.id
+    @attempt = AcmeSignAttempt.find_by_certificate_id @certificate.id
   end
 
   def verification_failed

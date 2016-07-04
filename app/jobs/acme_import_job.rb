@@ -3,6 +3,8 @@ class AcmeImportJob < ActiveJob::Base
 
   def perform(attempt)
     @attempt = attempt
+    attempt.last_checked_at = Time.now
+    attempt.last_status = 'working'
     refresh_all
     if any_failed?
       attempt.last_status = 'failed'
@@ -11,7 +13,13 @@ class AcmeImportJob < ActiveJob::Base
     if all_succeeded?
       attempt.last_status = 'valid'
       import_cert
+    else
+      AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
     end
+  rescue StandardError => err
+    attempt.last_status = 'errored'
+    attempt.status_message = err.to_s
+    raise err
   ensure
     attempt.save!
   end
@@ -19,7 +27,9 @@ class AcmeImportJob < ActiveJob::Base
   private
 
   def refresh_all
-    attempt.challenges.each(&:attempt_challenge)
+    attempt.challenges.each do |challenge|
+      attempt_challenge(challenge)
+    end
   end
 
   def any_failed?
@@ -36,16 +46,8 @@ class AcmeImportJob < ActiveJob::Base
 
   def attempt_challenge(challenge)
     challenge.refresh_status
-    if challenge.status.pending?
-      if challenge.request_verification
-        import_cert
-      else
-        AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
-      end
-    else
-      attempt.acme_checked_at = Time.now
-      import_cert if challenge.status.valid?
-    end
+    return unless challenge.status.pending?
+    challenge.request_verification
   rescue Acme::Client::Error::NotFound
     challenge.delete
   end

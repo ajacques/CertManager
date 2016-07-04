@@ -28,9 +28,7 @@ module CertHelper
   private
 
   def build_chain(cert, &block)
-    if cert.issuer == cert
-      return
-    end
+    return if cert.issuer == cert
     if cert.issuer
       build_chain(cert.issuer, &block)
     else

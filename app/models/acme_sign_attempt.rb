@@ -7,6 +7,16 @@ class AcmeSignAttempt < ActiveRecord::Base
     ActiveSupport::StringInquirer.new last_status
   end
 
+  def status_complete?
+    !(status.unchecked? || status.working?)
+  end
+
+  delegate :errored?, to: :status
+
+  def problem?
+    status.failed? || status.errored?
+  end
+
   def fetch_signed
     signed = acme_client.new_certificate certificate.csr
     public_key = PublicKey.import signed.to_pem
