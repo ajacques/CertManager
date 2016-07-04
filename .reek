@@ -4,3 +4,12 @@ IrresponsibleModule:
 # Already handled by Rubocop
 TooManyStatements:
   enabled: false
+
+FeatureEnvy:
+  enabled: false
+
+Attribute:
+  enabled: false
+
+DuplicateMethodCall:
+  enabled: false

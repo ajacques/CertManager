@@ -64,6 +64,7 @@ group :development do
 
   # Coding quality
   gem 'rubocop', require: false
+  gem 'flay', require: false
   gem 'reek', require: false
   gem 'scss_lint', require: false
   gem 'haml-lint', require: false
