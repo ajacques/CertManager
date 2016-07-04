@@ -8,15 +8,11 @@ Rails.application.load_tasks
 # These gems aren't loaded in the final Docker container
 if Rails.env.test? || Rails.env.development?
   require 'rubocop/rake_task'
-  require 'flay_task'
-  require 'flay' # Temporary workaround. See https://github.com/seattlerb/flay/issues/61
   require 'scss_lint/rake_task'
   require 'haml_lint/rake_task'
   require 'reek/rake/task'
 
   RuboCop::RakeTask.new
-
-  FlayTask.new
 
   reek = Reek::Rake::Task.new
   reek.source_files = FileList['app/**/*.rb', 'lib/**/*.rb', 'config/**/*.rb']
@@ -30,5 +26,5 @@ if Rails.env.test? || Rails.env.development?
     t.files = %w(app/views app/assets/templates)
   end
 
-  task default: [:test, :reek, :rubocop, :scss_lint, :flay, :haml_lint]
+  task default: [:test, :reek, :rubocop, :scss_lint, :haml_lint]
 end

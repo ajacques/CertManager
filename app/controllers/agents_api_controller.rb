@@ -4,10 +4,11 @@ class AgentsApiController < ActionController::Base
   include RequestLogging
 
   def register
-    agent = Agent.find_by_registration_token(params[:token])
+    token = params[:token]
+    agent = Agent.find_by_registration_token(token)
     response = {
-      bootstrap_url: agent_bootstrap_url(token: params[:token]),
-      access_token: agent.bootstrap(params[:token]),
+      bootstrap_url: agent_bootstrap_url(token: token),
+      access_token: agent.bootstrap(token),
       image_name: agent.image_name
     }
     agent.save!
