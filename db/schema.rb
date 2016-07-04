@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   create_table "acme_sign_attempts", force: :cascade do |t|
     t.integer  "certificate_id",                      null: false
     t.integer  "private_key_id",                      null: false
+    t.integer  "imported_key_id"
     t.string   "last_status",     default: "unknown", null: false
     t.string   "acme_endpoint",                       null: false
     t.datetime "created_at",                          null: false
@@ -186,6 +187,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.boolean  "can_login",                     default: false,           null: false
     t.string   "time_zone",                     default: "Europe/London", null: false
     t.boolean  "lets_encrypt_accepted_terms",   default: false,           null: false
+    t.string   "lets_encrypt_registration_uri"
     t.string   "github_username"
     t.string   "github_access_token"
     t.string   "github_scope"
@@ -202,7 +204,6 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "lets_encrypt_registration_uri"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
