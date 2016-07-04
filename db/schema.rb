@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.integer  "acme_sign_attempt_id",                       null: false
     t.string   "domain_name",                                null: false
     t.string   "last_status",          default: "unchecked", null: false
-    t.json     "error_message"
+    t.string     "error_message"
     t.string   "token_key",                                  null: false
     t.string   "token_value",                                null: false
     t.string   "verification_uri",                           null: false
