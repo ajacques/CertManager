@@ -3,6 +3,8 @@ class Settings::Group
   include ActiveModel::Conversion
   include ActiveModel::Validations
   include ActiveModel::ForbiddenAttributesProtection
+  include ActiveModel::Callbacks
+  define_model_callbacks :update
 
   def initialize
     @changed_attributes = []
@@ -21,11 +23,15 @@ class Settings::Group
   end
 
   def save
-    @changed_attributes.each(&:save)
+    run_callbacks :update do
+      @changed_attributes.each(&:save)
+    end
   end
 
   def save!
-    @changed_attributes.each(&:save!)
+    run_callbacks :update do
+      @changed_attributes.each(&:save!)
+    end
   end
 
   def persisted?

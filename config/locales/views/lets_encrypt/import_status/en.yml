@@ -8,4 +8,4 @@ en:
           acme_status: ACME Verification Status
           verify_url: URL
         status:
-          last_checked: Last checked %{time} (%{ago} ago)
+          last_checked: 'Last checked: %{time} (%{ago} ago)'

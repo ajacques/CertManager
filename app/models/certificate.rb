@@ -39,8 +39,8 @@ class Certificate < ActiveRecord::Base
     end
   end
 
-  def csr
-    super || public_key.csr
+  def to_csr
+    csr || public_key.csr
   end
 
   def domain_names

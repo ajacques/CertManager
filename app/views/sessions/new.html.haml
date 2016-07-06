@@ -3,4 +3,4 @@
     %h1= t 'views.sessions.new.header'
     %p= t 'views.sessions.new.description'
     .form-group
-      %a.btn.center-block.btn-info{ href: oauth_login_path(provider: @provider.name) }= t 'views.sessions.new.oauth_providers.github'
+      %a.btn.center-block.btn-info{ href: oauth_login_path(provider: @provider.name), rel: 'nofollow' }= t 'views.sessions.new.oauth_providers.github'

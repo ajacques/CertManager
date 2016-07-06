@@ -23,7 +23,9 @@ class CertificateImporter
     @ssl_context = OpenSSL::SSL::SSLContext.new
     @ssl_socket = OpenSSL::SSL::SSLSocket.new @socket, @ssl_context
     @ssl_socket.hostname = @host
-    @ssl_socket.connect
+    Timeout.timeout(5) do
+      @ssl_socket.connect
+    end
   end
 
   def disconnect

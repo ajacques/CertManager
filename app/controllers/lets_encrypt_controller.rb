@@ -9,7 +9,7 @@ class LetsEncryptController < ApplicationController
 
   def prove_ownership
     certificate = Certificate.find params[:id]
-    @csr = certificate.csr
+    @csr = certificate.to_csr
     settings = Settings::LetsEncrypt.new
     @attempt = AcmeSignAttempt.for_certificate(certificate, settings)
     certificate.save!
