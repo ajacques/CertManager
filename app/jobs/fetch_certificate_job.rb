@@ -9,7 +9,7 @@ class FetchCertificateJob < ActiveJob::Base
       chain: certs
     }
     save_result(resp)
-  rescue Exception => ex
+  rescue StandardError => ex
     resp = {
       status: :fail,
       message: ex.message
