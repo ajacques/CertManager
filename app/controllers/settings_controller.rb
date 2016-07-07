@@ -11,7 +11,7 @@ class SettingsController < ApplicationController
     set.save!
 
     set = Settings::EmailServer.new
-    set.assign_attributes params.permit(settings_email_server: [:server, :port])[:settings_email_server]
+    set.assign_attributes params.permit(settings_email_server: [:server, :port, :from_address])[:settings_email_server]
     set.save!
 
     redirect_to settings_path

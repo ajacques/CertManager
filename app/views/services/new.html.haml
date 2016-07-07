@@ -17,6 +17,7 @@
         = f.text_field :node_group
       .select-group.hidden{ data: { key: 'Service::SoteriaAgent' } }
         = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
+        = f.text_field :node_tags
         .form-group
           %label.col-sm-2.control-label After rotation
           .col-sm-10

@@ -40,7 +40,7 @@ class ServicesController < ApplicationController
     p = if params[:service][:type] == 'Service::Salt'
           params.require(:service).permit(:type, :certificate_id, :cert_path, :after_rotate, :node_group)
         elsif params[:service][:type] == 'Service::SoteriaAgent'
-          params.require(:service).permit(:type, :certificate_id, :cert_path, :after_rotate, :node_group, :rotate_container_name)
+          params.require(:service).permit(:type, :certificate_id, :cert_path, :node_tags, :rotate_container_name)
         end
     redirect_to Service.create p
   end
