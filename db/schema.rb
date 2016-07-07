@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.integer  "acme_sign_attempt_id",                       null: false
     t.string   "domain_name",                                null: false
     t.string   "last_status",          default: "unchecked", null: false
-    t.string   "error_message"
+    t.json     "error_message"
     t.string   "token_key",                                  null: false
     t.string   "token_value",                                null: false
     t.string   "verification_uri",                           null: false
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.integer  "private_key_id",                      null: false
     t.integer  "imported_key_id"
     t.string   "last_status",     default: "unknown", null: false
+    t.string   "status_message"
     t.string   "acme_endpoint",                       null: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
@@ -75,9 +76,10 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.integer  "private_key_id"
     t.integer  "public_key_id"
     t.integer  "issuer_id"
-    t.string   "chain_hash",     null: false
-    t.integer  "created_by_id",  null: false
-    t.integer  "updated_by_id",  null: false
+    t.string   "chain_hash",                    null: false
+    t.integer  "created_by_id",                 null: false
+    t.integer  "updated_by_id",                 null: false
+    t.integer  "inflight_acme_sign_attempt_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

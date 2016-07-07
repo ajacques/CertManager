@@ -2,3 +2,10 @@ language: ruby
 rvm:
   - 2.3.0
 cache: bundler
+services:
+  - postgresql
+addons:
+  postgresql: '9.4'
+before_script:
+  - psql -c 'create database unit_tests;' -U postgres
+  - cp config/database.yml.travis config/database.yml
