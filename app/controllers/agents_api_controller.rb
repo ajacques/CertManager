@@ -20,8 +20,8 @@ class AgentsApiController < ActionController::Base
     response = {
       transport: :http_poll,
       endpoints: {
-        sync: agent_sync_path,
-        report: agent_report_path
+        sync: agent_sync_url,
+        report: agent_report_url
       }
     }
     render json: response

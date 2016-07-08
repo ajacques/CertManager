@@ -7,6 +7,10 @@ class Agent < ActiveRecord::Base
     'docker.technowizardry.net/soteria-agent:1'
   end
 
+  def services
+    []
+  end
+
   def self.register(key, token)
     _payload, _header = JWT.decode(token, key)
 
