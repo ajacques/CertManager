@@ -88,7 +88,9 @@ Rails.application.routes.draw do
     end
   end
   scope :agents, controller: :agents_api, as: :agent do
-    get 'register/:token', action: :register, as: :register
+    get 'register/:token', action: :register, as: :register, constraints: {
+      token: /([a-zA-Z0-9_\-_]+\.?){3}/
+    }
     get :bootstrap
     get :sync
     post :report

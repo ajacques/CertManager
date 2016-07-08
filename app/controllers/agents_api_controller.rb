@@ -4,11 +4,11 @@ class AgentsApiController < ActionController::Base
   include RequestLogging
 
   def register
+    settings = Settings::AgentConfig.new
     token = params[:token]
-    agent = Agent.find_by_registration_token(token)
+    agent = Agent.register(settings.private_key, token)
     response = {
-      bootstrap_url: agent_bootstrap_url(token: token),
-      access_token: agent.bootstrap(token),
+      bootstrap_url: agent_bootstrap_url(token: agent.access_token),
       image_name: agent.image_name
     }
     agent.save!

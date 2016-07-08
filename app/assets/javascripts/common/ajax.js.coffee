@@ -1,6 +1,6 @@
 GetCsrfToken = () -> document.querySelector('meta[name="csrf-token"]').content
 
-this.Ajax =
+///this.Ajax =
   post:(url, opts) ->
     return new Promise((resolve, reject) ->
       request = new XMLHttpRequest()
@@ -30,3 +30,22 @@ this.Ajax =
           reject(body)
       request.send(JSON.stringify(opts.data))
     )
+///
+
+# jQuery wrapper for now
+this.Ajax =
+  post:(url, opts) ->
+    props = {
+      type: 'post',
+      contentType: opts.contentType,
+      accepts: opts.acceptType,
+      data: JSON.stringify(opts.data)
+    }
+    return $.ajax(url, props)
+  get:(url, opts) ->
+    props = {
+      type: 'get',
+      accepts: opts.acceptType,
+      data: opts.data
+    }
+    return $.ajax(url, props)

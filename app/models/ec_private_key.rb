@@ -13,6 +13,7 @@ class ECPrivateKey < PrivateKey
 
   delegate :group, to: :to_openssl
   delegate :dsa_sign_asn1, to: :to_openssl
+  delegate :dsa_verify_asn1, to: :to_openssl
 
   def to_pem
     "-----BEGIN EC PRIVATE KEY-----\n#{Base64.encode64(body)}-----END EC PRIVATE KEY-----"

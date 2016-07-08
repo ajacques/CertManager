@@ -1,6 +1,7 @@
 class AgentNewForm extends React.Component {
   constructor(props) {
     super(props);
+    this.refreshData = this.refreshData.bind(this);
     this.state = {
       tags: [],
       loading: true,
@@ -12,7 +13,6 @@ class AgentNewForm extends React.Component {
     this.handleTagValueChange = this.handleTagValueChange.bind(this);
     this.handleTagKeyChange = this.handleTagKeyChange.bind(this);
     this.handleToken = this.handleToken.bind(this);
-    this.refreshData = this.refreshData.bind(this);
   }
   static propTypes() {
     return {
@@ -40,7 +40,7 @@ class AgentNewForm extends React.Component {
   }
   componentWillUpdate(newProps, newState) {
     if (this.state.tags !== newState.tags) {
-      this.state.refreshData();
+      this.refreshData();
     }
   }
   componentDidMount() {
@@ -93,7 +93,7 @@ class AgentNewForm extends React.Component {
     if (!this.state.auth_token) {
       return '';
     }
-    return `sudo docker run -d -v /var/run/docker.sock:/var/run/docker.sock ${this.props.imageName} register ${this.registrationUrl()}`;
+    return `sudo docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ${this.props.imageName} register ${this.registrationUrl()}`;
   }
   renderTagRow(index) {
     return (

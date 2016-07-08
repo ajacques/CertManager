@@ -9,7 +9,6 @@ class AgentsController < ApplicationController
     settings = Settings::AgentConfig.new
     input = JSON.parse(request.body.read)
     to_sign = {
-      host: request.host,
       date: Time.now.utc,
       tags: input['tags']
     }
