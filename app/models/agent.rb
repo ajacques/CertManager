@@ -8,10 +8,8 @@ class Agent < ActiveRecord::Base
   end
 
   def self.register(key, token)
-    payload, header = JWT.decode(token, key)
+    _payload, _header = JWT.decode(token, key)
 
-    Agent.create!({
-      access_token: SecureRandom.hex
-    })
+    Agent.create! access_token: SecureRandom.hex
   end
 end
