@@ -317,11 +317,9 @@ DEPENDENCIES
   jwt
   logstash-logger
   mocha
-  nokogiri (>= 1.6.8)
   pg
   r509
   rails (~> 4.2.6)
-  rails-html-sanitizer (~> 1.0.3)
   react-rails
   redis
   redis-session-store

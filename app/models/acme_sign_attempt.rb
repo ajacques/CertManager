@@ -40,7 +40,7 @@ class AcmeSignAttempt < ActiveRecord::Base
         private_key: settings.private_key
       )
       certificate.inflight_acme_sign_attempt = attempt
-      certificate.csr.domain_names.each do |name|
+      certificate.to_csr.domain_names.each do |name|
         challenge = AcmeChallenge.for_domain(attempt, settings, name)
         attempt.challenges << challenge
       end
