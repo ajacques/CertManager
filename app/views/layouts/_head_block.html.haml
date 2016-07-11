@@ -9,8 +9,8 @@
   %meta{ content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport' }
   - if user_signed_in?
     %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
-  = stylesheet_link_tag    'application', media: 'all', data: { turbolinks_track: true }
-  = javascript_include_tag 'application', data: { turbolinks_track: true }, defer: true
+  = stylesheet_link_tag    'application', media: 'all'
+  = javascript_include_tag 'application', defer: true
   = csrf_meta_tags
   - if content_for? :head
     = yield :head

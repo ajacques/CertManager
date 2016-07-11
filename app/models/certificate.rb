@@ -18,7 +18,10 @@ class Certificate < ActiveRecord::Base
   include HasPublicKey
 
   # Scopes
-  scope :expiring_in, -> (time) { joins(:public_key).where('public_keys.not_after < ? ', Time.now + time) if time.present? }
+  scope :expiring_in, lambda { |time|
+    now = Time.now
+    joins(:public_key).where('public_keys.not_after < ? and public_keys.not_after > ?', now + time, now) if time.present?
+  }
   scope :expired, -> { joins(:public_key).where('public_keys.not_after < ?', Time.now) }
   scope :owned, -> { where('certificates.private_key_id IS NOT NULL') }
   scope :signed, -> { where('certificates.private_key_id IS NOT NULL') }
@@ -26,6 +29,9 @@ class Certificate < ActiveRecord::Base
   scope :with_subject, -> (subject) { Certificate.joins(:subject).where(subjects: Subject.filter_params(subject.to_h)) }
   scope :with_everything, -> { eager_load(:private_key, public_key: :subject) }
   scope :can_sign, -> { joins(:public_key).where(public_keys: { is_ca: true }) }
+  scope :for_public_key, lambda { |pub|
+    joins(:private_key).where('private_keys.fingerprint = ?', pub.fingerprint)
+  }
 
   def status
     if private_key.present? && public_key.present?

@@ -43,8 +43,7 @@ Rails.application.routes.draw do
           post :register
           get :prove_ownership
           post :start_import
-          get :import_status
-          get :verification_failed
+          get 'import_status/:attempt_id', action: :import_status
         end
       end
       get 'sign/:another_id' => 'signing#configure'

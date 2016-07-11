@@ -89,14 +89,15 @@ class PublicKey < ActiveRecord::Base
   end
 
   def self.import(pem)
-    r509 = R509::Cert.new cert: pem
-    name = if r509.rsa?
+    cert = R509::Cert.new cert: pem
+    name = if cert.rsa?
              RSAPublicKey
-           elsif r509.ec?
+           elsif cert.ec?
              ECPublicKey
            end
-    name.find_or_initialize_by(body: r509.to_der) do |r|
-      r.import_from_r509 r509
+    # TODO: Look it up based on a computed hash
+    name.find_or_initialize_by(body: cert.to_der) do |r|
+      r.import_from_r509 cert
     end
   end
 

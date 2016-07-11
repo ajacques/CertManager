@@ -1,10 +1,15 @@
 class ValidateCertificateJob < ActiveJob::Base
   queue_as :refresh
+  attr_reader :redis
+
+  def initialize(*args)
+    super
+    @redis = CertManager::Configuration.redis_client
+  end
 
   def perform
-    @redis = CertManager::Configuration.redis_client
     find_dirty_cert_files
-    @redis.set('CertBgRefresh_LastRun', Time.now.to_f)
+    redis.set('CertBgRefresh_LastRun', Time.now.to_f)
   end
 
   private
@@ -23,9 +28,9 @@ class ValidateCertificateJob < ActiveJob::Base
           obj[:hash] = hash
           obj[:valid] = hash == service.certificate.chain_hash
         end
-        @redis.hset("#{key}_NEW", node, obj.to_json)
+        redis.hset("#{key}_NEW", node, obj.to_json)
       end
-      @redis.rename("#{key}_NEW", key)
+      redis.rename("#{key}_NEW", key)
     end
   end
 end

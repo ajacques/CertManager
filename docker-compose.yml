@@ -50,9 +50,15 @@ acmetestproxy:
     VIRTUAL_HOST: '*.xfinity'
 
 redis:
+  cap_drop:
+    - ALL
   image: redis:3.0.7-alpine
   expose:
     - 6379
+  cap_add:
+    - CHOWN
+    - SETGID
+    - SETUID
 
 db:
   image: postgres:latest
