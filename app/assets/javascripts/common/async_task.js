@@ -1,31 +1,27 @@
 var AsyncTask = (function() {
   'use strict';
-  var handle_loop = function(url_func, promise) {
+  var handle_loop = function(url_func, resolve, reject) {
     return function(result) {
       if (result.status === 'unfinished') {
         window.setTimeout(function() {
-          $.ajax({
-            url: url_func({wait_handle: result.wait_handle}),
-            method: 'GET'
-          }).success(handle_loop(url_func, promise));
+          Ajax.get(url_func({wait_handle: result.wait_handle})).success(handle_loop(url_func, resolve, reject));
         }, 500);
         return;
       }
 
-      promise.resolve(result);
+      resolve(result);
     };
   };
 
   return {
     start: function(data) {
-      var promise = $.Deferred();
-      Ajax.post(data.url(), {
-        acceptType: 'application/json',
-        contentType: 'application/json',
-        data: data.data
-      }).then(handle_loop(data.url, promise));
-
-      return promise;
+      return new Promise(function(resolve, reject) {
+        Ajax.post(data.url(), {
+          acceptType: 'application/json',
+          contentType: 'application/json',
+          data: data.data
+        }).then(handle_loop(data.url, resolve, reject));
+      });
     }
   };
 })();
