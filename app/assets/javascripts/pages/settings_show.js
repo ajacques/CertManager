@@ -7,10 +7,7 @@ var SettingsShow = function() {
     event.preventDefault();
     var validate_target = event.target.getAttribute('data-settings-validate');
     var path_functor = Routes['validate_' + validate_target + '_settings_path'];
-    $.ajax({
-      url: path_functor(),
-      method: 'post'
-    }).then(handleValidateResponse);
+    Ajax.post(path_functor()).then(handleValidateResponse);
   }
 
   this.init = function() {

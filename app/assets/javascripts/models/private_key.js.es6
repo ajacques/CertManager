@@ -10,10 +10,8 @@ class PrivateKey extends CertificatePart {
   }
 
   static analyze(input) {
-    return $.ajax({
-      url: Routes.analyze_private_key_path(),
-      dataType: 'json',
-      method: 'POST',
+    return Ajax.post(Routes.analyze_private_key_path(), {
+      acceptType: 'application/json',
       contentType: 'application/x-pem',
       data: input
     }).then(this._from_expanded);

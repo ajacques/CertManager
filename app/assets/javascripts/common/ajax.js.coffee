@@ -34,7 +34,8 @@ GetCsrfToken = () -> document.querySelector('meta[name="csrf-token"]').content
 
 # jQuery wrapper for now
 this.Ajax =
-  post:(url, opts) ->
+  post:(url, opts = {}) ->
+    input = if opts.contentType == 'application/json' then JSON.stringify(opts.data) else opts.data
     props = {
       type: 'post',
       contentType: opts.contentType,
@@ -42,7 +43,7 @@ this.Ajax =
       data: JSON.stringify(opts.data)
     }
     return $.ajax(url, props)
-  get:(url, opts) ->
+  get:(url, opts = {}) ->
     props = {
       type: 'get',
       accepts: opts.acceptType,

@@ -19,11 +19,10 @@ var AsyncTask = (function() {
   return {
     start: function(data) {
       var promise = $.Deferred();
-      $.ajax({
-          url: data.url(),
-          dataType: 'json',
-          method: 'POST',
-          data: data.data
+      Ajax.post(data.url(), {
+        acceptType: 'application/json',
+        contentType: 'application/json',
+        data: data.data
       }).then(handle_loop(data.url, promise));
 
       return promise;

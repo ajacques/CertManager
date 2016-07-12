@@ -8,15 +8,6 @@ class CertificatePart {
       this.cache['pem'] = this.opts.pem;
     }
 
-    this.build_request = function (format) {
-      if (this.opts.hasOwnProperty('id')) {
-        return {
-          url: this.show_url({id: this.opts.id}, {format: format}),
-          dataType: 'text'
-        };
-      }
-    };
-
     this.subject = this.opts.subject;
     this.to_pem = this.get_format.bind(this, 'pem');
     this.id = this.opts.id;
@@ -39,7 +30,9 @@ class CertificatePart {
       self.cache[format] = result;
       return resolved_promise(result);
     };
-    return $.ajax(this.build_request(format)).success(process);
+    return Ajax.get(this.show_url({id: this.opts.id}, {format: format}), {
+      acceptType: 'text/plain'
+    }).success(process);
   }
 
   static from_string(string) {
@@ -57,9 +50,7 @@ class Certificate extends CertificatePart {
   }
   static _analyze_req(body) {
     return {
-      url: Routes.analyze_certificates_path(),
       dataType: 'json',
-      method: 'POST',
       contentType: 'application/x-pem',
       data: body
     }
@@ -70,9 +61,7 @@ class Certificate extends CertificatePart {
   }
 
   getChain(format) {
-    return $.ajax({
-      url: Routes.chain_certificate_path({id: this.id}, {format: format})
-    }).success(this._from_chain);
+    return Ajax.get(Routes.chain_certificate_path({id: this.id}, {format: format})).then(this._from_chain);
   }
 
   static _from_expanded(blob) {
@@ -80,7 +69,7 @@ class Certificate extends CertificatePart {
   }
 
   static analyze(input) {
-    return $.ajax(this._analyze_req(input)).then(this._from_expanded);
+    return Ajax.post(Routes.analyze_certificates_path(), this._analyze_req(input)).then(this._from_expanded);
   }
 
   static _parse_result(result) {
