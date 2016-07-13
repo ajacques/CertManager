@@ -38,10 +38,6 @@ class CertificatePart {
   static from_string(string) {
     return new CertificatePart({pem: string});
   }
-
-  static analyze(input) {
-    return $.ajax(analyze_req(input)).then(parse_cert_data);
-  }
 }
 
 class Certificate extends CertificatePart {
@@ -50,7 +46,7 @@ class Certificate extends CertificatePart {
   }
   static _analyze_req(body) {
     return {
-      dataType: 'json',
+      acceptType: 'application/json',
       contentType: 'application/x-pem',
       data: body
     }
@@ -65,7 +61,7 @@ class Certificate extends CertificatePart {
   }
 
   static _from_expanded(blob) {
-    return resolved_promise(new Certificate(blob));
+    return new Certificate(blob);
   }
 
   static analyze(input) {

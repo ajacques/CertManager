@@ -40,7 +40,7 @@ this.Ajax =
       type: 'post',
       contentType: opts.contentType,
       accepts: opts.acceptType,
-      data: JSON.stringify(opts.data)
+      data: input
     }
     return $.ajax(url, props)
   get:(url, opts = {}) ->

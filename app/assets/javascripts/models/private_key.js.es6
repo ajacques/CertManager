@@ -3,10 +3,7 @@ class PrivateKey extends CertificatePart {
     super({opts: opts, show_url: Routes.private_key_path});
   }
   static _from_expanded(blob) {
-    var deferred = $.Deferred();
-
-    deferred.resolve(new PrivateKey(blob));
-    return deferred.promise();
+    return resolved_promise(new PrivateKey(blob));
   }
 
   static analyze(input) {
