@@ -120,7 +120,7 @@ GEM
       railties (>= 3.2)
       sprockets-rails
     json (1.8.3)
-    json-jwt (1.5.2)
+    json-jwt (1.6.2)
       activesupport
       bindata
       multi_json (>= 1.3)
