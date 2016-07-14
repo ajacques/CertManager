@@ -19,7 +19,7 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
     }
     output[:request] = {
       method: data[:method],
-      path: data[:path],
+      path: URI(data[:path]).path,
       format: data[:format],
       proxy_ip: request.remote_ip,
       client_ip: request.env['HTTP_X_FORWARDED_FOR']
