@@ -6,7 +6,6 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
   def process_action(event)
     data = event.payload
     output = LogStash::Event.new
-    request = RequestStore.store[:request]
     actor = RequestStore.store[:actor]
     response = RequestStore.store[:response]
     output.type = 'http_request'
@@ -17,30 +16,17 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
       db: data[:db_runtime],
       redis: data[:redis_runtime]
     }
-    output[:request] = {
-      method: data[:method],
-      path: URI(data[:path]).path,
-      format: data[:format],
-      proxy_ip: request.remote_ip,
-      client_ip: request.env['HTTP_X_FORWARDED_FOR']
-    }
     if response
       output[:response][:redirect_location] = response.headers['Location'] if response.headers.key? 'Location'
       output[:response][:content_type] = response.content_type
-      output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
     end
     output[:routing] = {
       controller: data[:controller],
       action: data[:action],
       resource: "#{data[:controller]}##{data[:action]}"
     }
-    if request
-      mg = {
-        id: request.env['action_dispatch.request_id'],
-        user_agent: request.env['HTTP_USER_AGENT']
-      }
-      output[:request].merge!(mg)
-    end
+    append_request(data)
+
     if actor.is_a? User
       output[:user] = {
         id: actor.id,
@@ -48,6 +34,25 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
       }
     end
     ElasticsearchHttpRequestLogger.logstash.info(output.to_json)
+  end
+
+  def append_request(data)
+    request = RequestStore.store[:request]
+    output[:request] = {
+      method: data[:method],
+      path: URI(data[:path]).path,
+      format: data[:format],
+      proxy_ip: request.remote_ip,
+      client_ip: request.env['HTTP_X_FORWARDED_FOR']
+    }
+    if request
+      mg = {
+        id: request.env['action_dispatch.request_id'],
+        user_agent: request.env['HTTP_USER_AGENT']
+      }
+      output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
+      output[:request].merge!(mg)
+    end
   end
 
   def extract_status(payload)
