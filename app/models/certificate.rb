@@ -127,11 +127,6 @@ class Certificate < ActiveRecord::Base
     save!
   end
 
-  def self.with_modulus(modulus)
-    modulus_hash = Digest::SHA1.hexdigest(modulus.to_s)
-    Certificate.joins(:public_key).where(public_keys: { modulus_hash: modulus_hash })
-  end
-
   def self.new_stub(subject)
     cert = Certificate.new
     cert.subject = Subject.from_r509(subject)

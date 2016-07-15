@@ -99,6 +99,8 @@ class PublicKey < ActiveRecord::Base
     name.find_or_initialize_by(body: cert.to_der) do |r|
       r.import_from_r509 cert
     end
+  rescue R509::R509Error => ex
+    raise X509ParseError, cert: cert, message: ex.message
   end
 
   def import_from_r509(r509)

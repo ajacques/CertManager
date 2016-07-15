@@ -1,6 +1,13 @@
 class CertificateBundle::Firefox < CertificateBundle
   after_initialize :set_name
 
+  attr_reader :errors
+
+  def initialize(*args)
+    super
+    @errors = []
+  end
+
   def self.fetch
     result = RestClient.get('https://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt?raw=1')
     s = new
@@ -10,7 +17,6 @@ class CertificateBundle::Firefox < CertificateBundle
 
   def parse(src)
     data = StringIO.new(src)
-    last_pub = nil
     loop do
       break if data.eof?
       line = data.readline
@@ -19,12 +25,18 @@ class CertificateBundle::Firefox < CertificateBundle
       split = line.split(' ')
       cmd = split[0]
       next unless cmd == 'CKA_CLASS'
-      last_pub = parse_cert(data) if split[2] == 'CKO_CERTIFICATE'
-      if split[2] == 'CKO_NSS_TRUST'
-        trusted = parse_trust(data)
-        add(last_pub) if trusted
-      end
+      import_cert(split, data) if split[2] == 'CKO_CERTIFICATE'
     end
+  end
+
+  def import_cert(split, data)
+    last_pub = parse_cert(data)
+    if split[2] == 'CKO_NSS_TRUST'
+      trusted = parse_trust(data)
+      add(last_pub) if trusted
+    end
+  rescue X509ParseError => ex
+    errors << ex
   end
 
   def parse_cert(data)

@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
 
   add_foreign_key "acme_sign_attempts", "certificates"
   add_foreign_key "acme_sign_attempts", "private_keys"
-  add_foreign_key "certificate_bundles_public_keys", "certificate_bundles"
+  add_foreign_key "certificate_bundles_public_keys", "certificate_bundles", on_delete: :cascade
   add_foreign_key "certificate_bundles_public_keys", "public_keys"
   add_foreign_key "certificates", "private_keys"
   add_foreign_key "certificates", "public_keys"
