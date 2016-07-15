@@ -34,7 +34,7 @@
               "fielddata": {
                 "format": "disabled"
               },
-              "index": "analyzed",
+              "index": "not_analyzed",
               "omit_norms": true,
               "type": "string",
               "fields": {
@@ -132,19 +132,12 @@
           "properties": {
             "path": {
               "type": "string",
+              "index": "analyzed",
               "analyzer": "directory_analyzer"
             },
-            "method": {
+            "user_agent": {
               "type": "string",
-              "index": "not_analyzed"
-            },
-            "format": {
-              "type": "string",
-              "index": "not_analyzed"
-            },
-            "id": {
-              "type": "string",
-              "index": "not_analyzed"
+              "index": "analyzed"
             }
           }
         },
