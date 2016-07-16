@@ -25,7 +25,7 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
       action: data[:action],
       resource: "#{data[:controller]}##{data[:action]}"
     }
-    append_request(data)
+    append_request(output, data)
 
     if actor.is_a? User
       output[:user] = {
@@ -36,7 +36,7 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
     ElasticsearchHttpRequestLogger.logstash.info(output.to_json)
   end
 
-  def append_request(data)
+  def append_request(output, data)
     request = RequestStore.store[:request]
     output[:request] = {
       method: data[:method],
