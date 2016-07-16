@@ -8,7 +8,8 @@ class AgentsApiController < ActionController::Base
     token = params[:token]
     agent = Agent.register(settings.private_key, token)
     response = {
-      bootstrap_url: agent_bootstrap_url(token: agent.access_token),
+      bootstrap_url: agent_bootstrap_url,
+      access_token: agent.access_token,
       image_name: agent.image_name
     }
     agent.save!
