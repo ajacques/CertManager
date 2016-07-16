@@ -42,7 +42,7 @@ class ServicesController < ApplicationController
         elsif params[:service][:type] == 'Service::SoteriaAgent'
           params.require(:service).permit(:type, :certificate_id, :cert_path, :node_tags, :rotate_container_name)
         end
-    redirect_to Service.create p
+    redirect_to Service.create! p
   end
 
   def destroy

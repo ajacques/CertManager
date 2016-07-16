@@ -2,7 +2,11 @@ class Service < ActiveRecord::Base
   belongs_to :certificate
 
   def properties
-    super || (self.properties = {})
+    # This can't be the simpliest way to do this
+    s = super
+    return s if s
+    self.properties = {}
+    super
   end
 
   def deployable?
