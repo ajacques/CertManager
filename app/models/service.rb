@@ -13,6 +13,20 @@ class Service < ActiveRecord::Base
     certificate.signed?
   end
 
+  def node_status
+    rkey = "SERVICE_#{id}_NODESTATUS"
+    redis = CertManager::Configuration.redis_client
+    redis.hgetall(rkey).map { |key, value|
+      json = JSON.parse value
+      node = Node.new key
+      node.hash = json['hash']
+      node.valid = json['valid']
+      node.exists = json['exists']
+      node.updated_at = Time.parse(json['update'])
+      node
+    }
+  end
+
   def status
     status = node_status
     good = status.count(&:valid?)

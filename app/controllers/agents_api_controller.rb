@@ -38,11 +38,11 @@ class AgentsApiController < ActionController::Base
   def report
     body = JSON.parse(request.body.read)
     # TODO: So insecure
-    body.each do |service_id|
+    body.each do |service_id, item|
       record = {
         update: Time.now,
         exists: true,
-        valid: true
+        valid: item['state'] == 'valid'
       }
       CertManager::Configuration.redis_client.hset("SERVICE_#{service_id}_NODESTATUS", agent.id, record.to_json)
     end
@@ -56,7 +56,7 @@ class AgentsApiController < ActionController::Base
     service_manifest = services.map do |service|
       {
         id: service.id,
-        url: agent_service_path(service),
+        url: agent_service_url(service),
         path: service.cert_path,
         after_action: [{
           type: :docker,

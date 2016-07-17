@@ -4,10 +4,6 @@ class Service::SoteriaAgent < Service
   service_prop :cert_path, :rotate_container_name
   validates :cert_path, presence: true
 
-  def node_status
-    {}
-  end
-
   def agents=(agents)
     super unless agents.any? && agents.first[1].is_a?(String)
     agents = agents.dup
@@ -16,7 +12,7 @@ class Service::SoteriaAgent < Service
       if agents.key?(id)
         agents.remove id
       else
-        member.delete!
+        member.delete
       end
     end
     agents.each do |id, _state|
