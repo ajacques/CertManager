@@ -8,6 +8,22 @@ class Service::SoteriaAgent < Service
     {}
   end
 
+  def agents=(agents)
+    super unless agents.any? && agents.first[1].is_a?(String)
+    agents = agents.dup
+    memberships.each do |member|
+      id = member.id.to_s
+      if agents.key?(id)
+        agents.remove id
+      else
+        member.delete!
+      end
+    end
+    agents.each do |id, _state|
+      memberships << AgentService.new(agent: Agent.find(id.to_i), service: self)
+    end
+  end
+
   def node_tags=(args)
     super args.split(' ')
   end

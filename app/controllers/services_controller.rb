@@ -20,7 +20,10 @@ class ServicesController < ApplicationController
 
   def update
     service = Service.find params[:id]
-    service.update_attributes! service_params
+    u_params = service_params
+    u_params[:agents] = params[:service][:agents]
+
+    service.update_attributes! u_params
     redirect_to service
   end
 
