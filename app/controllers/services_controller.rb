@@ -1,6 +1,7 @@
 class ServicesController < ApplicationController
   def index
     @services = Service.all.includes(:certificate)
+    @agents = Agent.all
   end
 
   def new

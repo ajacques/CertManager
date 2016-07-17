@@ -17,3 +17,15 @@
           %td= link_to service.certificate.subject.CN, id: service.id, action: :show
           %td= service.status
           %td Refresh
+%h2 Worker agents
+= link_to 'New agent', new_agent_path
+%table.table
+  %tbody
+    - @agents.each do |agent|
+      %tr{ class: ('bg-warning' if agent.last_sync_long_ago?) }
+        %td= agent.id
+        %td<
+          - if agent.last_synced_at
+            = agent.last_synced_at.in_time_zone(current_user.time_zone)
+          - else
+            Not synced
