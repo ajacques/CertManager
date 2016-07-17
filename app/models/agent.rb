@@ -1,5 +1,7 @@
 class Agent < ActiveRecord::Base
   has_many :tags, class_name: 'AgentTag'
+  has_many :services, through: :memberships
+  has_many :memberships, class_name: 'AgentService'
 
   scope :with_tag, -> (*tags) { joins(:tags).where(tags: { tag: tags }) }
 
@@ -13,10 +15,6 @@ class Agent < ActiveRecord::Base
 
   def synced!
     update_attributes! last_synced_at: Time.now.utc
-  end
-
-  def services
-    []
   end
 
   def self.register(key, token)

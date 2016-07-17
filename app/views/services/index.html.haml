@@ -30,6 +30,6 @@
         %td= agent.id
         %td<
           - if agent.last_synced_at
-            %abbr{ title: l(agent.last_synced_at.in_time_zone(current_user.time_zone), format: :month_day_time) }= time_ago_in_words(agent.last_synced_at)
+            %abbr{ title: l(agent.last_synced_at.in_time_zone(current_user.time_zone), format: :month_day_time) }= time_ago_in_words(agent.last_synced_at, include_seconds: true)
           - else
             Not synced
