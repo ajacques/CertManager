@@ -21,7 +21,7 @@ class ServicesController < ApplicationController
   def update
     service = Service.find params[:id]
     u_params = service_params
-    u_params[:agents] = params[:service][:agents]
+    u_params[:agent_ids] = params[:service][:agent_ids]
 
     service.update_attributes! u_params
     redirect_to service
@@ -45,7 +45,7 @@ class ServicesController < ApplicationController
     p = if params[:service][:type] == 'Service::Salt'
           params.require(:service).permit(:type, :certificate_id, :cert_path, :after_rotate, :node_group)
         elsif params[:service][:type] == 'Service::SoteriaAgent'
-          params.require(:service).permit(:type, :certificate_id, :cert_path, :node_tags, :rotate_container_name)
+          params.require(:service).permit(:type, :certificate_id, :cert_path, :rotate_container_name)
         end
     redirect_to Service.create! p
   end

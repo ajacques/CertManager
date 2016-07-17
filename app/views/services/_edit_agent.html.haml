@@ -5,5 +5,5 @@
   - Agent.find_each do |agent|
     %li
       %label
-        %input{ type: :checkbox, name: "service[agents][#{agent.id}]" }
+        %input{ type: :checkbox, name: "service[agent_ids][#{agent.id}]" }
         %span= agent.id

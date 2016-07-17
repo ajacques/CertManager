@@ -4,7 +4,6 @@ aside {
   background-color: $breadcrumb-bg;
   border-radius: 2px;
   padding: 2px;
-  width: 200px;
 }
 
 .aside-menu-list {
@@ -13,7 +12,6 @@ aside {
   padding-left: 0;
 
   > li > a {
-    padding-left: 6px;
+    padding-left: 8px;
   }
 }
-
