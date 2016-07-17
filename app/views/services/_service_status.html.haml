@@ -1,8 +1,9 @@
 %h3 Node Status
 - bad_count = @node_status.count { |n| !n.valid? }
 - if bad_count >= 1
-  %h3 There #{'is'.pluralize bad_count} currently #{pluralize bad_count, 'node'} that are inconsistent
-  %p= link_to 'Attempt to fix', deploy_service_path
+  %h3 There #{'is'.pluralize bad_count} currently inconsistent #{pluralize bad_count, 'node'}.
+  - if @service.deployable?
+    %p= link_to 'Attempt to fix', deploy_service_path
 %table
   %thead
     %tr

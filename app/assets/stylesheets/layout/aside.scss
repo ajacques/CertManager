@@ -1,0 +1,19 @@
+@import 'bootstrap/variables';
+
+aside {
+  background-color: $breadcrumb-bg;
+  border-radius: 2px;
+  padding: 2px;
+  width: 200px;
+}
+
+.aside-menu-list {
+  list-style-type: none;
+  margin-bottom: 0;
+  padding-left: 0;
+
+  > li > a {
+    padding-left: 6px;
+  }
+}
+

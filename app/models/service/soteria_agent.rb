@@ -4,8 +4,15 @@ class Service::SoteriaAgent < Service
   service_prop :cert_path, :rotate_container_name
   validates :cert_path, presence: true
 
-  def agents=(agents)
-    super unless agents.any? && agents.first[1].is_a?(String)
+  def agent_ids
+    agents.map(&:id)
+  end
+
+  def deployable?
+    false
+  end
+
+  def agent_ids=(agents)
     agents = agents.dup
     memberships.each do |member|
       id = member.id.to_s
