@@ -2,7 +2,7 @@ class Service < ActiveRecord::Base
   belongs_to :certificate
 
   def properties
-    # This can't be the simpliest way to do this
+    # This can't be the simplest way to do this
     s = super
     return s if s
     self.properties = {}

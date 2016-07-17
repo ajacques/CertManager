@@ -3,7 +3,7 @@ class PrivateKey extends CertificatePart {
     super({opts: opts, show_url: Routes.private_key_path});
   }
   static _from_expanded(blob) {
-    return resolved_promise(new PrivateKey(blob));
+    return new PrivateKey(blob);
   }
 
   static analyze(input) {

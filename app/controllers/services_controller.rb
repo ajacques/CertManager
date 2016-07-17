@@ -37,6 +37,7 @@ class ServicesController < ApplicationController
 
   def create
     # TODO: Clean this up
+    # TODO: For update, we shouldn't allow mutating the type or certificate_id
     p = if params[:service][:type] == 'Service::Salt'
           params.require(:service).permit(:type, :certificate_id, :cert_path, :after_rotate, :node_group)
         elsif params[:service][:type] == 'Service::SoteriaAgent'
