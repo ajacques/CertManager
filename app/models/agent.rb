@@ -7,6 +7,14 @@ class Agent < ActiveRecord::Base
     'docker.technowizardry.net/soteria-agent:1'
   end
 
+  def last_sync_long_ago?
+    last_synced_at.nil? || last_synced_at < 3.days.ago
+  end
+
+  def synced!
+    update_attributes! last_synced_at: Time.now.utc
+  end
+
   def services
     []
   end

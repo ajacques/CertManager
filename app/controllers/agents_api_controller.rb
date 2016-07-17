@@ -76,6 +76,7 @@ class AgentsApiController < ActionController::Base
       },
       services: service_manifest
     }
+    agent.synced!
     respond_to do |format|
       format.json {
         render json: response
