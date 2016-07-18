@@ -17,7 +17,6 @@ dockers
 .git
 Dockerfile
 
-*.yml
 *.json
 
 apparmor_policy
