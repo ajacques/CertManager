@@ -13,9 +13,11 @@ db/*.sqlite3
 # Development Environment
 dev
 dockers
-.idea
-.git
 Dockerfile
+.*
+*-compose.yml
+common.yml
+production.yml
 
 *.json
 
