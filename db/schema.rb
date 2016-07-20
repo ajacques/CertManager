@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   end
 
   create_table "agents", force: :cascade do |t|
-    t.string "access_token"
-    t.timestamp "last_synced_at"
+    t.string   "access_token"
+    t.datetime "last_synced_at"
   end
 
   create_table "agents_services", force: :cascade do |t|
@@ -79,9 +79,9 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.string   "chain_hash",                    null: false
     t.integer  "created_by_id",                 null: false
     t.integer  "updated_by_id",                 null: false
+    t.integer  "inflight_acme_sign_attempt_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "inflight_acme_sign_attempt_id"
   end
 
   create_table "csr_sans", force: :cascade do |t|
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   create_table "services", force: :cascade do |t|
     t.string   "type",           null: false
     t.integer  "certificate_id", null: false
-    t.json   "properties",     null: false
+    t.json     "properties",     null: false
     t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
@@ -211,8 +211,6 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "acme_sign_attempts", "certificates"
-  add_foreign_key "acme_sign_attempts", "private_keys"
   add_foreign_key "certificate_bundles_public_keys", "certificate_bundles", on_delete: :cascade
   add_foreign_key "certificate_bundles_public_keys", "public_keys"
   add_foreign_key "certificates", "private_keys"
