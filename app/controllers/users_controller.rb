@@ -1,14 +1,6 @@
 class UsersController < ApplicationController
   helper_method :validates?
 
-  def activate
-    @user = User.find params[:id]
-    @user.confirmation_token_confirmation = params[:token]
-    @message = flash.try(:[], :message)
-    @errors = flash.try(:[], :errors)
-    flash[:return_url] = url_for
-  end
-
   def update
     user = User.find params[:id]
     raise NotAuthorized unless current_user.can? :update_user, user
@@ -23,39 +15,6 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-  end
-
-  def new
-    @validations = flash[:validations]
-    data = flash.try(:[], :data)
-    @user = if data
-              User.create data
-            else
-              User.new
-            end
-  end
-
-  def create
-    user = User.new user_params
-    user.randomize_password
-    user.create_confirm_token
-    if user.invalid?
-      logger.info "Failed to save record #{user_params}. Validations failed #{user.errors.inspect}"
-      flash[:validations] = user.errors
-      flash[:data] = user.to_h
-      redirect_to action: :new
-      return
-    end
-    begin
-      user.save!
-    rescue ActiveRecord::RecordInvalid => err
-      logger.info "Failed to save record #{user_params} #{err}"
-      flash[:error] = err.to_s
-      redirect_to action: :new
-    else
-      UserMailer.new_account(user).deliver_now
-      redirect_to user
-    end
   end
 
   def show

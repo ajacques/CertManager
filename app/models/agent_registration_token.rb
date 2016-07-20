@@ -1,3 +1,5 @@
+# Enables generation of a signed token agents can use to authenticate
+# to this service
 class AgentRegistrationToken
   include ActiveModel::Validations
   attr_accessor :key

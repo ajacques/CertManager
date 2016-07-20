@@ -9,7 +9,5 @@ en:
     lost_password: Forgot your password?
     create: Create account
     mailers:
-      your_new_account: CertManager - Your Account
-      recover_account: CertManager - Recover Account
       test_mail_serve: CertManager - Test Email
     change_password: Change password
