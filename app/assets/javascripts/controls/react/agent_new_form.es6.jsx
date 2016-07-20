@@ -87,7 +87,7 @@ class AgentNewForm extends React.Component {
     this.upsertTagAt(index, {value: event.currentTarget.value});
   }
   registrationUrl() {
-    return window.location.host + Routes.agent_register_path(this.state.auth_token);
+    return `${window.location.protocol}//${window.location.host}${Routes.agent_register_path(this.state.auth_token)}`;
   }
   launchCommand() {
     if (!this.state.auth_token) {
