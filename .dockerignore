@@ -1,7 +1,5 @@
 # Rails stuff
 *.md
-.gitignore
-.reek
 
 test
 log/*

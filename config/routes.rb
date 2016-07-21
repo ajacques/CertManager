@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
   end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
-  resources :users, only: [:index, :show], constraints: {
+  resources :users, only: [:index, :show, :update], constraints: {
     id: /[0-9]+/
   }
   scope :search, controller: :search, as: :search do
