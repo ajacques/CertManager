@@ -104,12 +104,12 @@ class AgentNewForm extends React.Component {
     );
   }
   tagListElement() {
-    return <li>
+    return (<li>
       <h4>Tag</h4>
       <ul className="list-unstyled">
         {this.renderTagRow(0)}
       </ul>
-    </li>;
+    </li>);
   }
   render() {
     return (

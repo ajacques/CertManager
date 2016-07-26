@@ -86,7 +86,7 @@ Rails.application.routes.draw do
     get 'register/:token', action: :register, as: :register, constraints: {
       token: /([a-zA-Z0-9_\-_]+\.?){3}/
     }
-    get :bootstrap
+    post :bootstrap
     get :sync
     post :report
     get 'service/:id', action: :cert_chain, as: :service

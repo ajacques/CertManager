@@ -1,7 +1,11 @@
 en:
   errors:
     not_found:
-      title: Soteria | Not Found
+      title: Not Found
       message: Page not found
       links:
         go_home: Main Page
+    internal_server_error:
+      title: Internal Server Error
+    service_unavailable:
+      title: Service Unavailable

@@ -17,19 +17,4 @@
           %td= link_to service.certificate.subject.CN, id: service.id, action: :show
           %td= service.status
           %td Refresh
-%h2 Worker agents
-= link_to 'New agent', new_agent_path
-%table.table
-  %thead
-    %tr
-      %td Id
-      %td Last synchronized
-  %tbody
-    - @agents.each do |agent|
-      %tr{ class: ('bg-warning' if agent.last_sync_long_ago?) }
-        %td= agent.id
-        %td<
-          - if agent.last_synced_at
-            %abbr{ title: l(agent.last_synced_at.in_time_zone(current_user.time_zone), format: :month_day_time) }= time_ago_in_words(agent.last_synced_at, include_seconds: true)
-          - else
-            Not synced
+= render partial: 'agent_status_table'

@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Soteria | Internal Server Error
+    %title #{t 'brand'} | #{t 'errors.internal_server_error.title'}
     %meta{ charset: 'utf-8' }
     %meta{ content: 'IE=edge,chrome=1', http: { equiv: 'X-UA-Compatible' } }
     %meta{ content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport' }
@@ -12,7 +12,7 @@
       %nav.navbar.navbar-default
         .container
           .navbar-header
-            = link_to 'Soteria', root_path, class: 'navbar-brand'
+            = link_to t('brand'), root_path, class: 'navbar-brand'
       .content-pane.container
         %h1 Sorry! \#{ServiceName} is currently down.
         %p The server encountered an internal error
