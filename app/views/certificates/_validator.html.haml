@@ -2,7 +2,7 @@
   %tbody
     = cert_show_validate_result public_key.not_before < Time.now, 'Valid from' do
       - public_key.not_before.in_time_zone(current_user.time_zone).to_s :long
-    = cert_show_validate_result public_key.not_after > Time.now, 'Valid from' do
+    = cert_show_validate_result public_key.not_after > Time.now, 'Valid until' do
       - public_key.not_after.in_time_zone(current_user.time_zone).to_s :long
     - if public_key.bit_length
       = cert_show_validate_policy(:bit_length, public_key.bit_length, 'Bit Length') do

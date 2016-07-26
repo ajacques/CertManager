@@ -24,9 +24,3 @@ function debounce(func, wait, immediate, maxWait) {
     }
   };
 }
-
-function resolved_promise(result) {
-  return new Promise(function(resolve, reject) {
-    resolve(result);
-  });
-}
