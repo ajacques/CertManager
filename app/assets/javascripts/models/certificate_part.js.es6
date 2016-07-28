@@ -24,11 +24,11 @@ class CertificatePart {
   get_format(format) {
     var self = this;
     if (this.cache.hasOwnProperty(format)) {
-      return resolved_promise(this.cache[format]);
+      return this.cache[format];
     }
     var process = function (result) {
       self.cache[format] = result;
-      return resolved_promise(result);
+      return result;
     };
     return Ajax.get(this.show_url({id: this.opts.id}, {format: format}), {
       acceptType: 'text/plain'
@@ -53,7 +53,7 @@ class Certificate extends CertificatePart {
   }
 
   _from_chain(result) {
-    return resolved_promise(this);
+    return this;
   }
 
   getChain(format) {
