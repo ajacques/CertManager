@@ -2,11 +2,17 @@ module SecurityPolicy
   @config = nil
   class << self
     def load_file
+      return if @config && !Rails.env.development?
       @config = YAML.load_file("#{Rails.root}/config/security_policy.yml")
     end
 
+    def respond_to_missing?(method)
+      load_file
+      @config.key? method
+    end
+
     def method_missing(method, *_args, &_block)
-      load_file unless @config && !Rails.env.development?
+      load_file
       set = @config.send(:[], method.to_s)
       raise "No policy for '#{method}'" unless set.present?
       if set['type'] == 'array'

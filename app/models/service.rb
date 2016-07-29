@@ -30,7 +30,7 @@ class Service < ActiveRecord::Base
   def status
     status = node_status
     good = status.count(&:valid?)
-    if status.count == 0
+    if status.count.zero?
       'Unknown'
     elsif good == status.count
       "Running [#{good}/#{status.count}]"

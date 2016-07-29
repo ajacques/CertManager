@@ -5,6 +5,7 @@ module CertManager
 
     class << self
       def load_file
+        return if @config && Rails.env.production?
         yaml = YAML.load_file("#{Rails.root}/config/configuration.yml")
 
         @config = HashWithIndifferentAccess.new(yaml)
@@ -18,8 +19,13 @@ module CertManager
         Redis.new redis
       end
 
+      def respond_to_missing?(method)
+        load_file
+        @config.key? method
+      end
+
       def method_missing(method, *_args, &_block)
-        load_file unless @config && Rails.env.production?
+        load_file
         @config[method]
       end
     end
