@@ -1,11 +1,12 @@
 %h1= t 'views.agents.new.header'
+%noscript JavaScript is required for this page to function.
 - unless @signing_key
   .bg-danger= t 'views.agents.new.errors.no_signing_key'
 %div
-  %div Add an Agent to use the SoteriaAgent transport system to deploy certificates to machines
+  %div= t 'views.agents.new.sub_header'
   %ol
     %li
       %h4 Firewall/networking
-      %div Ensure that the container is permitted to access port 443.
+      %div= t 'views.agents.new.network_step.message', port: 443
       %code Container -> #{root_url}
     = react_component 'AgentNewForm', { imageName: @agent.image_name }, prerender: true, data: { react_mount: true, initialToken: 'foo' }

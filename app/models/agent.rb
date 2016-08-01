@@ -21,5 +21,7 @@ class Agent < ActiveRecord::Base
     _payload, _header = JWT.decode(token, key)
 
     Agent.create! access_token: SecureRandom.hex
+  rescue JWT::DecodeError
+    raise NotAuthorized
   end
 end

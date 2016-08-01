@@ -2,6 +2,9 @@ en:
   views:
     agents:
       new:
-        header: Agent agent
+        header: Create agent
+        sub_header: Add an Agent to use the SoteriaAgent transport system to deploy certificates to machines
+        network_step:
+          message: Ensure that the container is permitted to access port %{port}.
         errors:
           no_signing_key: No signing key configured.

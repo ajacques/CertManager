@@ -15,6 +15,8 @@ class AgentsApiController < ActionController::Base
     agent.save!
 
     render json: response
+  rescue NotAuthorized
+    render nothing: true, status: :forbidden
   end
 
   def bootstrap
