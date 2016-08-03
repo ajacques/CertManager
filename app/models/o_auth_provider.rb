@@ -15,6 +15,10 @@ class OAuthProvider < ActiveRecord::Base
     url.to_s
   end
 
+  def base_domain
+    URI(authorize_uri_base).host
+  end
+
   def fetch_token(params)
     props = {
       client_id: client_id,
