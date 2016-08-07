@@ -3,10 +3,16 @@ class SessionsController < ApplicationController
   public_endpoint
 
   def new
-    redirect_to root_path if current_user
+    if current_user
+      redirect_to root_path
+      return
+    end
     @error_message = flash[:error]
     @provider = OAuthProvider.github
-    redirect_to install_oauth_path unless @provider
+    unless @provider
+      redirect_to install_oauth_path
+      return
+    end
   end
 
   def create
