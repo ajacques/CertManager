@@ -2,11 +2,11 @@ FROM ubuntu:16.04
 
 ADD . /rails-app
 WORKDIR /rails-app
-RUN /usr/bin/apt-get update \
-  && /usr/bin/apt-get install --no-install-recommends -qy ruby ruby-dev make g++ libsqlite3-dev \
+RUN apt-get update \
+  && apt-get install --no-install-recommends -qy ruby ruby-dev make g++ libsqlite3-dev \
        libsqlite3-0 patch zlib1g-dev libpq5 libpq-dev libghc-zlib-dev \
   && gem install bundler --no-ri --no-rdoc \
-  && /usr/bin/env bundle install --without test development \
+  && env bundle install --without test development \
 
 # Generate compiled assets + manifests
   && RAILS_ENV=assets rake assets:precompile \
@@ -15,9 +15,9 @@ RUN /usr/bin/apt-get update \
   && rm -rf app/assets/* \
 
 # Uninstall development headers/packages
-  && /usr/bin/apt-get -qy purge libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch \
-  && /usr/bin/apt-get -qy autoremove \
-  && /bin/rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /var/lib/apt/lists/* tmp/* \
+  && apt-get -qy purge libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch \
+  && apt-get -qy autoremove \
+  && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /var/lib/apt/lists/* tmp/* \
 
 # Delete compiled assets since they're delivered out of band
   && find public -mindepth 1 -not -name 'assets' \
