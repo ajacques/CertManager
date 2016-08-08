@@ -12,7 +12,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Uglifier.new output: { comments: :none }
-  config.assets.css_compressor = Uglifier.new output: { comments: :none }
+  config.assets.css_compressor = :sass
 
   config.assets.precompile += %w(components.js)
 
