@@ -19,11 +19,6 @@ RUN apt-get update \
   && apt-get -qy autoremove \
   && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /var/lib/apt/lists/* tmp/* \
 
-# Delete compiled assets since they're delivered out of band
-  && find public -mindepth 1 -not -name 'assets' \
-    -not -name '.sprockets-manifest-*.json' \
-    -not -name 'components-*.js' -print -delete \
-
 # All files/folders should be owned by root by readable by www-data
   && find . -type f -print -exec chmod 444 {} \; \
   && find . -type d -print -exec chmod 555 {} \; \
