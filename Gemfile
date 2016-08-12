@@ -18,9 +18,6 @@ gem 'redis-session-store'
 gem 'r509' # SSL certificate utilities
 gem 'acme-client'
 
-# Temp: https://github.com/unixcharles/acme-client/issues/74
-gem 'json-jwt', '1.5.2'
-
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
 gem 'pg', platform: :ruby # Postgres
