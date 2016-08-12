@@ -17,6 +17,13 @@ Style/BlockDelimiters:
 Style/FormatString:
   EnforcedStyle: percent
 
+# Disabled because of
+# lib/app/configuration.rb
+# lib/app/instrumented_redis.rb
+# app/support/security_policy.rb
+MethodMissing:
+  Enabled: false
+
 # Disabling because I wasn't able to get a certain association to work
 Rails/HasAndBelongsToMany:
   Enabled: false
