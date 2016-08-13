@@ -9,10 +9,8 @@ class SessionsController < ApplicationController
     end
     @error_message = flash[:error]
     @provider = OAuthProvider.github
-    unless @provider
-      redirect_to install_oauth_path
-      return
-    end
+
+    redirect_to install_oauth_path unless @provider
   end
 
   def create
