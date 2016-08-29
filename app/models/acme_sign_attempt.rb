@@ -19,7 +19,7 @@ class AcmeSignAttempt < ActiveRecord::Base
   end
 
   def acme_client
-    Acme::Client.new private_key: private_key, endpoint: acme_endpoint
+    Acme::Client.new private_key: private_key.to_openssl, endpoint: acme_endpoint
   end
 
   def fetch_signed
