@@ -39,7 +39,7 @@ nginx:
   links:
     - 'browsersync:web'
   volumes:
-    - dockers/nginx:/etc/nginx/conf.d
+    - ./dockers/nginx:/etc/nginx/conf.d:ro
     - public:/rails-app/public:ro
   environment:
     VIRTUAL_HOST: certmgr.devvm
