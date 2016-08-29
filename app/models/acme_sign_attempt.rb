@@ -23,13 +23,12 @@ class AcmeSignAttempt < ActiveRecord::Base
   end
 
   def fetch_signed
-    signed = acme_client.new_certificate certificate.csr
-    set = ImportSet.from_array signed.x509_fullchain
-    set.import
-
-    self.imported_key = set.public_keys.first
-
-    imported_key
+    signed = acme_client.new_certificate certificate.generate_csr
+    public_key = PublicKey.import signed.to_pem
+    certificate.public_key = public_key
+    public_key.private_key = certificate.private_key
+    self.imported_key = public_key
+    public_key
   end
 
   def self.create_for_certificate(certificate, settings)
