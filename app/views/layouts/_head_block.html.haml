@@ -7,6 +7,7 @@
   %meta{ charset: 'utf-8' }
   %meta{ content: 'IE=edge', http: { equiv: 'X-UA-Compatible' } }
   %meta{ content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport' }
+  %meta{ content: I18n.locale, http: { equiv: 'Content-Language' } }
   - if user_signed_in?
     %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
   = stylesheet_link_tag    'application', media: 'all'
