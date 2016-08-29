@@ -6,15 +6,10 @@ class AcmeImportJob < ActiveJob::Base
     attempt.last_checked_at = Time.now
     attempt.last_status = 'working'
     refresh_all
-    if attempt.challenges.empty?
+    if attempt.challenges.empty? || any_failed?
       attempt.last_status = 'failed'
-      return
-    end
-    if any_failed?
-      attempt.last_status = 'failed'
-      return
-    end
-    if all_succeeded?
+      attempt.certificate.inflight_acme_sign_attempt = nil
+    elsif all_succeeded?
       attempt.last_status = 'valid'
       import_cert
     else
