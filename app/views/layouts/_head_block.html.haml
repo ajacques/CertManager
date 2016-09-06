@@ -1,9 +1,5 @@
 %head
-  %title<
-    - if content_for? :title
-      #{yield :title} | #{t 'brand'}
-    - else
-      = t 'brand'
+  %title= page_title
   %meta{ charset: 'utf-8' }
   %meta{ content: 'IE=edge', http: { equiv: 'X-UA-Compatible' } }
   %meta{ content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0', name: 'viewport' }

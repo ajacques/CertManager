@@ -1,5 +1,4 @@
-- content_for :title do
-  = @cert.subject
+- page_title @cert.subject
 %ol.breadcrumb
   = cert_chain_tree(@cert) do |cert|
     - if cert == @cert || cert.stub?

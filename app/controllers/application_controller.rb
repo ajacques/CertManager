@@ -8,10 +8,21 @@ class ApplicationController < ActionController::Base
   helper_method :user_signed_in?
   helper_method :current_user
   helper_method :model_id
+  helper_method :page_title
   include RequestLogging
 
   def self.public_endpoint
     skip_before_action :require_login
+  end
+
+  def page_title(title=nil)
+    if title
+      @title = title
+    elsif @title
+      "#{@title} | #{t 'brand'}"
+    else
+      t 'brand'
+    end
   end
 
   protected
