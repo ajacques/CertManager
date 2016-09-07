@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     skip_before_action :require_login
   end
 
-  def page_title(title=nil)
+  def page_title(title = nil)
     if title
       @title = title
     elsif @title
