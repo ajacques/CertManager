@@ -9,7 +9,7 @@ module OauthAuthentication
 
   module ClassMethods
     def authenticate_with_github_user(user)
-      User.find_by('email = ? OR github_username = ?', user['email'], user['login'])
+      User.find_by('github_userid = ?', user['id'])
     end
   end
 

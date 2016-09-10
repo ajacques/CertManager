@@ -66,6 +66,7 @@ class OAuthProvider < ActiveRecord::Base
       email: user_info['email'],
       github_access_token: access_token,
       github_username: user_info['login'],
+      github_userid: user_info['id'],
       can_login: true
     }
     user = User.new user_props

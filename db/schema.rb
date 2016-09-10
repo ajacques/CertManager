@@ -190,7 +190,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.string   "time_zone",                     default: "Europe/London", null: false
     t.boolean  "lets_encrypt_accepted_terms",   default: false,           null: false
     t.string   "lets_encrypt_registration_uri"
-    t.string   "github_username"
+    t.integer  "github_userid"
     t.string   "github_access_token"
     t.string   "github_scope"
     t.datetime "created_at",                                              null: false
