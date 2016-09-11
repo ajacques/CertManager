@@ -14,6 +14,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :lets_encrypt_registration_uri, null: true
 
       # GitHub authentication
+      t.string :github_username
       t.integer :github_userid
       t.string :github_access_token
       t.string :github_scope

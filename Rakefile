@@ -32,3 +32,5 @@ if Rails.env.test? || Rails.env.development?
 
   task default: [:test, :reek, :rubocop, :scss_lint, :haml_lint]
 end
+
+task release: ['assets:clobber', 'assets:precompile']

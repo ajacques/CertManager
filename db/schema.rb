@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.boolean  "lets_encrypt_accepted_terms",   default: false,           null: false
     t.string   "lets_encrypt_registration_uri"
     t.integer  "github_userid"
+    t.string   "github_username"
     t.string   "github_access_token"
     t.string   "github_scope"
     t.datetime "created_at",                                              null: false

@@ -42,10 +42,13 @@ class AgentsApiController < ActionController::Base
     # TODO: So insecure
     body.each do |service_id, item|
       record = {
-        update: Time.now,
+        hostname: item['hostname'],
+        updated_at: Time.now,
         exists: true,
-        valid: item['state'] == 'valid'
+        valid: item['state'] == 'valid',
+        status: item['state']
       }
+      record[:reason] = item['reason'] if item.key? 'reason'
       CertManager::Configuration.redis_client.hset("SERVICE_#{service_id}_NODESTATUS", agent.id, record.to_json)
     end
 

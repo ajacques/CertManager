@@ -9,7 +9,7 @@ RUN apt-get update \
   && env bundle install --without test development \
 
 # Generate compiled assets + manifests
-  && RAILS_ENV=assets rake assets:precompile \
+  && RAILS_ENV=assets rake release \
 
 # Remove the source assets because we don't need them anymore
   && rm -rf app/assets/* \

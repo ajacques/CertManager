@@ -1,0 +1,11 @@
+en:
+  views:
+    services:
+      show:
+        table_headers:
+          hostname: Hostname
+          status: Status
+          last_checked: Last checked
+        statuses:
+          failed: Failed
+          valid: Valid (Deployed)
