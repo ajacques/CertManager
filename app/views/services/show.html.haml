@@ -2,10 +2,6 @@
   %li= link_to 'Services', action: :index
   %li.active= @service.certificate
 - page_title "#{@service.certificate} Service"
-.col-xs-10
-  %h1= @service.certificate
-  = render partial: 'service_status'
-
 %aside.pull-right.col-xs-2
   %ul.aside-menu-list
     %li= link_to 'Edit', edit_service_path
@@ -14,3 +10,6 @@
     %li
       = form_tag service_path, method: :delete do
         = submit_tag 'Delete', class: 'btn-link'
+
+%h1= @service.certificate
+= render partial: 'service_status'

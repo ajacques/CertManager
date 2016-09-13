@@ -24,7 +24,7 @@ module ApplicationHelper
     relative_time = time_ago_in_words(time, include_seconds: true)
     actual_time = l(time.in_time_zone(current_user.time_zone), format: :month_day_time)
     capture_haml do
-      haml_tag :abbr, relative_time, { title: actual_time }
+      haml_tag :abbr, relative_time, title: actual_time
     end
   end
 end

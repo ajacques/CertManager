@@ -12,6 +12,24 @@ class Service::SoteriaAgent < Service
     false
   end
 
+  def as_agent_manifest
+    map = {
+      id: id,
+      path: cert_path,
+      after_action: [],
+      hash: {
+        algorithm: :sha256,
+        value: certificate.chain_hash
+      }
+    }
+
+    map[:after_action] << {
+      type: :docker,
+      container_name: rotate_container_name
+    } if rotate_container_name
+    map
+  end
+
   def agent_ids=(agents)
     agents = agents.dup
     memberships.each do |member|

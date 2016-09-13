@@ -59,19 +59,9 @@ class AgentsApiController < ActionController::Base
     services = agent.services
 
     service_manifest = services.map do |service|
-      {
-        id: service.id,
-        url: agent_service_url(service),
-        path: service.cert_path,
-        after_action: [{
-          type: :docker,
-          container_name: 'nginx'
-        }],
-        hash: {
-          algorithm: :sha256,
-          value: service.certificate.chain_hash
-        }
-      }
+      manifest = service.as_agent_manifest
+      manifest[:url] = agent_service_url(service)
+      manifest
     end
 
     response = {
