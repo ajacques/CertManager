@@ -1,5 +1,5 @@
 !!!
-%html
+%html{ lang: I18n.locale }
   = render partial: 'layouts/head_block'
   %body{ data: { page: [controller_name.capitalize, action_name.capitalize].join, id: model_id } }
     .page-wrap

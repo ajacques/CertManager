@@ -16,8 +16,6 @@
         - color = 'bg-danger'
       - elsif node.status.valid?
         - color = 'bg-success'
-      - else
-        - color = nil
       %tr{ class: color }
         %td= node.hostname
         %td
