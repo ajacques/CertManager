@@ -26,6 +26,7 @@ gem 'rest-client'
 
 gem 'logstash-logger'
 gem 'request_store'
+gem 'secure_headers'
 
 gem 'jwt'
 
