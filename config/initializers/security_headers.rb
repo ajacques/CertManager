@@ -1,3 +1,4 @@
+# rubocop:disable PercentStringArray
 SecureHeaders::Configuration.default do |config|
   def asset_src
     if Rails.env.production? && ENV['CERT_ASSET_CDN']
