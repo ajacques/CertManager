@@ -3,30 +3,12 @@ class SessionsController < ApplicationController
   public_endpoint
 
   def new
-    if current_user
-      redirect_to root_path
-      return
-    end
+    return redirect_to root_path if current_user
+
     @error_message = flash[:error]
     @provider = OAuthProvider.github
 
     redirect_to install_oauth_path unless @provider
-  end
-
-  def create
-    email = params[:email]
-    user = User.authenticate!(email, params[:password])
-    unless user
-      logger.info "#{email} did not match any known users"
-      flash[:username] = email
-      flash[:error] = :no_match
-      redirect_to action: :new
-      return
-    end
-
-    url = session[:return_url] || root_path
-    assume_user(user)
-    redirect_to url
   end
 
   def destroy

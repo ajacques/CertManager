@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   include OauthAuthentication
   attr_accessor :password, :password_confirmation, :confirmation_token_confirmation
   attr_reader :reset_password_token_confirmation
-  validates :first_name, :last_name, presence: true
+  validates :first_name, presence: true
   validates :email, email: true, uniqueness: true
   validates :password, length: { within: 6..128 }, confirmation: true, allow_nil: true
   validates :confirmation_token, confirmation: true

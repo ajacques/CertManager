@@ -49,15 +49,20 @@ class OAuthProvider < ActiveRecord::Base
     user_info = JSON.parse(RestClient.get('https://api.github.com/user?access_token=' + access_token, accept: :json))
     user = User.authenticate_with_github_user(user_info)
 
-    user ||= register_account(user_info, access_token)
-    user.github_access_token = access_token
-    user.save!
+    user ||= register_account(user_info)
+    refresh_account(user, user_info, access_token)
     user
   end
 
   private
 
-  def register_account(user_info, access_token)
+  def register_account(user_info)
+    user = User.new can_login: true, github_userid: user_info['id']
+    user.randomize_password
+    user
+  end
+
+  def refresh_account(user, user_info, access_token)
     # TODO: This won't split all names correctly.
     name_split_attempt = user_info['name'].split(' ')
     user_props = {
@@ -65,12 +70,8 @@ class OAuthProvider < ActiveRecord::Base
       last_name: name_split_attempt[1],
       email: user_info['email'],
       github_access_token: access_token,
-      github_username: user_info['login'],
-      github_userid: user_info['id'],
-      can_login: true
+      github_username: user_info['login']
     }
-    user = User.new user_props
-    user.randomize_password
-    user
+    user.update_attributes user_props
   end
 end
