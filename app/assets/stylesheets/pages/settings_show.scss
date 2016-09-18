@@ -1,0 +1,6 @@
+@import 'bootstrap/variables';
+
+.well.problem {
+  background-color: mix($well-bg, $brand-danger, 95%);
+  border: solid thin mix($well-border, $brand-danger, 75%);
+}

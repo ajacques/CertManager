@@ -1,8 +1,10 @@
 %h3 Settings
-.well.well-large
+.well.well-large{ class: if params[:problem_group] == 'acme' then 'problem' end }
   %h4 Let's Encrypt
+  - if params[:problem_group] == 'acme' && params.key?('message')
+    %p.text-danger= t "views.settings.show.messages.acme.#{params[:message]}"
   = bootstrap_form_for Settings::LetsEncrypt.new, url: url_for do |f|
-    = f.select :private_key_id, @signing_keys
+    = f.select :private_key_id, [['None Selected', 'nil']] + @signing_keys
     = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint'), description: 'test'
     = f.submit t('form_controls.save'), class: 'btn btn-default'
 

@@ -1,7 +1,7 @@
 - unless @attempt.status_complete?
   - content_for :head do
     %meta{ content: 5, http: { equiv: 'refresh' } }
-- page_title t 'views.lets_encrypt.import_status.page_title', { cert: @attempt.certificate.to_s }
+- page_title t 'views.lets_encrypt.import_status.page_title', cert: @attempt.certificate.to_s
 %ol.breadcrumb
   %li= link_to @attempt.certificate, @attempt.certificate
   %li.active= t 'views.lets_encrypt.import_status.header'

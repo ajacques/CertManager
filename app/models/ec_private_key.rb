@@ -20,8 +20,10 @@ class ECPrivateKey < PrivateKey
   end
 
   def public_key
-    opub = to_openssl.public_key.group.to_der
-    ECPublicKey.new private_key: self, curve_name: curve_name, body: opub
+    # TODO: This should return a model instance
+    # We're stuck because PublicKey currently models a Certificate and a Certificate models a CertificateRecord
+    to_openssl.public_key.group
+    # ECPublicKey.new private_key: self, curve_name: curve_name, body: opub
   end
 
   def create_public_key

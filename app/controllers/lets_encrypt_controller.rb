@@ -1,17 +1,23 @@
-require 'acme/client'
-
 class LetsEncryptController < ApplicationController
+  attr_reader :acme_settings
+  append_before_action :load_settings
   skip_before_action :require_login, only: [:validate_token]
+
   # Specification: https://letsencrypt.github.io/acme-spec/
   def index
+    unless acme_settings.private_key?
+      session[:app_redirect_to] = lets_encrypt_certificate_path
+      redirect_to settings_path(problem_group: :acme, message: :missing_key)
+      return
+    end
+
     redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
   end
 
   def prove_ownership
     certificate = Certificate.find params[:id]
     @csr = certificate.to_csr
-    settings = Settings::LetsEncrypt.new
-    @attempt = AcmeSignAttempt.create_for_certificate(certificate, settings)
+    @attempt = AcmeSignAttempt.create_for_certificate(certificate, acme_settings)
     certificate.save!
   rescue Acme::Client::Error::Unauthorized
     current_user.lets_encrypt_accepted_terms = false
@@ -59,6 +65,10 @@ class LetsEncryptController < ApplicationController
 
   private
 
+  def load_settings
+    @acme_settings = Settings::LetsEncrypt.new
+  end
+
   def invalid_challenge(challenge)
     challenge.delete!
     redirect_to
@@ -70,9 +80,5 @@ class LetsEncryptController < ApplicationController
 
   def acme_client
     @acme_client ||= Acme::Client.new private_key: acme_settings.private_key.to_openssl, endpoint: acme_settings.endpoint
-  end
-
-  def acme_settings
-    Settings::LetsEncrypt.new
   end
 end

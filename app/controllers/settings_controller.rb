@@ -14,7 +14,12 @@ class SettingsController < ApplicationController
     set.assign_attributes params.permit(settings_email_server: [:server, :port, :from_address])[:settings_email_server]
     set.save!
 
-    redirect_to settings_path
+    if session.key? :app_redirect_to
+      redirect_to session[:app_redirect_to]
+      session.delete :app_redirect_to
+    else
+      redirect_to settings_path
+    end
   end
 
   def validate_mail_server

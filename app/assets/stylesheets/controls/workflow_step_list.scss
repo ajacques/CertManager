@@ -1,5 +1,9 @@
+$border-color: #808080;
+$success-color: #d6ffc1;
+$progress-color: #ffffab;
+
 .workflow-step-list {
-  border: solid thin grey;
+  border: solid thin $border-color;
   display: table;
   padding-left: 0;
   table-layout: fixed;
@@ -10,11 +14,11 @@
     text-align: center;
 
     &.done {
-      background-color: #d6ffc1;
+      background-color: $success-color;
     }
 
     &.progress {
-      background-color: #ffffab;
+      background-color: $progress-color;
     }
   }
 }

@@ -1,0 +1,7 @@
+en:
+  views:
+    settings:
+      show:
+        messages:
+          acme:
+            missing_key: Please specify a private key to use for communicating with the ACME endpoint.
