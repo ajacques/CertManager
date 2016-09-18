@@ -1,11 +1,18 @@
 en:
   views:
     lets_encrypt:
+      workflow_steps:
+        website_setup: Website Setup
+        verify: Verification/Import
+        finish: Deployment
       import_status:
+        page_title: 'ACME Import - %{cert}'
         header: Import Status
         table:
           domain: Domain
           acme_status: ACME Verification Status
           verify_url: URL
+          help:
+            acme_status: Shows the verification status as reported by the ACME verification system itself.
         status:
           last_checked: 'Last checked: %{time} (%{ago} ago)'

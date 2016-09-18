@@ -15,9 +15,10 @@ class CertificateSignRequest < ActiveRecord::Base
 
   def self.from_cert(cert)
     csr = new
+    csr.certificate = cert
     csr.subject = cert.subject
     csr.private_key = cert.private_key
-    csr.subject_alternate_names = cert.public_key.subject_alternate_names
+    csr.subject_alternate_names = (cert.public_key || cert.csr).subject_alternate_names
     csr
   end
 
@@ -38,6 +39,8 @@ class CertificateSignRequest < ActiveRecord::Base
     }
     self._subject_alternate_names = new
   end
+
+  delegate :to_text, to: :to_openssl
 
   def to_openssl
     csr = OpenSSL::X509::Request.new

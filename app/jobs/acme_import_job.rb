@@ -17,7 +17,7 @@ class AcmeImportJob < ActiveJob::Base
     end
   rescue StandardError => err
     attempt.last_status = 'errored'
-    attempt.status_message = err.to_s
+    attempt.status_message = "#{err}\n#{err.backtrace.first}"
     raise err
   ensure
     attempt.save!

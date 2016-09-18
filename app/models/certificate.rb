@@ -64,7 +64,7 @@ class Certificate < ActiveRecord::Base
   end
 
   def generate_csr
-    self.csr = CertificateSignRequest.from_cert self
+    CertificateSignRequest.from_cert self
   end
 
   def public_keys

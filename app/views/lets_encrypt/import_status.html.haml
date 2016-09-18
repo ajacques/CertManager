@@ -1,6 +1,14 @@
 - unless @attempt.status_complete?
   - content_for :head do
     %meta{ content: 5, http: { equiv: 'refresh' } }
+- page_title t 'views.lets_encrypt.import_status.page_title', { cert: @attempt.certificate.to_s }
+%ol.breadcrumb
+  %li= link_to @attempt.certificate, @attempt.certificate
+  %li.active= t 'views.lets_encrypt.import_status.header'
+%ol.workflow-step-list
+  %li.done= t 'views.lets_encrypt.workflow_steps.website_setup'
+  %li{ class: @attempt.status_complete? ? 'done' : 'progress' }= t 'views.lets_encrypt.workflow_steps.verify'
+  %li= t 'views.lets_encrypt.workflow_steps.finish'
 %h1= t 'views.lets_encrypt.import_status.header'
 %div
   %span Status:
@@ -25,7 +33,8 @@
     %tr
       %td= t 'views.lets_encrypt.import_status.table.domain'
       %td Verification URL
-      %td= t 'views.lets_encrypt.import_status.table.acme_status'
+      %td
+        %abbr{ title: t('views.lets_encrypt.import_status.table.help.acme_status') }= t 'views.lets_encrypt.import_status.table.acme_status'
   %tbody
   - @attempt.challenges.each do |challenge|
     %tr{ class: acme_status_as_css_class(challenge.status) }

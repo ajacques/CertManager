@@ -1,6 +1,5 @@
 class ECPublicKey < PublicKey
   validates :curve_name, presence: true
-  before_save :update_fingerprint
 
   def ec?
     true
@@ -18,7 +17,7 @@ class ECPublicKey < PublicKey
     self.curve_name = r509.curve_name
   end
 
-  private
+  protected
 
   def update_fingerprint
     self.fingerprint = fingerprint_hash_algorithm.hexdigest(to_openssl.public_key.public_key.to_bn.to_s)

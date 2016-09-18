@@ -28,6 +28,11 @@ class PublicKey < ActiveRecord::Base
     body
   end
 
+  def body=(value)
+    super
+    update_fingerprint
+  end
+
   def rsa?
     false
   end
@@ -133,6 +138,9 @@ class PublicKey < ActiveRecord::Base
   end
 
   protected
+
+  def update_fingerprint
+  end
 
   def fingerprint_hash_algorithm
     Digest::SHA256

@@ -1,0 +1,20 @@
+.workflow-step-list {
+  border: solid thin grey;
+  display: table;
+  padding-left: 0;
+  table-layout: fixed;
+  width: 100%;
+
+  > li {
+    display: table-cell;
+    text-align: center;
+
+    &.done {
+      background-color: #d6ffc1;
+    }
+
+    &.progress {
+      background-color: #ffffab;
+    }
+  }
+}

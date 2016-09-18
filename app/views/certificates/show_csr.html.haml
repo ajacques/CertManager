@@ -1,4 +1,6 @@
 %h1= @cert
+- if @cert.inflight_acme_sign_attempt
+  = render partial: 'certificates/acme/import_inprogress_banner', locals: { cert: @cert }
 %p Unsigned certificate. This certificate has no issuer.
 %h4 Sign this certificate
 %ul

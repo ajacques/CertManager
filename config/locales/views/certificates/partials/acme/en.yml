@@ -1,0 +1,7 @@
+en:
+  views:
+    certificates:
+      partials:
+        acme_inprogress_banner:
+          message: We're currently attempting to sign this certificate using an ACME provider
+          status_link: Follow the status

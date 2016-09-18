@@ -28,7 +28,7 @@ class ImportSet
 
   def promote_all_to_certificates
     public_keys.each do |pub|
-      cert = Certificate.for_public_key(pub)
+      cert = Certificate.for_public_key(pub).first
       next unless cert
       cert.public_key = pub
       cert.save!

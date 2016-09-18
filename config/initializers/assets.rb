@@ -7,7 +7,7 @@ Rails.application.config.assets.configure do |assets|
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
   # config.assets.precompile += %w( search.js )
 
-  assets.register_mime_type 'text/html', extensions: ['.html']
+  assets.register_mime_type 'text/html', extensions: ['.haml']
   assets.register_engine '.haml', Tilt::HamlTemplate
 
   assets.context_class.class_eval do
