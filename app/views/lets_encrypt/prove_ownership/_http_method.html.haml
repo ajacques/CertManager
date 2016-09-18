@@ -1,0 +1,13 @@
+.panel.panel-default
+  .panel-heading HTTP method
+  .panel-body
+    %p This method will require access to the web servers for:
+    %ul
+      - @csr.domain_names.each do |domain|
+        %li= domain
+    = render partial: 'lets_encrypt/prove_ownership/http_method_auto'
+    = render partial: 'lets_encrypt/prove_ownership/http_method_manual'
+    %h3 Complete ownership verification
+    %p After the above files have been created, you can click below.
+    = form_tag action: :start_import do
+      = submit_tag 'Attempt verification'

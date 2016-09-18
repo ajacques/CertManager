@@ -1,0 +1,9 @@
+en:
+  models:
+    acme_sign_attempt:
+      status:
+        unchecked: Waiting
+        working: In Progress
+        errored: Errored
+        failed: Failed
+        imported: Imported

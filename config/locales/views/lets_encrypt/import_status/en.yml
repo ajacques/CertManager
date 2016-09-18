@@ -6,7 +6,7 @@ en:
         verify: Verification/Import
         finish: Deployment
       import_status:
-        page_title: 'ACME Import - %{cert}'
+        page_title: '%{status} - %{cert} - ACME Import'
         header: Import Status
         table:
           domain: Domain
@@ -15,4 +15,5 @@ en:
           help:
             acme_status: Shows the verification status as reported by the ACME verification system itself.
         status:
-          last_checked: 'Last checked: %{time} (%{ago} ago)'
+          last_checked: 'Last checked: %{inline_date}'
+          started_at: 'Started: %{inline_date}'

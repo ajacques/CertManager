@@ -22,10 +22,6 @@ en:
   operations:
     new: New
     import: Import
-  time:
-    formats:
-      month_day_time: '%B %e at %l:%M %p'
-      lifetime: '%B %e, %Y'
   settings:
     lets_encrypt_endpoint: Server endpoint
   form_controls:

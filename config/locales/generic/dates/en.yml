@@ -1,0 +1,7 @@
+en:
+  time:
+    composed:
+      inline_string: '%{time} (%{ago} ago)'
+    formats:
+      month_day_time: '%B %e at %l:%M %p'
+      lifetime: '%B %e, %Y'

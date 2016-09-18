@@ -1,0 +1,6 @@
+en:
+  views:
+    lets_encrypt:
+      prove_ownership:
+        header: Prove domain ownership
+        sub_header: ACME needs to verify that you have ownership of the domains on the certificate.

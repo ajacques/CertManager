@@ -1,0 +1,17 @@
+%h3 Or manually create verification files
+%p Use this approach if you do not wish to modify request routing for your website.
+%table.table.table-striped
+  %thead
+    %tr
+      %td File Name
+      %td Contents
+      %td
+        %abbr{ title: t('views.lets_encrypt.import_status.table.help.acme_status') }= t 'views.lets_encrypt.import_status.table.acme_status'
+  %tbody
+    - @attempt.challenges.each do |challenge|
+      %tr
+        %td
+          %input.form-control{ type: :text, value: challenge.full_path, readonly: true }
+        %td
+          %input.form-control{ type: :text, value: challenge.token_value, readonly: true }
+        %td= challenge.status

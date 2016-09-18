@@ -1,7 +1,8 @@
 - unless @attempt.status_complete?
   - content_for :head do
     %meta{ content: 5, http: { equiv: 'refresh' } }
-- page_title t 'views.lets_encrypt.import_status.page_title', cert: @attempt.certificate.to_s
+- status = t "models.acme_sign_attempt.status.#{@attempt.status}"
+- page_title t 'views.lets_encrypt.import_status.page_title', status: status, cert: @attempt.certificate.to_s
 %ol.breadcrumb
   %li= link_to @attempt.certificate, @attempt.certificate
   %li.active= t 'views.lets_encrypt.import_status.header'
@@ -20,13 +21,11 @@
     %span.text-danger Failed
   - else
     %span.text-warn= @attempt.status
+%div= t 'views.lets_encrypt.import_status.status.started_at', inline_date: inline_ago_string(@attempt.created_at, format: :month_day_time)
 - if @attempt.status_message
   %div= @attempt.status_message
 - if @attempt.last_checked_at
-  %div
-    - tz_adjusted = @attempt.last_checked_at.in_time_zone(current_user.time_zone).to_s(:long)
-    - ago = time_ago_in_words(@attempt.last_checked_at)
-    %span= t 'views.lets_encrypt.import_status.status.last_checked', time: tz_adjusted, ago: ago
+  %div= t 'views.lets_encrypt.import_status.status.last_checked', inline_date: inline_ago_string(@attempt.last_checked_at, format: :month_day_time)
 %h3 Domains
 %table.table.table-striped
   %tbody

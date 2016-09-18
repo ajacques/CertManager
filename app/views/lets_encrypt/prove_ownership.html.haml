@@ -1,38 +1,4 @@
-%h1 Prove domain ownership
-.col-md-6.center-block
-  .panel.panel-default
-    .panel-heading HTTP method
-    .panel-body
-      %p This method will require access to the web servers for:
-      %ul
-        - @csr.domain_names.each do |domain|
-          %li= domain
-      %h3 Create the files:
-      %table
-        %thead
-          %tr
-            %td File Name
-            %td Contents
-            %td Status
-        %tbody
-          - @attempt.challenges.each do |challenge|
-            %tr
-              %td
-                %input{ type: :text, value: challenge.full_path, readonly: true }
-              %td
-                %input{ type: :text, value: challenge.token_value, readonly: true }
-              %td
-                - unless challenge.status.unchecked?
-                  %span= challenge.status
-      %h3 Or automatically authorize
-      %p This will proxy requests for ACME certificates to CertManager to automatically handle everything.
-      %h4 NGINX Example:
-      %pre
-        :preserve
-          location /.well-known/acme-challenge {
-            rewrite ^/.well-known/acme-challenge/(.*)$ /acme-challenge-responder/$1 break;
-            proxy_set_header X-Original-Host $host;
-            proxy_pass http://#{request.host}:#{request.port};
-          }
-      = form_tag action: :start_import do
-        = submit_tag 'Attempt verification'
+.col-md-8.center-block
+  %h1= t('views.lets_encrypt.prove_ownership.header')
+  %p= t('views.lets_encrypt.prove_ownership.sub_header')
+  = render partial: 'lets_encrypt/prove_ownership/http_method'
