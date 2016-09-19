@@ -1,5 +1,3 @@
-require 'resque/server'
-
 Rails.application.routes.draw do
   root 'overview#index'
   get 'ping' => 'health_check#ping'
@@ -97,5 +95,5 @@ Rails.application.routes.draw do
   end
   get 'acme-challenge-responder/:token' => 'lets_encrypt#validate_token'
 
-  mount Resque::Server.new, at: '/resque'
+  # mount Resque::Server.new, at: '/resque'
 end
