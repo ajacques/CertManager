@@ -5,7 +5,7 @@ class CertificatePart {
     this.show_url = opts.show_url;
 
     if (this.opts.hasOwnProperty('pem')) {
-      this.cache['pem'] = this.opts.pem;
+      this.cache.pem = this.opts.pem;
     }
 
     this.subject = this.opts.subject;
@@ -24,7 +24,7 @@ class CertificatePart {
   get_format(format) {
     var self = this;
     if (this.cache.hasOwnProperty(format)) {
-      return this.cache[format];
+      return new Promise(resolve => resolve(this.cache[format]));
     }
     var process = function (result) {
       self.cache[format] = result;
@@ -32,7 +32,7 @@ class CertificatePart {
     };
     return Ajax.get(this.show_url({id: this.opts.id}, {format: format}), {
       acceptType: 'text/plain'
-    }).success(process);
+    }).then(process);
   }
 
   static from_string(string) {

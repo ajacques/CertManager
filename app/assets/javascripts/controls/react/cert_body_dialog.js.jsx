@@ -90,9 +90,9 @@
       return self[model.type].find(model.id);
     },
     openWindow: function(event) {
+      event.preventDefault();
       var elem = ReactDOM.render(<CertBodyDialog model={this._getModel()} onClose={this.close} />, modalPoint);
       elem.changeFormat(elem.state.format);
-      event.preventDefault();
       return false;
     },
     render: function() {

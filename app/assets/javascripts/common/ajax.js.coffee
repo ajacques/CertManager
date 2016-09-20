@@ -15,10 +15,13 @@ GetCsrfToken = () -> document.querySelector('meta[name="csrf-token"]').content
       request.send(JSON.stringify(opts.data))
     )
   get:(url, opts) ->
-    params = Object.keys(opts.data).map((key) -> encodeURIComponent(key) + '=' + encodeURIComponent(opts.data[key]))
+    if (opts.data)
+      params = '?' + Object.keys(opts.data).map((key) -> encodeURIComponent(key) + '=' + encodeURIComponent(opts.data[key]))
+    else
+      params = ''
     return new Promise((resolve, reject) ->
       request = new XMLHttpRequest()
-      request.open('GET', url + '?' + params, true)
+      request.open('GET', url + params, true)
       request.setRequestHeader('Accept', opts.acceptType)
       request.onload = () ->
         body = request.responseText
