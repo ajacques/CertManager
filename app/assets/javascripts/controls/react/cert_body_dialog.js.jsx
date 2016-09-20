@@ -32,7 +32,11 @@
       this.triggerBodyUpdate(format, this.state.include_chain);
     },
     changeBody: function(body) {
-      this.setState({text: body});
+      let data = body;
+      if (typeof body === "object") {
+        data = JSON.stringify(body);
+      }
+      this.setState({text: data});
     },
     handleIncludeChain: function(event) {
       this.setState({include_chain: event.target.checked});
