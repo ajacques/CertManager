@@ -4,7 +4,9 @@ var AsyncTask = (function() {
     return function(result) {
       if (result.status === 'unfinished') {
         window.setTimeout(function() {
-          Ajax.get(url_func({wait_handle: result.wait_handle})).success(handle_loop(url_func, resolve, reject));
+          Ajax.get(url_func({wait_handle: result.wait_handle}), {
+            acceptType: 'application/json'
+          }).then(handle_loop(url_func, resolve, reject));
         }, 500);
         return;
       }
