@@ -17,7 +17,8 @@ SecureHeaders::Configuration.default do |config|
     default_src: %w('none'),
     script_src: asset_src,
     style_src: asset_src,
-    font_src: asset_src
+    font_src: asset_src,
+    connect_src: %w('self')
   }
   # Browsersync
   if Rails.env.development?
