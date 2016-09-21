@@ -31,9 +31,6 @@ gem 'secure_headers'
 gem 'jwt'
 
 group :assets, :development do
-  # Use jquery as the JavaScript library
-  gem 'jquery-rails'
-
   gem 'classnames-rails'
 
   gem 'bootstrap-sass'
