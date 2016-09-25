@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160703215600) do
+ActiveRecord::Schema.define(version: 20160923090500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +54,14 @@ ActiveRecord::Schema.define(version: 20160703215600) do
   create_table "agents_services", force: :cascade do |t|
     t.integer "agent_id",   null: false
     t.integer "service_id", null: false
+  end
+
+  create_table "authorizations", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.string   "type",            null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.datetime "last_checked_at"
   end
 
   create_table "certificate_bundles", force: :cascade do |t|
@@ -102,9 +109,8 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.string "token_uri_base",     null: false
     t.string "client_id"
     t.string "client_secret"
+    t.index ["name"], name: "index_o_auth_providers_on_name", unique: true, using: :btree
   end
-
-  add_index "o_auth_providers", ["name"], name: "index_o_auth_providers_on_name", unique: true, using: :btree
 
   create_table "private_keys", force: :cascade do |t|
     t.string   "type",        null: false
@@ -114,30 +120,28 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.binary   "body",        null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["fingerprint"], name: "index_private_keys_on_fingerprint", using: :btree
   end
 
-  add_index "private_keys", ["fingerprint"], name: "index_private_keys_on_fingerprint", using: :btree
-
   create_table "public_keys", force: :cascade do |t|
-    t.integer  "subject_id",                                  null: false
+    t.integer  "subject_id",                        null: false
     t.integer  "private_key_id"
     t.integer  "issuer_subject_id"
     t.integer  "certificate_id"
-    t.string   "type",                                        null: false
+    t.string   "type",                              null: false
     t.string   "curve_name"
-    t.string   "hash_algorithm",                              null: false
+    t.string   "hash_algorithm",                    null: false
     t.integer  "bit_length"
-    t.boolean  "is_ca",                       default: false, null: false
-    t.datetime "not_before",                                  null: false
-    t.datetime "not_after",                                   null: false
-    t.integer  "serial",            limit: 8,                 null: false
-    t.binary   "body",                                        null: false
+    t.boolean  "is_ca",             default: false, null: false
+    t.datetime "not_before",                        null: false
+    t.datetime "not_after",                         null: false
+    t.bigint   "serial",                            null: false
+    t.binary   "body",                              null: false
     t.string   "fingerprint"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.index ["fingerprint"], name: "index_public_keys_on_fingerprint", using: :btree
   end
-
-  add_index "public_keys", ["fingerprint"], name: "index_public_keys_on_fingerprint", using: :btree
 
   create_table "public_keys_sans", force: :cascade do |t|
     t.integer "public_key_id",             null: false
@@ -207,10 +211,9 @@ ActiveRecord::Schema.define(version: 20160703215600) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "certificate_bundles_public_keys", "certificate_bundles", on_delete: :cascade
   add_foreign_key "certificate_bundles_public_keys", "public_keys"

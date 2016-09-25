@@ -1,4 +1,5 @@
 class OAuthProvider < ActiveRecord::Base
+  has_many :authorizations
   validates :name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret, presence: true
 
   def self.github
