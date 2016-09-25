@@ -10,6 +10,8 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// Critical files are required for all other scripts to execute
+//= require_tree ./critical
 //= require react
 //= require classnames
 //= require js-routes
