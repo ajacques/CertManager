@@ -1,6 +1,6 @@
 class NativeAjax {
   _csrfToken() {
-    return document.head.querySelector('meta[name="csrf-token"]').content;
+    return this.csrfToken || (this.csrfToken = document.head.querySelector('meta[name="csrf-token"]').content);
   }
   _parseResponse(response) {
     let mimeType = response.getResponseHeader('Content-Type');
@@ -8,6 +8,11 @@ class NativeAjax {
       return JSON.parse(response.responseText);
     } else {
       return response.responseText;
+    }
+  }
+  _addRequestParameters(request, opts) {
+    if (opts.acceptType) {
+      request.setRequestHeader('Accept', opts.acceptType);
     }
   }
   get(url, opts = {}) {
@@ -20,7 +25,7 @@ class NativeAjax {
     return new Promise((resolve, reject) => {
       let request = new XMLHttpRequest();
       request.open('GET', url + params, true);
-      request.setRequestHeader('Accept', opts.acceptType);
+      this._addRequestParameters(request, opts);
       request.onload = () => {
         let body = this._parseResponse(request);
         if (request.status == 200) {
@@ -36,6 +41,7 @@ class NativeAjax {
     return new Promise((resolve, reject) => {
       let request = new XMLHttpRequest();
       request.open('POST', url, true);
+      this._addRequestParameters(request, opts);
       request.setRequestHeader('Content-Type', opts.contentType);
       request.setRequestHeader('X-CSRF-Token', this._csrfToken());
       request.onload = () => {
