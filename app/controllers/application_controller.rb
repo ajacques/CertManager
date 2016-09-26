@@ -30,7 +30,8 @@ class ApplicationController < ActionController::Base
   attr_reader :current_user
 
   def initialize_user
-    @current_user = User.find session[:user_id] if session.key? :user_id
+    return unless session.key? :user_id
+    @current_user = User.find session[:user_id]
     Raven.user_context user_id: current_user.id
     RequestStore.store[:actor] = @current_user
   rescue ActiveRecord::RecordNotFound
