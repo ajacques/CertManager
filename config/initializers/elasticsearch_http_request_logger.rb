@@ -38,6 +38,7 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
 
   def append_request(output, data)
     request = RequestStore.store[:request]
+    return unless request
     output[:request] = {
       method: data[:method],
       path: URI(data[:path]).path,
@@ -45,13 +46,12 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
       proxy_ip: request.remote_ip,
       client_ip: request.env['HTTP_X_FORWARDED_FOR']
     }
-    if request
-      mg = {
-        id: request.env['action_dispatch.request_id'],
-        user_agent: request.env['HTTP_USER_AGENT']
-      }
-      output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
-      output[:request].merge!(mg)
+    mg = {
+      id: request.env['action_dispatch.request_id'],
+      user_agent: request.env['HTTP_USER_AGENT']
+    }
+    output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
+    output[:request].merge!(mg)
     end
   end
 
