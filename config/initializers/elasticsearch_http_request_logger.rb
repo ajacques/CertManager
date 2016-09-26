@@ -52,7 +52,6 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
     }
     output[:request][:requested_with] = request.headers['X-Requested-With'] if request.headers.key? 'X-Requested-With'
     output[:request].merge!(mg)
-    end
   end
 
   def extract_status(payload)
