@@ -235,6 +235,8 @@ GEM
       sass (~> 3.4.20)
     secure_headers (3.4.1)
       useragent
+    sentry-raven (1.2.3)
+      faraday (>= 0.7.6, < 0.10.x)
     sexp_processor (4.7.0)
     simplecov (0.12.0)
       docile (~> 1.1.0)
@@ -319,6 +321,7 @@ DEPENDENCIES
   sass-rails
   scss_lint
   secure_headers
+  sentry-raven
   simplecov
   spring
   sprockets

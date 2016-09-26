@@ -7,3 +7,9 @@ if ENV['LOGSTASH_ENABLED']
   ElasticsearchJobLogger.logstash = logstash
   ElasticsearchJobLogger.attach_to(:active_job)
 end
+
+if ENV.key? 'SENTRY_DSN'
+  Raven.configure do |config|
+    config.dsn = ENV['SENTRY_DSN']
+  end
+end

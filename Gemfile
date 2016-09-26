@@ -65,4 +65,8 @@ group :development do
   gem 'haml-lint', require: false
 end
 
+group :development, :production do
+  gem 'sentry-raven'
+end
+
 gem 'unicorn', platform: :ruby
