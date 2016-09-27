@@ -29,4 +29,4 @@ RUN apt-get update \
 USER www-data
 EXPOSE 8080
 ENTRYPOINT ["/usr/bin/ruby", "/rails-app/bin/bundle", "exec"]
-CMD ["/usr/local/bin/unicorn", "-o", "0.0.0.0", "-p", "8080", "-c", "unicorn.rb"]
+CMD ["/usr/local/bin/unicorn", "-o", "0.0.0.0", "-p", "8080", "-c", "unicorn.rb", "--no-default-middleware"]
