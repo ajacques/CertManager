@@ -26,6 +26,11 @@ class AcmeImportJob < ActiveJob::Base
   private
 
   def refresh_all
+    Raven.breadcrumbs.record do |crumb|
+      crumb.level = :info
+      crumb.message = 'Checking ACME challenge status.'
+      crumb.category = 'job.step'
+    end
     attempt.challenges.each do |challenge|
       attempt_challenge(challenge)
     end

@@ -35,11 +35,8 @@ class OAuthProvider < ActiveRecord::Base
     access_token
   end
 
-  def fetch_orgs(user)
-    headers = {
-      authorization: "token #{user.github_access_token}"
-    }
-    user_info = JSON.parse(RestClient.get('https://api.github.com/user/orgs', headers))
+  def fetch_orgs(token)
+    user_info = api_get('https://api.github.com/user/orgs', token)
     Hash[user_info.map do |org|
       [org['id'], org['login']]
     end]
@@ -47,7 +44,25 @@ class OAuthProvider < ActiveRecord::Base
 
   def login(params)
     access_token = params[:access_token]
-    user_info = JSON.parse(RestClient.get('https://api.github.com/user?access_token=' + access_token, accept: :json))
+    Raven.breadcrumbs.record do |crumb|
+      crumb.category = 'auth.oauth'
+      crumb.message = 'Fetching OAuth user info'
+    end
+    user_info = api_get('https://api.github.com/user', access_token)
+    org_info = fetch_orgs(access_token)
+    # Default Permit All. This will enable users to login and add permissions
+    if authorizations.any?
+      auths = authorizations.for_oauth_attempt(user_info['id'], org_info.keys)
+      final_auth_vector = auths.first
+      raise 'Not authorized' unless final_auth_vector
+      Raven.breadcrumbs.record do |crumb|
+        crumb.data = {
+          vectors: auths.map(&:to_s)
+        }
+        crumb.category = 'auth.oauth'
+        crumb.message = "Authorized through #{final_auth_vector}"
+      end
+    end
     user = User.authenticate_with_github_user(user_info)
 
     user ||= register_account(user_info)
@@ -56,6 +71,10 @@ class OAuthProvider < ActiveRecord::Base
   end
 
   private
+
+  def api_get(url, token)
+    JSON.parse(RestClient.get(url, accept: :json, authorization: "token #{token}"))
+  end
 
   def register_account(user_info)
     user = User.new can_login: true, github_userid: user_info['id']

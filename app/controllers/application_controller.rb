@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   def initialize_user
     return unless session.key? :user_id
     @current_user = User.find session[:user_id]
-    Raven.user_context user_id: current_user.id
+    Raven.user_context id: current_user.id
     RequestStore.store[:actor] = @current_user
   rescue ActiveRecord::RecordNotFound
     @current_user = nil

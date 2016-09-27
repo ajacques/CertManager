@@ -3,7 +3,7 @@ module OauthAuthentication
 
   def oauth_organizations
     cached(key: 'oauth_organizations', ttl: 5.minutes) do
-      OAuthProvider.github.fetch_orgs(self)
+      OAuthProvider.github.fetch_orgs(github_access_token)
     end
   end
 

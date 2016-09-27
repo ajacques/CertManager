@@ -57,10 +57,11 @@ ActiveRecord::Schema.define(version: 20160923090500) do
   end
 
   create_table "authorizations", force: :cascade do |t|
-    t.string   "name",            null: false
-    t.string   "type",            null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "o_auth_provider_id", null: false
+    t.string   "identifier",         null: false
+    t.string   "authorization_type", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.datetime "last_checked_at"
   end
 
