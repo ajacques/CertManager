@@ -70,10 +70,34 @@ class OAuthProvider < ActiveRecord::Base
     user
   end
 
+  def authorization_from_identifier(identifier, user)
+    resp = api_get("https://api.github.com/search/users?q=#{identifier}", user.github_access_token)
+    return nil unless resp['items'].any?
+    auth = resp['items'].first
+    image = URI(auth['avatar_url'])
+    type = if auth['type'] == 'Organization'
+             'group'
+           elsif auth['type'] == 'User'
+             'user'
+           else
+             raise "Unknown ACL actor type: #{auth['type']}, name: #{auth['login']}"
+           end
+    props = {
+      identifier: auth['id'],
+      authorization_type: type,
+      display_name: auth['login'],
+      o_auth_provider: self,
+      display_image: image,
+      display_image_host: image.host
+    }
+    Authorization.new(props)
+  end
+
   private
 
   def api_get(url, token)
-    JSON.parse(RestClient.get(url, accept: :json, authorization: "token #{token}"))
+    resp = Faraday.get url, {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
+    JSON.parse(resp.body)
   end
 
   def register_account(user_info)

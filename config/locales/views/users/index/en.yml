@@ -4,3 +4,4 @@ en:
       index:
         authorization_block:
           header: Who can login?
+          add_new: Add new user or organization.

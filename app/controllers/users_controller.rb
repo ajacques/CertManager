@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  helper_method :validates?
-
   def update
     user = User.find params[:id]
     raise NotAuthorized unless current_user.can? :update_user, user
@@ -15,6 +13,10 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
+    auths = Authorization.all
+    @auths = auths.order(:display_name)
+    urls = auths.distinct.pluck(:display_image_host)
+    append_content_security_policy_directives(img_src: urls)
   end
 
   def show
@@ -25,14 +27,6 @@ class UsersController < ApplicationController
     end if flash[:errors]
     flash.clear
     flash[:return_url] = url_for
-  end
-
-  protected
-
-  def validates?(selector, if_true)
-    if_true if @validations
-               .try(:[], selector.to_s)
-               .try(:any?)
   end
 
   private

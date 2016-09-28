@@ -1,0 +1,14 @@
+%h2= t 'views.users.index.authorization_block.header'
+%table.table.table-striped
+  %tbody
+    - @auths.each do |auth|
+      %tr
+        %td.img-sm
+          %img.img-sm{ src: auth.display_image }
+        %td= auth.display_name
+        %td Revoke
+    %tr
+      %td{ colspan: 3 }
+        = form_for Authorization.new do |f|
+          = f.hidden_field :o_auth_provider_id, value: OAuthProvider.github.id
+          = f.text_field :identifier, class: 'form-control', placeholder: t('views.users.index.authorization_block.add_new')
