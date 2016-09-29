@@ -13,5 +13,3 @@ session:
     httponly: true
     redis:
       host: redis
-auth:
-  mailer_sender: certmgr@example.com
