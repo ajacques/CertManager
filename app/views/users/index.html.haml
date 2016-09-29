@@ -1,23 +1,4 @@
 %ul.nav.nav-pills
   %li.active= link_to (t 'users.list'), users_path
-%table.table.table-striped
-  %thead
-    %tr
-      %td User
-      %td= t 'account.username'
-      %td Created
-      %td Last connection
-      %td
-  %tbody
-    - @users.each do |user|
-      - color = 'warning' unless user.can_login?
-      %tr{ class: color }
-        %td= link_to "#{user.first_name} #{user.last_name}", user
-        %td= user.email
-        %td= user.created_at
-        %td
-          - if user.confirmation_token
-            .text-danger Not activated yet
-          - elsif user.last_sign_in_at
-            = user.last_sign_in_at
+= render partial: 'user_table'
 = render partial: 'authorization_block'

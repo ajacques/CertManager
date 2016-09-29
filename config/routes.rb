@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     id: /[0-9]+/
   } do
     collection do
-      resources :authorizations, only: [:create]
+      resources :authorizations, only: [:create, :destroy]
     end
   end
   scope :search, controller: :search, as: :search do

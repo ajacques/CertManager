@@ -5,8 +5,11 @@
       %tr
         %td.img-sm
           %img.img-sm{ src: auth.display_image }
-        %td= auth.display_name
-        %td Revoke
+        %td
+          %a{ href: auth.url, rel: 'noopener', target: '_blank' }= auth.display_name
+        %td
+          = form_for auth, method: :delete do |f|
+            = f.submit 'Revoke', class: 'btn-link'
     %tr
       %td{ colspan: 3 }
         = form_for Authorization.new do |f|

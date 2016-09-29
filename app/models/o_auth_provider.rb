@@ -54,7 +54,7 @@ class OAuthProvider < ActiveRecord::Base
     if authorizations.any?
       auths = authorizations.for_oauth_attempt(user_info['id'], org_info.keys)
       final_auth_vector = auths.first
-      raise 'Not authorized' unless final_auth_vector
+      raise NotAuthorized unless final_auth_vector
       Raven.breadcrumbs.record do |crumb|
         crumb.data = {
           vectors: auths.map(&:to_s)
@@ -88,7 +88,8 @@ class OAuthProvider < ActiveRecord::Base
       display_name: auth['login'],
       o_auth_provider: self,
       display_image: image,
-      display_image_host: image.host
+      display_image_host: image.host,
+      url: auth['html_url']
     }
     Authorization.new(props)
   end

@@ -4,6 +4,12 @@ class AuthorizationsController < ApplicationController
     redirect_to users_path
   end
 
+  def destroy
+    auth = Authorization.find(params[:id])
+    auth.delete
+    redirect_to users_path
+  end
+
   private
 
   def create_params

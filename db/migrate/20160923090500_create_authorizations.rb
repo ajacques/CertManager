@@ -7,6 +7,7 @@ class CreateAuthorizations < ActiveRecord::Migration
       t.string :display_name, null: false
       t.string :display_image
       t.string :display_image_host # Pulled from display_image. Allows CSP headers to be quickly generated
+      t.string :url
 
       t.timestamps null: false
       t.timestamp :last_checked_at

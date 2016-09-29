@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20160923090500) do
     t.string   "display_name",       null: false
     t.string   "display_image"
     t.string   "display_image_host"
+    t.string   "url"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.datetime "last_checked_at"

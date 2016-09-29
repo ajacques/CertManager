@@ -9,3 +9,4 @@ en:
   login:
     error:
       no_match: Incorrect username or password
+      not_authorized: Not authorized to login by the OAuth access control.

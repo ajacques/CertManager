@@ -22,13 +22,31 @@ class OAuthController < ApplicationController
   end
 
   def authenticate
-    raise 'Need access token' unless session.key? :access_token
+    unless session.key? :access_token
+      respond_to do |format|
+        format.html {
+          flash[:error] = :missing_token
+          redirect_to new_user_session_path
+        }
+        format.all {
+          render status: :bad_request, nothing: true
+        }
+      end
+      return
+    end
     access_token = session[:access_token]
     provider = OAuthProvider.find_by_name(params[:provider])
     user = provider.login access_token: access_token
 
     assume_user user
     redirect_to root_path
+  rescue NotAuthorized
+    Raven.breadcrumbs.record do |crumb|
+      crumb.level = :warn
+      crumb.message = 'Login attempt rejected. Not authorized'
+    end
+    flash[:error] = :not_authorized
+    redirect_to new_user_session_path
   end
 
   private
