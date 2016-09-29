@@ -4,6 +4,7 @@ class AcmeRenewJob < ActiveJob::Base
   def perform(cert)
     @cert = cert
     start_attempt unless cert.inflight_acme_sign_attempt
+    AcmeImportJob.perform_later(cert.inflight_acme_sign_attempt)
   end
 
   private

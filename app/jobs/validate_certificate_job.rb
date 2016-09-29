@@ -19,9 +19,8 @@ class ValidateCertificateJob < ActiveJob::Base
   private
 
   def know_how_to_renew?(cert)
-    cert.issuer
-        .try(:public_key)
-        .try(:subject)
+    cert.public_key
+        .try(:issuer_subject)
         .try(:CN)
         .try(:starts_with?, 'h2ppy h2cker fake CA')
   end
