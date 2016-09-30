@@ -13,7 +13,8 @@
   = bootstrap_form_for Settings::EmailServer.new, url: url_for do |f|
     = f.text_field :server, label: 'Server Address', placeholder: '127.0.0.1'
     = f.text_field :port, label: 'Port', placeholder: 587
-    = f.text_field :from_address, label: 'From Address', placeholder: 'Soteria <certs@technowizardry.net>'
+    = f.text_field :from_address, label: 'From Address', placeholder: 'user@example.com'
+    = f.check_box :enable_starttls, label: t('activerecord.settings.email_server.enable_starttls')
     .form-group
       = f.submit t('form_controls.save'), class: 'btn btn-default'
       %button.btn{ data: { settings: { validate: 'mail_server' } } } Test settings

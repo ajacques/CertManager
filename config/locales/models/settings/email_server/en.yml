@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    settings:
+      email_server:
+        enable_starttls: Enable STARTTLS if your email server supports it.

@@ -17,6 +17,9 @@ Dockerfile
 common.yml
 production.yml
 
+!.git/HEAD
+!.git/refs/heads/master
+
 *.json
 
 apparmor_policy
