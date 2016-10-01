@@ -17,4 +17,4 @@
     = f.check_box :enable_starttls, label: t('activerecord.settings.email_server.enable_starttls')
     .form-group
       = f.submit t('form_controls.save'), class: 'btn btn-default'
-      %button.btn{ data: { settings: { validate: 'mail_server' } } } Test settings
+      = react_component 'SettingsValidateButton', { target: :mail_server }, tag: :span, prerender: true, data: { react_mount: true }

@@ -24,6 +24,20 @@ class SettingsController < ApplicationController
 
   def validate_mail_server
     UserMailer.validate_mail_server(current_user).deliver_now
-    render nothing: true
+    respond_to do |format|
+      format.all {
+        render nothing: true, status: :accepted
+      }
+    end
+  rescue Net::SMTPSyntaxError, Net::SMTPFatalError, OpenSSL::SSL::SSLError => e
+    error = {
+      status: :failed,
+      message: e.message
+    }
+    respond_to do |format|
+      format.json {
+        render json: error, status: :bad_request
+      }
+    end
   end
 end
