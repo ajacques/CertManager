@@ -4,7 +4,7 @@ class NativeAjax {
   }
   _parseResponse(response) {
     let mimeType = response.getResponseHeader('Content-Type');
-    if (mimeType && mimeType.startsWith('application/json')) {
+    if (mimeType && mimeType.startsWith('application/json') && response.responseText !== '') {
       return JSON.parse(response.responseText);
     } else {
       return response.responseText;
@@ -15,6 +15,16 @@ class NativeAjax {
       request.setRequestHeader('Accept', opts.acceptType);
     }
   }
+  _processResponse(request, resolve, reject) {
+    return () => {
+      const body = this._parseResponse(request);
+      if (request.status >= 200 && request.status < 300) {
+        resolve(body);
+      } else {
+        reject(body);
+      }
+    };
+  }
   get(url, opts = {}) {
     let params;
     if (opts.data) {
@@ -23,17 +33,10 @@ class NativeAjax {
       params = '';
     }
     return new Promise((resolve, reject) => {
-      let request = new XMLHttpRequest();
+      const request = new XMLHttpRequest();
       request.open('GET', url + params, true);
       this._addRequestParameters(request, opts);
-      request.onload = () => {
-        let body = this._parseResponse(request);
-        if (request.status == 200) {
-          resolve(body);
-        } else {
-          reject(body);
-        }
-      };
+      request.onload = this._processResponse(request, resolve, reject);
       request.send(JSON.stringify(opts.data));
     });
   }
@@ -44,41 +47,9 @@ class NativeAjax {
       this._addRequestParameters(request, opts);
       request.setRequestHeader('Content-Type', opts.contentType);
       request.setRequestHeader('X-CSRF-Token', this._csrfToken());
-      request.onload = () => {
-        if (request.status == 200) {
-          resolve(this._parseResponse(request));
-        } else {
-          reject(request.responseText);
-        }
-      };
+      request.onload = this._processResponse(request, resolve, reject);
       request.send(JSON.stringify(opts.data));
     });
-  }
-}
-
-class jQueryAjax {
-  get(url, opts = {}) {
-    let props = {
-      type: 'get',
-      accepts: opts.acceptType,
-      data: opts.data
-    };
-    return $.ajax(url, props);
-  }
-  post(url, opts = {}) {
-    let input;
-    if (opts.contentType == 'application/json'){
-      input = JSON.stringify(opts.data);
-    } else {
-      input = opts.data;
-    }
-    let props = {
-      type: 'post',
-      contentType: opts.contentType,
-      accepts: opts.acceptType,
-      data: input
-    };
-    return $.ajax(url, props);
   }
 }
 
