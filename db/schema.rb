@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 20160923090500) do
 
   create_table "authorizations", force: :cascade do |t|
     t.integer  "o_auth_provider_id", null: false
-    t.string   "identifier",         null: false
     t.string   "authorization_type", null: false
+    t.string   "identifier",         null: false
     t.string   "display_name",       null: false
     t.string   "display_image"
     t.string   "display_image_host"
@@ -199,8 +199,8 @@ ActiveRecord::Schema.define(version: 20160923090500) do
     t.string   "time_zone",                     default: "Europe/London", null: false
     t.boolean  "lets_encrypt_accepted_terms",   default: false,           null: false
     t.string   "lets_encrypt_registration_uri"
-    t.integer  "github_userid"
     t.string   "github_username"
+    t.integer  "github_userid"
     t.string   "github_access_token"
     t.string   "github_scope"
     t.datetime "created_at",                                              null: false
