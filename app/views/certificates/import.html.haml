@@ -20,7 +20,7 @@
   %p= t('views.certificates.import.from_url.sub_header')
   = form_tag import_certificates_path, class: 'form-inline' do
     .form-group
-      = text_field_tag :host, nil, id: 'import-url', class: 'form-control' ,
+      = text_field_tag :host, nil, id: 'import-url', class: 'form-control',
         placeholder: t('views.certificates.import.from_url.url_placeholder'),
         aria: { label: t('views.certificates.import.from_url.url_aria_label') }
       = submit_tag t('operations.import'), id: 'import-button', class: 'btn'
