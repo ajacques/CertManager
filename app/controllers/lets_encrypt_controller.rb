@@ -11,7 +11,25 @@ class LetsEncryptController < ApplicationController
       return
     end
 
-    redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
+    redirect_to_ownership if acme_settings.accepted_terms?
+  end
+
+  def register
+    return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
+
+    registration = acme_client.register contact: "mailto:#{current_user.email}"
+    current_user.lets_encrypt_registration_uri = registration.uri
+    begin
+      unless acme_settings.accepted_terms?
+        registration.agree_terms
+        acme_settings.accepted_terms = true
+      end
+      current_user.lets_encrypt_accepted_terms = true
+    ensure
+      current_user.save!
+    end
+
+    redirect_to_ownership
   end
 
   def prove_ownership
@@ -20,8 +38,7 @@ class LetsEncryptController < ApplicationController
     @attempt = AcmeSignAttempt.create_for_certificate(certificate, acme_settings)
     certificate.save!
   rescue Acme::Client::Error::Unauthorized
-    current_user.lets_encrypt_accepted_terms = false
-    current_user.save!
+    acme_settings.accepted_terms = false
     redirect_to action: :index
   end
 
@@ -46,21 +63,6 @@ class LetsEncryptController < ApplicationController
     @attempt = AcmeSignAttempt.find params[:attempt_id]
     raise NotFound unless certificate.id == @attempt.certificate_id
     redirect_to action: :prove_ownership unless @attempt
-  end
-
-  def register
-    return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
-
-    registration = acme_client.register contact: "mailto:#{current_user.email}"
-    current_user.lets_encrypt_registration_uri = registration.uri
-    begin
-      registration.agree_terms
-      current_user.lets_encrypt_accepted_terms = true
-    ensure
-      current_user.save!
-    end
-
-    redirect_to_ownership
   end
 
   private
