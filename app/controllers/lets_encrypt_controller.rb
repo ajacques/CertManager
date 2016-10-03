@@ -36,6 +36,7 @@ class LetsEncryptController < ApplicationController
     certificate = Certificate.find params[:id]
     @csr = certificate.to_csr
     @attempt = AcmeSignAttempt.create_for_certificate(certificate, acme_settings)
+    @attempt.status = 'pending_verification'
     certificate.save!
   rescue Acme::Client::Error::Unauthorized
     acme_settings.accepted_terms = false

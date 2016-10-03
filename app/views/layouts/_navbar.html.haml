@@ -14,5 +14,5 @@
         = react_component 'HeaderSearchBox', { query: params[:query] }, prerender: true, data: { react_mount: true }
       %ul.nav.navbar-nav.navbar-right
         %li= link_to 'Settings', settings_path
-        %li= link_to current_user.first_name, user_path(current_user)
+        %li{ aria: { label: t('navbar.user_label') } }= link_to current_user.first_name, user_path(current_user)
         %li= link_to 'Sign out', destroy_user_session_path
