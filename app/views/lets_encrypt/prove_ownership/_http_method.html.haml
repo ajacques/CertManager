@@ -9,5 +9,7 @@
     = render partial: 'lets_encrypt/prove_ownership/http_method_manual'
     %h3 Complete ownership verification
     %p After the above files have been created, you can click below.
+    = form_tag acme_sign_attempt_path(@attempt), method: :delete do
+      = submit_tag 'Cancel', class: 'btn btn-danger'
     = form_tag action: :start_import do
       = submit_tag 'Attempt verification', class: 'btn btn-primary'

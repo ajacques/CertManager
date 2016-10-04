@@ -3,6 +3,7 @@ class AcmeSignAttempt < ActiveRecord::Base
   belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :imported_key, class_name: 'PublicKey', autosave: true
+  validates :last_status, inclusion: { in: %w(aborted unknown pending_verification errored failed imported) }
 
   def status
     ActiveSupport::StringInquirer.new last_status

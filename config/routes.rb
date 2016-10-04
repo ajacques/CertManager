@@ -41,7 +41,6 @@ Rails.application.routes.draw do
           post :register
           get :prove_ownership
           post :start_import
-          get 'import_status/:attempt_id', action: :import_status, as: :acme_import_status
         end
       end
       get 'sign/:another_id' => 'signing#configure'
@@ -57,6 +56,7 @@ Rails.application.routes.draw do
       post 'analyze'
     end
   end
+  resources :acme_sign_attempts, only: [:show, :destroy]
   resources :public_keys, only: [:show]
   resources :services, constraints: {
     id: /[0-9]+/

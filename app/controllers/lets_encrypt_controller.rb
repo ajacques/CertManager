@@ -15,7 +15,7 @@ class LetsEncryptController < ApplicationController
   end
 
   def register
-    return redirect_to_ownership if current_user.lets_encrypt_accepted_terms?
+    return redirect_to_ownership if current_user.lets_encrypt_accepted_terms? && acme_settings.accepted_terms?
 
     registration = acme_client.register contact: "mailto:#{current_user.email}"
     current_user.lets_encrypt_registration_uri = registration.uri
@@ -56,14 +56,7 @@ class LetsEncryptController < ApplicationController
     attempt.status_message = nil
     attempt.save!
     AcmeImportJob.perform_later(attempt)
-    redirect_to action: :import_status, attempt_id: attempt.id
-  end
-
-  def import_status
-    certificate = Certificate.find params[:id]
-    @attempt = AcmeSignAttempt.find params[:attempt_id]
-    raise NotFound unless certificate.id == @attempt.certificate_id
-    redirect_to action: :prove_ownership unless @attempt
+    redirect_to acme_sign_attempt_path(attempt)
   end
 
   private
