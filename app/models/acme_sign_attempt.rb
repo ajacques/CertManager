@@ -19,6 +19,10 @@ class AcmeSignAttempt < ActiveRecord::Base
     status.failed? || status.errored?
   end
 
+  def successful?
+    status.imported?
+  end
+
   def acme_client
     Acme::Client.new private_key: private_key.to_openssl, endpoint: acme_endpoint
   end

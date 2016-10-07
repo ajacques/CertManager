@@ -8,3 +8,4 @@ en:
         failed: Failed
         imported: Imported
         unknown: Unknown
+        aborted: Aborted

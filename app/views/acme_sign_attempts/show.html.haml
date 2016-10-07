@@ -6,43 +6,10 @@
 %ol.breadcrumb
   %li= link_to @attempt.certificate, @attempt.certificate
   %li.active= t 'views.lets_encrypt.import_status.header'
-%ol.workflow-step-list
-  %li.done= t 'views.lets_encrypt.workflow_steps.website_setup'
-  %li{ class: @attempt.status_complete? ? 'done' : 'progress' }= t 'views.lets_encrypt.workflow_steps.verify'
-  %li= t 'views.lets_encrypt.workflow_steps.finish'
-%h1= t 'views.lets_encrypt.import_status.header'
-%div
-  %span Status:
-  - if @attempt.errored?
-    %span.text-danger Errored
-    = form_tag action: :start_import do
-      %input.btn-link{ type: :submit, value: 'Retry' }
-  - elsif @attempt.problem?
-    %span.text-danger Failed
-  - else
-    %span.text-warn= @attempt.status
-%div= t 'views.lets_encrypt.import_status.status.started_at', inline_date: inline_ago_string(@attempt.created_at, format: :month_day_time)
-- if @attempt.status_message
-  %div= @attempt.status_message
-- if @attempt.last_checked_at
-  %div= t 'views.lets_encrypt.import_status.status.last_checked', inline_date: inline_ago_string(@attempt.last_checked_at, format: :month_day_time)
-%h3 Domains
-%table.table.table-striped
-  %tbody
-    %tr
-      %td= t 'views.lets_encrypt.import_status.table.domain'
-      %td Verification URL
-      %td
-        %abbr{ title: t('views.lets_encrypt.import_status.table.help.acme_status') }= t 'views.lets_encrypt.import_status.table.acme_status'
-  %tbody
-  - @attempt.challenges.each do |challenge|
-    %tr{ class: acme_status_as_css_class(challenge.status) }
-      %td= challenge.domain_name
-      %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path, target: '_blank', rel: 'noopener'
-      %td
-        %div= challenge.status
-        - if challenge.status.invalid?
-          %div= challenge.error_message['detail']
+%h1 ACME Certificate Import
+= render partial: 'status_bar'
+= render partial: 'status'
+= render partial: 'domain_status_table'
 - if @attempt.imported_key_id
   %div Your certificate has been successfully imported!
   = link_to 'Show', @attempt.certificate

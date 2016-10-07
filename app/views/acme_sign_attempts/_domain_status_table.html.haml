@@ -1,0 +1,18 @@
+.well.well-md
+  %h3 Domains
+  %table.table.table-striped
+    %tbody
+      %tr
+        %td= t 'views.lets_encrypt.import_status.table.domain'
+        %td Verification URL
+        %td
+          %abbr{ title: t('views.lets_encrypt.import_status.table.help.acme_status') }= t 'views.lets_encrypt.import_status.table.acme_status'
+    %tbody
+    - @attempt.challenges.each do |challenge|
+      %tr{ class: acme_status_as_css_class(challenge.status) }
+        %td= challenge.domain_name
+        %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path, target: '_blank', rel: 'noopener'
+        %td
+          %div= challenge.status
+          - if challenge.status.invalid?
+            %div= challenge.error_message['detail']
