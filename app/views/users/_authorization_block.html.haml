@@ -5,8 +5,7 @@
       %tr
         %td.img-sm
           %img.img-sm{ src: auth.display_image }
-        %td
-          %a{ href: auth.url, rel: 'noopener', target: '_blank' }= auth.display_name
+        %td= untrusted_party_link auth.display, auth.url
         %td
           = form_for auth, method: :delete do |f|
             = f.submit 'Revoke', class: 'btn-link'

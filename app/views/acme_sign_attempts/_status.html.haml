@@ -7,7 +7,7 @@
     - if @attempt.errored?
       = form_tag start_import_certificate_path(@attempt.certificate) do
         %input.btn-link{ type: :submit, value: 'Retry' }
-  %div= t 'views.lets_encrypt.import_status.status.started_at', inline_date: inline_ago_string(@attempt.created_at, format: :month_day_time)
-  %div= t 'views.lets_encrypt.import_status.status.last_checked', inline_date: inline_ago_string(@attempt.updated_at, format: :month_day_time)
+  %div #{t 'views.lets_encrypt.import_status.status.started_at'}: #{inline_ago_string(@attempt.created_at, format: :month_day_time)}
+  %div #{t 'views.lets_encrypt.import_status.status.last_checked'}: #{inline_ago_string(@attempt.updated_at, format: :month_day_time)}
   - if @attempt.status_message
     %div= @attempt.status_message

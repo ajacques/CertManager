@@ -15,5 +15,5 @@ en:
           help:
             acme_status: Shows the verification status as reported by the ACME verification system itself.
         status:
-          last_checked: 'Last checked: %{inline_date}'
-          started_at: 'Started: %{inline_date}'
+          last_checked: Last checked
+          started_at: Started

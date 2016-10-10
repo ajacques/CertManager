@@ -11,7 +11,7 @@
     - @attempt.challenges.each do |challenge|
       %tr{ class: acme_status_as_css_class(challenge.status) }
         %td= challenge.domain_name
-        %td= link_to t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path, target: '_blank', rel: 'noopener'
+        %td= untrusted_party_link t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path
         %td
           %div= challenge.status
           - if challenge.status.invalid?
