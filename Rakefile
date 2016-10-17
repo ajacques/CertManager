@@ -23,7 +23,7 @@ if Rails.env.test? || Rails.env.development?
   reek.fail_on_error = false
 
   SCSSLint::RakeTask.new do |t|
-    t.files = ['app/assets/stylesheets']
+    t.files = %w(app/assets/stylesheets)
   end
 
   HamlLint::RakeTask.new do |t|

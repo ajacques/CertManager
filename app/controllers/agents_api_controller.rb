@@ -88,7 +88,7 @@ class AgentsApiController < ActionController::Base
     raise NotAuthorized unless split[0] == 'Bearer'
     key = split[1]
     raise NotAuthorized unless key
-    @agent = Agent.find_by_access_token(key)
+    @agent = Agent.find_by(access_token: key)
     raise NotAuthorized unless @agent
   end
 end

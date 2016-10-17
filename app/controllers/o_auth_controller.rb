@@ -3,7 +3,7 @@ class OAuthController < ApplicationController
   public_endpoint
 
   def begin
-    provider = OAuthProvider.find_by_name(params[:provider])
+    provider = OAuthProvider.find_by(name: params[:provider])
     session[:oauth_state] = state = secure_token
 
     redirect_to provider.authorize_uri(state)
@@ -11,7 +11,7 @@ class OAuthController < ApplicationController
 
   def receive
     raise 'Failed to verify security token' unless session[:oauth_state] == params[:state]
-    provider = OAuthProvider.find_by_name(params[:provider])
+    provider = OAuthProvider.find_by(name: params[:provider])
     raise 'Invalid OAuth provider' unless provider
     access_token = provider.fetch_token params.permit(:code, :state)
 
@@ -35,7 +35,7 @@ class OAuthController < ApplicationController
       return
     end
     access_token = session[:access_token]
-    provider = OAuthProvider.find_by_name(params[:provider])
+    provider = OAuthProvider.find_by(name: params[:provider])
     user = provider.login access_token: access_token
 
     assume_user user

@@ -3,7 +3,7 @@ class OAuthProvider < ActiveRecord::Base
   validates :name, :requested_scopes, :authorize_uri_base, :token_uri_base, :client_id, :client_secret, presence: true
 
   def self.github
-    find_by_name('github')
+    find_by(name: 'github')
   end
 
   def authorize_uri(state)
@@ -72,7 +72,8 @@ class OAuthProvider < ActiveRecord::Base
 
   def authorization_from_identifier(identifier, user)
     resp = api_get("https://api.github.com/search/users?q=#{identifier}", user.github_access_token)
-    return nil unless resp['items'].any?
+    raise 'Failed to fetch any matching values' if resp.key? 'errors'
+    return nil unless resp.key? 'items'
     auth = resp['items'].first
     image = URI(auth['avatar_url'])
     type = if auth['type'] == 'Organization'

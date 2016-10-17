@@ -143,9 +143,9 @@ class Certificate < ActiveRecord::Base
   end
 
   def self.find_for_key_pair(pub, priv)
-    cert1 = Certificate.find_by_public_key_id pub.id if pub
-    cert2 = Certificate.find_by_private_key_id priv.id if priv
-    cert3 = Certificate.find_by_subject_id pub.subject.id if pub
+    cert1 = Certificate.find_by(public_key_id: pub.id) if pub
+    cert2 = Certificate.find_by(private_key_id: priv.id) if priv
+    cert3 = Certificate.find_by(subject_id: pub.subject.id) if pub
     cert = cert1 || cert2 || cert3
     unless cert
       if pub

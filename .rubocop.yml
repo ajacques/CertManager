@@ -28,6 +28,14 @@ MethodMissing:
 Rails/HasAndBelongsToMany:
   Enabled: false
 
+Metrics/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+    - 'config/routes.rb'
+    - 'app/views/**/*'
+
 # GOAL: Work to lower these limits
 Metrics/MethodLength:
   Max: 50

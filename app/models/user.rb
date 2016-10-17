@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
 
   def self.authenticate!(username, password)
-    user = find_by_email(username)
+    user = find_by(email: username)
     if user.present? && user.password_matches?(password) && user.can_login?
       user.last_sign_in_at = Time.now
       user.save!

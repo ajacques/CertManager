@@ -22,7 +22,7 @@ class ImportSet
     ## Then add/update edges
     # Link public keys to appropriate private keys
     public_keys.each do |pub|
-      pub.private_key = PrivateKey.find_by_fingerprint(pub.fingerprint)
+      pub.private_key = PrivateKey.find_by(fingerprint: pub.fingerprint)
     end
   end
 

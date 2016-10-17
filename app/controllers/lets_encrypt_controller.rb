@@ -44,7 +44,7 @@ class LetsEncryptController < ApplicationController
   end
 
   def validate_token
-    challenge = AcmeChallenge.find_by_token_key params[:token]
+    challenge = AcmeChallenge.find_by token_key: params[:token]
     return render text: 'Unknown challenge', status: :not_found unless challenge
     render plain: challenge.token_value
   end
