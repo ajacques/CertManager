@@ -2,7 +2,7 @@ class NativeAjax {
   _csrfToken() {
     return this.csrfToken || (this.csrfToken = document.head.querySelector('meta[name="csrf-token"]').content);
   }
-  _parseResponse(response) {
+  static _parseResponse(response) {
     let mimeType = response.getResponseHeader('Content-Type');
     if (mimeType && mimeType.startsWith('application/json') && response.responseText !== '') {
       return JSON.parse(response.responseText);
@@ -10,14 +10,24 @@ class NativeAjax {
       return response.responseText;
     }
   }
-  _addRequestParameters(request, opts) {
+  static _issueRequest(req, opts) {
+    let payload = opts.data;
+    if (opts.contentType) {
+      req.setRequestHeader('Content-Type', opts.contentType);
+      if (opts.contentType === 'application/json') {
+        payload = JSON.stringify(opts.data);
+      }
+    }
+    req.send(payload);
+  }
+  static _addRequestParameters(request, opts) {
     if (opts.acceptType) {
       request.setRequestHeader('Accept', opts.acceptType);
     }
   }
-  _processResponse(request, resolve, reject) {
+  static _processResponse(request, resolve, reject) {
     return () => {
-      const body = this._parseResponse(request);
+      const body = NativeAjax._parseResponse(request);
       if (request.status >= 200 && request.status < 300) {
         resolve(body);
       } else {
@@ -35,21 +45,22 @@ class NativeAjax {
     return new Promise((resolve, reject) => {
       const request = new XMLHttpRequest();
       request.open('GET', url + params, true);
-      this._addRequestParameters(request, opts);
-      request.onload = this._processResponse(request, resolve, reject);
-      request.send(JSON.stringify(opts.data));
+      NativeAjax._addRequestParameters(request, opts);
+      request.onload = NativeAjax._processResponse(request, resolve, reject);
+      request.send();
     });
   }
   post(url, opts = {}) {
-    return new Promise((resolve, reject) => {
-      let request = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
+    const promise = new Promise((resolve, reject) => {
       request.open('POST', url, true);
-      this._addRequestParameters(request, opts);
-      request.setRequestHeader('Content-Type', opts.contentType);
+      NativeAjax._addRequestParameters(request, opts);
       request.setRequestHeader('X-CSRF-Token', this._csrfToken());
-      request.onload = this._processResponse(request, resolve, reject);
-      request.send(JSON.stringify(opts.data));
+      request.onload = NativeAjax._processResponse(request, resolve, reject);
+      NativeAjax._issueRequest(request, opts);
     });
+    promise.abort = request.abort;
+    return promise;
   }
 }
 
