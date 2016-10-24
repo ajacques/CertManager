@@ -13,4 +13,6 @@
       %td{ colspan: 3 }
         = form_for Authorization.new do |f|
           = f.hidden_field :o_auth_provider_id, value: OAuthProvider.github.id
-          = f.text_field :identifier, class: 'form-control', placeholder: t('views.users.index.authorization_block.add_new')
+          .pull-right= f.submit '+', class: 'btn btn-default'
+          .form-control-inline
+            = f.text_field :identifier, class: 'form-control', placeholder: t('views.users.index.authorization_block.add_new')

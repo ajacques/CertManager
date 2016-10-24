@@ -16,7 +16,7 @@ class ImportSet
       public_keys << PublicKey.import(cert)
     end
     @src_private_keys.each do |key|
-      private_keys < PrivateKey.import(key)
+      private_keys << PrivateKey.import(key)
     end
 
     ## Then add/update edges
@@ -26,13 +26,22 @@ class ImportSet
     end
   end
 
+  def save
+    ActiveRecord::Base.transaction do
+      (public_keys + private_keys).each(&:save!)
+    end
+  end
+
   def promote_all_to_certificates
+    certs = []
     public_keys.each do |pub|
       cert = Certificate.for_public_key(pub).first
       next unless cert
       cert.public_key = pub
       cert.save!
+      certs << cert
     end
+    certs
   end
 
   def self.from_array(array)

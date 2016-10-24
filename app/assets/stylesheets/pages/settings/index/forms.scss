@@ -1,0 +1,6 @@
+$submit-button-width: 34px;
+$margin: 8px;
+
+.form-control-inline {
+  width: calc(100% - #{$submit-button-width + $margin});
+}

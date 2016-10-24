@@ -37,6 +37,6 @@
     - @cert.services.each do |service|
       %li= link_to service, service
 - else
-  %p no services yet. A service allows you to securely deploy this certificate to a host
+  %p No services yet. A service allows you to securely deploy this certificate to a host
   = link_to 'Create a service', controller: :services, action: :new, cert_id: @cert.id
 #modal

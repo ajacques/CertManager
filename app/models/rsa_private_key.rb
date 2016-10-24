@@ -27,6 +27,11 @@ class RSAPrivateKey < PrivateKey
     end
   end
 
+  def self.random(bit_length: 2048)
+    base = R509::PrivateKey.new bit_length: bit_length
+    new bit_length: bit_length, body: base.to_der
+  end
+
   private
 
   def generate_key
