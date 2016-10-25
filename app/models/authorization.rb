@@ -14,4 +14,8 @@ class Authorization < ActiveRecord::Base
     auth.save!
     auth
   end
+
+  def to_s
+    "Authorization Provider: #{o_auth_provider.name} #{authorization_type}:#{identifier} <#{display_name}>"
+  end
 end

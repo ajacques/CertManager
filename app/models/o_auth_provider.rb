@@ -36,7 +36,7 @@ class OAuthProvider < ActiveRecord::Base
   end
 
   def fetch_orgs(token)
-    user_info = api_get('https://api.github.com/user/orgs', token)
+    user_info = api_get('/user/orgs', token)
     Hash[user_info.map do |org|
       [org['id'], org['login']]
     end]
@@ -48,7 +48,7 @@ class OAuthProvider < ActiveRecord::Base
       crumb.category = 'auth.oauth'
       crumb.message = 'Fetching OAuth user info'
     end
-    user_info = api_get('https://api.github.com/user', access_token)
+    user_info = api_get('/user', access_token)
     org_info = fetch_orgs(access_token)
     # Default Permit All. This will enable users to login and add permissions
     if authorizations.any?
@@ -71,7 +71,7 @@ class OAuthProvider < ActiveRecord::Base
   end
 
   def authorization_from_identifier(identifier, user)
-    resp = api_get("https://api.github.com/search/users?q=#{identifier}", user.github_access_token)
+    resp = api_get("/search/users?q=#{identifier}", user.github_access_token)
     raise 'Failed to fetch any matching values' if resp.key? 'errors'
     return nil unless resp.key? 'items'
     auth = resp['items'].first
@@ -98,7 +98,7 @@ class OAuthProvider < ActiveRecord::Base
   private
 
   def api_get(url, token)
-    resp = Faraday.get url, {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
+    resp = Faraday.get "https://api.github.com#{url}", {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
     JSON.parse(resp.body)
   end
 
@@ -109,12 +109,18 @@ class OAuthProvider < ActiveRecord::Base
   end
 
   def refresh_account(user, user_info, access_token)
+    email_result = api_get('/user/emails', access_token)
+    email_result = email_result.select do |email|
+      email['primary'] && email['verified']
+    end
+    email = email_result.first['email']
+
     # TODO: This won't split all names correctly.
     name_split_attempt = user_info['name'].split(' ')
     user_props = {
       first_name: name_split_attempt[0],
       last_name: name_split_attempt[1],
-      email: user_info['email'],
+      email: email,
       github_access_token: access_token,
       github_username: user_info['login']
     }
