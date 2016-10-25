@@ -1,4 +1,6 @@
-%h2= t 'views.users.index.authorization_block.header'
+%h3= t 'views.users.index.authorization_block.header'
+- if @auths.empty?
+  %p.bg-danger= t 'views.users.index.authorization_block.no_auths_warning'
 %table.table.table-striped
   %tbody
     - @auths.each do |auth|

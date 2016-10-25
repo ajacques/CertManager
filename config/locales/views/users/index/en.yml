@@ -5,3 +5,4 @@ en:
         authorization_block:
           header: Who can login?
           add_new: Add new user or organization.
+          no_auths_warning: There are no access controls enabled, all login attempts will be permitted.
