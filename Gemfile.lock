@@ -42,7 +42,7 @@ GEM
       tzinfo (~> 1.1)
     arel (7.1.4)
     ast (2.3.0)
-    autoprefixer-rails (6.5.1)
+    autoprefixer-rails (6.5.1.1)
       execjs
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -92,7 +92,7 @@ GEM
       haml (>= 4.0.6, < 5.0)
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
-    haml_lint (0.18.2)
+    haml_lint (0.18.3)
       haml (~> 4.0)
       rake (>= 10, < 12)
       rubocop (>= 0.36.0)
@@ -227,7 +227,7 @@ GEM
       sass (~> 3.4.20)
     secure_headers (3.5.0)
       useragent
-    sentry-raven (2.0.2)
+    sentry-raven (2.1.2)
       faraday (>= 0.7.6, < 0.10.x)
     sexp_processor (4.7.0)
     simplecov (0.12.0)
@@ -259,7 +259,7 @@ GEM
     tilt (2.0.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.2)
+    uglifier (3.0.3)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
