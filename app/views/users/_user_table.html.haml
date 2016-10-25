@@ -14,10 +14,10 @@
           %tr{ class: color }
             %td= link_to "#{user.first_name} #{user.last_name}", user
             %td= user.email
-            %td= user.created_at
+            %td= inline_ago_string user.created_at
             %td
               - if user.confirmation_token
                 .text-danger Not activated yet
               - elsif user.last_sign_in_at
-                = user.last_sign_in_at
+                = inline_ago_string user.last_sign_in_at
 
