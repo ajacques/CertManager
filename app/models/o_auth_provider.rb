@@ -98,7 +98,12 @@ class OAuthProvider < ActiveRecord::Base
   private
 
   def api_get(url, token)
-    resp = Faraday.get "https://api.github.com#{url}", {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
+    full_url = "https://api.github.com#{url}"
+    Raven.breadcrumbs.record do |crumb|
+      crumb.category = 'auth.oauth'
+      crumb.message = "OAuth API call: #{full_url}"
+    end
+    resp = Faraday.get full_url, {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
     JSON.parse(resp.body)
   end
 
