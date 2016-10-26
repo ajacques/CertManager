@@ -16,6 +16,8 @@ class UsersController < ApplicationController
     auths = Authorization.all
     @auths = auths.order(:display_name)
     urls = auths.distinct.pluck(:display_image_host)
+    @auth = Authorization.new
+    @auth.errors.add(:identifier, flash[:auth_error]) if flash[:auth_error]
     append_content_security_policy_directives(img_src: urls)
   end
 

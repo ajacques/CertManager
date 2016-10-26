@@ -13,8 +13,7 @@
             = f.submit 'Revoke', class: 'btn-link'
     %tr
       %td{ colspan: 3 }
-        = form_for Authorization.new do |f|
+        = bootstrap_form_for @auth do |f|
           = f.hidden_field :o_auth_provider_id, value: OAuthProvider.github.id
           .pull-right= f.submit '+', class: 'btn btn-default'
-          .form-control-inline
-            = f.text_field :identifier, class: 'form-control', placeholder: t('views.users.index.authorization_block.add_new')
+          = f.text_field :identifier, skip_label: true, input_group_class: 'form-control-inline', class: 'form-control', placeholder: t('views.users.index.authorization_block.add_new')

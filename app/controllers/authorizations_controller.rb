@@ -2,6 +2,9 @@ class AuthorizationsController < ApplicationController
   def create
     Authorization.create_with_identifier create_params, current_user
     redirect_to users_path
+  rescue => e
+    flash[:auth_error] = e
+    redirect_to users_path
   end
 
   def destroy
