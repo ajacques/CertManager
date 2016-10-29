@@ -1,5 +1,5 @@
 - content_for :head do
-  %link{ href: "//#{@provider.base_domain}", rel: 'dns-prefetch' }
+  %link{ href: "https://#{@provider.base_domain}", rel: 'preconnect' }
 .row.vertical-center.modal-centered-form{ role: :main }
   .login-form-container.col-sm-12.col-lg-4.well.well-lg.center-block
     %h1= t 'views.sessions.new.header'
