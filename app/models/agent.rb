@@ -3,7 +3,7 @@ class Agent < ActiveRecord::Base
   has_many :services, through: :memberships
   has_many :memberships, class_name: 'AgentService'
 
-  scope :with_tag, -> (*tags) { joins(:tags).where(tags: { tag: tags }) }
+  scope :with_tag, ->(*tags) { joins(:tags).where(tags: { tag: tags }) }
 
   def image_name
     'docker.technowizardry.net/soteria-agent:1'

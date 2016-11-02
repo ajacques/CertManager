@@ -23,10 +23,12 @@ class Service::SoteriaAgent < Service
       }
     }
 
-    map[:after_action] << {
-      type: :docker,
-      container_name: rotate_container_name
-    } if rotate_container_name
+    if rotate_container_name
+      map[:after_action] << {
+        type: :docker,
+        container_name: rotate_container_name
+      }
+    end
     map
   end
 
