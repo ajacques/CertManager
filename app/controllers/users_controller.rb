@@ -24,9 +24,11 @@ class UsersController < ApplicationController
   def show
     user_id = params[:id] || session[:user_id]
     @user = User.find(user_id)
-    flash[:errors].each do |key, error|
-      @user.errors.add(key, error)
-    end if flash[:errors]
+    if flash[:errors]
+      flash[:errors].each do |key, error|
+        @user.errors.add(key, error)
+      end
+    end
     flash.clear
     flash[:return_url] = url_for
   end
