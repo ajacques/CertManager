@@ -392,22 +392,6 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Enabled: true
-        PriceClass: PriceClass_100
-        Restrictions:
-          GeoRestriction:
-            RestrictionType: whitelist
-            Locations:
-            - US
-        DefaultCacheBehavior:
-          TargetOriginId: staticAssetOrigin
-          ViewerProtocolPolicy: redirect-to-https
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: whitelist
-              WhitelistedNames:
-              - rack.session
         CacheBehaviors:
         - TargetOriginId: staticAssetOrigin
           ViewerProtocolPolicy: redirect-to-https
@@ -420,6 +404,17 @@ Resources:
             Cookies:
               Forward: none
             Headers: []
+        DefaultCacheBehavior:
+          TargetOriginId: staticAssetOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: whitelist
+              WhitelistedNames:
+              - rack.session
+        Enabled: true
+        HttpVersion: http2
         Origins:
         - Id: staticAssetOrigin
           DomainName:
@@ -434,6 +429,12 @@ Resources:
               - ''
               - - origin-access-identity/cloudfront/
                 - Ref: OriginAccessIdentityID
+        PriceClass: PriceClass_100
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: whitelist
+            Locations:
+            - US
   HostInstance:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
