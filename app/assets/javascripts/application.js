@@ -12,6 +12,8 @@
 //
 // Critical files are required for all other scripts to execute
 //= require_tree ./critical
+//= require i18n
+//= require i18n/translations
 //= require react
 //= require classnames
 //= require js-routes

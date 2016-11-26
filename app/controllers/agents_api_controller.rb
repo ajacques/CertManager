@@ -39,10 +39,11 @@ class AgentsApiController < ActionController::Base
 
   def report
     body = JSON.parse(request.body.read)
+    agent.last_hostname = body['hostname']
     # TODO: So insecure
-    body.each do |service_id, item|
+    body['services'].each do |service_id, item|
       record = {
-        hostname: item['hostname'],
+        hostname: body['hostname'],
         updated_at: Time.now,
         exists: true,
         valid: item['state'] == 'valid',
@@ -51,8 +52,9 @@ class AgentsApiController < ActionController::Base
       record[:reason] = item['reason'] if item.key? 'reason'
       CertManager::Configuration.redis_client.hset("SERVICE_#{service_id}_NODESTATUS", agent.id, record.to_json)
     end
+    agent.save!
 
-    render nothing: true
+    render nothing: true, status: :accepted
   end
 
   def sync
@@ -88,7 +90,7 @@ class AgentsApiController < ActionController::Base
     raise NotAuthorized unless split[0] == 'Bearer'
     key = split[1]
     raise NotAuthorized unless key
-    @agent = Agent.find_by(access_token: key)
+    @agent = Agent.find_by access_token: key
     raise NotAuthorized unless @agent
   end
 end

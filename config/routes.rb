@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   scope :search, controller: :search, as: :search do
     get :results
     get :manifest
-    get :suggest
+    get :suggestions
   end
   scope :install, controller: :install, as: :install do
     get 'oauth'
@@ -66,9 +66,6 @@ Rails.application.routes.draw do
     end
     collection do
       get 'deployment'
-      scope :salt do
-        get 'nodes'
-      end
     end
   end
   scope :private_keys, controller: :private_keys do
@@ -86,7 +83,7 @@ Rails.application.routes.draw do
   end
   scope :agents, controller: :agents_api, as: :agent do
     get 'register/:token', action: :register, as: :register, constraints: {
-      token: /([a-zA-Z0-9_\-_]+\.?){3}/
+      token: /([a-zA-Z0-9_\-]+\.?){3}/
     }
     post :bootstrap
     get :sync

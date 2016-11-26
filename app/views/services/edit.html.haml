@@ -1,7 +1,7 @@
 %ol.breadcrumb
   %li= link_to 'Services', action: :index
   %li= link_to @service.certificate, service_path
-  %li.active Edit
+  %li.active= t 'operations.edit'
 %h2 Edit #{@service.certificate}
 = bootstrap_form_for @service, layout: :horizontal do |f|
   - if @service.is_a? Service::SoteriaAgent

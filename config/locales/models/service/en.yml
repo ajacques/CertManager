@@ -4,10 +4,16 @@ en:
       service:
         cert_path: Certificate path
         rotate_container_name: Target Container Name
+    errors:
+      models:
+        service:
+          attributes:
+            cert_path:
+              blank: A valid, non-empty file path must be specified.
     help:
       service:
         cert_path: An absolute path located inside the target Docker container.
         rotate_container_name: This Docker container will receive a signal after the certificate has been updated.
   services:
       name:
-        plural: "Services"
+        plural: Services

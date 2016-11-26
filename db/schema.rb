@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20160923090500) do
 
   create_table "agents", force: :cascade do |t|
     t.string   "access_token"
+    t.string   "last_hostname"
     t.datetime "last_synced_at"
   end
 

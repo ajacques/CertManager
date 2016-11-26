@@ -1,0 +1,6 @@
+%aside.pull-right.col-xs-2
+  %ul.aside-menu-list
+    %li= link_to t('operations.edit'), edit_service_path
+    %li
+      = form_tag service_path, method: :delete do
+        = submit_tag t('operations.delete'), class: 'btn-link'

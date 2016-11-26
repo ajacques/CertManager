@@ -48,6 +48,9 @@ class CertificatesController < ApplicationController
           item.public_key.to_pem
         }.join("\n")
       }
+      format.json {
+        render json: cert.chain
+      }
     end
   end
 

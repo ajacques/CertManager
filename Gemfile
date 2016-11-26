@@ -32,6 +32,7 @@ gem 'jwt'
 
 group :assets, :development do
   gem 'classnames-rails'
+  gem 'i18n-js', '>= 3.0.0.rc11'
 
   gem 'bootstrap-sass'
   gem 'js-routes'

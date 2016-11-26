@@ -1,7 +1,7 @@
 !!! XML
 %opensearchdescription{ xmlns: 'http://a9.com/-/spec/opensearch/1.1/' }
   %shortname= t 'brand'
-  %description Search for certificates
+  %description= t 'views.search.manifest.description'
   %inputencoding UTF-8
   %url{ type: 'text/html', template: "#{certificates_url}?query={searchTerms}" }/
-  %url{ type: 'application/x-suggestions+json', template: "#{search_suggest_url(format: 'json')}?query={searchTerms}" }/
+  %url{ type: 'application/x-suggestions+json', template: "#{search_suggestions_url(format: 'json')}?query={searchTerms}" }/

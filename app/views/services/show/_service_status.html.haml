@@ -2,8 +2,6 @@
 - bad_count = @node_status.count { |n| !n.valid? }
 - if bad_count >= 1
   .bg-warning There #{'is'.pluralize bad_count} currently #{pluralize bad_count, 'inconsistent node'}.
-  - if @service.deployable?
-    %p= link_to 'Attempt to fix', deploy_service_path
 %table.table
   %thead
     %tr
@@ -12,11 +10,7 @@
       %td= t 'views.services.show.table_headers.last_checked'
   %tbody
     - @node_status.each do |node|
-      - if node.status.failed?
-        - color = 'bg-danger'
-      - elsif node.status.valid?
-        - color = 'bg-success'
-      %tr{ class: color }
+      %tr{ class: to_css_class(node.status, failed: 'bg-danger', valid: 'bg-success') }
         %td= node.hostname
         %td
           %div= t "views.services.show.statuses.#{node.status}"

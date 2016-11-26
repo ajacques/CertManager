@@ -1,0 +1,17 @@
+en:
+  views:
+    services:
+      new:
+        help:
+          certificate: Which certificate will be deployed?
+          cert_path: Where should the certificate be placed on the file system?
+        after_update:
+          header: Post update
+          help: After a certificate change (ex. renewal), the following actions will be performed on all appropriate hosts.
+          signal: Specifies the signal that should be sent to the process to reload.
+        config:
+          header: Configuration
+        deploy_plan:
+          header: Preview
+          help: The deployed file will be in the following format
+          missing_cert: Missing certificate. Is this record signed?

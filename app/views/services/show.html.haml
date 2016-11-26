@@ -1,15 +1,9 @@
-%ol.breadcrumb
-  %li= link_to 'Services', action: :index
-  %li.active= @service.certificate
 - page_title "#{@service.certificate} Service"
-%aside.pull-right.col-xs-2
-  %ul.aside-menu-list
-    %li= link_to 'Edit', edit_service_path
-    - if @service.deployable?
-      %li= link_to 'Deploy certificate', action: :deploy
-    %li
-      = form_tag service_path, method: :delete do
-        = submit_tag 'Delete', class: 'btn-link'
 
+%ol.breadcrumb
+  %li= link_to 'Services', services_path
+  %li.active= @service.certificate
+
+= render partial: 'services/show/settings_pane'
 %h1= @service.certificate
-= render partial: 'service_status'
+= render partial: 'services/show/service_status'

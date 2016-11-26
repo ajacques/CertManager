@@ -1,9 +1,17 @@
-= f.text_field :cert_path, help: t('activerecord.help.service.cert_path')
-= f.text_field :rotate_container_name, help: t('activerecord.help.service.rotate_container_name')
+.input-group
+  .col-sm-2
+    %label{ for: 'service_cert_path' }= t 'models.service.attributes.cert_path'
+  .col-sm-10
+    %input#service_cert_path{ type: :text, disabled: true, value: @service.cert_path }
+    %div= t 'activerecord.help.service.cert_path'
+    .text-warn= t 'views.services.edit.agent.cert_path_note'
+= f.fields_for :rotate do |r|
+  = r.text_field :container_name, help: t('activerecord.help.service.rotate_container_name')
+  = r.select :signal, Service::SoteriaAgent.SIGNALS, help: t('views.services.new.after_update.signal')
 
 %ul
   - Agent.find_each do |agent|
     %li
       %label
         %input{ type: :checkbox, name: "service[agent_ids][#{agent.id}]" }
-        %span= agent.id
+        %span= agent.last_hostname

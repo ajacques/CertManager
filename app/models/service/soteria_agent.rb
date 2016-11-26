@@ -1,8 +1,13 @@
 class Service::SoteriaAgent < Service
+  SIGNALS = %w(HUP USR1).sort.freeze
   has_many :agents, through: :memberships
   has_many :memberships, class_name: 'AgentService', foreign_key: :service_id, inverse_of: :service
-  service_prop :cert_path, :rotate_container_name
+  service_prop :cert_path, :rotate_enabled, :rotate
+
+  # Validations
   validates :cert_path, presence: true
+  validates :signal, inclusion: { in: SIGNALS }
+  validates :rotate, presence: true, if: :rotate_enabled
 
   def agent_ids
     agents.map(&:id)
@@ -11,6 +16,8 @@ class Service::SoteriaAgent < Service
   def deployable?
     false
   end
+
+  alias triggers_post_rotate? rotate_enabled
 
   def as_agent_manifest
     map = {
@@ -23,10 +30,11 @@ class Service::SoteriaAgent < Service
       }
     }
 
-    if rotate_container_name
+    if triggers_post_rotate?
       map[:after_action] << {
         type: :docker,
-        container_name: rotate_container_name
+        container_name: rotate.container_name,
+        signal: rotate.signal
       }
     end
     map
@@ -45,9 +53,5 @@ class Service::SoteriaAgent < Service
     agents.each do |id, _state|
       memberships << AgentService.new(agent: Agent.find(id.to_i), service: self)
     end
-  end
-
-  def node_tags=(args)
-    super args.split(' ')
   end
 end

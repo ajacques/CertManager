@@ -6,7 +6,7 @@
   = bootstrap_form_for Settings::LetsEncrypt.new, url: url_for do |f|
     = f.select :private_key_id, [['None Selected', 'nil']] + @signing_keys
     = f.text_field :endpoint, label: t('settings.lets_encrypt_endpoint'), description: 'test'
-    = f.submit t('form_controls.save'), class: 'btn btn-default'
+    = f.submit t('operations.save'), class: 'btn btn-default'
 
 .well.well-large
   %h4 Email settings
@@ -16,5 +16,5 @@
     = f.text_field :from_address, label: 'From Address', placeholder: 'user@example.com'
     = f.check_box :enable_starttls, label: t('activerecord.settings.email_server.enable_starttls')
     .form-group
-      = f.submit t('form_controls.save'), class: 'btn btn-default'
+      = f.submit t('operations.save'), class: 'btn btn-default'
       = react_component 'SettingsValidateButton', { target: :mail_server }, tag: :span, prerender: true, data: { react_mount: true }

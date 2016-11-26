@@ -1,6 +1,5 @@
 en:
   brand: Soteria
-  certificate: Certificate
   setup:
     header: Welcome!
     sub_header: Create your account
@@ -22,7 +21,8 @@ en:
   operations:
     new: New
     import: Import
+    delete: Delete
+    edit: Edit
+    save: Save
   settings:
     lets_encrypt_endpoint: Server endpoint
-  form_controls:
-    save: "Save"

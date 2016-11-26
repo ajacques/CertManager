@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-  def suggest
+  def suggestions
     certs = certificates
     resp = [
       params[:query], certs.map(&:to_s)

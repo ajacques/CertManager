@@ -1,0 +1,5 @@
+en:
+  views:
+    search:
+      manifest:
+        description: Search for certificates

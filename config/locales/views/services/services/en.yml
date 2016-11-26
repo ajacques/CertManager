@@ -1,0 +1,6 @@
+en:
+  views:
+    services:
+      edit:
+        agent:
+          cert_path_note: 'NOTE: The certificate will not be removed from the previous certificate path location.'

@@ -27,4 +27,9 @@ module ApplicationHelper
       haml_tag :abbr, relative_time, title: actual_time
     end
   end
+
+  def to_css_class(value, mapping)
+    sym = value.to_sym
+    mapping[sym] if mapping.key? sym
+  end
 end

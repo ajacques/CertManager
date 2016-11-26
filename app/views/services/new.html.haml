@@ -3,25 +3,9 @@
   %li= link_to 'Services', action: :index
   %li.active New
 %h2 Create service
-= bootstrap_form_tag url: services_path, layout: :horizontal do |g|
-  = g.fields_for :service do |f|
-    = f.select :certificate_id, options_for_certificate_list(Certificate.signed)
-    = f.form_group :deploy_strategy do
-      = f.radio_button :type, Service::Salt.to_s, label: 'Salt stack', checked: true
-      = f.radio_button :type, Service::SoteriaAgent.to_s, label: 'Docker agent'
-    .select-group-set{ data: { parent: '[service][type]' } }
-      .select-group{ data: { key: 'Service::Salt' } }
-        = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
-        = f.text_field :after_rotate, placeholder: 'service nginx reload'
-        = f.text_field :node_group
-      .select-group.hidden{ data: { key: 'Service::SoteriaAgent' } }
-        = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem'
-        = f.text_field :node_tags
-        .form-group
-          %label.col-sm-2.control-label After rotation
-          .col-sm-10
-            %label
-              %input{ type: 'checkbox' }
-              %span Perform rotation
-        = f.text_field :rotate_container_name
-  = g.submit 'Create service', class: 'btn btn-primary'
+.col-md-6
+  = render partial: 'services/new_service_form'
+.col-md-6
+  %h3= t 'views.services.new.deploy_plan.header'
+  %p= t 'views.services.new.deploy_plan.help'
+  = react_component 'ServicesNewOverview', { certificateSelectId: 'service_certificate_id' }, prerender: true, data: { react_mount: true }

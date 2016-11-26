@@ -1,4 +1,5 @@
 en:
+  certificate: Certificate
   models:
     certificate:
       actions:

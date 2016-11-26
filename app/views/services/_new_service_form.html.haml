@@ -1,0 +1,17 @@
+= bootstrap_form_for @service, url: services_path, layout: :horizontal do |f|
+  .well
+    %h3= t 'views.services.new.config.header'
+    = f.select :certificate_id, options_for_certificate_list(Certificate.signed, @service.certificate_id), help: t('views.services.new.help.certificate')
+    = f.hidden_field :type, value: Service::SoteriaAgent.to_s
+    = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem', help: t('views.services.new.help.cert_path')
+  .well
+    %h3= t 'views.services.new.after_update.header'
+    %p= t 'views.services.new.after_update.help'
+    = f.fields_for :rotate do |r|
+      .form-group
+        %label.col-sm-2.control-label Post update
+        .col-sm-10
+          = f.check_box :rotate_enabled
+      = r.text_field :container_name
+      = r.select :signal, Service::SoteriaAgent::SIGNALS, help: t('views.services.new.after_update.signal')
+  = f.submit 'Create service', class: 'btn btn-primary center-block'

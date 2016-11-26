@@ -53,11 +53,37 @@ class Certificate extends CertificatePart {
   }
 
   _from_chain(result) {
+    result.reverse();
+    this.opts = result[0];
+    let node = this;
+    for (let i = 1; i < result.length; i++) {
+      node = node.parent = new Certificate(result[i]);
+    }
     return this;
   }
 
+  get chain() {
+    const chain = [];
+    for (let node = this; node; node = node.parent) {
+      chain.push(node);
+    }
+
+    return chain;
+  }
+
+  get public_key() {
+    return this.opts && this.opts.public_key;
+  }
+  get private_key() {
+    return this.opts && this.opts.private_key;
+  }
+
+  fetch() {
+    return this.getChain('json');
+  }
+
   getChain(format) {
-    return Ajax.get(Routes.chain_certificate_path({id: this.id}, {format: format})).then(this._from_chain);
+    return Ajax.get(Routes.chain_certificate_path({id: this.id}, {format: format})).then(this._from_chain.bind(this));
   }
 
   static _from_expanded(blob) {
