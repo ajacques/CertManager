@@ -108,7 +108,8 @@ class Certificate < ActiveRecord::Base
   def sign(cert)
     # raise 'Must be a CA cert to sign other certs' unless public_key.is_ca? || public_key == cert.public_key
     # raise 'Basic constraints must include keyCertSign' unless public_key.key_usage.include? :keyCertSign
-    public_key.issuer_subject = subject
+    cert.public_key.issuer_subject = subject
+    cert.issuer = self
     ossl = cert.public_key.to_openssl
     ossl.issuer = subject.to_openssl
     ossl.public_key = cert.private_key.to_openssl.public_key

@@ -28,9 +28,10 @@ module CertHelper
   private
 
   def build_chain(cert, &block)
-    return if cert.issuer == cert
-    if cert.issuer
-      build_chain(cert.issuer, &block)
+    # Terminal case: Self signed certificates
+    issuer = cert.issuer
+    if issuer
+      build_chain(issuer, &block) unless issuer == cert
     else
       yield StubCertificate.new subject: cert.public_key.issuer_subject
     end

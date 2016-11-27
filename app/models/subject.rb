@@ -24,14 +24,17 @@ class Subject < ActiveRecord::Base
     subject
   end
 
+  def to_full
+    to_h.map { |k,v| "#{k}=#{v}" }.inject(:+)
+  end
+
   def to_h
-    {
-      CN: self.CN,
-      O: self.O,
-      OU: self.OU,
-      ST: self.ST,
-      C: self.C
-    }
+    h = {}
+    attributes.each do |k, v|
+      next if k == 'id'
+      h[k] = v if v
+    end
+    h
   end
 
   def self.from_r509(subject)

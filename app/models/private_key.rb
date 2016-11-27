@@ -43,7 +43,6 @@ class PrivateKey < ActiveRecord::Base
       bit_length: bit_length,
       type: type,
       fingerprint: fingerprint
-
     }
   end
 

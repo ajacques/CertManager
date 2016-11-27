@@ -1,6 +1,6 @@
 hash_algorithm:
   type: array
-  default: sha1
+  default: sha256
   secure:
     - sha256
     - sha384

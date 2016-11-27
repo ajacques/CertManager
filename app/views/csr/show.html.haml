@@ -1,16 +1,14 @@
-%h3 Create a CSR
+%h3= t 'views.csr.show.header'
 %div
-  %h4 Step 1. Verify your request
-  %h5 Inspect the follow to ensure that everything looks correct. This is what your CA will be signing so it's important to be correct.
-  - if validate_csr(@csr).any?
-    .bg-warning Unrecommended parameters detected. Please check carefully
-  = explain_csr @csr
-  %h4 Step 2. Submit your request
-  %p Submit this to your signing authority
-  = text_area_tag :csr_body, @csr.to_pem, class: 'form-control certificate cert-body', readonly: true
-  %h4 Step 3. Import the signed chain
-  %p Here's where you'd upload the signed chain
+  %h4= t 'views.csr.show.step1.header'
+  %h5= t 'views.csr.show.step1.message'
+  = render partial: 'csr/info'
+  %h4= t 'views.csr.show.step2.header'
+  %p= t 'views.csr.show.step2.message'
+  %textarea.form-control.certificate.cert-body{ readonly: true }= @csr.to_pem
+  %h4= t 'views.csr.show.step3.header'
+  %p= t 'views.csr.show.step3.message'
   = bootstrap_form_tag url: url_for(action: :import) do |f|
     = f.fields_for :certificate do |c|
       = c.text_area :key, label: 'Certificate chain', class: 'certificate'
-    = f.submit 'Import'
+    = f.submit t('operations.import')

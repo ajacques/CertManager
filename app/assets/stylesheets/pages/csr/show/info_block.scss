@@ -1,0 +1,22 @@
+.csr-checklist {
+  list-style-type: none;
+  overflow: auto;
+  padding-left: 0;
+}
+
+.csr-checklist-item {
+  border: solid thin #808080;
+  border-radius: 4px;
+  float: left;
+  margin: 1em;
+  padding: 0 .5em .5em .5em;
+  width: 200px;
+
+  &.valid {
+    box-shadow: inset 0px 0px 15px #dff0d8;
+  }
+
+  &.warning {
+    box-shadow: inset 0px 0px 15px #fcf8e3;
+  }
+}

@@ -1,0 +1,23 @@
+en:
+  views:
+    csr:
+      show:
+        header: Create a CSR
+        step1:
+          header: Step 1. Verify your request
+          message: Inspect the follow to ensure that everything looks correct. This is what your CA will be signing so it's important to be correct.
+        step2:
+          header: Step 2. Submit your request
+          message: Submit this to your signing authority
+        step3:
+          header: Step 3. Import the signed chain
+          message: Here's where you'd upload the signed chain
+        subject:
+          header: Subject
+          summary: Includes the subject and all alternate names.
+        type:
+          header: Type
+        bit_length:
+          header: Bit length
+          summary: Higher bit lengths usually indicate better security.
+          value: '%{value} bits'
