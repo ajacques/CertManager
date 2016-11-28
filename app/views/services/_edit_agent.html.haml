@@ -1,13 +1,12 @@
-.input-group
-  .col-sm-2
-    %label{ for: 'service_cert_path' }= t 'models.service.attributes.cert_path'
+.form-group
+  %label.control-label.col-sm-2{ for: 'service_cert_path' }= t 'activerecord.attributes.service.cert_path'
   .col-sm-10
-    %input#service_cert_path{ type: :text, disabled: true, value: @service.cert_path }
+    %input.form-control#service_cert_path{ type: :text, disabled: true, value: @service.cert_path }
     %div= t 'activerecord.help.service.cert_path'
     .text-warn= t 'views.services.edit.agent.cert_path_note'
 = f.fields_for :rotate do |r|
   = r.text_field :container_name, help: t('activerecord.help.service.rotate_container_name')
-  = r.select :signal, Service::SoteriaAgent.SIGNALS, help: t('views.services.new.after_update.signal')
+  = r.select :signal, Service::SoteriaAgent::SIGNALS, help: t('views.services.new.after_update.signal')
 
 %ul
   - Agent.find_each do |agent|

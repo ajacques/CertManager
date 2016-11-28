@@ -6,7 +6,7 @@ class Service::SoteriaAgent < Service
 
   # Validations
   validates :cert_path, presence: true
-  validates :signal, inclusion: { in: SIGNALS }
+  # validates :signal, inclusion: { in: SIGNALS }
   validates :rotate, presence: true, if: :rotate_enabled
 
   def agent_ids
