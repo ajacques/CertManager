@@ -5,7 +5,7 @@ module RedisInstrumentation
     end
 
     def self.reset_runtime
-      @runtime = 0.0
+      @runtime = nil
     end
 
     def query(event)
