@@ -135,14 +135,6 @@ class Certificate < ActiveRecord::Base
     cert
   end
 
-  def self.find_by_common_name(name)
-    Certificate.joins(public_key: :subject).where(subjects: { CN: name })
-  end
-
-  def self.find_by_subject_id(id)
-    Certificate.joins(:public_key).find_by(public_keys: { subject_id: id })
-  end
-
   def self.find_for_key_pair(pub, priv)
     cert1 = Certificate.find_by(public_key_id: pub.id) if pub
     cert2 = Certificate.find_by(private_key_id: priv.id) if priv
