@@ -29,7 +29,7 @@ class OAuthController < ApplicationController
           redirect_to new_user_session_path
         }
         format.all {
-          render status: :bad_request, nothing: true
+          head :bad_request
         }
       end
       return

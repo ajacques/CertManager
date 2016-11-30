@@ -26,7 +26,7 @@ class SettingsController < ApplicationController
     UserMailer.validate_mail_server(current_user).deliver_now
     respond_to do |format|
       format.all {
-        render nothing: true, status: :accepted
+        head :accepted
       }
     end
   rescue Net::SMTPSyntaxError, Net::SMTPFatalError, OpenSSL::SSL::SSLError => e
