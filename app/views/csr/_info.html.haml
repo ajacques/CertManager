@@ -11,7 +11,7 @@
   %li.csr-checklist-item
     %h4= t 'views.csr.show.type.header'
     %b= @csr.private_key.model_name
-  %li.csr-checklist-item{ class: if SecurityPolicy.bit_length.secure?(@csr.bit_length) then 'valid' else 'warning' end }
+  %li.csr-checklist-item{ class: SecurityPolicy.bit_length.secure?(@csr.bit_length) ? 'valid' : 'warning' }
     %h4= t 'views.csr.show.bit_length.header'
     %p= t 'views.csr.show.bit_length.summary'
     %b= t 'views.csr.show.bit_length.value', value: @csr.bit_length

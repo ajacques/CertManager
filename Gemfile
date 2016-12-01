@@ -4,23 +4,25 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.0.0.1'
 
 # User Interface Gems
+gem 'bootstrap_form'
 gem 'haml'
 gem 'haml-rails'
-gem 'bootstrap_form'
-gem 'will_paginate'
 gem 'react-rails'
+gem 'will_paginate'
 
 gem 'therubyracer', platform: :ruby
 
 gem 'redis'
 gem 'redis-session-store'
 
-gem 'r509' # SSL certificate utilities
 gem 'acme-client'
+gem 'r509' # SSL certificate utilities
+
+# Database
+gem 'pg', platform: :ruby # Postgres
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'
-gem 'pg', platform: :ruby # Postgres
 
 gem 'rest-client'
 
@@ -31,13 +33,11 @@ gem 'secure_headers'
 gem 'jwt'
 
 group :assets, :development do
+  gem 'autoprefixer-rails'
+  gem 'bootstrap-sass'
   gem 'classnames-rails'
   gem 'i18n-js', '>= 3.0.0.rc11'
-
-  gem 'bootstrap-sass'
   gem 'js-routes'
-  gem 'autoprefixer-rails'
-
   gem 'sprockets'
   gem 'sprockets-es6'
 end
@@ -50,18 +50,18 @@ group :assets do
 end
 
 group :development do
+  gem 'mocha'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   # Use sqlite3 as the database for Active Record
   gem 'simplecov', platform: :ruby
-  gem 'mocha'
 
   # Coding quality
-  gem 'rubocop', require: false
   gem 'flay', require: false
-  gem 'reek', require: false
-  gem 'scss_lint', require: false
   gem 'haml-lint', require: false
+  gem 'reek', require: false
+  gem 'rubocop', require: false
+  gem 'scss_lint', require: false
 end
 
 group :development, :production do
