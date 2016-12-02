@@ -25,7 +25,7 @@ class Subject < ActiveRecord::Base
   end
 
   def to_full
-    to_h.map { |k,v| "#{k}=#{v}" }.inject(:+)
+    to_h.map { |k, v| "#{k}=#{v}" }.inject(:+)
   end
 
   def to_h

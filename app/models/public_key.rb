@@ -139,8 +139,7 @@ class PublicKey < ActiveRecord::Base
 
   protected
 
-  def update_fingerprint
-  end
+  def update_fingerprint; end
 
   def fingerprint_hash_algorithm
     Digest::SHA256

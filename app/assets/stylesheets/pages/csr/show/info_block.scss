@@ -1,3 +1,5 @@
+@import 'bootstrap/variables';
+
 .csr-checklist {
   list-style-type: none;
   overflow: auto;
@@ -5,18 +7,18 @@
 }
 
 .csr-checklist-item {
-  border: solid thin #808080;
+  border: solid thin $gray-light;
   border-radius: 4px;
   float: left;
   margin: 1em;
-  padding: 0 .5em .5em .5em;
+  padding: 0 .5em .5em;
   width: 200px;
 
   &.valid {
-    box-shadow: inset 0px 0px 15px #dff0d8;
+    box-shadow: inset 0 0 15px $state-success-bg;
   }
 
   &.warning {
-    box-shadow: inset 0px 0px 15px #fcf8e3;
+    box-shadow: inset 0 0 15px $state-warning-bg;
   }
 }
