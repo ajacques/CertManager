@@ -15,7 +15,7 @@ gem 'therubyracer', platform: :ruby
 gem 'redis'
 gem 'redis-session-store'
 
-gem 'acme-client'
+gem 'acme-client', '0.4.1'
 gem 'r509' # SSL certificate utilities
 
 # Database
