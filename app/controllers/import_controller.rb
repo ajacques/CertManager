@@ -26,34 +26,11 @@ class ImportController < ApplicationController
   end
 
   def do_import
-    key = params[:certificate][:key]
-    public_keys = CertificateTools.extract_certificates(key)
-    private_keys = CertificateTools.extract_private_keys(key)
+    set = ImportSet.from_array params[:certificate][:key]
 
-    public_keys.uniq!
-    ActiveRecord::Base.transaction do
-      public_keys = public_keys.map { |raw|
-        key = PublicKey.import raw
-        key.save!
-        key
-      }
-      private_keys = private_keys.map { |raw|
-        key = PrivateKey.import raw
-        key.save!
-        key
-      }
-      @certs = []
-      import_keys(private_keys, public_keys)
-      @certs.each do |cert|
-        next unless cert.public_key
-        issuer = cert if cert.public_key.issuer_subject_id == cert.public_key.subject_id
-        issuer ||= Certificate.find_by(subject_id: cert.public_key.issuer_subject_id)
-        if issuer
-          cert.issuer = issuer
-          cert.save!
-        end
-      end
-    end
+    set.import
+    set.save
+    @certs = set.promote_all_to_certificates
 
     respond_to do |format|
       format.json do
@@ -66,21 +43,6 @@ class ImportController < ApplicationController
           render 'import_done'
         end
       }
-    end
-  end
-
-  def import_keys(private_keys, public_keys)
-    public_keys.each do |pub|
-      certificate = Certificate.find_for_key_pair pub, nil
-      certificate.touch_by current_user
-      certificate.save!
-      @certs << certificate
-    end
-    private_keys.each do |priv|
-      certificate = Certificate.find_for_key_pair nil, priv
-      certificate.touch_by current_user
-      certificate.save!
-      @certs << certificate
     end
   end
 end

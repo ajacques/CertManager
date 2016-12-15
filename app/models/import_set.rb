@@ -44,6 +44,20 @@ class ImportSet
     certs
   end
 
+  def self.from_string(string)
+    # TODO: LA/LR parser
+    parts = []
+    part = ''
+    string.lines.each do |line|
+      part += line
+      if line.starts_with?('-----END')
+        parts.push(part) if line.include?(marker)
+        part = ''
+      end
+    end
+    parts
+  end
+
   def self.from_array(array)
     certs = []
     privates = []

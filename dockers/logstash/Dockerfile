@@ -1,5 +1,5 @@
-FROM logstash:latest
+FROM busybox:latest
 
-ADD logstash.conf /etc/logstash/conf.d/logstash.conf
-ADD template.json /etc/logstash/conf.d/template.json
-WORKDIR /etc/logstash/conf.d
+ADD config/* /data/
+VOLUME /etc/logstash/conf.d
+CMD ["/bin/sh", "-c", "/bin/cp -fr /data/* /etc/logstash/conf.d/"]

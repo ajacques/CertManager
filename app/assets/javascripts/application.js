@@ -20,4 +20,3 @@
 //= require_tree ./common
 //= require_tree ./controls
 //= require_tree ./models
-//= require_tree ./pages

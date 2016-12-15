@@ -5,12 +5,15 @@
     = csr.fields_for :subject_attributes do |sb|
       -# TODO: Figure out how to use Bootstrap forms for this one
       .form-group
-        = label 'certificate_csr_attributes_subject_attributes', 'CN', 'Common Name', class: 'col-sm-2 control-label'
+        .col-sm-2.control-label
+          = label 'certificate_csr_attributes_subject_attributes', 'CN', 'Common Name'
+          %abbr.text-success{ title: t('views.certificates.new.recommended_reason') }= t 'views.certificates.new.recommended'
         .col-sm-10
           .input-group
             .input-group-addon https://
             = text_field_tag 'certificate[csr_attributes][subject_attributes][CN]', nil,
               class: 'form-control', placeholder: 'example.com'
+          %span.help-block= t 'views.certificates.new.help.common_name'
       = sb.text_field :O, label: 'Organization Name', placeholder: 'Foo Widgets, Ltd.'
       = sb.text_field :OU, label: 'Department Name', placeholder: 'Accounting'
       = sb.text_field :C, label: 'Country', placeholder: 'US or UK'

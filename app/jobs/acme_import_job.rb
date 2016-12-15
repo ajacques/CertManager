@@ -18,6 +18,7 @@ class AcmeImportJob < ActiveJob::Base
   rescue StandardError => err
     attempt.last_status = 'errored'
     attempt.status_message = "#{err}\n#{err.backtrace.first}"
+    Raven.capture_exception err
     raise err
   ensure
     attempt.save!

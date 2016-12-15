@@ -1,0 +1,8 @@
+en:
+  views:
+    certificates:
+      new:
+        help:
+          common_name: A common name can be a domain name, email address, or any other string. When connecting to a remote host, the CN must match the name that the client used.
+        recommended: Recommended
+        recommended_reason: Most certificates have this attribute set

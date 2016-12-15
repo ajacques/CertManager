@@ -9,6 +9,5 @@
   %h4= t 'views.csr.show.step3.header'
   %p= t 'views.csr.show.step3.message'
   = bootstrap_form_tag url: url_for(action: :import) do |f|
-    = f.fields_for :certificate do |c|
-      = c.text_area :key, label: 'Certificate chain', class: 'certificate'
+    = react_component 'CertificateImportContainer', {}, prerender: true, data: { react_mount: true }
     = f.submit t('operations.import')

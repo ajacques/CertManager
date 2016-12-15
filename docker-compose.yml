@@ -114,7 +114,12 @@ browsersync:
     - .:/app:ro
 
 logstash:
-  build: dockers/logstash
+  image: logstash
+  volumes_from:
+    - logstash_config
   command: logstash -f /etc/logstash/conf.d/logstash.conf
   external_links:
     - elasticsearch
+
+logstash_config:
+  build: dockers/logstash
