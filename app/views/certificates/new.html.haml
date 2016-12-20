@@ -1,5 +1,6 @@
-%h1 New Certificate
-%p Fill out the following information to create a private key and associated certificate request.
+- page_title t 'views.certificates.new.title'
+%h1= t 'views.certificates.new.title'
+%p= t 'views.certificates.new.instruction'
 = bootstrap_form_for :certificate, url: url_for(action: :create), layout: :horizontal do |f|
   = f.fields_for :csr_attributes do |csr|
     = csr.fields_for :subject_attributes do |sb|
@@ -10,7 +11,7 @@
           %abbr.text-success{ title: t('views.certificates.new.recommended_reason') }= t 'views.certificates.new.recommended'
         .col-sm-10
           .input-group
-            .input-group-addon https://
+            .input-group-addon CN
             = text_field_tag 'certificate[csr_attributes][subject_attributes][CN]', nil,
               class: 'form-control', placeholder: 'example.com'
           %span.help-block= t 'views.certificates.new.help.common_name'
@@ -20,7 +21,7 @@
     .form-group
       %label.col-sm-2.control-label Alternate Names (SAN)
       .col-sm-10#subject-alt-list
-        = react_component 'SubjectAltNameList', {}, prerender: true
+        = react_component 'SubjectAltNameList', {}, prerender: true, data: { react_mount: true }
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       = pk.radio_button :type, 'RSAPrivateKey', checked: true, label: 'RSA'
