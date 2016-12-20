@@ -1,8 +1,66 @@
-extends: 'eslint:recommended'
+
+plugins:
+  - react
+  - eslint-plugin-react
+
+extends:
+  - 'eslint:recommended'
+  - plugin:react/recommended
+
+globals:
+  - React
 
 parserOptions:
-  plugins:
-    - react
+  ecmaVersion: 6
+  ecmaFeatures:
+    jsx: true
+  impliedStrict: true
+
+settings:
+  react:
+    version: '15.0.2'
 
 env:
   browser: true
+
+rules:
+  # Asset Pipeline differences
+  no-undef: error
+
+  # React
+  react/react-in-jsx-scope: off
+  react/jsx-no-undef: off
+
+  semi: error
+  no-unexpected-multiline: error
+  no-extra-parens: error
+  no-unsafe-negation: warn
+  complexity:
+    - warn
+    - 4
+  curly:
+    - warn
+    - all
+  no-alert: error
+  no-extra-bind: error
+  no-eval: error
+  radix:
+    - error
+    - always
+  no-shadow: error
+
+  prefer-const: error
+
+  # Class Layout
+  no-useless-constructor: error
+
+  # Code style
+  indent:
+    - error
+    - 2
+  yoda:
+    - warn
+    - never
+  brace-style:
+    - error
+    - 1tbs
