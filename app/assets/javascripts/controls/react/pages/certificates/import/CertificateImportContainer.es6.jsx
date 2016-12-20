@@ -1,7 +1,10 @@
+/* exported CertificateImportContainer */
+/* globals Certificate, PrivateKey */
 class CertificateImportContainer extends React.Component {
   constructor(props) {
     super(props);
     this.update = this.update.bind(this);
+    this.handleAnalyze = this.handleAnalyze.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.state = {
       certificates: []
@@ -9,7 +12,7 @@ class CertificateImportContainer extends React.Component {
   }
 
   onRemove(key) {
-    const newCerts = certificates.slice();
+    const newCerts = this.state.certificates.slice();
     const index = newCerts.findIndex(f => f.key === key);
     newCerts.splice(index, 1);
     this.setState({certificates: newCerts});
@@ -23,12 +26,12 @@ class CertificateImportContainer extends React.Component {
         }
         match.parsed = result;
         match.state = 'loaded';
-        this.forceRender();
+        this.forceUpdate();
       },
       fail: result => {
         match.state = 'errored';
         match.error = result.responseText;
-        this.forceRender();
+        this.forceUpdate();
       }
     };
   }
@@ -49,6 +52,9 @@ class CertificateImportContainer extends React.Component {
       }
     }
     return null;
+  }
+  handleRemove() {
+
   }
   handlePrivateKeyAnalyze(root) {
     let certificates = this.state.certificates;
@@ -98,7 +104,7 @@ class CertificateImportContainer extends React.Component {
     }
     newCerts.push(cert);
     this.setState({certificates: newCerts});
-  };
+  }
 
   render() {
     return (

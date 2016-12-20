@@ -7,9 +7,6 @@ extends:
   - 'eslint:recommended'
   - plugin:react/recommended
 
-globals:
-  - React
-
 parserOptions:
   ecmaVersion: 6
   ecmaFeatures:
@@ -19,6 +16,9 @@ parserOptions:
 settings:
   react:
     version: '15.0.2'
+
+globals:
+  - React
 
 env:
   browser: true

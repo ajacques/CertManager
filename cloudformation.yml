@@ -602,14 +602,14 @@ Resources:
               - ''
               - - 'arn:aws:s3:::'
                 - Ref: StaticFileS3BucketName
-                - '/web_content/*'
+                - /web_content/*
             Condition:
               Bool:
                 aws:SecureTransport: 'true'
   FrontendIAMInstanceRole:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Path: '/'
+      Path: /
       Roles:
       - Ref: FrontendIAMRole
 Outputs:
