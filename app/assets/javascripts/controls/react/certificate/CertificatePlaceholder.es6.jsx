@@ -17,7 +17,7 @@ class CertificatePlaceholder extends React.Component {
     if (!public_key) {
       return [
         <div>{I18n.t('views.services.new.deploy_plan.missing_cert')}</div>
-      ]
+      ];
     }
     return [
       <div>-----BEGIN CERTIFICATE-----</div>,

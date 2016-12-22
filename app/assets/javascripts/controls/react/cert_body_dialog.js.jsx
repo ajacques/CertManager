@@ -81,7 +81,7 @@
       model: React.PropTypes.object.isRequired
     },
     close: function() {
-      ReactDOM.unmountComponentAtNode(modalPoint)
+      ReactDOM.unmountComponentAtNode(modalPoint);
     },
     _getModel: function() {
       var model = this.props.model;
@@ -104,5 +104,5 @@
         <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.model.id})}>{this.props.children}</a>
       );
     }
-  })
+  });
 }).call(this);

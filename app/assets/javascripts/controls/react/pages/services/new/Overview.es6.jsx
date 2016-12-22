@@ -21,7 +21,7 @@ class ServicesNewOverview extends React.Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      (this.state.loaded !== nextState.loaded && nextState.loaded) ||
+      this.state.loaded !== nextState.loaded && nextState.loaded ||
       this.state.loading !== nextState.loading
     );
   }
@@ -31,7 +31,7 @@ class ServicesNewOverview extends React.Component {
   }
 
   loadCertificateId(id) {
-    const cert = Certificate.find(parseInt(id));
+    const cert = Certificate.find(parseInt(id, 10));
     cert.fetch().then(this.onChainFetch);
     this.setState({loaded: false, loading: true, certificate: cert});
   }

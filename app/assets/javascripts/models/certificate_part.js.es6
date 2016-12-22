@@ -11,10 +11,10 @@ class CertificatePart {
     this.subject = this.opts.subject;
     this.to_pem = this.get_format.bind(this, 'pem');
     this.id = this.opts.id;
-  };
+  }
 
   to_pem() {
-    return get_format('pem');
+    return this.get_format('pem');
   }
 
   id() {
@@ -49,7 +49,7 @@ class Certificate extends CertificatePart {
       acceptType: 'application/json',
       contentType: 'application/x-pem',
       data: body
-    }
+    };
   }
 
   _from_chain(result) {

@@ -3,7 +3,7 @@ class NativeAjax {
     return this.csrfToken || (this.csrfToken = document.head.querySelector('meta[name="csrf-token"]').content);
   }
   static _parseResponse(response) {
-    let mimeType = response.getResponseHeader('Content-Type');
+    const mimeType = response.getResponseHeader('Content-Type');
     if (mimeType && mimeType.startsWith('application/json') && response.responseText !== '') {
       return JSON.parse(response.responseText);
     } else {

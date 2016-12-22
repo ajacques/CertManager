@@ -28,9 +28,9 @@
     };
     var page_name = document.body.getAttribute('data-page');
     page_obj = window[page_name];
-    if ("function" === typeof page_obj) {
+    if (typeof page_obj === "function") {
       page_obj();
-    } else if ("object" === typeof page_obj) {
+    } else if (typeof page_obj === "object") {
       page_obj.init();
     }
     initializeReact();
