@@ -1,5 +1,14 @@
 window.on_pageload = window.on_pageload || [];
 window.on_pageload.push(function() {
+  function updateClasses(target, child) {
+    var isCurrent = target === child.getAttribute('data-key');
+    var isHidden = child.classList.contains('hidden');
+    if (isHidden && isCurrent) {
+      child.classList.remove('hidden');
+    } else if (!(isHidden || isCurrent)) {
+      child.classList.add('hidden');
+    }
+  }
   'use strict';
   var elems = document.querySelectorAll('div.select-group-set');
   for (var i = 0; i < elems.length; i++) {
@@ -10,13 +19,7 @@ window.on_pageload.push(function() {
     for (var j = 0; j < parentControls.length; j++) {
       parentControls[j].addEventListener('change', function(event) {
         for (var x = 0; x < children.length; x++) {
-          var isCurrent = event.target.value === children[x].getAttribute('data-key');
-          var isHidden = children[x].classList.contains('hidden');
-          if (isHidden && isCurrent) {
-            children[x].classList.remove('hidden');
-          } else if (!(isHidden || isCurrent)) {
-            children[x].classList.add('hidden');
-          }
+          updateClasses(event.target.name, children[x]);
         }
       });
     }

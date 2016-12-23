@@ -1,6 +1,7 @@
 /* exported CertificateChunk */
 var CertificateChunk = React.createClass({
   propTypes: {
+    certificate: React.PropTypes.object.isRequired,
     onRemove: React.PropTypes.func.isRequired,
     id: React.PropTypes.node.isRequired,
     state: React.PropTypes.string.isRequired,
@@ -9,45 +10,53 @@ var CertificateChunk = React.createClass({
   handleRemove: function() {
     this.props.onRemove(this.props.id);
   },
-  render: function() {
-    var certificate, private_key;
-    if (this.props.certificate !== undefined) {
-      var state = this.props.certificate.state;
-      if (state === 'fetching') {
-        certificate = <span>[Analyzing certificate...]</span>;
-      } else if (state === 'errored') {
-        certificate = <span className="error">[Failed to analyze. Certificate may not be valid.]</span>;
-      } else {
-        var cert = this.props.certificate;
-        var already_imported;
-        if (cert.parsed.id !== null) {
-          already_imported = <CertBodyDialogLink model={cert.parsed}>[View existing]</CertBodyDialogLink>;
-        }
-        certificate = (
-          <span>
-            <span>Subject: {cert.parsed.subject.CN}</span>
-            {already_imported}
-          </span>
-        );
-      }
-    }
-    if (this.props.private_key !== undefined) {
-      var key = this.props.private_key;
-      if (key.state === 'fetching') {
-        private_key = <span>[Analyzing private key</span>;
-      } else {
-        private_key = (
-          <span>
-            <b>Private Key:</b>
-            <span>{key.parsed.opts.bit_length} Bits</span>
-          </span>
-        );
-      }
+  renderKnownCertificate: function() {
+    var cert = this.props.certificate;
+    var already_imported;
+    if (cert.parsed.id !== null) {
+      already_imported = <CertBodyDialogLink model={cert.parsed}>[View existing]</CertBodyDialogLink>;
     }
     return (
+      <span>
+        <span>Subject: {cert.parsed.subject.CN}</span>
+        {already_imported}
+      </span>
+    );
+  },
+  renderCertificate: function() {
+    if (this.props.certificate === undefined) {
+      return null;
+    }
+    var state = this.props.certificate.state;
+    if (state === 'fetching') {
+      return <span>[Analyzing certificate...]</span>;
+    } else if (state === 'errored') {
+      return <span className="error">[Failed to analyze. Certificate may not be valid.]</span>;
+    } else {
+      return this.renderKnownCertificate();
+    }
+  },
+  renderPrivateKey: function() {
+    if (this.props.private_key === undefined) {
+      return null;
+    }
+    var key = this.props.private_key;
+    if (key.state === 'fetching') {
+      return <span>[Analyzing private key</span>;
+    } else {
+      return (
+        <span>
+          <b>Private Key:</b>
+          <span>{key.parsed.opts.bit_length} Bits</span>
+        </span>
+      );
+    }
+  },
+  render: function() {
+    return (
       <div className="cert-chunk">
-        {certificate}
-        {private_key}
+        {this.renderCertificate()}
+        {this.renderPrivateKey()}
         <button onClick={this.handleRemove} type="button" className="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
