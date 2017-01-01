@@ -6,4 +6,4 @@
 //= require classnames
 //= require_tree ./controls/react
 
-var window = {};
+var window = this;
