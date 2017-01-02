@@ -12,3 +12,5 @@ en:
     extended_key_usage:
       serverAuth: Authenticates as a server
       clientAuth: Authenticates as a client
+    subject_alternate_names:
+      label: Subject Alternate Names (SAN)
