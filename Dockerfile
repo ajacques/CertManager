@@ -2,8 +2,8 @@ FROM alpine:3.5
 
 ADD . /rails-app
 WORKDIR /rails-app
-RUN export BUILD_PKGS="ruby-dev build-base postgresql-dev libxml2-dev ruby-io-console linux-headers" \
-  && apk --update --upgrade add ruby ruby-json ruby-bigdecimal nodejs $BUILD_PKGS \
+RUN export BUILD_PKGS="ruby-dev build-base postgresql-dev libxml2-dev linux-headers" \
+  && apk --update --upgrade add ruby ruby-json ca-certificates libxml2 libpq ruby-io-console ruby-bigdecimal nodejs $BUILD_PKGS \
 
   && gem install -N bundler \
   && env bundle install --without test development \
@@ -21,6 +21,8 @@ RUN export BUILD_PKGS="ruby-dev build-base postgresql-dev libxml2-dev ruby-io-co
 
   && rm -rf /var/lib/gems/*/cache/* ~/.gem /var/cache/* /root tmp/* \
 
+  && addgroup -g 9999 -S www-data && adduser -u 9999 -H -h /rails-app -S www-data \
+
 # All files/folders should be owned by root by readable by www-data
   && find . -type f -print -exec chmod 444 {} \; \
   && find . -type d -print -exec chmod 555 {} \; \
@@ -32,4 +34,4 @@ ENV RAILS_ENV=production
 USER www-data
 EXPOSE 8080
 ENTRYPOINT ["/usr/bin/ruby", "/rails-app/bin/bundle", "exec"]
-CMD ["/usr/local/bin/unicorn", "-o", "0.0.0.0", "-p", "8080", "-c", "unicorn.rb", "--no-default-middleware"]
+CMD ["/usr/bin/unicorn", "-o", "0.0.0.0", "-p", "8080", "-c", "unicorn.rb", "--no-default-middleware"]
