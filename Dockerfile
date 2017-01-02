@@ -1,11 +1,11 @@
-FROM ubuntu:16.10
+FROM alpine:3.5
 
 ADD . /rails-app
 WORKDIR /rails-app
-RUN apt-get update \
-  && apt-get install --no-install-recommends -qy ruby ruby-dev make g++ libsqlite3-dev \
-       libsqlite3-0 patch zlib1g-dev libpq5 libpq-dev libghc-zlib-dev \
-  && gem install bundler --no-ri --no-rdoc \
+RUN export BUILD_PKGS="ruby-dev build-base postgresql-dev libxml2-dev ruby-io-console linux-headers" \
+  && apk --update --upgrade add ruby ruby-json ruby-bigdecimal nodejs $BUILD_PKGS \
+
+  && gem install -N bundler \
   && env bundle install --without test development \
 
 # Generate compiled assets + manifests
@@ -15,10 +15,11 @@ RUN apt-get update \
   && rm -rf app/assets/* \
 
 # Uninstall development headers/packages
-  && apt-get -qy purge libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch \
-  && apt-get -qy autoremove \
-  && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /root /var/lib/apt/info/* /var/lib/apt/lists/* /var/lib/ghc \
-     tmp/* \
+  && apk del $BUILD_PKGS \
+  && find / -type f -iname \*.apk-new -delete \
+  && rm -rf /var/cache/apk/* \
+
+  && rm -rf /var/lib/gems/*/cache/* ~/.gem /var/cache/* /root tmp/* \
 
 # All files/folders should be owned by root by readable by www-data
   && find . -type f -print -exec chmod 444 {} \; \

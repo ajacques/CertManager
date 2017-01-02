@@ -10,7 +10,8 @@ gem 'haml-rails'
 gem 'react-rails'
 gem 'will_paginate'
 
-gem 'therubyracer', platform: :ruby
+# gem 'therubyracer', platform: :ruby
+gem 'tzinfo-data'
 
 gem 'redis'
 gem 'redis-session-store'
