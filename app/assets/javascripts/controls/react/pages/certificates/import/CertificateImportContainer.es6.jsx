@@ -11,13 +11,6 @@ class CertificateImportContainer extends React.Component {
     };
   }
 
-  onRemove(key) {
-    const newCerts = this.state.certificates.slice();
-    const index = newCerts.findIndex(f => f.key === key);
-    newCerts.splice(index, 1);
-    this.setState({certificates: newCerts});
-  }
-
   handleAnalyze(root, match) {
     return {
       success: result => {
@@ -37,7 +30,7 @@ class CertificateImportContainer extends React.Component {
   }
   findCertById(id) {
     const certificates = this.state.certificates;
-    for (var i = 0; i < certificates.length; i++) {
+    for (let i = 0; i < certificates.length; i++) {
       if (certificates[i].cert_id === id) {
         return certificates[i];
       }
@@ -46,22 +39,25 @@ class CertificateImportContainer extends React.Component {
   }
   findCertByFingerprint(fingerprint) {
     const certificates = this.state.certificates;
-    for (var i = 0; i < certificates.length; i++) {
+    for (let i = 0; i < certificates.length; i++) {
       if (certificates[i].fingerprint === fingerprint) {
         return certificates[i];
       }
     }
     return null;
   }
-  handleRemove() {
-
+  handleRemove(key) {
+    const newCerts = this.state.certificates.slice();
+    const index = newCerts.findIndex(f => f.key === key);
+    newCerts.splice(index, 1);
+    this.setState({certificates: newCerts});
   }
   handlePrivateKeyAnalyze(root) {
     let certificates = this.state.certificates;
     let private_key = root.private_key;
     return result => {
       if (result.opts.public_keys.length >= 1) {
-        var cert = this.findCertById(result.opts.public_keys[0].id);
+        let cert = this.findCertById(result.opts.public_keys[0].id);
         if (cert === null) {
           cert = this.findCertByFingerprint(result.opts.fingerprint);
         }

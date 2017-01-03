@@ -36,7 +36,7 @@
       this._processTextBlob(event.target.value);
     },
     render: function() {
-      return <textarea onPaste={this.handlePaste} onChange={this.handleType} className="cert-input-span" value={this.state.text} />;
+      return <textarea onPaste={this.handlePaste} onChange={this.handleType} className="cert-input-span form-control" value={this.state.text} />;
     }
   });
 
