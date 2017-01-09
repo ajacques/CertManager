@@ -22,11 +22,11 @@ class CertificatePart {
   }
 
   get_format(format) {
-    var self = this;
+    const self = this;
     if (this.cache.hasOwnProperty(format)) {
       return new Promise(resolve => resolve(this.cache[format]));
     }
-    var process = function (result) {
+    const process = function (result) {
       self.cache[format] = result;
       return result;
     };

@@ -19,7 +19,7 @@ class SettingsValidateButton extends React.Component {
     this.setState({state: 'loading'});
     Ajax.post(this.functor(), { acceptType: 'application/json' }).then(this.handleResponse, this.handleFailure);
   }
-  handleResponse(response) {
+  handleResponse() {
     this.setState({state: 'success'});
   }
   handleFailure(response) {
