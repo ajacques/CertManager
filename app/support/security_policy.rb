@@ -3,7 +3,7 @@ module SecurityPolicy
   class << self
     def load_file
       return if @config && !Rails.env.development?
-      @config = YAML.load_file("#{Rails.root}/config/security_policy.yml")
+      @config = YAML.load_file(Rails.root.join('config', 'security_policy.yml'))
     end
 
     def respond_to_missing?(method)

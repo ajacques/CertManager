@@ -6,7 +6,7 @@ module CertManager
     class << self
       def load_file
         return if @config && Rails.env.production?
-        yaml = YAML.load_file("#{Rails.root}/config/configuration.yml")
+        yaml = YAML.load_file(Rails.root.join('config', 'configuration.yml'))
 
         @config = HashWithIndifferentAccess.new(yaml)
       end

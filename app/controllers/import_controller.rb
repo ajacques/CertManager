@@ -3,7 +3,7 @@ class ImportController < ApplicationController
     if params.key? :wait_handle
       value = CertManager::Configuration.redis_client.get params[:wait_handle]
       resp = if value
-               Marshal.load(value) # TODO: Security review this
+               JSON.parse(value)
              else
                {
                  status: :unfinished,
