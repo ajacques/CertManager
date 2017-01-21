@@ -21,6 +21,6 @@ class FetchCertificateJob < ActiveJob::Base
 
   def save_result(result)
     redis = CertManager::Configuration.redis_client
-    redis.set job_id, Marshal.dump(result)
+    redis.set job_id, JSON.dump(result)
   end
 end

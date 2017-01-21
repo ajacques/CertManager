@@ -121,7 +121,6 @@ class Certificate < ActiveRecord::Base
   def touch_by(user)
     self.created_by_id = user.id unless created_by_id
     self.updated_by_id = user.id
-    touch unless new_record?
   end
 
   def touch_by!(user)
