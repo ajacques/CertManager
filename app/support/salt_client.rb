@@ -73,7 +73,7 @@ class SaltClient
       req = Net::HTTP::Get.new(uri.request_uri)
       req['Accept'] = 'application/x-yaml'
       req['X-Auth-Token'] = @auth_token
-      YAML.load(http.request(req).body)
+      YAML.safe_load(http.request(req).body)
     end
   end
 
@@ -93,7 +93,7 @@ class SaltClient
       req['Accept'] = 'application/x-yaml'
       # req['X-Auth-Token'] = @auth_token
       req.set_form_data(body)
-      map_response(YAML.load(http.request(req).body))
+      map_response(YAML.safe_load(http.request(req).body))
     end
   end
 

@@ -11,7 +11,7 @@ namespace :resque do
   task setup_schedule: :setup do
     require 'resque-scheduler'
 
-    Resque.schedule = YAML.load_file("#{Rails.root}/config/scheduled_jobs.yml")
+    Resque.schedule = YAML.load_file(Rails.root.join('config', 'scheduled_jobs.yml'))
   end
   task scheduler_setup: :setup_schedule
 end
