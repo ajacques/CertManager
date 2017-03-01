@@ -33,8 +33,8 @@ class Service::SoteriaAgent < Service
     if triggers_post_rotate?
       map[:after_action] << {
         type: :docker,
-        container_name: rotate.container_name,
-        signal: rotate.signal
+        container_name: rotate['container_name'],
+        signal: rotate['signal']'
       }
     end
     map
