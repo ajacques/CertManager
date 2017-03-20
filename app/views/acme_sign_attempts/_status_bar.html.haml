@@ -1,4 +1,4 @@
 %ol.workflow-step-list
   %li.done= t 'views.lets_encrypt.workflow_steps.website_setup'
-  %li{ class: @attempt.status_complete? ? 'done' : 'progress' }= t 'views.lets_encrypt.workflow_steps.verify'
+  %li{ class: attempt.status_complete? ? 'done' : 'progress' }= t 'views.lets_encrypt.workflow_steps.verify'
   %li= t 'views.lets_encrypt.workflow_steps.finish'

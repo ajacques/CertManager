@@ -5,8 +5,8 @@
       %td{ scope: 'col' } Status
       %td{ scope: 'col' } Expiration
   %tbody
-    = render partial: 'certificates/certificate_row', collection: @expiring, as: :cert
-    = render partial: 'certificates/certificate_row', collection: @certs, as: :cert
+    = render partial: 'certificates/certificate_row', collection: expiring, as: :cert
+    = render partial: 'certificates/certificate_row', collection: certs, as: :cert
 - if @certs.respond_to? :page
   .row
-    .center-block.col-md-3= will_paginate @certs
+    .center-block.col-md-3= will_paginate certs

@@ -1,65 +1,65 @@
-- if @cert.public_key
+- if cert.public_key
   %table.table
     %thead
       %tr
         %td Name
         %td Type
     %tbody
-      - if @cert.public_key.extended_key_usage
-        - @cert.public_key.extended_key_usage.allowed_uses.each do |use|
+      - if cert.public_key.extended_key_usage
+        - cert.public_key.extended_key_usage.allowed_uses.each do |use|
           %tr
             %td= use.to_s
             %td Extended
-      - if @cert.public_key.key_usage
-        - @cert.public_key.key_usage.allowed_uses.each do |use|
+      - if cert.public_key.key_usage
+        - cert.public_key.key_usage.allowed_uses.each do |use|
           %tr
             %td= use.to_s
             %td Basic
-- if @cert.public_key.not_before.present?
+- if cert.public_key.not_before.present?
   %p
-    %div Not Before: #{@cert.public_key.not_before}
-    %div Not After: #{@cert.public_key.not_after} #{time_ago_in_words(@cert.public_key.not_after)}
-- if @cert.public_key
+    %div Not Before: #{cert.public_key.not_before}
+    %div Not After: #{cert.public_key.not_after} #{time_ago_in_words(cert.public_key.not_after)}
+- if cert.public_key
   %h2 Revocation Lists
   #crl-group
-    - if @cert.public_key.crl_distribution_points
+    - if cert.public_key.crl_distribution_points
       %h3 Certificate Revocation Lists
       %h4.group-status
       %ul#crl_list
-        - @cert.public_key.crl_distribution_points.uris.each_with_index do |crl, index|
+        - cert.public_key.crl_distribution_points.uris.each_with_index do |crl, index|
           %li{ data: { id: index } }= crl.to_s
-    - if @cert.public_key.policy_constraints
+    - if cert.public_key.policy_constraints
       %h2 Policy Constraints
       %table
-        - @cert.public_key.policy_constraints.to_h.each do |k, v|
+        - cert.public_key.policy_constraints.to_h.each do |k, v|
           %tr
             %td= k
             %td= v
-  - if @cert.public_key.extensions
+  - if cert.public_key.extensions
     %h2 Extensions
     %table
-      - @cert.public_key.extensions.each do |k, v|
+      - cert.public_key.extensions.each do |k, v|
         %tr
           %td= k
           %td= v
-- if @cert.private_key_data.nil?
+- if cert.private_key_data.nil?
   %h3 No private key yet, can't use for encryption
-- if @cert.private_key_data.present?
+- if cert.private_key_data.present?
   %h3
     Private Key Bit Length:
-    = @cert.private_key.bit_length
+    = cert.private_key.bit_length
     bits
-- if @cert.public_key.present?
+- if cert.public_key.present?
   %h3
     Public Key Bit Length:
-    = @cert.public_key.bit_length
+    = cert.public_key.bit_length
     bits
-- if @cert.public_key.nil? && @cert.certificate_request.present? # CSR
+- if cert.public_key.nil? && cert.certificate_request.present? # CSR
   %h3 No public key yet, upload one now
-  = text_area_tag :csr, @cert.certificate_request.to_pem, class: 'cert-body', readonly: true
+  = text_area_tag :csr, cert.certificate_request.to_pem, class: 'cert-body', readonly: true
   = form_tag action: :do_import do
     = label_tag :key, 'Certificate'
     = text_area_tag :key
     = submit_tag 'Upload certificate'
-- if @cert.private_key.present? && @cert.public_key.present?
+- if cert.private_key.present? && cert.public_key.present?
   %p Certificate is ready for deployment

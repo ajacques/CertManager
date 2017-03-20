@@ -3,4 +3,4 @@
   %li= link_to (t 'operations.import'), import_certificates_path, aria: { label: t('models.certificate.actions.import') }
   %li= link_to (t 'operations.new'), new_certificate_path, aria: { label: t('models.certificate.actions.new') }
 %h2= t 'views.certificates.index.your_certificates'
-= render partial: 'certificate_list'
+= render partial: 'certificate_list', locals: { expiring: @expiring, certs: @certs }

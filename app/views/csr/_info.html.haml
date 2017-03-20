@@ -3,15 +3,15 @@
   %li.csr-checklist-item
     %h4= t 'views.csr.show.subject.header'
     %p= t 'views.csr.show.subject.summary'
-    %b= @csr.subject.to_full
+    %b= csr.subject.to_full
     %ul
-      - @csr.subject_alternate_names.each do |name|
+      - csr.subject_alternate_names.each do |name|
         %li
           %b= name
   %li.csr-checklist-item
     %h4= t 'views.csr.show.type.header'
-    %b= @csr.private_key.model_name
-  %li.csr-checklist-item{ class: SecurityPolicy.bit_length.secure?(@csr.bit_length) ? 'valid' : 'warning' }
+    %b= csr.private_key.model_name
+  %li.csr-checklist-item{ class: SecurityPolicy.bit_length.secure?(csr.bit_length) ? 'valid' : 'warning' }
     %h4= t 'views.csr.show.bit_length.header'
     %p= t 'views.csr.show.bit_length.summary'
     %b= t 'views.csr.show.bit_length.value', value: @csr.bit_length

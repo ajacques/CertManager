@@ -22,4 +22,4 @@
                 = yield
               %tr
                 %td.container-padding.footer-text{ align: :left }
-                  = render partial: 'layouts/mailers/footer'
+                  = render partial: 'layouts/mailers/footer', locals: { user: @user }
