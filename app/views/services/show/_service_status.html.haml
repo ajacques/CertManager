@@ -1,5 +1,5 @@
 %h3 Node Status
-- bad_count = @node_status.count { |n| !n.valid? }
+- bad_count = node_status.count { |n| !n.valid? }
 - if bad_count >= 1
   .bg-warning There #{'is'.pluralize bad_count} currently #{pluralize bad_count, 'inconsistent node'}.
 %table.table
@@ -9,7 +9,7 @@
       %td= t 'views.services.show.table_headers.status'
       %td= t 'views.services.show.table_headers.last_checked'
   %tbody
-    - @node_status.each do |node|
+    - node_status.each do |node|
       %tr{ class: to_css_class(node.status, failed: 'bg-danger', valid: 'bg-success') }
         %td= node.hostname
         %td

@@ -4,7 +4,7 @@
   %li.active New
 %h2 Create service
 .col-md-6
-  = render partial: 'services/new_service_form'
+  = render partial: 'services/new_service_form', locals: { service: @service }
 .col-md-6
   %h3= t 'views.services.new.deploy_plan.header'
   %p= t 'views.services.new.deploy_plan.help'

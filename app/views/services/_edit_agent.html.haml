@@ -1,7 +1,7 @@
 .form-group
-  %label.control-label.col-sm-2{ for: 'service_cert_path' }= t 'activerecord.attributes.service.cert_path'
+  %label.control-label.col-sm-2{ for: 'service-cert-path' }= t 'activerecord.attributes.service.cert_path'
   .col-sm-10
-    %input.form-control#service_cert_path{ type: :text, disabled: true, value: @service.cert_path }
+    %input.form-control#service-cert-path{ type: :text, disabled: true, value: service.cert_path }
     %div= t 'activerecord.help.service.cert_path'
     .text-warn= t 'views.services.edit.agent.cert_path_note'
 = f.fields_for :rotate do |r|

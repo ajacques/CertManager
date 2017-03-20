@@ -8,7 +8,7 @@
         %td
           %abbr{ title: t('views.lets_encrypt.import_status.table.help.acme_status') }= t 'views.lets_encrypt.import_status.table.acme_status'
     %tbody
-    - @attempt.challenges.each do |challenge|
+    - attempt.challenges.each do |challenge|
       %tr{ class: acme_status_as_css_class(challenge.status) }
         %td= challenge.domain_name
         %td= untrusted_party_link t('views.lets_encrypt.import_status.table.verify_url'), challenge.full_path

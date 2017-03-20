@@ -30,7 +30,7 @@
       %li= link_to t('views.certificates.show.renew.lets_encrypt'), lets_encrypt_certificate_path
     %li= link_to pluralize(@cert.sub_certificates.count, 'child'), action: :index, issuer: @cert.id
 = render partial: 'validator', locals: { public_key: @cert.public_key }
-= render partial: 'certificates/history/history'
+= render partial: 'certificates/history/history', locals: { cert: @cert }
 %h2 Services
 - if @cert.services.any?
   %ul

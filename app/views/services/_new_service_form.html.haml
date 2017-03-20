@@ -1,7 +1,7 @@
-= bootstrap_form_for @service, url: services_path, layout: :horizontal do |f|
+= bootstrap_form_for service, url: services_path, layout: :horizontal do |f|
   .well
     %h3= t 'views.services.new.config.header'
-    = f.select :certificate_id, options_for_certificate_list(Certificate.signed, @service.certificate_id), help: t('views.services.new.help.certificate')
+    = f.select :certificate_id, options_for_certificate_list(Certificate.signed, service.certificate_id), help: t('views.services.new.help.certificate')
     = f.hidden_field :type, value: Service::SoteriaAgent.to_s
     = f.text_field :cert_path, label: 'File path', placeholder: '/etc/nginx/certs/example.com.pem', help: t('views.services.new.help.cert_path')
   .well

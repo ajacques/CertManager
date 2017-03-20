@@ -7,9 +7,9 @@
   %li= link_to @attempt.certificate, @attempt.certificate
   %li.active= t 'views.lets_encrypt.import_status.header'
 %h1 ACME Certificate Import
-= render partial: 'status_bar'
-= render partial: 'status'
-= render partial: 'domain_status_table'
+= render partial: 'status_bar', locals: { attempt: @attempt }
+= render partial: 'status', locals: { attempt: @attempt }
+= render partial: 'domain_status_table', locals: { attempt: @attempt }
 - if @attempt.imported_key_id
   %div Your certificate has been successfully imported!
   = link_to 'Show', @attempt.certificate

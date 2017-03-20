@@ -2,7 +2,7 @@
 %div
   %h4= t 'views.csr.show.step1.header'
   %h5= t 'views.csr.show.step1.message'
-  = render partial: 'csr/info'
+  = render partial: 'csr/info', locals: { csr: @csr }
   %h4= t 'views.csr.show.step2.header'
   %p= t 'views.csr.show.step2.message'
   %textarea.form-control.certificate.cert-body{ readonly: true }= @csr.to_pem
