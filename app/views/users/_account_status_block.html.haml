@@ -4,15 +4,15 @@
     .form-group
       %label.col-sm-3.control-label Status
       .col-sm-9
-        - if @user.can_login?
+        - if user.can_login?
           %p.form-control-static.text-success Active
         - else
           %p.form-control-static.text-danger Locked
     .form-group
       %label.col-sm-3.control-label Created
       .col-sm-9
-        %p.form-control-static= inline_ago_string @user.created_at
+        %p.form-control-static= inline_ago_string user.created_at
     .form-group
       %label.col-sm-3.control-label Last Login
       .col-sm-9
-        %p.form-control-static= inline_ago_string @user.last_sign_in_at
+        %p.form-control-static= inline_ago_string user.last_sign_in_at

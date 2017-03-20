@@ -14,4 +14,4 @@
   %li.csr-checklist-item{ class: SecurityPolicy.bit_length.secure?(csr.bit_length) ? 'valid' : 'warning' }
     %h4= t 'views.csr.show.bit_length.header'
     %p= t 'views.csr.show.bit_length.summary'
-    %b= t 'views.csr.show.bit_length.value', value: @csr.bit_length
+    %b= t 'views.csr.show.bit_length.value', value: csr.bit_length
