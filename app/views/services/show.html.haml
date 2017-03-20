@@ -6,4 +6,4 @@
 
 = render partial: 'services/show/settings_pane'
 %h1= @service.certificate
-= render partial: 'services/show/service_status'
+= render partial: 'services/show/service_status', locals: { node_status: @node_status }
