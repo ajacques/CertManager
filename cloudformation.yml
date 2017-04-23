@@ -34,10 +34,6 @@ Parameters:
     Type: Number
     Description: Maximum size and initial Desired Capacity of ECS Auto Scaling Group
     Default: '1'
-  StaticFileS3BucketName:
-    Type: String
-    Description: Name of the S3 bucket that will be created where static files, such
-      as JS and CSS, will be stored.
   OriginAccessIdentityID:
     Type: String
     Description: Identity for CloudFront to connect to the static file S3 bucket.
@@ -359,26 +355,21 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: Private
-      BucketName:
-        Ref: StaticFileS3BucketName
   CloudFrontS3Permission:
     Type: AWS::S3::BucketPolicy
     DependsOn:
     - StaticFileS3Bucket
     Properties:
       Bucket:
-        Ref: StaticFileS3BucketName
+        Ref: StaticFileS3Bucket
       PolicyDocument:
         Statement:
         - Action:
           - s3:GetObject
           Effect: Allow
           Resource:
-            Fn::Join:
-            - ''
-            - - 'arn:aws:s3:::'
-              - Ref: StaticFileS3BucketName
-              - "/web_content/*"
+            !Sub |-
+              arn:aws:s3:::${StaticFileS3Bucket}/web_content/*
           Condition:
             Bool:
               aws:SecureTransport: 'true'
@@ -418,11 +409,9 @@ Resources:
         Origins:
         - Id: staticAssetOrigin
           DomainName:
-            Fn::Join:
-            - ''
-            - - Ref: StaticFileS3BucketName
-              - ".s3.amazonaws.com"
-          OriginPath: "/web_content"
+            !Sub |-
+              ${StaticFileS3Bucket}.s3.amazonaws.com
+          OriginPath: /web_content
           S3OriginConfig:
             OriginAccessIdentity:
               Fn::Join:
@@ -598,11 +587,8 @@ Resources:
             - s3:PutObject
             Effect: Allow
             Resource:
-              Fn::Join:
-              - ''
-              - - 'arn:aws:s3:::'
-                - Ref: StaticFileS3BucketName
-                - /web_content/*
+              !Sub |-
+                arn:aws:s3:::${StaticFileS3Bucket}/web_content/*
             Condition:
               Bool:
                 aws:SecureTransport: 'true'
