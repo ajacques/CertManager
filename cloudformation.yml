@@ -375,10 +375,8 @@ Resources:
               aws:SecureTransport: 'true'
           Principal:
             AWS:
-              Fn::Join:
-              - ''
-              - - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '
-                - Ref: OriginAccessIdentityID
+              !Sub |-
+                arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${OriginAccessIdentityID}
   ExternalCloudFront:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -579,7 +577,7 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       Policies:
-      - PolicyName: root
+      - PolicyName: PermitFileUpload
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -599,6 +597,10 @@ Resources:
       Roles:
       - Ref: FrontendIAMRole
 Outputs:
+  StaticS3Bucket:
+    Description: Stores static content for website
+    Value:
+      Ref: StaticFileS3Bucket
   URL:
     Description: Raw CloudFront hostname
     Value:
