@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20160923090500) do
     t.integer  "created_by_id",                 null: false
     t.integer  "updated_by_id",                 null: false
     t.integer  "inflight_acme_sign_attempt_id"
+    t.string   "auto_renewal_strategy"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

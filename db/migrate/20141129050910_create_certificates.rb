@@ -9,6 +9,7 @@ class CreateCertificates < ActiveRecord::Migration
       t.integer :updated_by_id, null: false
 
       t.integer :inflight_acme_sign_attempt_id
+      t.string :auto_renewal_strategy
 
       t.timestamps
     end

@@ -12,6 +12,7 @@ class ValidateCertificateJob < ActiveJob::Base
     expiring_certs.each do |cert|
       next unless know_how_to_renew? cert
       next if cert.inflight_acme_sign_attempt
+      # TODO: Use job from DB
       AcmeRenewJob.perform_later(cert)
     end
   end
@@ -19,10 +20,7 @@ class ValidateCertificateJob < ActiveJob::Base
   private
 
   def know_how_to_renew?(cert)
-    cert.public_key
-        .try(:issuer_subject)
-        .try(:CN)
-        .try(:starts_with?, 'h2ppy h2cker fake CA')
+    cert.auto_renewal_strategy.present?
   end
 
   def expiring_certs

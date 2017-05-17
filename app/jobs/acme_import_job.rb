@@ -62,6 +62,7 @@ class AcmeImportJob < ActiveJob::Base
   def import_cert
     attempt.fetch_signed
     attempt.certificate.inflight_acme_sign_attempt = nil
+    attempt.certificate.auto_renewal_strategy = AcmeRenewJob.name
     attempt.last_status = :imported
   end
 end
