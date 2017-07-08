@@ -1,4 +1,4 @@
-class AcmeRenewJob < ActiveJob::Base
+class AcmeRenewJob < ApplicationJob
   attr_reader :cert
 
   def perform(cert)

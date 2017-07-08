@@ -1,4 +1,4 @@
-class CertificateSignRequest < ActiveRecord::Base
+class CertificateSignRequest < ApplicationRecord
   belongs_to :certificate
   belongs_to :private_key
   belongs_to :subject

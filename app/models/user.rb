@@ -1,6 +1,6 @@
 require 'securerandom'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include OauthAuthentication
   attr_accessor :password, :password_confirmation, :confirmation_token_confirmation
   attr_reader :reset_password_token_confirmation

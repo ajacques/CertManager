@@ -1,4 +1,4 @@
-class SentryReportJob < ActiveJob::Base
+class SentryReportJob < ApplicationJob
   queue_as :default
 
   def perform(event)

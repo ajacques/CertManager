@@ -25,7 +25,7 @@ class PublicKeyTest < ActiveSupport::TestCase
   end
 
   test 'has san' do
-    san = %w(example.com www.example.com)
+    san = %w[example.com www.example.com]
     pub = RSAPublicKey.new subject_alternate_names: san
     assert_equal san, pub.subject_alternate_names
   end

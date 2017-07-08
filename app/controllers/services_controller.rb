@@ -60,10 +60,10 @@ class ServicesController < ApplicationController
   private
 
   def service_create_params
-    params.require(:service).permit(:type, :certificate_id, :cert_path, :rotate_enabled, rotate: [:container_name, :signal])
+    params.require(:service).permit(:type, :certificate_id, :cert_path, :rotate_enabled, rotate: %i[container_name signal])
   end
 
   def service_update_params
-    params.require(:service).permit(:cert_path, rotate: [:container_name, :signal])
+    params.require(:service).permit(:cert_path, rotate: %i[container_name signal])
   end
 end

@@ -1,4 +1,4 @@
-class PublicKey < ActiveRecord::Base
+class PublicKey < ApplicationRecord
   has_one :certificate
   belongs_to :subject, autosave: true
   belongs_to :private_key
@@ -12,8 +12,8 @@ class PublicKey < ActiveRecord::Base
   has_many :extended_key_usages, -> { where(group: 'extended') }, class_name: 'KeyUsage', autosave: true, dependent: :destroy
   accepts_nested_attributes_for :subject
   has_and_belongs_to_many :certificate_bundles
-  validates :hash_algorithm, presence: true, inclusion: { in: %w(md2 md5 sha1 sha256 sha384 sha512),
-                                                          message: '%{value} is not an expected hash_algorithm' }
+  validates :hash_algorithm, presence: true, inclusion: { in: %w[md2 md5 sha1 sha256 sha384 sha512],
+                                                          message: '%<value>s is not an expected hash_algorithm' }
   after_initialize :set_defaults
 
   def to_pem
@@ -110,7 +110,7 @@ class PublicKey < ActiveRecord::Base
 
   def import_from_r509(r509)
     self.subject = Subject.from_r509(r509.subject)
-    %w(not_before not_after).each do |attrib|
+    %w[not_before not_after].each do |attrib|
       send("#{attrib}=", r509.send(attrib))
     end
     self.issuer_subject = Subject.from_r509 r509.issuer

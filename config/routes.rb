@@ -10,11 +10,11 @@ Rails.application.routes.draw do
     end
   end
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
-  resources :users, only: [:index, :show, :update], constraints: {
+  resources :users, only: %i[index show update], constraints: {
     id: /[0-9]+/
   } do
     collection do
-      resources :authorizations, only: [:create, :destroy]
+      resources :authorizations, only: %i[create destroy]
     end
   end
   scope :search, controller: :search, as: :search do
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     post 'oauth', action: :create_provider
     get 'configure'
   end
-  resources :certificates, only: [:create, :index, :new, :show], constraints: {
+  resources :certificates, only: %i[create index new show], constraints: {
     id: /[0-9]+/,
     another_id: /[0-9]+/
   } do
@@ -56,8 +56,8 @@ Rails.application.routes.draw do
       post 'analyze'
     end
   end
-  resources :acme_sign_attempts, only: [:show, :destroy]
-  resources :public_keys, only: [:show]
+  resources :acme_sign_attempts, only: %I[show destroy]
+  resources :public_keys, only: %I[show]
   resources :services, constraints: {
     id: /[0-9]+/
   } do
@@ -71,12 +71,12 @@ Rails.application.routes.draw do
   scope :private_keys, controller: :private_keys do
     post :analyze, as: :analyze_private_key
   end
-  resource :settings, only: [:show, :update] do
+  resource :settings, only: %i[show update] do
     member do
       post 'validate/mail_server', action: 'validate_mail_server'
     end
   end
-  resources :agents, as: :agent, only: [:new, :update] do
+  resources :agents, as: :agent, only: %I[new update] do
     collection do
       post :generate_token
     end

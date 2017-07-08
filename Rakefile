@@ -23,14 +23,14 @@ if Rails.env.test? || Rails.env.development?
   reek.fail_on_error = false
 
   SCSSLint::RakeTask.new do |t|
-    t.files = %w(app/assets/stylesheets)
+    t.files = %w[app/assets/stylesheets]
   end
 
   HamlLint::RakeTask.new do |t|
-    t.files = %w(app/views app/assets/templates)
+    t.files = %w[app/views app/assets/templates]
   end
 
-  task default: [:test, :rubocop, :scss_lint, :haml_lint]
+  task default: %i[test rubocop scss_lint haml_lint]
 end
 
-task release: %w(assets:clobber assets:precompile)
+task release: %w[assets:clobber assets:precompile]

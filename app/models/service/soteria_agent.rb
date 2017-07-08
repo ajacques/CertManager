@@ -1,5 +1,5 @@
 class Service::SoteriaAgent < Service
-  SIGNALS = %w(HUP USR1).sort.freeze
+  SIGNALS = %w[HUP USR1].sort.freeze
   has_many :agents, through: :memberships
   has_many :memberships, class_name: 'AgentService', foreign_key: :service_id, inverse_of: :service
   service_prop :cert_path, :rotate_enabled, :rotate

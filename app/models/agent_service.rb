@@ -1,4 +1,4 @@
-class AgentService < ActiveRecord::Base
+class AgentService < ApplicationRecord
   self.table_name = 'agents_services'
 
   belongs_to :service

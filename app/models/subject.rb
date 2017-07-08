@@ -1,4 +1,4 @@
-class Subject < ActiveRecord::Base
+class Subject < ApplicationRecord
   after_update :prune_empty
   after_initialize :prune_empty
 
@@ -19,7 +19,7 @@ class Subject < ActiveRecord::Base
     subject = OpenSSL::X509::Name.new
     Subject.safe_attributes.each do |k|
       val = send(k)
-      subject.add_entry(k.to_s, val) if val && !val.empty?
+      subject.add_entry(k.to_s, val) if val.present?
     end
     subject
   end
@@ -46,7 +46,7 @@ class Subject < ActiveRecord::Base
   end
 
   def self.safe_attributes
-    [:O, :OU, :C, :CN, :L, :ST]
+    %i[O OU C CN L ST]
   end
 
   private

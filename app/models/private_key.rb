@@ -1,4 +1,4 @@
-class PrivateKey < ActiveRecord::Base
+class PrivateKey < ApplicationRecord
   has_one :certificate
   has_many :public_keys_by_fingerprint, -> { readonly }, foreign_key: :fingerprint, primary_key: :fingerprint
   has_many :public_keys

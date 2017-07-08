@@ -4,7 +4,7 @@ class CertificatePart {
     this.opts = opts.opts;
     this.show_url = opts.show_url;
 
-    if (this.opts.hasOwnProperty('pem')) {
+    if (this.opts.pem) {
       this.cache.pem = this.opts.pem;
     }
 

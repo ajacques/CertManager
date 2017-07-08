@@ -1,6 +1,6 @@
-class Authorization < ActiveRecord::Base
+class Authorization < ApplicationRecord
   belongs_to :o_auth_provider
-  validates :authorization_type, inclusion: { in: %w(user group) }
+  validates :authorization_type, inclusion: { in: %w[user group] }
 
   scope :for_oauth_attempt, lambda { |user_id, group_ids|
     where("(\"authorization_type\" = 'user' AND \"identifier\" = ?) OR (\"authorization_type\" = 'group' AND \"identifier\" IN (?))",

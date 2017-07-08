@@ -1,4 +1,4 @@
-class AcmeChallenge < ActiveRecord::Base
+class AcmeChallenge < ApplicationRecord
   belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :sign_attempt, class_name: 'AcmeSignAttempt', foreign_key: 'acme_sign_attempt_id'

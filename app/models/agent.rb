@@ -1,4 +1,4 @@
-class Agent < ActiveRecord::Base
+class Agent < ApplicationRecord
   has_many :tags, class_name: 'AgentTag'
   has_many :services, through: :memberships
   has_many :memberships, class_name: 'AgentService'

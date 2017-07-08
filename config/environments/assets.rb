@@ -14,7 +14,7 @@ Rails.application.configure do
   config.assets.js_compressor = Uglifier.new output: { comments: :none }
   config.assets.css_compressor = :sass
 
-  config.assets.precompile += %w(components.js)
+  config.assets.precompile += %w[components.js]
 
   # Generate digests for assets URLs.
   config.assets.digest = true

@@ -1,4 +1,4 @@
-class AcmeImportJob < ActiveJob::Base
+class AcmeImportJob < ApplicationJob
   attr_reader :attempt
 
   def perform(attempt)

@@ -39,7 +39,7 @@ class SigningController < ApplicationController
             extended_key_usage: [],
             key_usage: [],
             subject_attributes: Subject.safe_attributes,
-            extensions_attributes: [:name, :value]
+            extensions_attributes: %i[name value]
           )
   end
 end

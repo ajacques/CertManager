@@ -1,5 +1,5 @@
 class ECPrivateKey < PrivateKey
-  validates :curve_name, presence: true, inclusion: { in: %w(secp384r1) }
+  validates :curve_name, presence: true, inclusion: { in: %w[secp384r1] }
   after_initialize :generate_key
   before_save :update_fingerprint, if: :body_changed?
 

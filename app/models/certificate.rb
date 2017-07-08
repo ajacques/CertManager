@@ -1,4 +1,4 @@
-class Certificate < ActiveRecord::Base
+class Certificate < ApplicationRecord
   # Associations
   attr_accessor :issuer_subject
   belongs_to :issuer, class_name: 'Certificate', inverse_of: :sub_certificates, autosave: true

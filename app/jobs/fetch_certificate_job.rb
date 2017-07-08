@@ -1,4 +1,4 @@
-class FetchCertificateJob < ActiveJob::Base
+class FetchCertificateJob < ApplicationJob
   queue_as :public
 
   def perform(opts)

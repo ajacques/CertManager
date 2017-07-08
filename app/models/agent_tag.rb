@@ -1,2 +1,2 @@
-class AgentTag < ActiveRecord::Base
+class AgentTag < ApplicationRecord
 end

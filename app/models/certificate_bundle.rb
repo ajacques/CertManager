@@ -1,4 +1,4 @@
-class CertificateBundle < ActiveRecord::Base
+class CertificateBundle < ApplicationRecord
   has_and_belongs_to_many :public_keys, autosave: true
 
   def add(pub)

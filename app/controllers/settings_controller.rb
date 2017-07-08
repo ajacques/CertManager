@@ -7,11 +7,11 @@ class SettingsController < ApplicationController
 
   def update
     set = Settings::LetsEncrypt.new
-    set.assign_attributes params.permit(settings_lets_encrypt: [:endpoint, :private_key_id])[:settings_lets_encrypt]
+    set.assign_attributes params.permit(settings_lets_encrypt: %i[endpoint private_key_id])[:settings_lets_encrypt]
     set.save!
 
     set = Settings::EmailServer.new
-    set.assign_attributes params.permit(settings_email_server: [:server, :port, :from_address, :enable_starttls])[:settings_email_server]
+    set.assign_attributes params.permit(settings_email_server: %i[server port from_address enable_starttls])[:settings_email_server]
     set.save!
 
     if session.key? :app_redirect_to

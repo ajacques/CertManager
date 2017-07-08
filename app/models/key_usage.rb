@@ -1,3 +1,3 @@
-class KeyUsage < ActiveRecord::Base
+class KeyUsage < ApplicationRecord
   belongs_to :public_key
 end

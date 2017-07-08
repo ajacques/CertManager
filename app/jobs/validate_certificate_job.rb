@@ -1,4 +1,4 @@
-class ValidateCertificateJob < ActiveJob::Base
+class ValidateCertificateJob < ApplicationJob
   queue_as :refresh
   attr_reader :redis
   after_perform :update_tick

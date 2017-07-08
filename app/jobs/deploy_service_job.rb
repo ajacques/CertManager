@@ -1,4 +1,4 @@
-class DeployServiceJob < ActiveJob::Base
+class DeployServiceJob < ApplicationJob
   queue_as :deployment
 
   before_enqueue do |job|

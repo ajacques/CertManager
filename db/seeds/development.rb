@@ -54,7 +54,7 @@ ca = new_key_pair!(
   bit_length: 2048,
   user: user,
   is_ca: true,
-  key_usage: [:keyCertSign, :cRLSign],
+  key_usage: %i[keyCertSign cRLSign],
   extended_key_usage: [:OCSPSigning]
 )
 

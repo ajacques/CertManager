@@ -4,7 +4,7 @@ SecureHeaders::Configuration.default do |config|
     if Rails.env.production? && ENV['CERT_ASSET_CDN']
       [ENV['CERT_ASSET_CDN']]
     else
-      %w('self')
+      %w['self']
     end
   end
   config.cookies = {
@@ -14,15 +14,15 @@ SecureHeaders::Configuration.default do |config|
   config.x_download_options = SecureHeaders::OPT_OUT
 
   config.csp = {
-    default_src: %w('none'),
+    default_src: %w['none'],
     script_src: asset_src,
     style_src: asset_src,
     font_src: asset_src,
-    connect_src: %w('self')
+    connect_src: %w['self']
   }
   # Browsersync
   if Rails.env.development?
     config.csp[:script_src] << "'sha256-OH62nWXd8EjoXubrd8JxJyNkzPjBgGuoQUBbXt2EKEs='"
-    config.csp[:connect_src] = %w(ws://certmgr.devvm 'self')
+    config.csp[:connect_src] = %w[ws://certmgr.devvm 'self']
   end
 end
