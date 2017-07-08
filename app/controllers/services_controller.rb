@@ -7,10 +7,8 @@ class ServicesController < ApplicationController
   def new
     @service = Service::SoteriaAgent.new
     @service.certificate_id = params[:cert_id].to_i || 0
-    if flash[:error]
-      flash[:error].each do |error|
-        @service.errors.add error
-      end
+    flash[:error]&.each do |error|
+      @service.errors.add error
     end
   end
 

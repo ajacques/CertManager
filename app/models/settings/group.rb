@@ -77,6 +77,6 @@ class Settings::Group
     key = key.to_s
     return @settings[key] if @settings.key? key
     val = Setting.find_by(config_group: class_name, key: key)
-    val.value if val
+    val&.value
   end
 end

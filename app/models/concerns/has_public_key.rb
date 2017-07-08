@@ -36,7 +36,7 @@ module HasPublicKey
   end
 
   def can_sign?
-    public_key.is_ca if public_key
+    public_key&.is_ca
   end
 
   def ocsp_enabled?
