@@ -16,6 +16,7 @@ Dockerfile
 *-compose.yml
 common.yml
 production.yml
+cloudformation.yml
 
 !.git/HEAD
 !.git/refs/heads/master
