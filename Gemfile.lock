@@ -62,6 +62,7 @@ GEM
       virtus (~> 1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
+    coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     descendants_tracker (0.0.4)
@@ -107,7 +108,7 @@ GEM
       ruby_parser (~> 3.5)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (0.8.5)
+    i18n (0.8.6)
     i18n-js (3.0.0)
       i18n (~> 0.6, >= 0.6.6)
     ice_nine (0.11.2)
@@ -181,8 +182,9 @@ GEM
       rake
     raindrops (0.18.0)
     rake (12.0.0)
-    react-rails (2.2.1)
+    react-rails (1.10.0)
       babel-transpiler (>= 0.7.0)
+      coffee-script-source (~> 1.8)
       connection_pool
       execjs
       railties (>= 3.2)
@@ -317,7 +319,7 @@ DEPENDENCIES
   pg
   r509
   rails (~> 5.0.1)
-  react-rails
+  react-rails (= 1.10.0)
   redis
   redis-session-store
   reek
