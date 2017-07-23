@@ -13,6 +13,6 @@ if ENV.key? 'SENTRY_DSN'
     config.dsn = ENV['SENTRY_DSN']
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
     config.release = File.read('.git/refs/heads/master').chomp
-    config.async = lambda { |event| SentryReportJob.perform_later(event) }
+    config.async = ->(event) { SentryReportJob.perform_later(event) }
   end
 end
