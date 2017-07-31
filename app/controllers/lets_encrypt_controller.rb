@@ -1,7 +1,7 @@
 class LetsEncryptController < ApplicationController
   attr_reader :acme_settings
   append_before_action :load_settings
-  skip_before_action :require_login, only: [:validate_token]
+  skip_before_action :require_login, only: %i[validate_token]
 
   # Specification: https://letsencrypt.github.io/acme-spec/
   def index
@@ -17,8 +17,13 @@ class LetsEncryptController < ApplicationController
   def register
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms? && acme_settings.accepted_terms?
 
-    registration = acme_client.register contact: "mailto:#{current_user.email}"
-    current_user.lets_encrypt_registration_uri = registration.uri
+    begin
+      registration = acme_client.register contact: "mailto:#{current_user.email}"
+      current_user.lets_encrypt_registration_uri = registration.uri
+    rescue Acme::Client::Error::Malformed => e
+      raise e unless e.message.include? 'Registration key is already in use'
+      acme_settings.accepted_terms = true
+    end
     begin
       unless acme_settings.accepted_terms?
         registration.agree_terms
@@ -26,6 +31,7 @@ class LetsEncryptController < ApplicationController
       end
       current_user.lets_encrypt_accepted_terms = true
     ensure
+      acme_settings.save
       current_user.save!
     end
 
