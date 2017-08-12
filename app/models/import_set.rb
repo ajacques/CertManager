@@ -24,6 +24,13 @@ class ImportSet
     public_keys.each do |pub|
       pub.private_key = PrivateKey.find_by(fingerprint: pub.fingerprint)
     end
+
+    certificates.each do |cert|
+      next unless cert.public_key_id || cert.issuer_id
+      pub_key = PublicKey.find_by(subject_id: cert.public_key.issuer_subject_id)
+      cert.issuer = Certificate.find_by(public_key: pub_key)
+      cert.save!
+    end
   end
 
   def save
@@ -45,7 +52,7 @@ class ImportSet
   end
 
   def self.from_string(string)
-    # TODO: LA/LR parser
+    # TODO: Better parser. This is a regular language
     parts = []
     part = ''
     string.lines.each do |line|
