@@ -1,17 +1,3 @@
-saltmaster:
-  extends:
-    file: common.yml
-    service: saltmaster
-
-saltminion:
-  extends:
-    file: common.yml
-    service: saltminion
-  links:
-    - 'saltmaster:salt'
-  volumes_from:
-    - nginx
-
 web:
   extends:
     file: common.yml
