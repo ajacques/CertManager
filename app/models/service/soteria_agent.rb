@@ -50,7 +50,7 @@ class Service::SoteriaAgent < Service
         member.delete
       end
     end
-    agents.each do |id, _state|
+    agents.each_key do |id|
       memberships << AgentService.new(agent: Agent.find(id.to_i), service: self)
     end
   end

@@ -1,7 +1,7 @@
 class Node
   attr_reader :updated_at
   attr_writer :status
-  attr_accessor :hostname, :hash, :updated_at, :valid, :exists, :reason
+  attr_accessor :hostname, :hash, :valid, :exists, :reason
   alias valid? valid
   alias exists? exists
 

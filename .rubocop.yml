@@ -67,3 +67,6 @@ Rails/TimeZone:
 
 Style/GuardClause:
   MinBodyLength: 5
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
