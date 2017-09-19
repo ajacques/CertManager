@@ -5,16 +5,14 @@
         %td Name
         %td Type
     %tbody
-      - if cert.public_key.extended_key_usage
-        - cert.public_key.extended_key_usage.allowed_uses.each do |use|
-          %tr
-            %td= use.to_s
-            %td Extended
-      - if cert.public_key.key_usage
-        - cert.public_key.key_usage.allowed_uses.each do |use|
-          %tr
-            %td= use.to_s
-            %td Basic
+      - cert.public_key.extended_key_usage&.allowed_uses&.each do |use|
+        %tr
+          %td= use.to_s
+          %td Extended
+      - cert.public_key.key_usage&.allowed_uses&.each do |use|
+        %tr
+          %td= use.to_s
+          %td Basic
 - if cert.public_key.not_before.present?
   %p
     %div Not Before: #{cert.public_key.not_before}
