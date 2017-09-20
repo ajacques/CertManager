@@ -65,7 +65,7 @@ class CertificatesController < ApplicationController
   def csr
     id = params[:id]
     @csr = CertificateSignRequest.find_by certificate_id: id
-    @csr = CertificateSignRequest.from_cert(Certificate.find(id)) unless @csr
+    @csr ||= CertificateSignRequest.from_cert(Certificate.find(id))
     render 'csr/show'
   end
 

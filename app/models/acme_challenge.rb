@@ -30,10 +30,8 @@ class AcmeChallenge < ApplicationRecord
 
   def self.for_certificate(cert, settings)
     challenge = where(certificate_id: cert.id)
-    unless challenge
-      challenge = cert.domain_names.map do |domain|
-        for_domain(cert, settings, domain)
-      end
+    challenge ||= cert.domain_names.map do |domain|
+      for_domain(cert, settings, domain)
     end
     challenge
   end
