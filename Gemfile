@@ -71,3 +71,4 @@ group :development, :production do
 end
 
 gem 'unicorn', platform: :ruby
+gem 'nokogiri', '>= 1.8.1'
