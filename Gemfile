@@ -70,5 +70,5 @@ group :development, :production do
   gem 'sentry-raven'
 end
 
-gem 'unicorn', platform: :ruby
 gem 'nokogiri', '>= 1.8.1'
+gem 'unicorn', platform: :ruby
