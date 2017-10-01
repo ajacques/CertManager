@@ -8,10 +8,12 @@ SecureHeaders::Configuration.default do |config|
     end
   end
   config.cookies = {
-    httponly: true
+    httponly: true,
+    samesite: {
+      lax: true
+    }
   }
   config.x_frame_options = 'DENY'
-  config.x_download_options = SecureHeaders::OPT_OUT
 
   config.csp = {
     default_src: %w['none'],
