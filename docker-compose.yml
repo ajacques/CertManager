@@ -28,7 +28,7 @@ nginx:
     - ./dockers/nginx:/etc/nginx/conf.d:ro
     - public:/rails-app/public:ro
   environment:
-    VIRTUAL_HOST: certmgr.devvm
+    VIRTUAL_HOST: certmgr.localhost
 
 acmetestproxy:
   build: dockers/acme-test-proxy

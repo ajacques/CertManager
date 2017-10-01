@@ -16,7 +16,7 @@ web:
     service: web
   environment:
     RAILS_ENV: production
-    VIRTUAL_HOST: certmgr.devvm
+    VIRTUAL_HOST: certmgr.localhost
   links:
     - 'saltmaster:salt'
     - redis
