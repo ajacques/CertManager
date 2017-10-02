@@ -11,6 +11,7 @@
 // about supported directives.
 //
 // Critical files are required for all other scripts to execute
+// The will be packed into the bundle at the start
 //= require_tree ./critical
 //= require i18n
 //= require i18n/translations

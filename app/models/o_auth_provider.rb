@@ -27,7 +27,7 @@ class OAuthProvider < ApplicationRecord
       code: params[:code],
       state: params[:state]
     }
-    token_info = JSON.parse(RestClient.post(token_uri_base, props, accept: :json))
+    token_info = JSON.parse(HttpRequest.post(token_uri_base, props, service_name: 'Github', 'Accept' => 'application/json'))
     access_token = token_info['access_token']
 
     raise 'Need access to user email scope' unless token_info['scope'].split(',').include?('user:email')
@@ -103,7 +103,7 @@ class OAuthProvider < ApplicationRecord
       crumb.category = 'auth.oauth'
       crumb.message = "OAuth API call: #{full_url}"
     end
-    resp = Faraday.get full_url, {}, 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
+    resp = HttpRequest.get full_url, service_name: 'Github', 'Authorization' => "token #{token}", 'Accept' => 'application/vnd.github.v3+json'
     JSON.parse(resp.body)
   end
 

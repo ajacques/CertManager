@@ -1,21 +1,19 @@
 (function() {
   window.on_pageload = window.on_pageload || [];
+  var registeredReactComponents = [];
 
   function initializeReact() {
-    var className, clazz, element, j, len, props, ref, results;
-    ref = document.querySelectorAll('[data-react-mount=true]');
-    results = [];
+    var ref = document.querySelectorAll('[data-react-mount=true]');
     for (j = 0, len = ref.length; j < len; j++) {
-      element = ref[j];
-      className = element.getAttribute('data-react-class');
-      clazz = window[name] || window[className];
-      props = JSON.parse(element.getAttribute('data-react-props'));
-      results.push(ReactDOM.render(React.createElement(clazz, props), element));
+      var element = ref[j];
+      var className = element.getAttribute('data-react-class');
+      var clazz = window[name] || window[className];
+      var props = JSON.parse(element.getAttribute('data-react-props'));
+      registeredReactComponents.push(ReactDOM.render(React.createElement(clazz, props), element));
     }
-    return results;
   }
 
-  const PageInitializer = function() {
+  function initializePage() {
     var i, j, len, page_obj, ref;
     ref = window.on_pageload;
     for (i = j = 0, len = ref.length; j < len; i = ++j) {
@@ -37,8 +35,8 @@
   };
 
   if (document.readyState === "complete" || document.readyState === "loaded") {
-    PageInitializer();
+    initializePage();
   } else {
-    document.addEventListener('DOMContentLoaded', PageInitializer);
+    document.addEventListener('DOMContentLoaded', initializePage);
   }
 }).call(this);

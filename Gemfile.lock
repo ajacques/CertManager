@@ -78,6 +78,8 @@ GEM
     execjs (2.7.0)
     faraday (0.13.1)
       multipart-post (>= 1.2, < 3)
+    finagle-thrift (1.4.2)
+      thrift (~> 0.9.3)
     flay (2.10.0)
       erubis (~> 2.7.0)
       path_expander (~> 1.0)
@@ -268,6 +270,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sucker_punch (2.0.4)
+      concurrent-ruby (~> 1.0.0)
     sysexits (1.2.0)
     temple (0.8.0)
     therubyracer (0.12.3)
@@ -275,6 +279,7 @@ GEM
       ref
     thor (0.20.0)
     thread_safe (0.3.6)
+    thrift (0.9.3.0)
     tilt (2.0.8)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
@@ -299,6 +304,11 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.6)
+    zipkin-tracer (0.27.0)
+      faraday (~> 0.8)
+      finagle-thrift (~> 1.4.2)
+      rack (>= 1.0)
+      sucker_punch (~> 2.0)
 
 PLATFORMS
   ruby
@@ -343,6 +353,7 @@ DEPENDENCIES
   uglifier
   unicorn
   will_paginate
+  zipkin-tracer
 
 BUNDLED WITH
    1.15.1

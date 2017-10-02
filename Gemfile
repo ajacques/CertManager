@@ -32,6 +32,8 @@ gem 'logstash-logger'
 gem 'request_store'
 gem 'secure_headers'
 
+gem 'zipkin-tracer'
+
 gem 'jwt'
 
 group :assets, :development do
