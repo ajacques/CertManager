@@ -1,5 +1,3 @@
-include CrlHelper
-
 class CertificatesController < ApplicationController
   def index
     query = CertificateFilter.new params.permit(:query, :page, :issuer, :expiring_in)

@@ -65,6 +65,13 @@ Style/FrozenStringLiteralComment:
 Rails/TimeZone:
  Enabled: false
 
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - assets
+
 Style/GuardClause:
   MinBodyLength: 5
 
