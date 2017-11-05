@@ -3,7 +3,7 @@ class AcmeSignAttempt < ApplicationRecord
   belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :imported_key, class_name: 'PublicKey', autosave: true
-  validates :last_status, inclusion: { in: %w[unchecked aborted unknown pending_verification errored failed imported] }
+  validates :last_status, inclusion: { in: %w[unchecked aborted unknown pending_verification errored failed imported working valid] }
 
   def status
     ActiveSupport::StringInquirer.new last_status
@@ -21,6 +21,12 @@ class AcmeSignAttempt < ApplicationRecord
 
   def successful?
     status.imported?
+  end
+
+  # Status Handlers
+  def report_error(error)
+    self.last_status = 'errored'
+    self.status_message = "#{error}\n#{error.backtrace.first}"
   end
 
   def acme_client

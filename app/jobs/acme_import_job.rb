@@ -16,8 +16,7 @@ class AcmeImportJob < ApplicationJob
       AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
     end
   rescue StandardError => err
-    attempt.last_status = 'errored'
-    attempt.status_message = "#{err}\n#{err.backtrace.first}"
+    attempt.report_error err
     Raven.capture_exception err
     raise err
   ensure
@@ -63,6 +62,6 @@ class AcmeImportJob < ApplicationJob
     attempt.fetch_signed
     attempt.certificate.inflight_acme_sign_attempt = nil
     attempt.certificate.auto_renewal_strategy = AcmeRenewJob.name
-    attempt.last_status = :imported
+    attempt.last_status = 'imported'
   end
 end
