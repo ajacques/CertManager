@@ -1,6 +1,6 @@
 module ZipkinViewRendering
   def render(view, *args, &block)
-    ZipkinTracer::TraceClient.local_component_span(virtual_path) do |ztc|
+    ZipkinTracer::TraceClient.local_component_span(virtual_path) do |_ztc|
       super
     end
   end
@@ -9,7 +9,7 @@ end
 module ZipkinActionController
   def send_action(*args, &block)
     fully_qualified = "#{self.class.name}\##{args[0]}"
-    ZipkinTracer::TraceClient.local_component_span(fully_qualified) do |ztc|
+    ZipkinTracer::TraceClient.local_component_span(fully_qualified) do |_ztc|
       super
     end
   end
@@ -17,7 +17,7 @@ end
 
 module ZipkinReactRender
   def react_component(name, props = {}, options = {}, &block)
-    ZipkinTracer::TraceClient.local_component_span("React:#{name}") do |ztc|
+    ZipkinTracer::TraceClient.local_component_span("React:#{name}") do |_ztc|
       super
     end
   end
