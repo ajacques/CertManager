@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
     @error_message = flash[:error]
     @provider = OAuthProvider.github
+    use_secure_headers_override(:login_page)
 
     redirect_to install_oauth_path unless @provider
   end
