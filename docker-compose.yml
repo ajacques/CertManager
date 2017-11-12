@@ -8,7 +8,6 @@ web:
   expose:
     - 8080
   links:
-    - 'saltmaster:salt'
     - 'redis:redis'
     - logstash
     - db
@@ -69,7 +68,6 @@ worker:
   volumes_from:
     - gems-2.1
   links:
-    - 'saltmaster:salt'
     - 'redis:redis'
     - db
     - logstash
