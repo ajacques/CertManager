@@ -1,20 +1,23 @@
-module ZipkinActiveRecordTracing
-  def select_all(*args, &block)
-    ZipkinTracer::TraceClient.local_component_span('ActiveRecord') do |ztc|
-      ztc.record args[1] if args[1]
-      ztc.record_tag('query', args[0]) if args[0]
-
+module ZipkinViewRendering
+  def render(view, *args, &block)
+    ZipkinTracer::TraceClient.local_component_span(virtual_path) do |ztc|
       super
     end
   end
 end
 
-module ZipkinViewRendering
-  def render(*args, &block)
-    ZipkinTracer::TraceClient.local_component_span('ViewRender') do |ztc|
-      ztc.record 'View'
-      name = args[0].instance_eval('@virtual_path')
-      ztc.record_tag('Name', name) if name
+module ZipkinActionController
+  def send_action(*args, &block)
+    fully_qualified = "#{self.class.name}\##{args[0]}"
+    ZipkinTracer::TraceClient.local_component_span(fully_qualified) do |ztc|
+      super
+    end
+  end
+end
+
+module ZipkinReactRender
+  def react_component(name, props = {}, options = {}, &block)
+    ZipkinTracer::TraceClient.local_component_span("React:#{name}") do |ztc|
       super
     end
   end
@@ -22,7 +25,12 @@ end
 
 if ENV.key? 'ZIPKIN_REPORT_HOST'
   Rails.configuration.after_initialize do
-    ActionView::Template.prepend ZipkinViewRendering
-    ActiveRecord::ConnectionAdapters::DatabaseStatements.prepend ZipkinActiveRecordTracing
+    ActiveSupport.on_load(:action_view, run_once: true) do
+      ActionView::Template.prepend ZipkinViewRendering
+    end
+    ActiveSupport.on_load(:action_controller, run_once: true) do
+      prepend ZipkinActionController
+    end
+    React::Rails::ComponentMount.prepend ZipkinReactRender
   end
 end
