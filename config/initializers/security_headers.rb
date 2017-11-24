@@ -15,6 +15,7 @@ SecureHeaders::Configuration.default do |config|
     }
   }
   config.x_frame_options = 'DENY'
+  config.referrer_policy = 'no-referrer'
 
   config.csp = {
     default_src: %w['none'],
