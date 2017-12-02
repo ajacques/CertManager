@@ -6,9 +6,10 @@ module SecurityPolicy
       @config = YAML.load_file(Rails.root.join('config', 'security_policy.yml'))
     end
 
-    def respond_to_missing?(method)
+    def respond_to_missing?(method, include_private = false)
       load_file
-      @config.key? method
+      return true @config.key? method
+      super
     end
 
     def method_missing(method, *_args, &_block)
