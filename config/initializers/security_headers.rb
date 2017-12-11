@@ -1,4 +1,4 @@
-# rubocop:disable PercentStringArray, Metrics/ModuleLength
+# rubocop:disable PercentStringArray, Metrics/BlockLength
 # Disabled because it's required for the CSP header
 SecureHeaders::Configuration.default do |config|
   def asset_src

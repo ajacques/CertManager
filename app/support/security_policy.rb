@@ -8,7 +8,7 @@ module SecurityPolicy
 
     def respond_to_missing?(method, include_private = false)
       load_file
-      return true @config.key? method
+      return true if @config.key? method
       super
     end
 
