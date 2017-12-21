@@ -293,6 +293,8 @@ GEM
     tilt (2.0.8)
     tzinfo (1.2.4)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2017.3)
+      tzinfo (>= 1.0.0)
     uglifier (4.0.2)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
@@ -360,11 +362,11 @@ DEPENDENCIES
   sprockets
   sprockets-es6
   therubyracer
+  tzinfo-data
   uglifier
   unicorn
   will_paginate
   zipkin-tracer
 
-
 BUNDLED WITH
-   1.15.1
+   1.16.1

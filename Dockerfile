@@ -1,4 +1,4 @@
-FROM ubuntu:16.10
+FROM ubuntu:17.10
 
 ADD . /rails-app
 WORKDIR /rails-app

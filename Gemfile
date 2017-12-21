@@ -73,4 +73,5 @@ group :development, :production do
 end
 
 gem 'nokogiri', '>= 1.8.1'
+gem 'tzinfo-data'
 gem 'unicorn', platform: :ruby
