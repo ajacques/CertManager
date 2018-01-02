@@ -8,6 +8,9 @@ AllCops:
 Rails:
   Enabled: true
 
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
 Metrics/LineLength:
   Max: 150
 
