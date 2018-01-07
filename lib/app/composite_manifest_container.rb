@@ -7,7 +7,7 @@ class CompositeManifestContainer
 
   def find_asset(filename)
     if filename.starts_with? 'sprockets_'
-      @sprockets_container.find_asset(filename)
+      "\n" + @sprockets_container.find_asset(filename)
     else
       @webpacker_container.find_asset(filename)
     end
