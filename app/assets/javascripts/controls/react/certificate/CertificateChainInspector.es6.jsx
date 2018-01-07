@@ -1,9 +1,4 @@
 class CertificateChainInspector extends React.Component {
-  static propTypes() {
-    return {
-      chain: PropTypes.array.isRequired
-    };
-  }
   render() {
     const records = [];
     this.props.chain.forEach((pair, index) => {
@@ -16,3 +11,7 @@ class CertificateChainInspector extends React.Component {
     );
   }
 }
+
+CertificateChainInspector.propTypes = {
+  chain: PropTypes.array.isRequired
+};

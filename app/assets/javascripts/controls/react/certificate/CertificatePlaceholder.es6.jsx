@@ -31,5 +31,5 @@ class CertificatePlaceholder extends React.Component {
 
 CertificatePlaceholder.propTypes = {
   certificate: PropTypes.object.isRequired,
-  includePrivate: PropTypes.boolean
+  includePrivate: PropTypes.bool
 };
