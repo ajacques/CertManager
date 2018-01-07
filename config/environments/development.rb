@@ -32,7 +32,7 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  config.assets.precompile += %w[sprockets_server_rendering.js sprockets_server_rendering_preamble.js]
+  config.assets.precompile += %w[sprockets_server_rendering.js]
 
   config.log_level = :debug
   config.autoflush_log = true
@@ -50,6 +50,6 @@ Rails.application.configure do
   config.middleware.use I18n::JS::Middleware
 
   config.react.server_renderer_options = {
-    files: %w[sprockets_server_rendering_preamble.js server_rendering.js sprockets_server_rendering.js]
+    files: %w[server_rendering.js sprockets_server_rendering.js]
   }
 end
