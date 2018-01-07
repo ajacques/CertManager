@@ -7,13 +7,15 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import classNames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-window.React = React;
-window.ReactDOM = ReactDOM;
-window.PropTypes = PropTypes;
+global.React = React;
+global.ReactDOM = ReactDOM;
+global.PropTypes = PropTypes;
+global.classNames = classNames;
 
 // Legacy Component Exports
 const componentRequireContext = require.context("components", true);

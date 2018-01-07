@@ -15,7 +15,6 @@
 //= require_tree ./critical
 //= require i18n
 //= require i18n/translations
-//= require classnames
 //= require js-routes
 //= require_tree ./common
 //= require_tree ./controls

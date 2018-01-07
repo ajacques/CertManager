@@ -40,7 +40,6 @@ gem 'jwt'
 group :assets, :development do
   gem 'autoprefixer-rails'
   gem 'bootstrap-sass'
-  gem 'classnames-rails'
   gem 'i18n-js', '>= 3.0.0.rc11'
   gem 'js-routes'
   gem 'sprockets'

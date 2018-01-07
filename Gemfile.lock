@@ -57,7 +57,6 @@ GEM
       sass (>= 3.3.4)
     bootstrap_form (2.7.0)
     builder (3.2.3)
-    classnames-rails (2.1.5)
     codeclimate-engine-rb (0.4.1)
       virtus (~> 1.0)
     coercible (1.0.0)
@@ -332,7 +331,6 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass
   bootstrap_form
-  classnames-rails
   flay
   haml
   haml-lint
