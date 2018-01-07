@@ -1,0 +1,125 @@
+plugins:
+  - eslint-plugin-react
+
+extends:
+  - 'eslint:recommended'
+  - plugin:react/recommended
+
+parserOptions:
+  ecmaVersion: 6
+  ecmaFeatures:
+    jsx: true
+  impliedStrict: true
+
+globals:
+  React: true
+  ReactDOM: true
+  Routes: true
+  classNames: true
+
+settings:
+  react:
+    version: '15.0.2'
+
+env:
+  browser: true
+
+rules:
+  # Asset Pipeline differences
+  no-undef: error
+
+  # React
+  react/react-in-jsx-scope: off
+  react/jsx-no-undef: warn
+  react/jsx-uses-vars: error
+  react/jsx-key: error
+  react/jsx-no-target-blank: error
+  react/jsx-no-duplicate-props: error
+  react/jsx-no-comment-textnodes: error
+  react/jsx-indent:
+    - error
+    - 2
+  react/jsx-curly-spacing: error
+  react/jsx-closing-tag-location: error
+  react/jsx-closing-bracket-location:
+    - error
+    - selfClosing: after-props
+      nonEmpty: after-props
+  react/jsx-tag-spacing: error
+  react/jsx-pascal-case: error
+  react/jsx-wrap-multilines: error
+  react/jsx-equals-spacing: error
+  react/boolean-prop-naming: error
+  react/default-props-match-prop-types: error
+  react/jsx-boolean-value: error
+
+  semi: error
+  no-unexpected-multiline: error
+  no-extra-parens:
+    - error
+    - all
+    - ignoreJSX: multi-line
+  no-unsafe-negation: warn
+  complexity:
+    - warn
+    - 4
+  curly:
+    - warn
+    - all
+  no-alert: error
+  no-extra-bind: error
+  no-eval: error
+  radix:
+    - error
+    - always
+  no-shadow: error
+
+  prefer-const: error
+
+  # Class Layout
+  no-useless-constructor: error
+
+  # Code style
+  indent:
+    - error
+    - 2
+  yoda:
+    - warn
+    - never
+  brace-style:
+    - error
+    - 1tbs
+  linebreak-style:
+    - error
+    - unix
+  no-multi-spaces: error
+  # This is not safe to arbitrarily change across the code base.
+  # Needs slow migration
+  eqeqeq: warn
+  no-floating-decimal: error
+  dot-notation: error
+  dot-location:
+    - error
+    - property
+
+  # Control Flow
+  max-depth:
+    - error
+    - 3
+
+  no-implicit-coercion: error
+
+  semi-spacing: error
+  keyword-spacing: error
+  no-confusing-arrow: error
+  space-infix-ops:
+    - error
+    - int32Hint: false
+  space-before-blocks: error
+  space-before-function-paren:
+    - error
+    - never
+  space-in-parens:
+    - error
+    - never
+  spaced-comment: error

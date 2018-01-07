@@ -20,7 +20,8 @@ cloudformation.yml
 
 !.git/HEAD
 !.git/refs/heads/master
-
-*.json
+!.babelrc
 
 apparmor_policy
+
+node_modules

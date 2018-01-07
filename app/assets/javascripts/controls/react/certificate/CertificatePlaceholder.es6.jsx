@@ -1,10 +1,4 @@
 class CertificatePlaceholder extends React.Component {
-  static propTypes() {
-    return {
-      certificate: React.PropTypes.object.isRequired,
-      includePrivate: React.PropTypes.boolean
-    };
-  }
   renderPrivate() {
     return [
       <div>-----BEGIN PRIVATE KEY-----</div>,
@@ -34,3 +28,8 @@ class CertificatePlaceholder extends React.Component {
     return React.createElement.apply(this, items);
   }
 }
+
+CertificatePlaceholder.propTypes = {
+  certificate: PropTypes.object.isRequired,
+  includePrivate: PropTypes.boolean
+};

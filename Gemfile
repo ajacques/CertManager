@@ -7,12 +7,13 @@ gem 'rails', '~> 5.0.1'
 gem 'bootstrap_form'
 gem 'haml'
 gem 'haml-rails'
-# Temp pin because the latest version made some changes about assets that
-# we're not compatible with yet
-gem 'react-rails', '1.10.0'
-gem 'will_paginate'
 
-gem 'therubyracer', platform: :ruby
+# Asset Management
+gem 'mini_racer', platform: :ruby
+gem 'react-rails'
+gem 'webpacker'
+
+gem 'will_paginate'
 
 gem 'redis'
 gem 'redis-session-store'

@@ -79,6 +79,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.react.server_renderer_options = {
-    files: %w[components.js], # files to load for prerendering
+    files: %w[sprockets_server_rendering_preamble.js server_rendering.js sprockets_server_rendering.js] # files to load for prerendering
   }
 end

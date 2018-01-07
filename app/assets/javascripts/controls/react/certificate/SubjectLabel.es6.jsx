@@ -1,7 +1,7 @@
 class SubjectLabel extends React.Component {
   static propTypes() {
     return {
-      subject: React.PropTypes.object.isRequired
+      subject: PropTypes.object.isRequired
     };
   }
   render() {

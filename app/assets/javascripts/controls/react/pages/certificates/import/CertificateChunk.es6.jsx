@@ -1,16 +1,9 @@
 /* exported CertificateChunk */
-var CertificateChunk = React.createClass({
-  propTypes: {
-    certificate: React.PropTypes.object.isRequired,
-    onRemove: React.PropTypes.func.isRequired,
-    id: React.PropTypes.node.isRequired,
-    state: React.PropTypes.string.isRequired,
-    parsed: React.PropTypes.object
-  },
-  handleRemove: function() {
+class CertificateChunk extends React.Component {
+  handleRemove() {
     this.props.onRemove(this.props.id);
-  },
-  renderKnownCertificate: function() {
+  }
+  renderKnownCertificate() {
     var cert = this.props.certificate;
     var already_imported;
     if (cert.parsed.id !== null) {
@@ -22,8 +15,8 @@ var CertificateChunk = React.createClass({
         {already_imported}
       </span>
     );
-  },
-  renderCertificate: function() {
+  }
+  renderCertificate() {
     if (this.props.certificate === undefined) {
       return null;
     }
@@ -35,8 +28,8 @@ var CertificateChunk = React.createClass({
     } else {
       return this.renderKnownCertificate();
     }
-  },
-  renderPrivateKey: function() {
+  }
+  renderPrivateKey() {
     if (this.props.private_key === undefined) {
       return null;
     }
@@ -51,8 +44,8 @@ var CertificateChunk = React.createClass({
         </span>
       );
     }
-  },
-  render: function() {
+  }
+  render() {
     return (
       <div className="cert-chunk">
         {this.renderCertificate()}
@@ -63,4 +56,12 @@ var CertificateChunk = React.createClass({
       </div>
     );
   }
-});
+}
+
+CertificateChunk.propTypes = {
+  certificate: PropTypes.object.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  id: PropTypes.node.isRequired,
+  state: PropTypes.string.isRequired,
+  parsed: PropTypes.object
+};
