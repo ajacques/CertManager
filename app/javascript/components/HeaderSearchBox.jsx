@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class HeaderSearchBox extends React.Component {
+export default class HeaderSearchBox extends React.Component {
   constructor(props) {
     super(props);
     this.requestSuggestions = this.requestSuggestions.bind(this);
@@ -101,5 +101,3 @@ class HeaderSearchBox extends React.Component {
 HeaderSearchBox.propTypes = {
   query: PropTypes.string
 };
-
-export default HeaderSearchBox;

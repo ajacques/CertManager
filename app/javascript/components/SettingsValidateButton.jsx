@@ -1,7 +1,9 @@
-class SettingsValidateButton extends React.Component {
+import React from 'react';
+import PropTypes from 'prop-types';
+
+export default class SettingsValidateButton extends React.Component {
   constructor(props) {
     super(props);
-    this.functor = Routes[`validate_${props.target}_settings_path`];
     this.clickButton = this.clickButton.bind(this);
     this.handleResponse = this.handleResponse.bind(this);
     this.handleFailure = this.handleFailure.bind(this);
@@ -9,6 +11,11 @@ class SettingsValidateButton extends React.Component {
       state: 'nothing'
     };
   }
+  componentDidMount() {
+    this.functor = Routes[`validate_${this.props.target}_settings_path`];
+  }
+
+  // Event Handlers
   clickButton(event) {
     event.preventDefault();
 
@@ -25,6 +32,7 @@ class SettingsValidateButton extends React.Component {
   handleFailure(response) {
     this.setState({state: 'failed', error: response.message});
   }
+
   render() {
     const classes = ['loadable-button', 'btn'];
     const props = {
@@ -49,3 +57,7 @@ class SettingsValidateButton extends React.Component {
     return React.createElement('button', props, innerContent);
   }
 }
+
+SettingsValidateButton.propTypes = {
+  target: PropTypes.string.isRequired
+};
