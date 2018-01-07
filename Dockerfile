@@ -2,20 +2,25 @@ FROM ubuntu:17.10
 
 ADD . /rails-app
 WORKDIR /rails-app
-RUN apt-get update \
-  && apt-get install --no-install-recommends -qy ruby ruby-dev make g++ libsqlite3-dev \
-       libsqlite3-0 patch zlib1g-dev libpq5 libpq-dev libghc-zlib-dev \
+RUN export BUILD_PKGS=" libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch nodejs curl" \
+  && apt-get update \
+  && apt-get install --no-install-recommends -qy ruby libsqlite3-0 libpq5 $BUILD_PKGS \
+  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
+  && apt-get update \
+  && apt-get install --no-install-recommends -qy yarn \
   && gem install bundler --no-ri --no-rdoc \
   && env bundle install --without test development \
+  && yarn install --frozen-lockfile --prod --no-interactive --silent \
 
 # Generate compiled assets + manifests
   && RAILS_ENV=assets rake release \
 
 # Remove the source assets because we don't need them anymore
-  && rm -rf app/assets/* \
+  && rm -rf app/assets/* app/javascript/* node_modules \
 
 # Uninstall development headers/packages
-  && apt-get -qy purge libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch \
+  && apt-get -qy purge $BUILD_PKGS yarn \
   && apt-get -qy autoremove \
   && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /root /var/lib/apt/info/* /var/lib/apt/lists/* /var/lib/ghc \
      ./tmp/* ./bundle \

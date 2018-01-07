@@ -1,7 +1,7 @@
 class CertificateChainInspector extends React.Component {
   static propTypes() {
     return {
-      chain: React.PropTypes.array.isRequired
+      chain: PropTypes.array.isRequired
     };
   }
   render() {

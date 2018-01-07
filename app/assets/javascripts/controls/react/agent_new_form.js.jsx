@@ -1,3 +1,4 @@
+/* exported AgentNewForm */
 class AgentNewForm extends React.Component {
   constructor(props) {
     super(props);
@@ -13,11 +14,6 @@ class AgentNewForm extends React.Component {
     this.handleTagValueChange = this.handleTagValueChange.bind(this);
     this.handleTagKeyChange = this.handleTagKeyChange.bind(this);
     this.handleToken = this.handleToken.bind(this);
-  }
-  static propTypes() {
-    return {
-      imageName: React.PropTypes.string.isRequired
-    };
   }
   refreshData() {
     if (this.state.inflightRequest !== null) {
@@ -121,9 +117,13 @@ class AgentNewForm extends React.Component {
           <h4>Launch</h4>
           <p>Execute the following command on the remote host</p>
           <textarea className="agent-new-form--command-box" onClick={this.handleTokenClick} readOnly="readonly"
-                    type="text" value={this.launchCommand()} />
+                    value={this.launchCommand()} />
         </li>
       </div>
     );
   }
 }
+
+AgentNewForm.propTypes = {
+  imageName: PropTypes.string.isRequired
+};

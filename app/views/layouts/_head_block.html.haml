@@ -10,4 +10,5 @@
     %meta{ content: form_authenticity_token, name: 'csrf-token' }
     %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
     = javascript_include_tag 'application', defer: true
+    = javascript_pack_tag 'application'
   = stylesheet_link_tag 'application', media: 'all'

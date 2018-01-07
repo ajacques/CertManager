@@ -9,11 +9,6 @@ class ServicesNewOverview extends React.Component {
       loaded: false
     };
   }
-  static propTypes() {
-    return {
-      certificateSelectId: React.PropTypes.string.isRequired
-    };
-  }
   componentDidMount() {
     const element = document.getElementById(this.props.certificateSelectId);
     element.addEventListener('change', this.onCertificateChange);
@@ -50,3 +45,7 @@ class ServicesNewOverview extends React.Component {
     );
   }
 }
+
+ServicesNewOverview.propTypes = {
+  certificateSelectId: PropTypes.string.isRequired
+};

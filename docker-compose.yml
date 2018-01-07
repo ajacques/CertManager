@@ -23,6 +23,7 @@ nginx:
     - 80
   links:
     - 'browsersync:web'
+    - 'web:rails'
   volumes:
     - ./dockers/nginx:/etc/nginx/conf.d:ro
     - public:/rails-app/public:ro
