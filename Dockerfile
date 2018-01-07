@@ -23,7 +23,7 @@ RUN export BUILD_PKGS=" libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby
   && apt-get -qy purge $BUILD_PKGS yarn \
   && apt-get -qy autoremove \
   && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /root /var/lib/apt/info/* /var/lib/apt/lists/* /var/lib/ghc \
-     ./tmp/* ./bundle \
+     ./tmp/* ./bundle /usr/local/share/.cache/yarn \
 
 # All files/folders should be owned by root by readable by www-data
   && find . -type f -print -exec chmod 444 {} \; \
