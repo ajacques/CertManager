@@ -4,7 +4,6 @@ class CertImportBox extends React.Component {
     super(props);
     this.dragOver = this.dragOver.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
-    this.onRemove = this.onRemove.bind(this);
     this.state = {
       certificates: []
     };
