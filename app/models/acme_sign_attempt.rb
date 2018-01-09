@@ -1,5 +1,5 @@
 class AcmeSignAttempt < ApplicationRecord
-  has_many :challenges, class_name: 'AcmeChallenge', autosave: true
+  has_many :challenges, class_name: 'AcmeChallenge', autosave: true, inverse_of: :sign_attempt
   belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :imported_key, class_name: 'PublicKey', autosave: true

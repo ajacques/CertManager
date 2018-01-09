@@ -1,7 +1,7 @@
 class AcmeChallenge < ApplicationRecord
   belongs_to :certificate, autosave: true
   belongs_to :private_key
-  belongs_to :sign_attempt, class_name: 'AcmeSignAttempt', foreign_key: 'acme_sign_attempt_id'
+  belongs_to :sign_attempt, class_name: 'AcmeSignAttempt', foreign_key: 'acme_sign_attempt_id', inverse_of: :challenges
   after_create :after_create
 
   delegate :request_verification, to: :inner_challenge
