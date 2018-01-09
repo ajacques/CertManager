@@ -32,6 +32,7 @@ SecureHeaders::Configuration.default do |config|
     config.csp[:connect_src] = %w[ws://certmgr.localhost 'self']
   end
 end
+# rubocop:enable PercentStringArray, Metrics/BlockLength
 
 # Login page is kept minimal for reduced exposure
 SecureHeaders::Configuration.override(:login_page) do |override|
