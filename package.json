@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
+    "babel-plugin-transform-react-constant-elements": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.0",
