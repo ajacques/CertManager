@@ -1,6 +1,9 @@
 /* exported CertificateImportContainer */
 /* globals Certificate, PrivateKey */
-class CertificateImportContainer extends React.Component {
+import CertImportBox from './CertImportBox';
+import React from 'react';
+
+export default class CertificateImportContainer extends React.Component {
   constructor(props) {
     super(props);
     this.update = this.update.bind(this);

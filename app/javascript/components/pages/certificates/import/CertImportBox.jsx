@@ -1,5 +1,9 @@
-/* globals CertBundle */
-class CertImportBox extends React.Component {
+import CertificateChunk from './CertificateChunk';
+import CertificateTextBox from './CertificateTextBox';
+import PropTypes from 'prop-types';
+import React from 'react';
+
+export default class CertImportBox extends React.Component {
   constructor(props) {
     super(props);
     this.dragOver = this.dragOver.bind(this);
@@ -20,27 +24,26 @@ class CertImportBox extends React.Component {
   }
   handleDrop(event) {
     if (event.dataTransfer.files.length >= 1) {
-      var reader = new FileReader();
-      var self = this;
-      reader.onload = function(text) {
+      const reader = new FileReader();
+      reader.onload = text => {
         // Validate format
-        var content = text.target.result;
-        var bundle = new CertBundle(content);
-        for (var i = 0; i < bundle.certs.length; i++) {
-          self.handleCertificate(bundle.certs[i]);
+        const content = text.target.result;
+        const bundle = new CertBundle(content);
+        for (let i = 0; i < bundle.certs.length; i++) {
+          this.handleCertificate(bundle.certs[i]);
         }
       };
-      for (var i = 0; i < event.dataTransfer.files.length; i++) {
+      for (let i = 0; i < event.dataTransfer.files.length; i++) {
         reader.readAsText(event.dataTransfer.files[i]);
         event.preventDefault();
       }
     }
   }
   render() {
-    var elems = [];
-    var text = '';
-    for (var i in this.props.certificates) {
-      var cert = this.props.certificates[i];
+    const elems = [];
+    let text = '';
+    for (let i in this.props.certificates) {
+      const cert = this.props.certificates[i];
       if (cert.certificate !== undefined) {
         text += cert.certificate.value;
       }

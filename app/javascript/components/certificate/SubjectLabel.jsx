@@ -1,4 +1,7 @@
-class SubjectLabel extends React.Component {
+import PropTypes from 'prop-types';
+import React from 'react';
+
+export default class SubjectLabel extends React.Component {
   render() {
     const array = Object.keys(this.props.subject)
       .filter(key => this.props.subject[key])

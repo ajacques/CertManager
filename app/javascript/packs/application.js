@@ -20,8 +20,10 @@ global.classNames = classNames;
 // Legacy Component Exports
 const componentRequireContext = require.context("components", true);
 
-componentRequireContext.keys().forEach(f => {
-  if (!f.endsWith('.js')) {
-    window[f.substring(2)] = componentRequireContext(f).default;
+global.GetComponentConstructor = function(name) {
+  const context = componentRequireContext(`./${name}`);
+  if (context) {
+    return context.default;
   }
-});
+  return null;
+};

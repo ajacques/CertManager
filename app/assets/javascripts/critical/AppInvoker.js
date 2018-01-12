@@ -7,7 +7,7 @@
     for (j = 0, len = ref.length; j < len; j++) {
       var element = ref[j];
       var className = element.getAttribute('data-react-class');
-      var clazz = window[name] || window[className];
+      var clazz = GetComponentConstructor(className) || window[className];
       var props = JSON.parse(element.getAttribute('data-react-props'));
       registeredReactComponents.push(ReactDOM.hydrate(React.createElement(clazz, props), element));
     }

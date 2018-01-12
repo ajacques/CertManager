@@ -1,5 +1,8 @@
 /* exported CertificateChunk */
-class CertificateChunk extends React.Component {
+import PropTypes from 'prop-types';
+import React from 'react';
+
+export default class CertificateChunk extends React.Component {
   handleRemove() {
     this.props.onRemove(this.props.id);
   }

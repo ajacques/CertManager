@@ -21,7 +21,7 @@
     .form-group
       %label.col-sm-2.control-label= t 'attributes.subject_alternate_names.label'
       .col-sm-10#subject-alt-list
-        = react_component 'SubjectAltNameList', {}, prerender: true, data: { react_mount: true }
+        = react_component 'pages/certificates/new/SubjectAltNameList', {}, prerender: true, data: { react_mount: true }
   = f.fields_for :private_key_attributes do |pk|
     = pk.form_group :type, label: { text: 'Key algorithm' } do
       .row

@@ -1,9 +1,9 @@
-/* exported SubjectAltNameList */
-class SubjectAltNameList extends React.Component {
+import React from 'react';
+
+export default class SubjectAltNameList extends React.Component {
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
-    this.renderRow = this.renderRow.bind(this);
     this.state = {
       names: []
     };
@@ -17,7 +17,7 @@ class SubjectAltNameList extends React.Component {
   renderRow() {
     return (
       <input name="certificate[csr_attributes][subject_alternate_names][]"
-        className="san-textbox form-control" type="text" onChange={this.handleChange} />
+        className="san-textbox form-control" type="text" />
     );
   }
   buttonBar() {

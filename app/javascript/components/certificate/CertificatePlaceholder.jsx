@@ -1,4 +1,8 @@
-class CertificatePlaceholder extends React.Component {
+import PropTypes from 'prop-types';
+import SubjectLabel from './SubjectLabel';
+import React from 'react';
+
+export default class CertificatePlaceholder extends React.Component {
   renderPrivate() {
     return [
       <div>-----BEGIN PRIVATE KEY-----</div>,
