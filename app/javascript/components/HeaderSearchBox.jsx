@@ -15,7 +15,7 @@ export default class HeaderSearchBox extends React.Component {
   }
   componentDidMount() {
     if (window && window.debounce) {
-      this.state.debouncer = window.debounce(this.requestSuggestions, 200, false, 3);
+      this.debouncer = window.debounce(this.requestSuggestions, 200, false, 3);
     }
   }
   requestSuggestions() {
@@ -69,7 +69,7 @@ export default class HeaderSearchBox extends React.Component {
   }
   typeThunk(event) {
     this.setState({typedValue: event.target.value});
-    this.state.debouncer();
+    this.debouncer();
   }
   render() {
     const suggests = [];
