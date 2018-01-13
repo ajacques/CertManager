@@ -7,23 +7,26 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import classNames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-
-global.React = React;
-global.ReactDOM = ReactDOM;
-global.PropTypes = PropTypes;
-global.classNames = classNames;
 
 // Legacy Component Exports
 const componentRequireContext = require.context("components", true);
 
-global.GetComponentConstructor = function(name) {
+function GetComponentConstructor(name) {
   const context = componentRequireContext(`./${name}`);
   if (context) {
     return context.default;
   }
   return null;
+}
+
+function HydrateComponent(className, props, targetElement) {
+  const clazz = GetComponentConstructor(className) || global[className];
+  ReactDOM.hydrate(React.createElement(clazz, props), targetElement);
+}
+
+global.App = {
+  HydrateComponent
 };
+

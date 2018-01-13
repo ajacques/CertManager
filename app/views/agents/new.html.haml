@@ -9,4 +9,4 @@
       %h4 Firewall/networking
       %div= t 'views.agents.new.network_step.message', port: 443
       %code Container -> #{root_url}
-    = react_component 'AgentNewForm', { imageName: @agent.image_name }, prerender: true, data: { react_mount: true, initialToken: 'foo' }
+    = react_component 'pages/agents/new/AgentNewForm', { imageName: @agent.image_name }, prerender: true, data: { react_mount: true, initialToken: 'foo' }

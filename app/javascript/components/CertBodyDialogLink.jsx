@@ -1,4 +1,9 @@
-class CertBodyDialogLink extends React.Component {
+import CertBodyDialog from './CertBodyDialog';
+import PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+export default class CertBodyDialogLink extends React.Component {
   constructor(props) {
     super(props);
     this.openWindow = this.openWindow.bind(this);
@@ -8,7 +13,7 @@ class CertBodyDialogLink extends React.Component {
     ReactDOM.unmountComponentAtNode(CertBodyDialogLink.modalPoint);
   }
   _getModel() {
-    var model = this.props.model;
+    const model = this.props.model;
     if (model.hasOwnProperty('get_format')) {
       return model;
     }
@@ -19,7 +24,7 @@ class CertBodyDialogLink extends React.Component {
   }
   openWindow(event) {
     event.preventDefault();
-    var elem = ReactDOM.render(<CertBodyDialog model={this._getModel()} onClose={this.close} />, CertBodyDialogLink.modalPoint);
+    const elem = ReactDOM.render(<CertBodyDialog model={this._getModel()} onClose={this.close} />, CertBodyDialogLink.modalPoint);
     elem.changeFormat(elem.state.format);
     return false;
   }

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,7 +6,11 @@ export default class HeaderSearchBox extends React.Component {
   constructor(props) {
     super(props);
     this.requestSuggestions = this.requestSuggestions.bind(this);
+    this._handleSuggestions = this._handleSuggestions.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.typeThunk = this.typeThunk.bind(this);
     this.state = {
       suggestions: [],
       float_open: false,

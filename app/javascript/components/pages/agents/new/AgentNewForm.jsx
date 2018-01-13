@@ -1,5 +1,7 @@
-/* exported AgentNewForm */
-class AgentNewForm extends React.Component {
+import PropTypes from 'prop-types';
+import React from 'react';
+
+export default class AgentNewForm extends React.Component {
   constructor(props) {
     super(props);
     this.refreshData = this.refreshData.bind(this);
@@ -19,12 +21,12 @@ class AgentNewForm extends React.Component {
     if (this.state.inflightRequest !== null) {
       this.state.inflightRequest.abort();
     }
-    var reconciledTags = {};
-    for (var i = 0; i < this.state.tags.length; i++) {
-      var tagRecord = this.state.tags[i];
+    const reconciledTags = {};
+    for (let i = 0; i < this.state.tags.length; i++) {
+      const tagRecord = this.state.tags[i];
       reconciledTags[tagRecord.key] = tagRecord.value;
     }
-    var req = Ajax.post(Routes.generate_token_agent_index_path(), {
+    const req = Ajax.post(Routes.generate_token_agent_index_path(), {
       contentType: 'application/json',
       acceptType: 'text/plain',
       data: {
@@ -51,22 +53,22 @@ class AgentNewForm extends React.Component {
     event.currentTarget.select(0, event.currentTarget.value.length);
   }
   handlePossibleEquals(event) {
-    var index = event.currentTarget.dataset.index;
+    const index = event.currentTarget.dataset.index;
     if (event.keyCode === 187) { // Equals sign
       event.preventDefault();
-      var valueBox = this.refs['tag-row-' + index];
+      const valueBox = this.refs['tag-row-' + index];
       valueBox.focus();
     }
   }
   upsertTagAt(index, props) {
-    var newTags = this.state.tags.slice();
+    const newTags = this.state.tags.slice();
     if (this.state.tags.length < index) {
       newTags.push(Object.assign({
         key: null,
         value: null
       }, props));
     } else {
-      var oldTag = this.state.tags[index];
+      const oldTag = this.state.tags[index];
       newTags[index] = Object.assign({}, oldTag, props);
     }
     if (!newTags[index].key && !newTags[index].value) {
@@ -75,11 +77,11 @@ class AgentNewForm extends React.Component {
     this.setState({tags: newTags, dirty: true});
   }
   handleTagKeyChange(event) {
-    var index = event.currentTarget.dataset.index;
+    const index = event.currentTarget.dataset.index;
     this.upsertTagAt(index, {key: event.currentTarget.value});
   }
   handleTagValueChange(event) {
-    var index = event.currentTarget.dataset.index;
+    const index = event.currentTarget.dataset.index;
     this.upsertTagAt(index, {value: event.currentTarget.value});
   }
   registrationUrl() {

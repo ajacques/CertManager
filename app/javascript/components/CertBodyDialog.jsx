@@ -1,4 +1,7 @@
-class CertBodyDialog extends React.Component {
+import PropTypes from 'prop-types';
+import React from 'react';
+
+export default class CertBodyDialog extends React.Component {
   constructor(props) {
     super(props);
     this.changeBody = this.changeBody.bind(this);
@@ -33,11 +36,10 @@ class CertBodyDialog extends React.Component {
     this.triggerBodyUpdate(this.state.format, event.target.checked);
   }
   render() {
-    var formatElems = [];
-    var self = this;
-    CertBodyDialog.formats.forEach(function(format) {
-      var link = <a href={Routes.certificate_path({id: self.props.model.id}, {format: format})} onClick={self.handleChangeFormat.bind(null, format)}>{format}</a>;
-      var isActive = format === self.state.format;
+    const formatElems = [];
+    CertBodyDialog.formats.forEach(format => {
+      const link = <a href={Routes.certificate_path({id: this.props.model.id}, {format: format})} onClick={this.handleChangeFormat.bind(null, format)}>{format}</a>;
+      const isActive = format === self.state.format;
       formatElems.push(<li className={classNames({active: isActive})} key={format}>{link}</li>);
     });
     return (

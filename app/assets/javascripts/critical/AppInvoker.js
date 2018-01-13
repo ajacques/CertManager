@@ -1,15 +1,13 @@
 (function() {
   window.on_pageload = window.on_pageload || [];
-  var registeredReactComponents = [];
 
   function initializeReact() {
     var ref = document.querySelectorAll('[data-react-mount=true]');
     for (j = 0, len = ref.length; j < len; j++) {
       var element = ref[j];
       var className = element.getAttribute('data-react-class');
-      var clazz = GetComponentConstructor(className) || window[className];
       var props = JSON.parse(element.getAttribute('data-react-props'));
-      registeredReactComponents.push(ReactDOM.hydrate(React.createElement(clazz, props), element));
+      window.App.HydrateComponent(className, props, element);
     }
   }
 
@@ -32,7 +30,7 @@
       page_obj.init();
     }
     initializeReact();
-  };
+  }
 
   if (document.readyState === "complete" || document.readyState === "loaded") {
     initializePage();
