@@ -1,46 +1,8 @@
-class CertificatePart {
-  constructor(opts) {
-    this.cache = {};
-    this.opts = opts.opts;
-    this.show_url = opts.show_url;
+import Ajax from 'utilities/Ajax';
+import CertificatePart from './CertificatePart';
+import ModelCache from './ModelCache';
 
-    if (this.opts.pem) {
-      this.cache.pem = this.opts.pem;
-    }
-
-    this.subject = this.opts.subject;
-    this.to_pem = this.get_format.bind(this, 'pem');
-    this.id = this.opts.id;
-  }
-
-  to_pem() {
-    return this.get_format('pem');
-  }
-
-  id() {
-    return this.id;
-  }
-
-  get_format(format) {
-    const self = this;
-    if (this.cache.hasOwnProperty(format)) {
-      return new Promise(resolve => resolve(this.cache[format]));
-    }
-    const process = function (result) {
-      self.cache[format] = result;
-      return result;
-    };
-    return Ajax.get(this.show_url({id: this.opts.id}, {format: format}), {
-      acceptType: 'text/plain'
-    }).then(process);
-  }
-
-  static from_string(string) {
-    return new CertificatePart({pem: string});
-  }
-}
-
-class Certificate extends CertificatePart {
+export default class Certificate extends CertificatePart {
   constructor(opts) {
     super({opts: opts, show_url: Routes.certificate_path});
   }
@@ -111,15 +73,5 @@ class Certificate extends CertificatePart {
 
   static find(id) {
     return ModelCache.get(Certificate, id);
-  }
-}
-
-class PublicKey extends CertificatePart {
-  constructor(opts) {
-    super({opts: opts, show_url: Routes.public_key_path});
-  }
-
-  static find(id) {
-    return ModelCache.get(PublicKey, id);
   }
 }

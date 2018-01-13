@@ -7,6 +7,8 @@ export default class HeaderSearchBox extends React.Component {
     super(props);
     this.requestSuggestions = this.requestSuggestions.bind(this);
     this._handleSuggestions = this._handleSuggestions.bind(this);
+    this.handleMouseOverSuggestions = this.handleMouseOverSuggestions.bind(this);
+    this.handleMouseOutSuggestions = this.handleMouseOutSuggestions.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleScroll = this.handleScroll.bind(this);

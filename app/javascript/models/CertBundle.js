@@ -1,11 +1,9 @@
-(function(root) {
-  'use strict';
+export default class CertBundle {
+  constructor(data) {
+    const regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}[a-zA-Z0-9=/+\r\n]+-----END ([A-Z ]+)-----[\r\n]{1,2}/g;
+    const groups = [];
 
-  root.CertBundle = function(data) {
-    var regex = /-----BEGIN ([A-Z ]+)-----[\r\n]{1,2}[a-zA-Z0-9=/+\r\n]+-----END ([A-Z ]+)-----[\r\n]{1,2}/g;
-    var groups = [];
-
-    var rmatch;
+    let rmatch;
     while ((rmatch = regex.exec(data)) !== null) {
       groups.push({
         index: rmatch.index,
@@ -15,15 +13,15 @@
       });
     }
 
-    this.keys = groups.filter(function(l) {
+    this.keys = groups.filter(function (l) {
       return l.type === 'RSA PRIVATE KEY';
     });
-    this.certs = groups.filter(function(l) {
+    this.certs = groups.filter(function (l) {
       return l.type === 'CERTIFICATE';
     });
-    this.unknown = groups.filter(function(l) {
+    this.unknown = groups.filter(function (l) {
       return l.type !== 'CERTIFICATE';
     });
     this.all = groups;
-  };
-})(this);
+  }
+}

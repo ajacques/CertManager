@@ -1,3 +1,4 @@
+import CertBundle from 'models/CertBundle';
 import CertificateChunk from './CertificateChunk';
 import CertificateTextBox from './CertificateTextBox';
 import PropTypes from 'prop-types';

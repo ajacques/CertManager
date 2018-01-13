@@ -1,3 +1,4 @@
+import Ajax from 'utilities/Ajax';
 import PropTypes from 'prop-types';
 import React from 'react';
 

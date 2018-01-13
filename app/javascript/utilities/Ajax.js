@@ -64,4 +64,4 @@ class NativeAjax {
   }
 }
 
-const Ajax = new NativeAjax();
+export default new NativeAjax();

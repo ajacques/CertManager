@@ -1,3 +1,5 @@
+import Certificate from 'models/Certificate';
+import PublicKey from 'models/PublicKey';
 import CertBodyDialog from './CertBodyDialog';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -17,10 +19,12 @@ export default class CertBodyDialogLink extends React.Component {
     if (model.hasOwnProperty('get_format')) {
       return model;
     }
-    if (self[model.type] === undefined) {
-      return model;
+    if (model.type === "Certificate") {
+      return Certificate.find(model.id);
+    } else if (model.type === "PublicKey") {
+      return PublicKey.find(model.id);
     }
-    return self[model.type].find(model.id);
+    return this[model.type].find(model.id);
   }
   openWindow(event) {
     event.preventDefault();

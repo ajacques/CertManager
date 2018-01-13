@@ -7,6 +7,7 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import Ajax from 'utilities/Ajax';
 import React from 'react';
 import ReactDOM from 'react-dom'
 
@@ -29,4 +30,4 @@ function HydrateComponent(className, props, targetElement) {
 global.App = {
   HydrateComponent
 };
-
+global.Ajax = Ajax;

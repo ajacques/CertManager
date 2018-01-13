@@ -1,9 +1,11 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class CertBodyDialog extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChangeFormat = this.handleChangeFormat.bind(this);
     this.changeBody = this.changeBody.bind(this);
     this.state = {
       format: 'pem'
@@ -39,7 +41,7 @@ export default class CertBodyDialog extends React.Component {
     const formatElems = [];
     CertBodyDialog.formats.forEach(format => {
       const link = <a href={Routes.certificate_path({id: this.props.model.id}, {format: format})} onClick={this.handleChangeFormat.bind(null, format)}>{format}</a>;
-      const isActive = format === self.state.format;
+      const isActive = format === this.state.format;
       formatElems.push(<li className={classNames({active: isActive})} key={format}>{link}</li>);
     });
     return (

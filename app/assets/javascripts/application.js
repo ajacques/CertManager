@@ -18,4 +18,3 @@
 //= require js-routes
 //= require_tree ./common
 //= require_tree ./controls
-//= require_tree ./models

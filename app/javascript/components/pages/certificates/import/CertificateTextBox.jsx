@@ -1,3 +1,4 @@
+import CertBundle from 'models/CertBundle';
 import PropTypes from 'prop-types';
 import React from 'react';
 

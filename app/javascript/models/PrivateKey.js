@@ -1,4 +1,7 @@
-class PrivateKey extends CertificatePart {
+import Ajax from 'utilities/Ajax';
+import CertificatePart from './CertificatePart';
+
+export default class PrivateKey extends CertificatePart {
   constructor(opts) {
     super({opts: opts, show_url: Routes.private_key_path});
   }
