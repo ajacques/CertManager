@@ -14,16 +14,16 @@ RUN export BUILD_PKGS=" libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby
   && yarn install --frozen-lockfile --prod --no-interactive --silent \
 
 # Generate compiled assets + manifests
-  && RAILS_ENV=assets rake release \
+  && NODE_ENV=production RAILS_ENV=assets rake release \
 
 # Remove the source assets because we don't need them anymore
-  && rm -rf app/assets/* app/javascript/* node_modules \
+  && rm -rf app/assets/* app/javascript/* node_modules yarn.lock \
 
 # Uninstall development headers/packages
   && apt-get -qy purge $BUILD_PKGS yarn \
   && apt-get -qy autoremove \
   && rm -rf /var/lib/gems/2.3.0/cache /var/cache/* /root /var/lib/apt/info/* /var/lib/apt/lists/* /var/lib/ghc \
-     ./tmp/* ./bundle /usr/local/share/.cache/yarn \
+     ./tmp/* ./bundle /usr/local/share/.cache/yarn /var/lib/dpkg /var/lib/log/*  \
 
 # All files/folders should be owned by root by readable by www-data
   && find . -type f -print -exec chmod 444 {} \; \

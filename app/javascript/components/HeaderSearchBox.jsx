@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import debounce from 'utilities/Debounce';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -21,9 +22,7 @@ export default class HeaderSearchBox extends React.Component {
     };
   }
   componentDidMount() {
-    if (window && window.debounce) {
-      this.debouncer = window.debounce(this.requestSuggestions, 200, false, 3);
-    }
+    this.debouncer = debounce(this.requestSuggestions, 200, false, 3);
   }
   requestSuggestions() {
     const query = this.state.typedValue;

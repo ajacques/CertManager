@@ -6,6 +6,7 @@ export default class CertBodyDialog extends React.Component {
   constructor(props) {
     super(props);
     this.handleChangeFormat = this.handleChangeFormat.bind(this);
+    this.handleIncludeChain = this.handleIncludeChain.bind(this);
     this.changeBody = this.changeBody.bind(this);
     this.state = {
       format: 'pem'

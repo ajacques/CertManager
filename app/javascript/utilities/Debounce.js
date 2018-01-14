@@ -1,11 +1,11 @@
-function debounce(func, wait, immediate, maxWait) {
-  var timeout;
+export default function debounce(func, wait, immediate, maxWait) {
+  let timeout;
   maxWait = maxWait || 30 * 1000;
-  var lastTrigger = null;
+  let lastTrigger = null;
   return function() {
-    var now = new Date();
-    var context = this;
-    var args = arguments;
+    const now = new Date();
+    const context = this;
+    const args = arguments;
     if (lastTrigger !== null && now - lastTrigger > maxWait) {
       func.apply(context, args);
       lastTrigger = new Date();
