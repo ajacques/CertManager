@@ -1,4 +1,5 @@
 import Ajax from 'utilities/Ajax';
+import AsyncTask from 'utilities/AsyncTask';
 import CertificatePart from './CertificatePart';
 import ModelCache from './ModelCache';
 
@@ -57,7 +58,7 @@ export default class Certificate extends CertificatePart {
   }
 
   static _parse_result(result) {
-    return result.chain.map(function (f) {
+    return result.chain.map(function(f) {
       return new Certificate(f);
     });
   }

@@ -9,7 +9,7 @@
 
 import Ajax from 'utilities/Ajax';
 import React from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
 import Raven from 'raven-js';
 import Version from 'environment/ReleaseVersion.js.erb';
 

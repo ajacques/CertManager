@@ -16,5 +16,4 @@
 //= require i18n
 //= require i18n/translations
 //= require js-routes
-//= require_tree ./common
 //= require_tree ./controls

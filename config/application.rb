@@ -1,6 +1,17 @@
 require File.expand_path('../boot', __FILE__)
 
-require 'rails/all'
+if ENV['RAILS_ENV'] == 'assets'
+  %w[
+    action_controller/railtie
+    active_job/railtie
+    action_view/railtie
+    sprockets/railtie
+  ].each do |railtie|
+    require railtie
+  end
+else
+  require 'rails/all'
+end
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

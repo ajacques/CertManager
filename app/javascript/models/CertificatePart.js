@@ -28,7 +28,7 @@ export default class CertificatePart {
     if (this.cache.hasOwnProperty(format)) {
       return new Promise(resolve => resolve(this.cache[format]));
     }
-    const process = function (result) {
+    const process = function(result) {
       self.cache[format] = result;
       return result;
     };

@@ -1,19 +1,21 @@
-var AsyncTask = (function() {
+import Ajax from 'utilities/Ajax';
+
+export default (function() {
   'use strict';
-  var handle_loop = function(url_func, resolve, reject) {
+  function handleLoop(url_func, resolve, reject) {
     return function(result) {
       if (result.status === 'unfinished') {
         window.setTimeout(function() {
           Ajax.get(url_func({wait_handle: result.wait_handle}), {
             acceptType: 'application/json'
-          }).then(handle_loop(url_func, resolve, reject));
+          }).then(handleLoop(url_func, resolve, reject));
         }, 500);
         return;
       }
 
       resolve(result);
     };
-  };
+  }
 
   return {
     start: function(data) {
@@ -22,7 +24,7 @@ var AsyncTask = (function() {
           acceptType: 'application/json',
           contentType: 'application/json',
           data: data.data
-        }).then(handle_loop(data.url, resolve, reject));
+        }).then(handleLoop(data.url, resolve, reject));
       });
     }
   };
