@@ -5,6 +5,7 @@
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.5",
     "prop-types": "^15.6.0",
+    "raven-js": "^3.22.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react_ujs": "^2.4.3"

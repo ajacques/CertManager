@@ -10,6 +10,8 @@
 import Ajax from 'utilities/Ajax';
 import React from 'react';
 import ReactDOM from 'react-dom'
+import Raven from 'raven-js';
+import Version from 'environment/ReleaseVersion.js.erb';
 
 // Legacy Component Exports
 const componentRequireContext = require.context("components", true);
@@ -20,6 +22,17 @@ function GetComponentConstructor(name) {
     return context.default;
   }
   return null;
+}
+
+if (process.env.NODE_ENV === 'production') {
+  const metaTag = document.querySelector('meta[name="sentry-report-uri"]');
+  if (metaTag) {
+    Raven
+      .config(metaTag.content, {
+        version: Version
+      })
+      .install();
+  }
 }
 
 function HydrateComponent(className, props, targetElement) {

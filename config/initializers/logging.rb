@@ -9,8 +9,12 @@ if ENV['LOGSTASH_ENABLED']
 end
 
 if ENV.key? 'SENTRY_DSN'
+  private_dsn = URI(ENV['SENTRY_DSN'])
+  public_dsn = private_dsn.dup
+  public_dsn.password = nil
+  Rails.application.config.sentry_public_dsn = public_dsn.to_s
   Raven.configure do |config|
-    config.dsn = ENV['SENTRY_DSN']
+    config.dsn = private_dsn.to_s
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
     config.release = File.read('.git/refs/heads/master').chomp
     config.async = ->(event) { SentryReportJob.perform_later(event) }

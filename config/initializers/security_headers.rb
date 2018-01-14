@@ -25,6 +25,14 @@ SecureHeaders::Configuration.default do |config|
     connect_src: %w['self']
   }
 
+  if ENV.key? 'SENTRY_DSN'
+    uri = URI(ENV['SENTRY_DSN'])
+    uri.user = nil
+    uri.password = nil
+    uri.path = ''
+    config.csp[:connect_src] << uri.to_s
+  end
+
   # Browsersync
   if Rails.env.development?
     config.csp[:script_src] << "'sha256-OH62nWXd8EjoXubrd8JxJyNkzPjBgGuoQUBbXt2EKEs='"
