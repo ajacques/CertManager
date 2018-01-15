@@ -13,13 +13,13 @@ export default class CertBundle {
       });
     }
 
-    this.keys = groups.filter(function (l) {
+    this.keys = groups.filter(function(l) {
       return l.type === 'RSA PRIVATE KEY';
     });
-    this.certs = groups.filter(function (l) {
+    this.certs = groups.filter(function(l) {
       return l.type === 'CERTIFICATE';
     });
-    this.unknown = groups.filter(function (l) {
+    this.unknown = groups.filter(function(l) {
       return l.type !== 'CERTIFICATE';
     });
     this.all = groups;

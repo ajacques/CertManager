@@ -25,6 +25,8 @@ SecureHeaders::Configuration.default do |config|
     connect_src: %w['self']
   }
 
+  config.csp[:report_uri] = [ENV['CSP_REPORT_URI']] if ENV.key? 'CSP_REPORT_URI'
+
   if ENV.key? 'SENTRY_DSN'
     uri = URI(ENV['SENTRY_DSN'])
     uri.user = nil
