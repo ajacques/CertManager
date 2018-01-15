@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
   if (metaTag) {
     Raven
       .config(metaTag.content, {
-        version: Version
+        release: Version
       })
       .install();
   }
