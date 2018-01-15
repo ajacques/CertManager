@@ -30,7 +30,7 @@ export default class CertBodyDialog extends React.Component {
   changeBody(body) {
     let data = body;
     if (typeof body === "object") {
-      data = JSON.stringify(body);
+      data = JSON.stringify(body, null, 2);
     }
     this.setState({text: data});
   }
