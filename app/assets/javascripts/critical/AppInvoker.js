@@ -3,7 +3,7 @@
 
   function initializeReact() {
     var ref = document.querySelectorAll('[data-react-mount=true]');
-    for (j = 0, len = ref.length; j < len; j++) {
+    for (var j = 0, len = ref.length; j < len; j++) {
       var element = ref[j];
       var className = element.getAttribute('data-react-class');
       var props = JSON.parse(element.getAttribute('data-react-props'));

@@ -1,3 +1,4 @@
+import Ajax from 'utilities/Ajax';
 import classNames from 'classnames';
 import debounce from 'utilities/Debounce';
 import React from 'react';
