@@ -12,6 +12,10 @@ export default class CertBodyDialog extends React.Component {
       format: 'pem'
     };
   }
+  componentDidMount() {
+    this.triggerBodyUpdate(this.state.format, this.state.include_chain);
+  }
+
   handleChangeFormat(format, event) {
     event.preventDefault();
     this.changeFormat(format);

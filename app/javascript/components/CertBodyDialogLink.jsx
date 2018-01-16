@@ -5,14 +5,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const modalPoint = typeof document !== "undefined" && document.body.appendChild(document.createElement('div'));
+
 export default class CertBodyDialogLink extends React.Component {
   constructor(props) {
     super(props);
-    this.openWindow = this.openWindow.bind(this);
     this.close = this.close.bind(this);
+    this.openWindow = this.openWindow.bind(this);
+    this.state = {
+      open: false
+    };
   }
   close() {
-    ReactDOM.unmountComponentAtNode(CertBodyDialogLink.modalPoint);
+    this.setState({ open: false });
   }
   _getModel() {
     const model = this.props.model;
@@ -28,21 +33,20 @@ export default class CertBodyDialogLink extends React.Component {
   }
   openWindow(event) {
     event.preventDefault();
-    const elem = ReactDOM.render(<CertBodyDialog model={this._getModel()} onClose={this.close} />, CertBodyDialogLink.modalPoint);
-    elem.changeFormat(elem.state.format);
+    this.setState({ open: true });
     return false;
   }
   render() {
     return (
-      <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.model.id})}>{this.props.children}</a>
+      <React.Fragment>
+        {this.state.open && ReactDOM.createPortal(<CertBodyDialog model={this._getModel()} onClose={this.close} />, modalPoint)}
+        <a onClick={this.openWindow} href={Routes.public_key_path({id: this.props.model.id})}>{this.props.children}</a>
+      </React.Fragment>
     );
   }
 }
 
-if (typeof document !== "undefined") {
-  CertBodyDialogLink.modalPoint = document.createElement('div');
-  document.body.appendChild(CertBodyDialogLink.modalPoint);
-}
+
 
 CertBodyDialogLink.propTypes = {
   model: PropTypes.object.isRequired,
