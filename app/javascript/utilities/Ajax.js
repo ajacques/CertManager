@@ -6,9 +6,8 @@ class NativeAjax {
     const mimeType = response.getResponseHeader('Content-Type');
     if (mimeType && mimeType.startsWith('application/json') && response.responseText !== '') {
       return JSON.parse(response.responseText);
-    } else {
-      return response.responseText;
     }
+    return response.responseText;
   }
   static _issueRequest(req, opts) {
     let payload = opts.data;

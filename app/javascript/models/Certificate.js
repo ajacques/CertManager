@@ -5,7 +5,10 @@ import ModelCache from './ModelCache';
 
 export default class Certificate extends CertificatePart {
   constructor(opts) {
-    super({opts: opts, show_url: Routes.certificate_path});
+    super({
+      opts: opts,
+      showUrl: Routes.certificate_path
+    });
   }
   static _analyze_req(body) {
     return {
@@ -65,10 +68,10 @@ export default class Certificate extends CertificatePart {
 
   static from_url(host) {
     return AsyncTask.start({
-      url: Routes.from_url_certificates_path,
       data: {
         host: host
-      }
+      },
+      url: Routes.from_url_certificates_path
     }).then(this._parse_result);
   }
 

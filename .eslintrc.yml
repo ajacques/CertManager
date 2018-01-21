@@ -1,5 +1,5 @@
 plugins:
-  - eslint-plugin-react
+  - react
 
 extends:
   - 'eslint:recommended'
@@ -10,6 +10,7 @@ parserOptions:
   ecmaFeatures:
     jsx: true
   impliedStrict: true
+  sourceType: module
 
 globals:
   React: true
@@ -23,14 +24,14 @@ settings:
 
 env:
   browser: true
+  es6: true
 
 rules:
-  # Asset Pipeline differences
   no-undef: error
 
   # React
-  react/react-in-jsx-scope: off
-  react/jsx-no-undef: warn
+  react/react-in-jsx-scope: error
+  react/jsx-no-undef: error
   react/jsx-uses-vars: error
   react/jsx-key: error
   react/jsx-no-target-blank: error
@@ -52,6 +53,9 @@ rules:
   react/boolean-prop-naming: error
   react/default-props-match-prop-types: error
   react/jsx-boolean-value: error
+  react/sort-prop-types: error
+  react/sort-comp: error
+  react/self-closing-comp: error
 
   semi: error
   no-unexpected-multiline: error
@@ -93,9 +97,15 @@ rules:
     - error
     - unix
   no-multi-spaces: error
-  # This is not safe to arbitrarily change across the code base.
-  # Needs slow migration
-  eqeqeq: warn
+  padded-blocks:
+    - error
+    - never
+  spaced-comment: error
+  semi-spacing: error
+  keyword-spacing: error
+
+  sort-keys: error
+  eqeqeq: error
   no-floating-decimal: error
   dot-notation: error
   dot-location:
@@ -109,8 +119,6 @@ rules:
 
   no-implicit-coercion: error
 
-  semi-spacing: error
-  keyword-spacing: error
   no-confusing-arrow: error
   space-infix-ops:
     - error
@@ -122,4 +130,3 @@ rules:
   space-in-parens:
     - error
     - never
-  spaced-comment: error

@@ -21,7 +21,7 @@ export default class CertBodyDialogLink extends React.Component {
   }
   _getModel() {
     const model = this.props.model;
-    if (model.hasOwnProperty('get_format')) {
+    if (model.hasOwnProperty('getFormat')) {
       return model;
     }
     if (model.type === "Certificate") {

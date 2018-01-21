@@ -24,7 +24,7 @@ export default class CertBodyDialog extends React.Component {
     if (include_chain) {
       this.props.model.getChain(format).then(this.changeBody);
     } else {
-      this.props.model.get_format(format).then(this.changeBody);
+      this.props.model.getFormat(format).then(this.changeBody);
     }
   }
   changeFormat(format) {

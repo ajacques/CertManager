@@ -30,9 +30,9 @@ export default class HeaderSearchBox extends React.Component {
     if (query === this.state.query) {
       return;
     }
-    this.setState({query: query});
+    this.setState({ query: query });
     if (query === '') {
-      this.setState({suggestions: []});
+      this.setState({ suggestions: [] });
       return;
     }
     const req = Ajax.get(Routes.search_results_path(), {
@@ -82,9 +82,11 @@ export default class HeaderSearchBox extends React.Component {
     const suggests = [];
     for (let i = 0; i < this.state.suggestions.length; i++) {
       const style = classNames('search-option', {'search-highlighted-option': this.state.selected_index === i});
-      suggests.push(<div key={i} className={style}>
-        <a href={this.state.suggestions[i].url}>{this.state.suggestions[i].subject}</a>
-      </div>);
+      suggests.push(
+        <div key={i} className={style}>
+          <a href={this.state.suggestions[i].url}>{this.state.suggestions[i].subject}</a>
+        </div>
+      );
     }
     const panelStyle = {};
     if (!this.state.float_open && this.state.suggestions.length > 0) {

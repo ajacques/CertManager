@@ -1,12 +1,12 @@
-import ReactRailsUJS from 'react_ujs';
+/* globals require, global */
+import PropTypes from "prop-types";
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactRailsUJS from "react_ujs";
+import classNames from "classnames";
 
 const componentRequireContext = require.context("components", true);
 ReactRailsUJS.useContext(componentRequireContext);
-
-import classNames from 'classnames';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
 
 global.className = classNames;
 global.React = React;

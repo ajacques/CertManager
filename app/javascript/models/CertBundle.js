@@ -6,22 +6,16 @@ export default class CertBundle {
     let rmatch;
     while ((rmatch = regex.exec(data)) !== null) {
       groups.push({
-        index: rmatch.index,
         end: rmatch.index + rmatch[0].length,
+        index: rmatch.index,
         type: rmatch[1],
         value: rmatch[0]
       });
     }
 
-    this.keys = groups.filter(function(l) {
-      return l.type === 'RSA PRIVATE KEY';
-    });
-    this.certs = groups.filter(function(l) {
-      return l.type === 'CERTIFICATE';
-    });
-    this.unknown = groups.filter(function(l) {
-      return l.type !== 'CERTIFICATE';
-    });
+    this.keys = groups.filter(l => l.type === "RSA PRIVATE KEY");
+    this.certs = groups.filter(l => l.type === "CERTIFICATE");
+    this.unknown = groups.filter(l => l.type !== "CERTIFICATE");
     this.all = groups;
   }
 }

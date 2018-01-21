@@ -4,26 +4,26 @@ export default class CertificatePart {
   constructor(opts) {
     this.cache = {};
     this.opts = opts.opts;
-    this.show_url = opts.show_url;
+    this.show_url = opts.showUrl;
 
     if (this.opts.pem) {
       this.cache.pem = this.opts.pem;
     }
 
     this.subject = this.opts.subject;
-    this.to_pem = this.get_format.bind(this, 'pem');
+    this.to_pem = this.getFormat.bind(this, 'pem');
     this.id = this.opts.id;
   }
 
   to_pem() {
-    return this.get_format('pem');
+    return this.getFormat('pem');
   }
 
   id() {
     return this.id;
   }
 
-  get_format(format) {
+  getFormat(format) {
     const self = this;
     if (this.cache.hasOwnProperty(format)) {
       return new Promise(resolve => resolve(this.cache[format]));
@@ -32,7 +32,7 @@ export default class CertificatePart {
       self.cache[format] = result;
       return result;
     };
-    return Ajax.get(this.show_url({id: this.opts.id}, {format: format}), {
+    return Ajax.get(this.showUrl({id: this.opts.id}, {format: format}), {
       acceptType: 'text/plain'
     }).then(process);
   }
