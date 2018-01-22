@@ -1,14 +1,13 @@
 import Ajax from 'utilities/Ajax';
 
 export default (function() {
-  'use strict';
-  function handleLoop(url_func, resolve, reject) {
+  function handleLoop(urlFunc, resolve, reject) {
     return function(result) {
       if (result.status === 'unfinished') {
         window.setTimeout(function() {
-          Ajax.get(url_func({wait_handle: result.wait_handle}), {
+          Ajax.get(urlFunc({ wait_handle: result.wait_handle }), {
             acceptType: 'application/json'
-          }).then(handleLoop(url_func, resolve, reject));
+          }).then(handleLoop(urlFunc, resolve, reject));
         }, 500);
         return;
       }

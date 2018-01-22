@@ -7,7 +7,7 @@ import Version from "environment/ReleaseVersion.js.erb";
 // Legacy Component Exports
 const componentRequireContext = require.context("components", true);
 
-function GetComponentConstructor(name) {
+function getComponentConstructor(name) {
   const context = componentRequireContext(`./${name}`);
   if (context) {
     return context.default;
@@ -27,11 +27,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function HydrateComponent(className, props, targetElement) {
-  const clazz = GetComponentConstructor(className) || global[className];
+  const clazz = getComponentConstructor(className) || global[className];
   ReactDOM.hydrate(React.createElement(clazz, props), targetElement);
 }
 
 global.App = {
   HydrateComponent
 };
-

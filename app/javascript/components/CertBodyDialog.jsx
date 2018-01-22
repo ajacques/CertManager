@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 
 export default class CertBodyDialog extends React.Component {
   constructor(props) {
@@ -13,15 +13,15 @@ export default class CertBodyDialog extends React.Component {
     };
   }
   componentDidMount() {
-    this.triggerBodyUpdate(this.state.format, this.state.include_chain);
+    this.triggerBodyUpdate(this.state.format, this.state.includeChain);
   }
 
   handleChangeFormat(format, event) {
     event.preventDefault();
     this.changeFormat(format);
   }
-  triggerBodyUpdate(format, include_chain) {
-    if (include_chain) {
+  triggerBodyUpdate(format, includeChain) {
+    if (includeChain) {
       this.props.model.getChain(format).then(this.changeBody);
     } else {
       this.props.model.getFormat(format).then(this.changeBody);
@@ -29,17 +29,17 @@ export default class CertBodyDialog extends React.Component {
   }
   changeFormat(format) {
     this.setState({ format: format });
-    this.triggerBodyUpdate(format, this.state.include_chain);
+    this.triggerBodyUpdate(format, this.state.includeChain);
   }
   changeBody(body) {
     let data = body;
     if (typeof body === "object") {
       data = JSON.stringify(body, null, 2);
     }
-    this.setState({text: data});
+    this.setState({ text: data });
   }
   handleIncludeChain(event) {
-    this.setState({include_chain: event.target.checked});
+    this.setState({ includeChain: event.target.checked });
     this.triggerBodyUpdate(this.state.format, event.target.checked);
   }
   render() {
@@ -62,7 +62,7 @@ export default class CertBodyDialog extends React.Component {
             <div>
               <div className="modal-footer">
                 <label>
-                  <input type="checkbox" onChange={this.handleIncludeChain} checked={this.state.include_chain} />
+                  <input type="checkbox" onChange={this.handleIncludeChain} checked={this.state.includeChain} />
                   Include chain
                 </label>
                 <button className="close-button btn btn-default" onClick={this.props.onClose}>Close</button>

@@ -20,7 +20,7 @@ globals:
 
 settings:
   react:
-    version: '15.0.2'
+    version: '16.2.0'
 
 env:
   browser: true

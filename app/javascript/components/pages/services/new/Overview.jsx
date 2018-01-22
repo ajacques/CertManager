@@ -1,3 +1,8 @@
+import Certificate from 'models/Certificate';
+import CertificateChainInspector from 'components/certificate/CertificateChainInspector';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 class ServicesNewOverview extends React.Component {
   constructor(props) {
     super(props);
@@ -22,13 +27,13 @@ class ServicesNewOverview extends React.Component {
   }
 
   onChainFetch() {
-    this.setState({chain: this.state.certificate.chain, loaded: true});
+    this.setState({ chain: this.state.certificate.chain, loaded: true });
   }
 
   loadCertificateId(id) {
     const cert = Certificate.find(parseInt(id, 10));
     cert.fetch().then(this.onChainFetch);
-    this.setState({loaded: false, loading: true, certificate: cert});
+    this.setState({ certificate: cert, loaded: false, loading: true });
   }
 
   // Event Handlers
