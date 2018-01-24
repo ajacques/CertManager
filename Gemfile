@@ -22,7 +22,7 @@ gem 'acme-client', '0.4.1'
 gem 'r509' # SSL certificate utilities
 
 # Database
-gem 'pg', platform: :ruby # Postgres
+gem 'pg', '~> 0.18', platform: :ruby # Postgres
 
 gem 'resque' # Background job execution
 gem 'resque-scheduler'

@@ -154,7 +154,7 @@ GEM
     parser (2.4.0.2)
       ast (~> 2.3)
     path_expander (1.0.2)
-    pg (1.0.0)
+    pg (0.21.0)
     powerpack (0.1.1)
     r509 (1.0.1)
     rack (2.0.3)
@@ -343,7 +343,7 @@ DEPENDENCIES
   mini_racer
   mocha
   nokogiri (>= 1.8.1)
-  pg
+  pg (~> 0.18)
   r509
   rails (~> 5.0.1)
   react-rails
@@ -369,7 +369,6 @@ DEPENDENCIES
   webpacker
   will_paginate
   zipkin-tracer
-
 
 BUNDLED WITH
    1.16.1
