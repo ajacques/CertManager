@@ -4,7 +4,7 @@ export default class CertificatePart {
   constructor(opts) {
     this.cache = {};
     this.opts = opts.opts;
-    this.show_url = opts.showUrl;
+    this.showUrl = opts.showUrl;
 
     if (this.opts.pem) {
       this.cache.pem = this.opts.pem;
