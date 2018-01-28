@@ -1,4 +1,5 @@
 import Ajax from 'utilities/Ajax';
+import Debounce from 'utilities/Debounce';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -11,7 +12,7 @@ export default class AgentNewForm extends React.Component {
       loading: true,
       dirty: false,
       inflightRequest: null,
-      refreshData: debounce(this.refreshData, 1000, false)
+      refreshData: Debounce(this.refreshData, 1000, false)
     };
     this.handlePossibleEquals = this.handlePossibleEquals.bind(this);
     this.handleTagValueChange = this.handleTagValueChange.bind(this);

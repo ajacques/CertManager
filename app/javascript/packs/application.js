@@ -1,4 +1,4 @@
-/* globals require, process, global */
+/* globals require, process */
 import Raven from "raven-js";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -27,10 +27,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 function HydrateComponent(className, props, targetElement) {
-  const clazz = getComponentConstructor(className) || global[className];
+  const clazz = getComponentConstructor(className);
   ReactDOM.hydrate(React.createElement(clazz, props), targetElement);
 }
 
-global.App = {
+window.App = {
   HydrateComponent
 };

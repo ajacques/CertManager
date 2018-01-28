@@ -7,8 +7,8 @@ export default class CertificateChunk extends React.Component {
     this.props.onRemove(this.props.id);
   }
   renderKnownCertificate() {
-    var cert = this.props.certificate;
-    var already_imported;
+    const cert = this.props.certificate;
+    let already_imported;
     if (cert.parsed.id !== null) {
       already_imported = <CertBodyDialogLink model={cert.parsed}>[View existing]</CertBodyDialogLink>;
     }
@@ -23,7 +23,7 @@ export default class CertificateChunk extends React.Component {
     if (this.props.certificate === undefined) {
       return null;
     }
-    var state = this.props.certificate.state;
+    const state = this.props.certificate.state;
     if (state === 'fetching') {
       return <span>[Analyzing certificate...]</span>;
     } else if (state === 'errored') {
@@ -36,7 +36,7 @@ export default class CertificateChunk extends React.Component {
     if (this.props.private_key === undefined) {
       return null;
     }
-    var key = this.props.private_key;
+    const key = this.props.private_key;
     if (key.state === 'fetching') {
       return <span>[Analyzing private key</span>;
     } else {
