@@ -3,4 +3,9 @@
   %li= link_to (t 'operations.import'), import_certificates_path, aria: { label: t('models.certificate.actions.import') }
   %li= link_to (t 'operations.new'), new_certificate_path, aria: { label: t('models.certificate.actions.new') }
 %h2= t 'views.certificates.index.your_certificates'
+%form{ action: certificates_path, method: 'GET' }
+  %label
+    %input{ type: 'checkbox', name: 'with_private_key', checked: params[:with_private_key] == 'on', value: 'on' }
+    %span= t 'views.certificates.index.search.show_only_signed'
+  %button{ type: :submit }= t 'views.certificates.index.search.submit'
 = render partial: 'certificate_list', locals: { expiring: @expiring, certs: @certs }

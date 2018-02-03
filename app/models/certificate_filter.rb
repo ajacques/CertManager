@@ -20,6 +20,10 @@ class CertificateFilter
     @result_set = @result_set.where(issuer_id: input).where('certificates.issuer_id != certificates.id')
   end
 
+  def with_private_key=(input)
+    @result_set = @result_set.where('certificates.private_key_id IS NOT NULL') if input
+  end
+
   def expiring_in(input)
     @result_set = @result_set.expiring_in input.to_i.seconds
   end

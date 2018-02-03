@@ -3,3 +3,6 @@ en:
     certificates:
       index:
         your_certificates: Your certificates
+        search:
+          show_only_signed: Show only with private key
+          submit: Search

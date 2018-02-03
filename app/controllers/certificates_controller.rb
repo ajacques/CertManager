@@ -1,6 +1,6 @@
 class CertificatesController < ApplicationController
   def index
-    query = CertificateFilter.new params.permit(:query, :page, :issuer, :expiring_in)
+    query = CertificateFilter.new params.permit(:query, :page, :issuer, :expiring_in, :with_private_key)
     query.order_by_cn
     @certs = query.to_results
     @expiring = [] # @certs.expiring_in(30.days).order('not_after asc')
