@@ -30,7 +30,7 @@ if Rails.env.test? || Rails.env.development?
     t.files = %w[app/views app/assets/templates]
   end
 
-  task default: %i[test rubocop scss_lint haml_lint]
+  task default: %i[test scss_lint haml_lint rubocop flay]
 end
 
 task release: %w[assets:clobber assets:precompile]
