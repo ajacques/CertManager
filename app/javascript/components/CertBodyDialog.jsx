@@ -1,3 +1,4 @@
+import CertificatePart from 'models/CertificatePart';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
@@ -9,7 +10,8 @@ export default class CertBodyDialog extends React.Component {
     this.handleIncludeChain = this.handleIncludeChain.bind(this);
     this.changeBody = this.changeBody.bind(this);
     this.state = {
-      format: 'pem'
+      format: 'pem',
+      includeChain: false
     };
   }
   componentDidMount() {
@@ -77,6 +79,6 @@ export default class CertBodyDialog extends React.Component {
 
 CertBodyDialog.formats = ['pem', 'text', 'json'];
 CertBodyDialog.propTypes = {
-  model: PropTypes.object.isRequired,
+  model: PropTypes.instanceOf(CertificatePart).isRequired,
   onClose: PropTypes.func.isRequired
 };

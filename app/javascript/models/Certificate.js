@@ -9,6 +9,7 @@ export default class Certificate extends CertificatePart {
       opts: opts,
       showUrl: Routes.certificate_path
     });
+    this._from_chain = this._from_chain.bind(this);
   }
   static _analyze_req(body) {
     return {
@@ -49,7 +50,7 @@ export default class Certificate extends CertificatePart {
   }
 
   getChain(format) {
-    return Ajax.get(Routes.chain_certificate_path({id: this.id}, {format: format})).then(this._from_chain.bind(this));
+    return Ajax.get(Routes.chain_certificate_path({ id: this.id }, { format: format })).then(this._from_chain);
   }
 
   static _from_expanded(blob) {
