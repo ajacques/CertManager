@@ -3,7 +3,7 @@ import CertificateChainInspector from 'components/certificate/CertificateChainIn
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class ServicesNewOverview extends React.Component {
+export default class ServicesNewOverview extends React.Component {
   constructor(props) {
     super(props);
     this.onCertificateChange = this.onCertificateChange.bind(this);

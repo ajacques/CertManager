@@ -36,8 +36,4 @@ export default class CertificatePart {
       acceptType: 'text/plain'
     }).then(process);
   }
-
-  static from_string(string) {
-    return new CertificatePart({pem: string});
-  }
 }
