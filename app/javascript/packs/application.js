@@ -1,5 +1,4 @@
 /* globals require, process */
-import Raven from "raven-js";
 import React from "react";
 import ReactDOM from "react-dom";
 import Version from "environment/ReleaseVersion.js.erb";
@@ -16,6 +15,7 @@ function getComponentConstructor(name) {
 }
 
 if (process.env.NODE_ENV === 'production') {
+  const Raven = require('raven-js');
   const metaTag = document.querySelector('meta[name="sentry-report-uri"]');
   if (metaTag) {
     Raven
