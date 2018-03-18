@@ -129,6 +129,6 @@ class OAuthProvider < ApplicationRecord
       github_access_token: access_token,
       github_username: user_info['login']
     }
-    user.update_attributes user_props
+    user.update user_props
   end
 end

@@ -34,7 +34,7 @@ class ServicesController < ApplicationController
     u_params = service_update_params
     u_params[:agent_ids] = params[:service][:agent_ids]
 
-    service.update_attributes! u_params
+    service.update! u_params
     redirect_to service
   end
 
