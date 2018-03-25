@@ -3,8 +3,10 @@ class AcmeRenewJob < ApplicationJob
 
   def perform(cert)
     @cert = cert
-    start_attempt if should_start_renewal(cert)
-    AcmeImportJob.perform_later(cert.inflight_acme_sign_attempt)
+    if should_start_renewal cert
+      start_attempt
+      AcmeImportJob.perform_later(cert.inflight_acme_sign_attempt)
+    end
   end
 
   private
