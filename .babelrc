@@ -13,9 +13,22 @@
     ],
     "react"
   ],
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-inline-environment-variables",
+        "minify-mangle-names",
+        "minify-flip-comparisons",
+        "transform-react-constant-elements",
+        "transform-react-remove-prop-types",
+        "transform-runtime",
+        "minify-dead-code-elimination"
+      ]
+    }
+  },
   "plugins": [
+    "transform-react-remove-prop-types",
     "syntax-dynamic-import",
-    "transform-react-constant-elements",
     "transform-object-rest-spread",
     [
       "transform-class-properties",

@@ -14,7 +14,7 @@ class Agent < ApplicationRecord
   end
 
   def synced!
-    update_attributes! last_synced_at: Time.now.utc
+    update! last_synced_at: Time.now.utc
   end
 
   def self.register(key, token)
