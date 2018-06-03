@@ -2,8 +2,8 @@ redis: &redis_config
   host: redis
 resque: redis:6379/resque
 session:
-  - :redis_session_store
-  -
+  type: :redis_session_store
+  options:
     key: _CertManager_session
     httponly: true
     redis:
