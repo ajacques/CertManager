@@ -1,4 +1,3 @@
-
 # Since we're now SSO, this user is just a dummy account to associate with the following certs
 user = User.create!(
   email: 'user@example.com',

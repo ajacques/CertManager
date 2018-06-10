@@ -1,4 +1,3 @@
-
 class CompositeManifestContainer
   def initialize
     @webpacker_container = ::React::ServerRendering::WebpackerManifestContainer.new

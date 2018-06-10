@@ -3,7 +3,7 @@ class Subject < ApplicationRecord
   after_initialize :prune_empty
 
   def to_s
-    self.CN ? self.CN : self.OU
+    self.CN || self.OU
   end
 
   def to_r509
