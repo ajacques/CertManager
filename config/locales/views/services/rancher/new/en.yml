@@ -1,0 +1,6 @@
+en:
+  views:
+    services:
+      rancher:
+        new:
+          page_title: New Rancher Service

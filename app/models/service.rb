@@ -1,12 +1,22 @@
 class Service < ApplicationRecord
   belongs_to :certificate
 
+  class << self
+    def service_props
+      @service_props ||= Set.new
+    end
+  end
+
   def properties
     # This can't be the simplest way to do this
     s = super
     return s if s
     self.properties = {}
     super
+  end
+
+  def push_deployable?
+    false
   end
 
   def deployable?
@@ -40,6 +50,7 @@ class Service < ApplicationRecord
   def self.service_prop(*properties)
     properties.each do |property|
       prop = property.to_s
+      service_props << property
       define_method(property) do
         self.properties[prop]
       end

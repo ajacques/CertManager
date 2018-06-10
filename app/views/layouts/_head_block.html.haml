@@ -10,6 +10,7 @@
     %meta{ content: form_authenticity_token, name: 'csrf-token' }
     - if ENV.key? 'SENTRY_DSN'
       %meta{ content: Rails.application.config.sentry_public_dsn, name: 'sentry-report-uri' }
+      %meta{ content: current_user.id, name: 'user-id' }
     %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
     = javascript_pack_tag 'application', defer: true
     = javascript_include_tag 'application', defer: true

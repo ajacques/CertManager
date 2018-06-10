@@ -6,6 +6,9 @@ en:
           hostname: Hostname
           status: Status
           last_checked: Last checked
+        last_deployed: Last deployed
         statuses:
           failed: Failed
           valid: Valid (Deployed)
+        rancher:
+          view_ui: View on Rancher

@@ -1,0 +1,19 @@
+- page_title t 'views.services.rancher.new.page_title'
+-# V1 - MVP - User explicitly specifies all IDs
+-# V2 - User will pick using a friendly UI
+%ol.breadcrumb
+  %li= link_to 'Services', controller: :services, action: :index
+  %li.active New
+%h2= t 'views.services.rancher.new.page_title'
+= bootstrap_form_for @service, url: services_path, layout: :horizontal do |f|
+  = f.hidden_field :certificate_id, value: 1
+  = f.hidden_field :type, value: Service::Rancher.to_s
+  .well
+    = f.text_field :service_endpoint, placeholder: 'https://rancher.example.com/v3', required: true
+    = f.text_field :bearer_token, placeholder: 'token-foobar:w6qd.....', required: true
+  .well
+    = f.text_field :cluster_id, placeholder: 'c-abcde', required: true
+    = f.text_field :project_id, placeholder: 'project-abcde', required: true
+    = f.text_field :namespace, placeholder: 'foobar'
+    = f.text_field :rancher_cert_id, placeholder: 'namespace:certs'
+    = f.submit 'Create service', class: 'btn btn-primary center-block'

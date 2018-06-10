@@ -7,7 +7,6 @@
   - if @service.is_a? Service::SoteriaAgent
     = render partial: 'edit_agent', locals: { f: f, service: @service }
   - else
-    = f.text_field :cert_path
-    = f.text_field :after_rotate
-    = f.text_field :node_group
+    - @service.class.service_props.each do |prop|
+      = f.text_field prop
   = f.submit

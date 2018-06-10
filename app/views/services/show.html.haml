@@ -5,5 +5,12 @@
   %li.active= @service.certificate
 
 = render partial: 'services/show/settings_pane'
-%h1= @service.certificate
-= render partial: 'services/show/service_status', locals: { node_status: @node_status }
+%h1= @service.certificate and @service.last_deployed
+- if @service.deployable?
+  %p
+    %span= t 'views.services.show.last_deployed'
+    = time_ago_enhanced_block @service.last_deployed
+- if @service.is_a? Service::Rancher
+  = render partial: 'services/show/rancher_status', locals: { service: @service }
+- else
+  = render partial: 'services/show/service_status', locals: { node_status: @node_status }
