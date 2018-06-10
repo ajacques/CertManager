@@ -82,9 +82,9 @@ class ServicesController < ApplicationController
   end
 
   def service_any_params
-    svc_params = Set.new(:certificate_id)
+    svc_params = Set.new([:certificate_id])
     Service::Rancher.service_props.each { |param| svc_params << param }
     Service::SoteriaAgent.service_props.each { |param| svc_params << param }
-    svc_params
+    svc_params.to_a
   end
 end
