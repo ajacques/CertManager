@@ -8,12 +8,14 @@
   %table.table
     %thead
       %tr
+        %td Type
         %td Common Name
         %td Status
         %td Control
     %tbody
       - @services.each do |service|
         %tr{ class: ('bg-danger' if service.certificate.expires_in < 7.days) }
+          %td= t "services.type.#{service.class.name.demodulize.downcase}"
           %td= link_to service.certificate.subject.CN, id: service.id, action: :show
           %td= service.status
           %td Refresh

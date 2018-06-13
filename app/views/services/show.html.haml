@@ -10,6 +10,9 @@
   %p
     %span= t 'views.services.show.last_deployed'
     = time_ago_enhanced_block @service.last_deployed
+
+- if @service.push_deployable?
+  = link_to 'Deploy', deploy_service_path(service: @service)
 - if @service.is_a? Service::Rancher
   = render partial: 'services/show/rancher_status', locals: { service: @service }
 - else

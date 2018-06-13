@@ -2,7 +2,7 @@ class Service::Rancher < Service
   service_prop :service_endpoint, :bearer_token
   service_prop :cluster_id, :project_id, :namespace, :rancher_cert_id
 
-  def update_external
+  def deploy
     HttpRequest.post(update_url, update_payload, auth: bearer_token, 'Accept' => 'application/json')
     self.last_deployed = Time.now.utc
   end
