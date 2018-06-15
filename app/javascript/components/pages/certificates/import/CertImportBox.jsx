@@ -9,6 +9,7 @@ export default class CertImportBox extends React.Component {
     super(props);
     this.dragOver = this.dragOver.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+    this.handleCertificate = this.handleCertificate.bind(this);
     this.state = {
       certificates: []
     };

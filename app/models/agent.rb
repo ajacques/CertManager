@@ -1,7 +1,7 @@
 class Agent < ApplicationRecord
   has_many :tags, class_name: 'AgentTag'
-  has_many :services, through: :memberships
   has_many :memberships, class_name: 'AgentService'
+  has_many :services, through: :memberships
 
   scope :with_tag, ->(*tags) { joins(:tags).where(tags: { tag: tags }) }
 

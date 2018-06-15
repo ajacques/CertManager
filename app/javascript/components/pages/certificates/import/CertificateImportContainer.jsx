@@ -1,6 +1,8 @@
 /* exported CertificateImportContainer */
 /* globals Certificate, PrivateKey */
+import Certificate from 'models/Certificate';
 import CertImportBox from './CertImportBox';
+import PrivateKey from 'models/PrivateKey';
 import React from 'react';
 
 export default class CertificateImportContainer extends React.Component {
