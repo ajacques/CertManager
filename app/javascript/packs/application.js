@@ -1,4 +1,5 @@
 /* globals require, process */
+import RavenErrorContainer from 'utilities/RavenErrorContainer';
 import React from "react";
 import ReactDOM from "react-dom";
 import Version from "environment/ReleaseVersion.js.erb";
@@ -28,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 
 function HydrateComponent(className, props, targetElement) {
   const clazz = getComponentConstructor(className);
-  ReactDOM.hydrate(React.createElement(clazz, props), targetElement);
+  ReactDOM.hydrate(React.createElement(RavenErrorContainer, null, React.createElement(clazz, props)), targetElement);
 }
 
 window.App = {

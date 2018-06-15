@@ -15,9 +15,10 @@ export default class CertificateTextBox extends React.Component {
     return nextState.text !== this.state.text;
   }
   _ingestChunkSet(string, chunks) {
-    for (let i = chunks.length - 1; i >= 0; i--) {
-      const cert = chunks[i];
-      string = string.substring(0, cert.index) + string.substring(cert.end);
+    let consumed = 0;
+    for (const cert of chunks) {
+      string = string.substring(0, cert.index - consumed) + string.substring(cert.end - consumed);
+      consumed += cert.end - cert.index;
       this.props.onDetect(cert);
     }
     return string;

@@ -4,6 +4,8 @@ import CertificateTextBox from './CertificateTextBox';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const idSym = Symbol();
+
 export default class CertImportBox extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,7 @@ export default class CertImportBox extends React.Component {
     };
   }
   handleCertificate(body) {
-    body.key = CertImportBox.id++;
+    body.key = CertImportBox[idSym]++;
     this.props.update(body);
   }
   dragOver(event) {
@@ -43,28 +45,25 @@ export default class CertImportBox extends React.Component {
   }
   render() {
     const elems = [];
-    let text = '';
-    for (let i in this.props.certificates) {
-      const cert = this.props.certificates[i];
+    for (const cert of this.props.certificates) {
       if (cert.certificate !== undefined) {
-        text += cert.certificate.value;
+        elems.push(<input key={`${cert.key}_cert`} type="hidden" name="certificate[key][]" value={cert.certificate.value} />);
       }
       if (cert.private_key !== undefined) {
-        text += cert.private_key.value;
+        elems.push(<input key={`${cert.key}_priv`} type="hidden" name="certificate[key][]" value={cert.private_key.value} />);
       }
       elems.push(<CertificateChunk key={cert.key} id={cert.key} certificate={cert.certificate}
         private_key={cert.private_key} state={cert.state} onRemove={this.props.onRemove} />);
     }
     return (
       <span onDragOver={this.dragOver} onDrop={this.handleDrop}>
-        <input type="hidden" name="certificate[key]" value={text} />
         {elems}
         <CertificateTextBox onDetect={this.handleCertificate} />
       </span>
     );
   }
 }
-CertImportBox.id = 0;
+CertImportBox[idSym] = 0;
 
 CertImportBox.propTypes = {
   certificates: PropTypes.array.isRequired,

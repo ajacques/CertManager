@@ -10,6 +10,7 @@ export default class CertificateImportContainer extends React.Component {
     super(props);
     this.update = this.update.bind(this);
     this.handleAnalyze = this.handleAnalyze.bind(this);
+    this.handlePrivateKeyAnalyze = this.handlePrivateKeyAnalyze.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.state = {
       certificates: []
@@ -80,7 +81,7 @@ export default class CertificateImportContainer extends React.Component {
       }
       private_key.parsed = result;
       private_key.state = 'loaded';
-      this.forceRender();
+      this.forceUpdate();
     };
   }
   update(body) {

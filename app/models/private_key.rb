@@ -42,7 +42,8 @@ class PrivateKey < ApplicationRecord
     {
       bit_length: bit_length,
       type: type,
-      fingerprint: fingerprint
+      fingerprint: fingerprint,
+      public_keys: public_keys
     }
   end
 

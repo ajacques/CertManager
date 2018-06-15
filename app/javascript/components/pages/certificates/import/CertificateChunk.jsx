@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class CertificateChunk extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
   handleRemove() {
     this.props.onRemove(this.props.id);
   }
@@ -38,12 +42,12 @@ export default class CertificateChunk extends React.Component {
     }
     const key = this.props.private_key;
     if (key.state === 'fetching') {
-      return <span>[Analyzing private key</span>;
+      return <span>[Analyzing private key]</span>;
     } else {
       return (
         <span>
           <b>Private Key:</b>
-          <span>{key.parsed.opts.bit_length} Bits</span>
+          <span>{`${key.parsed.opts.bit_length} Bits`}</span>
         </span>
       );
     }
