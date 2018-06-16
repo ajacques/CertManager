@@ -19,7 +19,9 @@ export default class CertificateTextBox extends React.Component {
     for (const cert of chunks) {
       string = string.substring(0, cert.index - consumed) + string.substring(cert.end - consumed);
       consumed += cert.end - cert.index;
-      this.props.onDetect(cert);
+    }
+    if (chunks.length > 0) {
+      this.props.onDetect(chunks);
     }
     return string;
   }

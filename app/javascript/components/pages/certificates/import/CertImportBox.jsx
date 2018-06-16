@@ -17,7 +17,9 @@ export default class CertImportBox extends React.Component {
     };
   }
   handleCertificate(body) {
-    body.key = CertImportBox[idSym]++;
+    for (const elem of body) {
+      elem.key = CertImportBox[idSym]++;
+    }
     this.props.update(body);
   }
   dragOver(event) {

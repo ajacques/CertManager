@@ -8,7 +8,7 @@ import React from 'react';
 export default class CertificateImportContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.update = this.update.bind(this);
+    this.appendRecords = this.appendRecords.bind(this);
     this.handleAnalyze = this.handleAnalyze.bind(this);
     this.handlePrivateKeyAnalyze = this.handlePrivateKeyAnalyze.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
@@ -84,33 +84,39 @@ export default class CertificateImportContainer extends React.Component {
       this.forceUpdate();
     };
   }
-  update(body) {
+  ingestRecord(chunk) {
     const item = {
       state: 'fetching',
-      value: body.value
+      value: chunk.value
     };
-    const newCerts = this.state.certificates.slice();
     const cert = {
       state: 'fetching',
-      key: body.key,
+      key: chunk.key,
       certificate: undefined,
       private_key: undefined
     };
-    if (body.type === 'CERTIFICATE') {
+    if (chunk.type === 'CERTIFICATE') {
       cert.certificate = item;
       const functors = this.handleAnalyze(cert, item);
-      Certificate.analyze(body.value).then(functors.success, functors.fail);
-    } else if (body.type === 'RSA PRIVATE KEY') {
+      Certificate.analyze(chunk.value).then(functors.success, functors.fail);
+    } else if (chunk.type === 'RSA PRIVATE KEY') {
       cert.private_key = item;
-      PrivateKey.analyze(body.value).then(this.handlePrivateKeyAnalyze(cert));
+      PrivateKey.analyze(chunk.value).then(this.handlePrivateKeyAnalyze(cert));
     }
-    newCerts.push(cert);
+    return cert;
+  }
+  appendRecords(records) {
+    const newCerts = this.state.certificates.slice();
+
+    for (const record of records) {
+      newCerts.push(this.ingestRecord(record));
+    }
     this.setState({certificates: newCerts});
   }
 
   render() {
     return (
-      <CertImportBox certificates={this.state.certificates} update={this.update} onRemove={this.handleRemove} />
+      <CertImportBox certificates={this.state.certificates} update={this.appendRecords} onRemove={this.handleRemove} />
     );
   }
 }
