@@ -11,12 +11,17 @@ class DeployServiceJob < ApplicationJob
     plogger = Rails.logger
     Rails.logger = Logger.new RedisLogger.new job.job_id
     redis.set("job_#{job.job_id}_status", 1)
-    block.call
-    redis.set("job_#{job.job_id}_status", 3)
+    begin
+      block.call
+      redis.set("job_#{job.job_id}_status", 3)
+    rescue => ex
+      Rails.logger.error ex
+    end
     Rails.logger = plogger
   end
 
   def perform(service)
+    Rails.logger.info 'Deploying service'
     service.deploy
     service.save! if service.changed?
   end

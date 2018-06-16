@@ -3,7 +3,13 @@ class Service::Rancher < Service
   service_prop :cluster_id, :project_id, :namespace, :rancher_cert_id
 
   def deploy
-    HttpRequest.post(update_url, update_payload, auth: bearer_token, 'Accept' => 'application/json')
+    output = HttpRequest.put(
+        update_url, update_payload.to_json,
+        content_type: 'application/json',
+        auth: "Bearer #{bearer_token}",
+        'Accept' => 'application/json'
+    )
+    Rails.logger.info output.to_s
     self.last_deployed = Time.now.utc
   end
 
@@ -22,7 +28,10 @@ class Service::Rancher < Service
   def update_payload
     {
       certs: cert_chain,
-      key: certificate.private_key.to_pem
+      key: certificate.private_key.to_pem,
+      annotations: {
+        'certs.technowizardry.net/service' => self.id
+      }
     }
   end
 

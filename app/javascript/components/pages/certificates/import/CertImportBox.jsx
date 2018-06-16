@@ -12,9 +12,6 @@ export default class CertImportBox extends React.Component {
     this.dragOver = this.dragOver.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCertificate = this.handleCertificate.bind(this);
-    this.state = {
-      certificates: []
-    };
   }
   handleCertificate(body) {
     for (const elem of body) {
@@ -48,7 +45,7 @@ export default class CertImportBox extends React.Component {
   render() {
     const elems = [];
     for (const cert of this.props.certificates) {
-      if (cert.certificate !== undefined) {
+      if (cert.certificate !== undefined && cert.cert_id === null) {
         elems.push(<input key={`${cert.key}_cert`} type="hidden" name="certificate[key][]" value={cert.certificate.value} />);
       }
       if (cert.private_key !== undefined) {

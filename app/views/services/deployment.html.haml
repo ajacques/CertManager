@@ -1,4 +1,7 @@
-%h2 Garbage
-%ul
-  - @log.each do |logg|
-    %li= logg
+- content_for :head do
+  %meta{ content: 5, http: { equiv: 'refresh' } }
+%h2 Deployment Log
+.content-pane
+  %ul
+    - @log.each do |logg|
+      %li= logg

@@ -1,4 +1,5 @@
 /* exported CertificateChunk */
+import CertBodyDialogLink from 'components/CertBodyDialogLink';
 import PropTypes from 'prop-types';
 import React from 'react';
 

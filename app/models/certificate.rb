@@ -33,6 +33,9 @@ class Certificate < ApplicationRecord
   scope :for_public_key, lambda { |pub|
     joins(:private_key).where('private_keys.fingerprint = ?', pub.fingerprint)
   }
+  scope :for_private_key, lambda { |pub|
+    joins(:public_key).where('public_keys.fingerprint = ?', pub.fingerprint)
+  }
   scope :deployed_with_service, -> { joins(:services).where('services.id IS NOT NULL') }
 
   def status
