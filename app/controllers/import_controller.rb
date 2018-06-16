@@ -30,7 +30,7 @@ class ImportController < ApplicationController
 
     set.import
     set.save
-    @certs = set.promote_all_to_certificates
+    @certs = set.promote_all_to_certificates current_user
 
     respond_to do |format|
       format.json do

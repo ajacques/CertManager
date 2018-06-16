@@ -1,2 +1,2 @@
 Imported #{pluralize @certs.size, 'certificate'}
-= render partial: 'certificates/certificate_list'
+= render partial: 'certificates/certificate_list', locals: { expiring: [], certs: @certs }
