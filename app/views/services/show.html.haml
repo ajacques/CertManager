@@ -5,8 +5,8 @@
   %li.active= @service.certificate
 
 = render partial: 'services/show/settings_pane'
-%h1= @service.certificate && @service.last_deployed
-- if @service.deployable?
+%h1= @service.certificate
+- if @service.deployable? && @service.last_deployed
   %p
     %span= t 'views.services.show.last_deployed'
     = time_ago_enhanced_block @service.last_deployed

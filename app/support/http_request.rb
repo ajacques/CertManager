@@ -12,9 +12,8 @@ class HttpRequest
   end
 
   def self.connection(url, opts)
-    upstream_service_name = opts.delete(:service_name)
     Faraday.new(url: url) do |faraday|
-      faraday.use(ZipkinTracer::FaradayHandler, upstream_service_name) if upstream_service_name
+      faraday.use(ZipkinTracer::FaradayHandler, url.host)
       faraday.request :url_encoded
       faraday.adapter Faraday.default_adapter
       yield(faraday) if block_given?
