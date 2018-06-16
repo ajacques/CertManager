@@ -4,11 +4,11 @@ class Service::Rancher < Service
 
   def deploy
     output = HttpRequest.put(
-        update_url, update_payload.to_json,
-        content_type: 'application/json',
-        auth: "Bearer #{bearer_token}",
-        'Accept' => 'application/json'
-    )
+      update_url, update_payload.to_json,
+      content_type: 'application/json',
+      auth: "Bearer #{bearer_token}",
+      'Accept' => 'application/json'
+      )
     Rails.logger.info output.to_s
     self.last_deployed = Time.now.utc
   end
@@ -30,7 +30,7 @@ class Service::Rancher < Service
       certs: cert_chain,
       key: certificate.private_key.to_pem,
       annotations: {
-        'certs.technowizardry.net/service' => self.id
+        'certs.technowizardry.net/service' => id
       }
     }
   end
