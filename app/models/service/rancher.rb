@@ -8,7 +8,7 @@ class Service::Rancher < Service
       content_type: 'application/json',
       auth: "Bearer #{bearer_token}",
       'Accept' => 'application/json'
-      )
+    )
     Rails.logger.info output.to_s
     self.last_deployed = Time.now.utc
   end

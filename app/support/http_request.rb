@@ -1,6 +1,6 @@
 class HttpRequest
   def self.get(url, opts = {})
-    connection(url, opts).get url, {}, opts
+    connection(url).get url, {}, opts
   end
 
   def self.post(url, body, opts = {})
@@ -11,7 +11,7 @@ class HttpRequest
     send_payload(:put, url, body, opts)
   end
 
-  def self.connection(url, opts)
+  def self.connection(url)
     url = URI.new(url) unless url.is_a? URI
     Faraday.new(url: url) do |faraday|
       faraday.use Faraday::Response::RaiseError
@@ -23,7 +23,7 @@ class HttpRequest
   end
 
   def self.send_payload(method, url, body, opts = {})
-    resp = connection(url, opts).send(method) do |req|
+    resp = connection(url).send(method) do |req|
       req.url url
       req.headers['Accept'] = opts['Accept']
       req.headers['Authorization'] = opts[:auth] if opts.key? :auth
