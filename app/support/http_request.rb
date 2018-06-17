@@ -14,7 +14,8 @@ class HttpRequest
   def self.connection(url, opts)
     url = URI.new(url) unless url.is_a? URI
     Faraday.new(url: url) do |faraday|
-      faraday.use(ZipkinTracer::FaradayHandler, url.host)
+      faraday.use Faraday::Response::RaiseError
+      faraday.use ZipkinTracer::FaradayHandler, url.host
       faraday.request :url_encoded
       faraday.adapter Faraday.default_adapter
       yield(faraday) if block_given?
