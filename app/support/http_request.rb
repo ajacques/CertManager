@@ -12,7 +12,7 @@ class HttpRequest
   end
 
   def self.connection(url, opts)
-    url = URI(url) unless url.is_a? URI
+    url = URI.new(url) unless url.is_a? URI
     Faraday.new(url: url) do |faraday|
       faraday.use(ZipkinTracer::FaradayHandler, url.host)
       faraday.request :url_encoded
