@@ -40,9 +40,17 @@ class Service::Rancher < Service
     end
   end
 
+  def cert_uri_part
+    if namespace.empty?
+      'certificates'
+    else
+      'namespacedCertificates'
+    end
+  end
+
   def update_url
     uri = URI(service_endpoint)
-    uri.path = "#{uri.path}/project/#{cluster_id}:#{project_id}/namespacedCertificates/#{rancher_cert_id}"
+    uri.path = "#{uri.path}/project/#{cluster_id}:#{project_id}/#{cert_uri_part}/#{rancher_cert_id}"
     uri
   end
 end
