@@ -35,9 +35,10 @@ class Service::Rancher < Service
   end
 
   def cert_chain
-    certificate.chain.reverse.map do |cert|
+    chain = certificate.chain.reverse.map do |cert|
       cert.public_key.to_pem
     end
+    chain.join('\n')
   end
 
   def cert_uri_part
