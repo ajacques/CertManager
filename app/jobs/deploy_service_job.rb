@@ -25,6 +25,7 @@ class DeployServiceJob < ApplicationJob
   def perform(service)
     Rails.logger.info 'Deploying service'
     service.deploy
+    service.last_deployed = Time.now.utc
     service.save! if service.changed?
   end
 end

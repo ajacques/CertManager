@@ -9,7 +9,10 @@ class Service::Rancher < Service
       auth: "Bearer #{bearer_token}",
       'Accept' => 'application/json'
     )
-    self.last_deployed = Time.now.utc
+  rescue Faraday::ClientError => e
+    body = JSON.parse(e.response[:body])
+    message = "Rancher returned: #{body['message']}"
+    ServiceDeployFailed.raise_faraday message, e
   end
 
   def push_deployable?
@@ -38,7 +41,7 @@ class Service::Rancher < Service
     chain = certificate.chain.reverse.map do |cert|
       cert.public_key.to_pem
     end
-    chain.join('\n')
+    chain.join("\n")
   end
 
   def cert_uri_part

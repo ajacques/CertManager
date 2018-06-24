@@ -59,6 +59,7 @@ class ServicesController < ApplicationController
 
   def deployment
     redis = CertManager::Configuration.redis_client
+    @status = (redis.get("job_#{params[:id]}_status") || 0).to_i
     @log = redis.lrange("job_#{params[:id]}_log", 0, -1)
   end
 

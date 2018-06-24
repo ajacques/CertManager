@@ -1,5 +1,6 @@
-- content_for :head do
-  %meta{ content: 5, http: { equiv: 'refresh' } }
+- if @status <= 1
+  - content_for :head do
+    %meta{ content: 5, http: { equiv: 'refresh' } }
 %h2 Deployment Log
 .content-pane
   %ul
