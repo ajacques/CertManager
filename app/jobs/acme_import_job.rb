@@ -12,6 +12,7 @@ class AcmeImportJob < ApplicationJob
     elsif all_succeeded?
       attempt.last_status = 'valid'
       import_cert
+      DeployCertificateJob.set(wait: 10.seconds).perform_later attempt.certificate
     else
       AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
     end
