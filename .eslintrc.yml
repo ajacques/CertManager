@@ -11,7 +11,6 @@ parserOptions:
   ecmaFeatures:
     jsx: true
   impliedStrict: true
-  sourceType: module
 
 globals:
   React: true
