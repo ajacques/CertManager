@@ -8,8 +8,10 @@
 %h1= @service.certificate
 - if @service.deployable? && @service.last_deployed
   %p
-    %span= t 'views.services.show.last_deployed'
+    %span #{t 'views.services.show.last_deployed'}:
     = time_ago_enhanced_block @service.last_deployed
+
+= link_to @service.certificate, certificate_path(@service.certificate)
 
 - if @service.push_deployable?
   = link_to 'Deploy', deploy_service_path(service: @service)

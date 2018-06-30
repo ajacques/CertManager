@@ -39,7 +39,7 @@ class ServicesController < ApplicationController
   def update
     service = Service.find params[:id]
     u_params = service_update_params
-    u_params[:agent_ids] = params[:service][:agent_ids]
+    u_params[:agent_ids] = params[:service][:agent_ids] if params[:service].key? :agent_ids
 
     service.update! u_params
     redirect_to service

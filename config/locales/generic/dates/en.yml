@@ -3,5 +3,5 @@ en:
     composed:
       inline_string: '%{time} (%{ago} ago)'
     formats:
-      month_day_time: '%B %e at %l:%M %p'
+      month_day_time: '%B %e at %l:%M %p %Z'
       lifetime: '%B %e, %Y'
