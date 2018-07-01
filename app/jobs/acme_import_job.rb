@@ -11,6 +11,7 @@ class AcmeImportJob < ApplicationJob
       attempt.certificate.inflight_acme_sign_attempt = nil
     elsif all_succeeded?
       attempt.last_status = 'valid'
+      log_debug_step 'All challenges succeeded. Importing.'
       import_cert
       DeployCertificateJob.set(wait: 10.seconds).perform_later attempt.certificate
     else
@@ -27,13 +28,17 @@ class AcmeImportJob < ApplicationJob
   private
 
   def refresh_all
-    Raven.breadcrumbs.record do |crumb|
-      crumb.level = :info
-      crumb.message = 'Checking ACME challenge status.'
-      crumb.category = 'job.step'
-    end
+    log_debug_step 'Checking ACME challenge status.'
     attempt.challenges.each do |challenge|
       attempt_challenge(challenge)
+    end
+  end
+
+  def log_debug_step(message)
+    Raven.breadcrumbs.record do |crumb|
+      crumb.level = :info
+      crumb.message = message
+      crumb.category = 'job.step'
     end
   end
 
@@ -56,6 +61,7 @@ class AcmeImportJob < ApplicationJob
   rescue Acme::Client::Error::NotFound
     challenge.delete
   ensure
+    log_debug_step "ACME challenge status for '#{challenge.domain_name}': #{challenge.status}"
     challenge.save!
   end
 

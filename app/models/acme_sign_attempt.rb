@@ -37,7 +37,7 @@ class AcmeSignAttempt < ApplicationRecord
     signed = acme_client.new_certificate certificate.generate_csr
     set = ImportSet.from_array signed.x509_fullchain
     set.import
-    set.promote_all_to_certificates
+    set.promote_all_to_certificates nil # TODO: Add import identity correctly
 
     self.imported_key = set.public_keys.first
 
