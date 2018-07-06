@@ -57,7 +57,7 @@ class AcmeImportJob < ApplicationJob
   def attempt_challenge(challenge)
     challenge.refresh_status
     return unless challenge.status.pending?
-    challenge.request_verification
+    challenge.request_validation
   rescue Acme::Client::Error::NotFound
     challenge.delete
   ensure

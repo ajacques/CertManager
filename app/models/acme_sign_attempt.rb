@@ -29,12 +29,12 @@ class AcmeSignAttempt < ApplicationRecord
     self.status_message = "#{error}\n#{error.backtrace.first}"
   end
 
-  def acme_client
-    Acme::Client.new private_key: private_key.to_openssl, endpoint: acme_endpoint
+  def self.acme_client
+    Settings::LetsEncrypt.new.build_client
   end
 
   def fetch_signed
-    signed = acme_client.new_certificate certificate.generate_csr
+    signed = AcmeSignAttempt.acme_client.new_certificate certificate.generate_csr
     set = ImportSet.from_array signed.x509_fullchain
     set.import
     set.promote_all_to_certificates nil # TODO: Add import identity correctly
@@ -53,8 +53,10 @@ class AcmeSignAttempt < ApplicationRecord
         private_key: settings.private_key
       )
       certificate.inflight_acme_sign_attempt = attempt
-      certificate.to_csr.domain_names.each do |name|
-        challenge = AcmeChallenge.for_domain(attempt, settings, name)
+      domains = certificate.to_csr.domain_names
+      order = acme_client.new_order identifiers: domains
+      order.authorizations.each do |auth|
+        challenge = AcmeChallenge.from_authorization(attempt, auth)
         attempt.challenges << challenge
       end
     end

@@ -4,7 +4,7 @@ class AcmeChallenge < ApplicationRecord
   belongs_to :sign_attempt, class_name: 'AcmeSignAttempt', foreign_key: 'acme_sign_attempt_id', inverse_of: :challenges
   after_create :after_create
 
-  delegate :request_verification, to: :inner_challenge
+  delegate :request_validation, to: :inner_challenge
 
   def full_path
     "http://#{domain_name}/.well-known/acme-challenge/#{token_key}"
@@ -16,7 +16,7 @@ class AcmeChallenge < ApplicationRecord
 
   def refresh_status
     challenge = inner_challenge
-    self.last_status = challenge.verify_status
+    self.last_status = challenge.status
     self.error_message = challenge.error
   end
 
@@ -36,35 +36,23 @@ class AcmeChallenge < ApplicationRecord
     challenge
   end
 
-  def self.for_domain(attempt, settings, domain)
-    challenge = find_by(acme_sign_attempt_id: attempt.id, domain_name: domain)
-    unless challenge
-      authorization = acme_client(settings).authorize(domain: domain)
-      challenge = authorization.http01
-      challenge = new(
-        domain_name: domain,
-        token_key: challenge.token,
-        token_value: challenge.file_content,
-        verification_uri: challenge.uri,
-        expires_at: authorization.expires,
-        sign_attempt: attempt
-      )
-    end
-    challenge
-  end
-
-  def self.acme_client(settings)
-    Acme::Client.new(
-      private_key: settings.private_key.to_openssl,
-      endpoint: settings.endpoint
+  def self.from_authorization(attempt, auth)
+    challenge = auth.http
+    new(
+      domain_name: auth.domain,
+      token_key: challenge.token,
+      token_value: challenge.file_content,
+      verification_uri: challenge.url,
+      expires_at: auth.expires,
+      sign_attempt: attempt
     )
   end
 
   private
 
   def inner_challenge
-    inputs = { uri: verification_uri, token: token_key }
-    Acme::Client::Resources::Challenges::HTTP01.new acme_client, inputs.stringify_keys
+    client = Settings::LetsEncrypt.new.build_client
+    client.challenge url: verification_uri
   end
 
   def after_create

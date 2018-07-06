@@ -18,18 +18,14 @@ class LetsEncryptController < ApplicationController
     return redirect_to_ownership if current_user.lets_encrypt_accepted_terms? && acme_settings.accepted_terms?
 
     begin
-      registration = acme_client.register contact: "mailto:#{current_user.email}"
-      current_user.lets_encrypt_registration_uri = registration.uri
+      registration = acme_client.new_account contact: "mailto:#{current_user.email}", terms_of_service_agreed: true
+      current_user.lets_encrypt_registration_uri = registration.kid
+      acme_settings.registration_uri = registration.kid
+      current_user.lets_encrypt_accepted_terms = true
+      acme_settings.accepted_terms = true
     rescue Acme::Client::Error::Malformed => e
       raise e unless e.message.include? 'Registration key is already in use'
       acme_settings.accepted_terms = true
-    end
-    begin
-      unless acme_settings.accepted_terms?
-        registration.agree_terms
-        acme_settings.accepted_terms = true
-      end
-      current_user.lets_encrypt_accepted_terms = true
     ensure
       acme_settings.save
       current_user.save!
@@ -81,6 +77,6 @@ class LetsEncryptController < ApplicationController
   end
 
   def acme_client
-    @acme_client ||= Acme::Client.new private_key: acme_settings.private_key.to_openssl, endpoint: acme_settings.endpoint
+    acme_settings.build_client
   end
 end
