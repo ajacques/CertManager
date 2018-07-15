@@ -161,10 +161,10 @@ ActiveRecord::Schema.define(version: 20160923090500) do
     t.string  "uri_type",      null: false
   end
 
-  create_table "services", force: :cascade do |t|
+  create_table "services", id: :serial, force: :cascade do |t|
     t.string   "type",           null: false
     t.integer  "certificate_id", null: false
-    t.json     "properties",     null: false
+    t.jsonb     "properties",    null: false
     t.datetime "last_deployed"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false

@@ -3,7 +3,7 @@ class CreateServices < ActiveRecord::Migration
     create_table :services do |t|
       t.string :type, null: false
       t.integer :certificate_id, null: false
-      t.json :properties, null: false
+      t.jsonb :properties, null: false
       t.timestamp :last_deployed
 
       t.timestamps null: false
