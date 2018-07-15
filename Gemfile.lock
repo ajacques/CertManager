@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    acme-client (0.4.1)
+    acme-client (2.0.0)
       faraday (~> 0.9, >= 0.9.1)
     actioncable (5.2.0)
       actionpack (= 5.2.0)
@@ -340,7 +340,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  acme-client (= 0.4.1)
+  acme-client
   autoprefixer-rails
   bootstrap-sass
   bootstrap_form

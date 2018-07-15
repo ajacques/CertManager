@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 2018_06_24_185752) do
   create_table "external_services", force: :cascade do |t|
     t.string "endpoint_uri"
     t.string "credential_type"
-    t.json "credential"
+    t.jsonb "credential"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

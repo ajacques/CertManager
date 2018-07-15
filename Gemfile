@@ -18,7 +18,7 @@ gem 'will_paginate'
 gem 'redis'
 gem 'redis-session-store'
 
-gem 'acme-client', '0.4.1'
+gem 'acme-client'
 gem 'r509' # SSL certificate utilities
 
 # Database
