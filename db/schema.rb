@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(version: 2018_06_24_185752) do
   create_table "services", id: :serial, force: :cascade do |t|
     t.string "type", null: false
     t.integer "certificate_id", null: false
-    t.json "properties", null: false
+    t.jsonb "properties", null: false
     t.datetime "last_deployed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
