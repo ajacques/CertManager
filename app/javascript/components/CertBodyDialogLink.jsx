@@ -46,8 +46,6 @@ export default class CertBodyDialogLink extends React.Component {
   }
 }
 
-
-
 CertBodyDialogLink.propTypes = {
   children: PropTypes.string.isRequired,
   model: PropTypes.object.isRequired

@@ -38,7 +38,10 @@ SecureHeaders::Configuration.default do |config|
   # Browsersync
   if Rails.env.development?
     config.csp[:script_src] << "'sha256-OH62nWXd8EjoXubrd8JxJyNkzPjBgGuoQUBbXt2EKEs='"
+    config.csp[:script_src] << "'sha256-wOqaFVXZdA/IXRaGoYFjKms9KQM6Q/kzxQ6dbTgNDXk='"
+    config.csp[:script_src] << "'sha256-7gRFMqx3qXYdd9J/+p9wZuWL3efiJgBa3VOcNsbTv5c='"
     config.csp[:script_src] << "'unsafe-eval'" # Eval required for Webpacker
+    config.csp[:style_src] << "'unsafe-inline'"
     config.csp[:connect_src] << 'ws://certmgr.localhost'
   end
 end

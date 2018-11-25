@@ -3,7 +3,8 @@ class AcmeSignAttempt < ApplicationRecord
   belongs_to :certificate, autosave: true
   belongs_to :private_key
   belongs_to :imported_key, class_name: 'PublicKey', autosave: true
-  validates :last_status, inclusion: { in: %w[unchecked aborted unknown pending_verification errored failed imported working valid] }
+  WORKING_STATUSES = %w[unchecked unknown pending_verification importing working]
+  validates :last_status, inclusion: { in: WORKING_STATUSES + %w[aborted errored failed imported valid] }
 
   def status
     ActiveSupport::StringInquirer.new last_status
@@ -33,6 +34,12 @@ class AcmeSignAttempt < ApplicationRecord
     Settings::LetsEncrypt.new.build_client
   end
 
+  def request_cert
+    base_csr = certificate.generate_csr
+    acme_order.finalize csr: base_csr
+    self.last_status = 'importing'
+  end
+
   def fetch_signed
     signed = AcmeSignAttempt.acme_client.new_certificate certificate.generate_csr
     set = ImportSet.from_array signed.x509_fullchain
@@ -59,7 +66,15 @@ class AcmeSignAttempt < ApplicationRecord
         challenge = AcmeChallenge.from_authorization(attempt, auth)
         attempt.challenges << challenge
       end
+      attempt.order_uri = order.url
+      @_internal_order = order
     end
     attempt
+  end
+
+  private
+
+  def acme_order
+    @_internal_order ||= acme_client.order order: order_uri
   end
 end

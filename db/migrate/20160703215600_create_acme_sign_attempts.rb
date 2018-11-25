@@ -9,6 +9,7 @@ class CreateAcmeSignAttempts < ActiveRecord::Migration
       t.string :status_message
 
       t.string :acme_endpoint, null: false
+      t.string :order_uri, null: false
 
       t.timestamps null: false
       t.timestamp :last_checked_at

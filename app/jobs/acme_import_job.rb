@@ -6,16 +6,10 @@ class AcmeImportJob < ApplicationJob
     attempt.last_checked_at = Time.now
     attempt.last_status = 'working'
     refresh_all
-    if attempt.challenges.empty? || any_failed?
-      attempt.last_status = 'failed'
-      attempt.certificate.inflight_acme_sign_attempt = nil
-    elsif all_succeeded?
-      attempt.last_status = 'valid'
-      log_debug_step 'All challenges succeeded. Importing.'
-      import_cert
-      DeployCertificateJob.set(wait: 10.seconds).perform_later attempt.certificate
+    if attempt.last_status == 'importing'
+
     else
-      AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
+      try_to_verify
     end
   rescue StandardError => err
     attempt.report_error err
@@ -26,6 +20,23 @@ class AcmeImportJob < ApplicationJob
   end
 
   private
+
+  def try_to_import
+
+  end
+
+  def try_to_verify
+    if attempt.challenges.empty? || any_failed?
+      attempt.last_status = 'failed'
+      attempt.certificate.inflight_acme_sign_attempt = nil
+    elsif all_succeeded?
+      attempt.last_status = 'valid'
+      log_debug_step 'All challenges succeeded. Importing.'
+      import_cert
+    else
+      AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
+    end
+  end
 
   def refresh_all
     log_debug_step 'Checking ACME challenge status.'

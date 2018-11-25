@@ -5,6 +5,7 @@
   scale = (ratio * width_const).to_i
   left_midpoint = scale / 2
   right_midpoint = (width_const / 2) * (ratio + 1)
+  auto_renew = cert.auto_renewal_strategy.present?
 %svg{ viewBox: "0 0 #{width_const} 90", height: '90px', width: '100%' }
   %text{ x: width_const / 2, y: 20, text: { anchor: 'middle' } }= distance_of_time_in_words(public_key.not_after, public_key.not_before)
   -# Top timeline

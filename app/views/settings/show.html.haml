@@ -18,3 +18,10 @@
     .form-group
       = f.submit t('operations.save'), class: 'btn btn-default'
       = react_component 'SettingsValidateButton', { target: :mail_server }, tag: :span, prerender: true, data: { react_mount: true }
+
+.well.well-arge
+  %h4= t 'views.settings.show.rancher.header'
+  = bootstrap_form_for Settings::Rancher.new, url: url_for do |f|
+    = f.text_field :endpoint_uri
+    = f.password_field :token
+    = f.submit  t('operations.save'), class: 'btn btn-default'

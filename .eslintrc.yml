@@ -13,10 +13,7 @@ parserOptions:
   impliedStrict: true
 
 globals:
-  React: true
-  ReactDOM: true
   Routes: true
-  classNames: true
 
 settings:
   react:
@@ -130,3 +127,12 @@ rules:
   space-in-parens:
     - error
     - never
+
+  no-restricted-syntax:
+    - error
+    - selector: IfStatement > BinaryExpression[right.type='Literal'] > MemberExpression[property.name='name'] > MemberExpression[object.type='Identifier'][property.name='constructor']
+      message: 'foo.prototype.name does always not survive minification. Use instanceof instead'
+    - selector: CallExpression > MemberExpression[object.type='Identifier'][object.name='$'][property.type='Identifier'][property.name='extend']
+      message: 'Prefer Object.assign or {... object} over jQuery $.extend as these methods are built-in to the browser.'
+    - selector: CallExpression[callee.object.name='Object'][callee.property.name='assign'] > ObjectExpression:not(:matches([attr] > :first-child, :first-child))
+      message: 'Prefer Object.assign({foo: bar}, ...) over Object.assign({}, {foo:bar}, ...) to reduce the number of objects created'
