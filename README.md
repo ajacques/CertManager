@@ -1,7 +1,10 @@
 # CertManager [![Build Status](https://travis-ci.org/ajacques/CertManager.svg?branch=master)](https://travis-ci.org/ajacques/CertManager)
 Web application designed to simplify SSL certificate management
 
-## Setup
+## Production Setup
+Helm template is coming soon. The docker-compose should work.
+
+## Developer Setup
 
 This setup assumes that you use the docker-gen+NGINX docker environment. You can develop without it,
 instead of using domain names you'll have to connect directly the NGINX instance.
@@ -27,8 +30,6 @@ The tricky areas with setting up the environment is making sure that the gems ar
 
 ## Architecture
 
-* saltmaster: Master process for the Salt stack cluster - This is a development-only instance that all of the minions will connect to. It acts as the intermediary process that we push certificate deployments through
-* saltminion: Development instance. Emulates an end-host that runs a service such as a web server. We'll push certificates to these
 * web: Unicorn Rails app server - Runs the website
 * nginx: Front-end reverse proxy. Doesn't do much in development but is there to allow for prod verification. Will handle static files and load balancing
 * redis: Ephemeral data store - Used for caching host deployment status, CRL responses, and job scheduling for the works
