@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails'
+gem 'activestorage', '>= 5.2.1.1'
+gem 'rails', '>= 5.2.1.1'
 
 # User Interface Gems
 gem 'bootstrap_form'
@@ -72,6 +73,7 @@ group :development, :production do
   gem 'sentry-raven'
 end
 
-gem 'nokogiri', '>= 1.8.1'
+gem 'loofah', '>= 2.2.3'
+gem 'nokogiri', '>= 1.8.5'
 gem 'tzinfo-data'
 gem 'unicorn', platform: :ruby
