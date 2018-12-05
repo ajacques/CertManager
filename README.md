@@ -24,10 +24,6 @@ the Dockerfile on line 7 to allow them to be built-in for your development.
 We should setup a shared data volume for rubygems to prevent them from having to be
 downloaded every time it's built.
 
-## Problem Areas
-
-The tricky areas with setting up the environment is making sure that the gems are installed correctly. Currently we need to edit the Dockerfile to remove the '--without assets development test' block. This isn't really a good practice, but we don't want those gems in production.
-
 ## Architecture
 
 * web: Unicorn Rails app server - Runs the website
