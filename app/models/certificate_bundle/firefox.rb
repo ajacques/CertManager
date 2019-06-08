@@ -19,12 +19,15 @@ class CertificateBundle::Firefox < CertificateBundle
     data = StringIO.new(src)
     loop do
       break if data.eof?
+
       line = data.readline
       next if line[0] == '#'
       next if line == ''
+
       split = line.split(' ')
       cmd = split[0]
       next unless cmd == 'CKA_CLASS'
+
       import_cert(split, data) if split[2] == 'CKO_CERTIFICATE'
     end
   end
@@ -35,8 +38,8 @@ class CertificateBundle::Firefox < CertificateBundle
       trusted = parse_trust(data)
       add(last_pub) if trusted
     end
-  rescue X509ParseError => ex
-    errors << ex
+  rescue X509ParseError => e
+    errors << e
   end
 
   def parse_cert(data)
@@ -44,6 +47,7 @@ class CertificateBundle::Firefox < CertificateBundle
       line = data.readline
       split = line.split(' ')
       next unless split[0] == 'CKA_VALUE'
+
       return PublicKey.import(read_octal_value(data))
     end
   end
@@ -53,6 +57,7 @@ class CertificateBundle::Firefox < CertificateBundle
       line = data.readline
       split = line.split(' ')
       next unless split[0] == 'CKA_TRUST_SERVER_AUTH'
+
       return split[2] == 'CKT_NSS_TRUSTED_DELEGATOR'
     end
   end
@@ -62,6 +67,7 @@ class CertificateBundle::Firefox < CertificateBundle
     loop do
       line = data.readline
       break if line == "END\n"
+
       str += line.split('\\').drop(1).map { |char|
         Integer(char, 8).chr
       }.join('')

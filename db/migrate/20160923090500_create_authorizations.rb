@@ -1,4 +1,4 @@
-class CreateAuthorizations < ActiveRecord::Migration
+class CreateAuthorizations < ActiveRecord::Migration[4.2]
   def change
     create_table :authorizations do |t|
       t.integer :o_auth_provider_id, null: false

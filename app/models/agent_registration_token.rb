@@ -12,6 +12,7 @@ class AgentRegistrationToken
 
   def token
     raise 'Not a valid registration token' unless validate
+
     JWT.encode(jwt_payload, key, 'ES384', exp: expires_at)
   end
 

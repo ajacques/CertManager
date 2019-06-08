@@ -44,6 +44,7 @@ class ImportSet
     private_keys.each do |priv|
       cert = Certificate.for_private_key(priv).first
       next unless cert # Don't create any orphaned private keys
+
       cert.private_key = priv
       cert.save!
       certs << cert
@@ -63,6 +64,7 @@ class ImportSet
     array.each do |item|
       certs << item if item.is_a? OpenSSL::X509::Certificate
       next unless item.is_a? String
+
       matches = /^-{5}BEGIN ([A-Z ]+)-{5}/.match(item)
       case matches[1]
       when 'RSA PRIVATE KEY'

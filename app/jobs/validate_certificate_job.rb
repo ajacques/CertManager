@@ -12,6 +12,7 @@ class ValidateCertificateJob < ApplicationJob
     expiring_certs.each do |cert|
       next unless know_how_to_renew? cert
       next if cert.inflight_acme_sign_attempt
+
       # TODO: Use job from DB
       AcmeRenewJob.perform_later(cert)
     end

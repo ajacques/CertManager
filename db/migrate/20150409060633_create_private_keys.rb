@@ -1,4 +1,4 @@
-class CreatePrivateKeys < ActiveRecord::Migration
+class CreatePrivateKeys < ActiveRecord::Migration[4.2]
   def change
     create_table :private_keys do |t|
       t.string :type, null: false

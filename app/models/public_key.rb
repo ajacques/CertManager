@@ -67,6 +67,7 @@ class PublicKey < ApplicationRecord
 
   def to_openssl
     return OpenSSL::X509::Certificate.new(body) if body
+
     cert = OpenSSL::X509::Certificate.new
     cert.version = 2
     cert.subject = subject.to_openssl
@@ -88,6 +89,7 @@ class PublicKey < ApplicationRecord
     new = sans_list.map { |usage|
       first = orig.find { |k| k.value == usage }
       return first if first
+
       SubjectAlternateName.new name: usage
     }
     self._subject_alternate_names = new
@@ -104,8 +106,8 @@ class PublicKey < ApplicationRecord
     name.find_or_initialize_by(body: cert.to_der) do |r|
       r.import_from_r509 cert
     end
-  rescue R509::R509Error => ex
-    raise X509ParseError, cert: cert, message: ex.message
+  rescue R509::R509Error => e
+    raise X509ParseError, cert: cert, message: e.message
   end
 
   def import_from_r509(r509)
@@ -131,6 +133,7 @@ class PublicKey < ApplicationRecord
       new = usages.map { |usage|
         first = orig.find { |k| k.value == usage }
         return first if first
+
         KeyUsage.new value: usage, public_key: self, group: group
       }
       send("#{plural}=", new)

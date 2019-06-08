@@ -14,10 +14,10 @@ class DeployServiceJob < ApplicationJob
     begin
       block.call
       redis.set("job_#{job.job_id}_status", 3)
-    rescue ::StandardError => ex
-      Rails.logger.error ex
+    rescue ::StandardError => e
+      Rails.logger.error e
       redis.set("job_#{job.job_id}_status", 2)
-      raise ex
+      raise e
     end
     Rails.logger = plogger
   end

@@ -35,6 +35,7 @@ class CertificateSignRequest < ApplicationRecord
     new = san_list.map { |usage|
       first = orig.find { |k| k.value == usage }
       return first if first
+
       SubjectAlternateName.new name: usage
     }
     self._subject_alternate_names = new
@@ -62,6 +63,7 @@ class CertificateSignRequest < ApplicationRecord
 
   def san_attribute
     return if subject_alternate_names.empty?
+
     sans = subject_alternate_names.map { |s|
       "DNS:#{s}"
     }.join(', ')

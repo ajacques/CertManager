@@ -40,6 +40,7 @@ class Settings::Group
 
   def assign_attributes(values)
     return unless values
+
     sanitize_for_mass_assignment(values).each do |key, value|
       send("#{key}=", value)
     end
@@ -77,6 +78,7 @@ class Settings::Group
   def config_value(key)
     key = key.to_s
     return @settings[key] if @settings.key? key
+
     val = Setting.find_by(config_group: class_name, key: key)
     val&.value
   end

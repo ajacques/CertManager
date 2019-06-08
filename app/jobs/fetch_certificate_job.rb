@@ -9,10 +9,10 @@ class FetchCertificateJob < ApplicationJob
       chain: certs
     }
     save_result(resp)
-  rescue StandardError => ex
+  rescue StandardError => e
     resp = {
       status: :fail,
-      message: ex.message
+      message: e.message
     }
     save_result(resp)
   end

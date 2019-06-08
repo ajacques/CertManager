@@ -32,6 +32,7 @@ class Subject < ApplicationRecord
     h = {}
     attributes.each do |k, v|
       next if k == 'id'
+
       h[k] = v if v
     end
     h

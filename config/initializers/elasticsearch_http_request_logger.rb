@@ -39,6 +39,7 @@ class ElasticsearchHttpRequestLogger < ActiveSupport::LogSubscriber
   def append_request(output, data)
     request = RequestStore.store[:request]
     return unless request
+
     output[:request] = {
       method: data[:method],
       path: URI(data[:path]).path,

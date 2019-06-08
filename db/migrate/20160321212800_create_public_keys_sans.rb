@@ -1,4 +1,4 @@
-class CreatePublicKeysSans < ActiveRecord::Migration
+class CreatePublicKeysSans < ActiveRecord::Migration[4.2]
   def change
     create_table :public_keys_sans do |t|
       t.integer :public_key_id, null: false

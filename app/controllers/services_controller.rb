@@ -21,9 +21,10 @@ class ServicesController < ApplicationController
 
   def create
     raise NotSupported unless params[:service][:type].in? %w[Service::SoteriaAgent Service::Rancher]
+
     redirect_to Service.create! service_create_params
-  rescue ActiveRecord::RecordInvalid => ex
-    flash[:error] = ex.record.errors
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:error] = e.record.errors
     redirect_to action: :new
   end
 

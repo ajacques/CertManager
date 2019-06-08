@@ -86,10 +86,13 @@ class AgentsApiController < ActionController::Base
   def check_agent_key
     header = request.authorization
     raise NotAuthorized unless header
+
     split = header.split(' ')
     raise NotAuthorized unless split[0] == 'Bearer'
+
     key = split[1]
     raise NotAuthorized unless key
+
     @agent = Agent.find_by access_token: key
     raise NotAuthorized unless @agent
   end

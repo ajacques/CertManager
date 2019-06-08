@@ -22,6 +22,7 @@ class LetsEncryptController < ApplicationController
       current_user.lets_encrypt_registration_uri = registration.uri
     rescue Acme::Client::Error::Malformed => e
       raise e unless e.message.include? 'Registration key is already in use'
+
       acme_settings.accepted_terms = true
     end
     begin
@@ -52,6 +53,7 @@ class LetsEncryptController < ApplicationController
   def validate_token
     challenge = AcmeChallenge.find_by token_key: params[:token]
     return render text: 'Unknown challenge', status: :not_found unless challenge
+
     render plain: challenge.token_value
   end
 

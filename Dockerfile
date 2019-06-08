@@ -1,8 +1,8 @@
-FROM ubuntu:17.10
+FROM ubuntu:19.04
 
 ADD . /rails-app
 WORKDIR /rails-app
-RUN export BUILD_PKGS=" libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch nodejs curl" \
+RUN export BUILD_PKGS="gnupg libsqlite3-dev zlib1g-dev libghc-zlib-dev libpq-dev ruby-dev g++ make patch nodejs curl" \
   && apt-get update \
   && apt-get install --no-install-recommends -qy ruby libsqlite3-0 libpq5 $BUILD_PKGS \
   && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \

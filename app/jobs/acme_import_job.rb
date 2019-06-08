@@ -17,10 +17,10 @@ class AcmeImportJob < ApplicationJob
     else
       AcmeImportJob.set(wait: 20.seconds).perform_later(attempt)
     end
-  rescue StandardError => err
-    attempt.report_error err
-    Raven.capture_exception err
-    raise err
+  rescue StandardError => e
+    attempt.report_error e
+    Raven.capture_exception e
+    raise e
   ensure
     attempt.save!
   end
@@ -57,6 +57,7 @@ class AcmeImportJob < ApplicationJob
   def attempt_challenge(challenge)
     challenge.refresh_status
     return unless challenge.status.pending?
+
     challenge.request_verification
   rescue Acme::Client::Error::NotFound
     challenge.delete

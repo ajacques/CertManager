@@ -1,6 +1,6 @@
-class AddDeviseToUsers < ActiveRecord::Migration
+class AddDeviseToUsers < ActiveRecord::Migration[4.2]
   def self.up
-    change_table(:users) do |t|
+    change_table(:users, bulk: true) do |t|
       ## Recoverable
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at

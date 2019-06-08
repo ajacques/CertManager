@@ -16,6 +16,7 @@ module HasPublicKey
 
   def expires_in
     return 9_999_999.years unless expires?
+
     public_key.not_after - Time.now
   end
 

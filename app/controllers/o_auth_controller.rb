@@ -11,8 +11,10 @@ class OAuthController < ApplicationController
 
   def receive
     raise 'Failed to verify security token' unless session[:oauth_state] == params[:state]
+
     provider = OAuthProvider.find_by(name: params[:provider])
     raise 'Invalid OAuth provider' unless provider
+
     access_token = provider.fetch_token params.permit(:code, :state)
 
     session.destroy

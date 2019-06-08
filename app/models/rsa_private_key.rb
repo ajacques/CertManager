@@ -36,6 +36,7 @@ class RSAPrivateKey < PrivateKey
 
   def generate_key
     return unless valid?
+
     if body
       key = R509::PrivateKey.new key: to_openssl
     else

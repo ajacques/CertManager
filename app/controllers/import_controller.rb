@@ -12,6 +12,7 @@ class ImportController < ApplicationController
              end
     else
       raise 'Must specify hostname' if params[:host].empty?
+
       job = FetchCertificateJob.perform_later(host: params[:host], port: 443)
       resp = {
         status: :unfinished,

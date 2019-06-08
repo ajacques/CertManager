@@ -1,4 +1,4 @@
-class CreateCertificateBundles < ActiveRecord::Migration
+class CreateCertificateBundles < ActiveRecord::Migration[4.2]
   def change
     create_table :certificate_bundles do |t|
       t.string :name, null: false, unique: true

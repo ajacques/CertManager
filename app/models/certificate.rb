@@ -61,6 +61,7 @@ class Certificate < ApplicationRecord
   def subject
     base = public_key || csr
     return base.subject if base
+
     'Private Key'
   end
 

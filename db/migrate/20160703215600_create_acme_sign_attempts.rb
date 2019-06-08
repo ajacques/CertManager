@@ -1,4 +1,4 @@
-class CreateAcmeSignAttempts < ActiveRecord::Migration
+class CreateAcmeSignAttempts < ActiveRecord::Migration[4.2]
   def change
     create_table :acme_sign_attempts do |t|
       t.integer :certificate_id, null: false

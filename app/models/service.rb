@@ -11,6 +11,7 @@ class Service < ApplicationRecord
     # This can't be the simplest way to do this
     s = super
     return s if s
+
     self.properties = {}
     super
   end

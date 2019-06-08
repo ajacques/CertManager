@@ -1,4 +1,4 @@
-class CreateCertificateSignRequests < ActiveRecord::Migration
+class CreateCertificateSignRequests < ActiveRecord::Migration[4.2]
   def change
     create_table :certificate_sign_requests do |t|
       t.integer :certificate_id, null: false

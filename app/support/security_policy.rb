@@ -3,12 +3,14 @@ module SecurityPolicy
   class << self
     def load_file
       return if @config && !Rails.env.development?
+
       @config = YAML.load_file(Rails.root.join('config', 'security_policy.yml'))
     end
 
     def respond_to_missing?(method, include_private = false)
       load_file
       return true if @config.key? method
+
       super
     end
 
@@ -16,6 +18,7 @@ module SecurityPolicy
       load_file
       set = @config.send(:[], method.to_s)
       raise "No policy for '#{method}'" if set.blank?
+
       if set['type'] == 'array'
         ArrayPolicyChecker.new(set)
       elsif set['type'] == 'integer'

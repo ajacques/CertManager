@@ -55,6 +55,7 @@ class OAuthProvider < ApplicationRecord
       auths = authorizations.for_oauth_attempt(user_info['id'], org_info.keys)
       final_auth_vector = auths.first
       raise NotAuthorized unless final_auth_vector
+
       Raven.breadcrumbs.record do |crumb|
         crumb.data = {
           vectors: auths.map(&:to_s)
@@ -74,6 +75,7 @@ class OAuthProvider < ApplicationRecord
     resp = api_get("/search/users?q=#{identifier}", user.github_access_token)
     raise 'Failed to fetch any matching values' if resp.key? 'errors'
     return nil unless resp.key? 'items'
+
     auth = resp['items'].first
     image = URI(auth['avatar_url'])
     type = if auth['type'] == 'Organization'
@@ -109,7 +111,6 @@ class OAuthProvider < ApplicationRecord
 
   def register_account(user_info)
     user = User.new can_login: true, github_userid: user_info['id']
-    user.randomize_password
     user
   end
 
