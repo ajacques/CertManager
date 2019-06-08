@@ -7,17 +7,25 @@ export default class AgentNewForm extends React.Component {
   constructor(props) {
     super(props);
     this.refreshData = this.refreshData.bind(this);
-    this.state = {
-      tags: [],
-      loading: true,
-      dirty: false,
-      inflightRequest: null,
-      refreshData: Debounce(this.refreshData, 1000, false)
-    };
     this.handlePossibleEquals = this.handlePossibleEquals.bind(this);
     this.handleTagValueChange = this.handleTagValueChange.bind(this);
     this.handleTagKeyChange = this.handleTagKeyChange.bind(this);
     this.handleToken = this.handleToken.bind(this);
+    this.state = {
+      dirty: false,
+      inflightRequest: null,
+      loading: true,
+      refreshData: Debounce(this.refreshData, 1000, false),
+      tags: []
+    };
+  }
+  componentDidMount() {
+    this.refreshData();
+  }
+  componentWillUpdate(_newProps, newState) {
+    if (this.state.tags !== newState.tags) {
+      this.refreshData();
+    }
   }
   refreshData() {
     if (this.state.inflightRequest !== null) {
@@ -29,25 +37,17 @@ export default class AgentNewForm extends React.Component {
       reconciledTags[tagRecord.key] = tagRecord.value;
     }
     const req = Ajax.post(Routes.generate_token_agent_index_path(), {
-      contentType: 'application/json',
       acceptType: 'text/plain',
+      contentType: 'application/json',
       data: {
         tags: reconciledTags
       }
     });
     req.then(this.handleToken);
-    this.setState({loading: true, inflightRequest: req});
-  }
-  componentWillUpdate(newProps, newState) {
-    if (this.state.tags !== newState.tags) {
-      this.refreshData();
-    }
-  }
-  componentDidMount() {
-    this.refreshData();
+    this.setState({ inflightRequest: req, loading: true });
   }
   handleToken(response) {
-    this.setState({auth_token: response, loading: false});
+    this.setState({ auth_token: response, loading: false});
   }
   static handleTokenClick(event) {
     event.preventDefault();
@@ -121,7 +121,7 @@ export default class AgentNewForm extends React.Component {
           <h4>Launch</h4>
           <p>Execute the following command on the remote host</p>
           <textarea className="agent-new-form--command-box" onClick={this.handleTokenClick} readOnly="readonly"
-                    value={this.launchCommand()} />
+            value={this.launchCommand()} />
         </li>
       </div>
     );

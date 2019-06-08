@@ -16,9 +16,9 @@ export default class HeaderSearchBox extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
     this.typeThunk = this.typeThunk.bind(this);
     this.state = {
-      suggestions: [],
       float_open: false,
       mouse_over: false,
+      suggestions: [],
       typedValue: this.props.query || ''
     };
   }

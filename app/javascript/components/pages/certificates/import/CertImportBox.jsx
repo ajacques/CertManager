@@ -66,6 +66,6 @@ CertImportBox[idSym] = 0;
 
 CertImportBox.propTypes = {
   certificates: PropTypes.array.isRequired,
-  update: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired
+  onRemove: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired
 };

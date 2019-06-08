@@ -68,8 +68,8 @@ export default class CertificateChunk extends React.Component {
 
 CertificateChunk.propTypes = {
   certificate: PropTypes.object.isRequired,
-  onRemove: PropTypes.func.isRequired,
   id: PropTypes.node.isRequired,
-  state: PropTypes.string.isRequired,
-  parsed: PropTypes.object
+  onRemove: PropTypes.func.isRequired,
+  parsed: PropTypes.object,
+  state: PropTypes.string.isRequired
 };
