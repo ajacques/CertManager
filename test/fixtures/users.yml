@@ -2,5 +2,3 @@ main:
   first_name: John
   last_name: Smith
   email: test@example.com
-  password_hash: five
-  password_salt: six

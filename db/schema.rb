@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_215800) do
+ActiveRecord::Schema.define(version: 2019_08_17_110300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -195,8 +195,6 @@ ActiveRecord::Schema.define(version: 2019_06_07_215800) do
     t.string "email", null: false
     t.string "first_name", null: false
     t.string "last_name"
-    t.binary "password_hash", null: false
-    t.binary "password_salt", null: false
     t.boolean "can_login", default: false, null: false
     t.string "time_zone", default: "Europe/London", null: false
     t.boolean "lets_encrypt_accepted_terms", default: false, null: false

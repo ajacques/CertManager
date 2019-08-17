@@ -2,7 +2,6 @@ class User < ApplicationRecord
   include OauthAuthentication
   validates :first_name, presence: true
   validates :email, email: true, uniqueness: true
-  before_save :update_password
 
   TIME_ZONES = ActiveSupport::TimeZone::MAPPING.map do |_key, value|
     [value]

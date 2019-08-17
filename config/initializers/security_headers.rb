@@ -39,6 +39,7 @@ SecureHeaders::Configuration.default do |config|
   if Rails.env.development?
     config.csp[:script_src] << "'sha256-OH62nWXd8EjoXubrd8JxJyNkzPjBgGuoQUBbXt2EKEs='"
     config.csp[:script_src] << "'unsafe-eval'" # Eval required for Webpacker
+    config.csp[:style_src] << "'sha256-0CiLBo2RTQ3MsLt6a9DB06zBsgxOhwdsotcr/cQgmu4='" # Error page CSS
     config.csp[:connect_src] << 'ws://certmgr.localhost'
   end
 end
