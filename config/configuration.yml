@@ -1,4 +1,4 @@
-redis: &redis_config
+redis:
   host: redis
 resque: redis:6379/resque
 session:

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'activestorage', '>= 5.2.1.1'
-gem 'rails', '>= 5.2.1.1'
+gem 'rails', '5.2.3'
 
 # User Interface Gems
 gem 'bootstrap_form'

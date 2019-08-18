@@ -110,8 +110,7 @@ class OAuthProvider < ApplicationRecord
   end
 
   def register_account(user_info)
-    user = User.new can_login: true, github_userid: user_info['id']
-    user
+    User.new can_login: true, github_userid: user_info['id']
   end
 
   def refresh_account(user, user_info, access_token)

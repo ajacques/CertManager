@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get :authenticate
     end
   end
+  get 'auth_check' => 'sessions#validate'
   get 'logout' => 'sessions#destroy', as: :destroy_user_session
   resources :users, only: %i[index show update], constraints: {
     id: /[0-9]+/

@@ -17,4 +17,12 @@ class SessionsController < ApplicationController
     reset_session
     redirect_to new_user_session_path
   end
+
+  def validate
+    if current_user
+      head :no_content
+    else
+      render status: 403, plain: ''
+    end
+  end
 end
