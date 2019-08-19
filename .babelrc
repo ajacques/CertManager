@@ -8,7 +8,8 @@
           "browsers": "> 1%",
           "uglify": true
         },
-        "useBuiltIns": "entry"
+        "useBuiltIns": "usage",
+        "corejs": 3
       }
     ],
     "@babel/preset-react"
@@ -17,17 +18,10 @@
     "production": {
       "plugins": [
         "transform-inline-environment-variables",
-        "minify-mangle-names",
-        "minify-flip-comparisons",
-        "transform-react-constant-elements",
+        "@babel/plugin-transform-react-constant-elements",
         "transform-react-remove-prop-types",
-        "transform-runtime",
-        "minify-dead-code-elimination"
+        "@babel/plugin-transform-runtime"
       ]
     }
-  },
-  "plugins": [
-    "transform-react-remove-prop-types",
-    "@babel/syntax-dynamic-import"
-  ]
+  }
 }
