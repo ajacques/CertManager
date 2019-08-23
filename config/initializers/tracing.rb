@@ -1,36 +1,117 @@
-module ZipkinViewRendering
-  def render(view, *args, &block)
-    ZipkinTracer::TraceClient.local_component_span(virtual_path) do |_ztc|
-      super
+class CompositeSampler
+  def initialize
+    probability = ENV['OPENCENSUS_SAMPLE_RATE'].to_f / 100
+    @probability_sampler = OpenCensus::Trace::Samplers::Probability.new probability
+  end
+
+  def call(opts = {})
+    @probability_sampler.call(opts)
+  end
+end
+
+class CensusExporter < OpenCensus::Trace::Exporters::Logger
+  def initialize(report_host:)
+    @report_host = report_host
+  end
+
+  def export(spans)
+    remap = spans.map { |span| format_span(span) }
+    data = {
+      node: {
+        identifier: {
+        },
+        libraryInfo: {
+          language: 9
+        },
+        serviceInfo: {
+          name: 'CertManager'
+        }
+      },
+      spans: remap
+    }
+    Faraday.post(@report_host) do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.body = data.to_json
+    end
+    nil
+  end
+
+  private
+
+  def format_id(id)
+    Base64.strict_encode64([id].pack('H*'))
+  end
+
+  def format_span(span)
+    {
+      name: format_value(span.name),
+      kind: span.kind,
+      traceId: format_id(span.trace_id),
+      spanId: format_id(span.span_id),
+      parentSpanId: format_id(span.parent_span_id),
+      startTime: span.start_time,
+      endTime: span.end_time,
+      attributes: {
+        attributeMap: format_attributes(span.attributes)
+      },
+      links: {
+        link: span.links.map { |link| format_link(link) }
+      },
+      status: format_status(span.status),
+      sameProcessAsParentSpan: span.same_process_as_parent_span,
+      traceState: {}
+    }
+  end
+
+  def format_attributes(attrs)
+    result = {}
+    attrs.each do |k, v|
+      result[k] = format_nested_value v
+    end
+    result
+  end
+
+  def format_nested_value(value)
+    inner = format_value(value)
+    case value
+    when String, OpenCensus::Trace::TruncatableString
+      {
+        string_value: inner
+      }
+    else
+      {
+        string_value: format_value(value.to_s)
+      }
+    end
+  end
+
+  def format_value(value)
+    case value
+    when String, Integer, true, false
+      {
+        value: value
+      }
+    when OpenCensus::Trace::TruncatableString
+      if value.truncated_byte_count.zero?
+        { value: value.value }
+      else
+        {
+          value: value.value,
+          truncated_byte_count: value.truncated_byte_count
+        }
+      end
+    else
+      { value: value.to_s }
     end
   end
 end
 
-module ZipkinActionController
-  def send_action(*args, &block)
-    fully_qualified = "#{self.class.name}\##{args[0]}"
-    ZipkinTracer::TraceClient.local_component_span(fully_qualified) do |_ztc|
-      super
-    end
-  end
-end
+enabled = ENV.key? 'OPENCENSUS_REPORT_URL'
+Rails.configuration.tracing_enabled = enabled
 
-module ZipkinReactRender
-  def react_component(name, props = {}, options = {}, &block)
-    ZipkinTracer::TraceClient.local_component_span("React:#{name}") do |_ztc|
-      super
-    end
-  end
-end
-
-if ENV.key? 'ZIPKIN_REPORT_HOST'
-  Rails.configuration.after_initialize do
-    ActiveSupport.on_load(:action_view, run_once: true) do
-      ActionView::Template.prepend ZipkinViewRendering
-    end
-    ActiveSupport.on_load(:action_controller, run_once: true) do
-      prepend ZipkinActionController
-    end
-    React::Rails::ComponentMount.prepend ZipkinReactRender
+if enabled
+  OpenCensus::Trace.configure do |c|
+    c.default_sampler = CompositeSampler.new
+    c.exporter = CensusExporter.new report_host: ENV['OPENCENSUS_REPORT_URL']
   end
 end

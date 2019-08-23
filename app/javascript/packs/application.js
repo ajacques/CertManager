@@ -16,16 +16,23 @@ function getComponentConstructor(name) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  const Raven = require('raven-js');
+  const Sentry = require('@sentry/browser');
   const metaTag = document.querySelector('meta[name="sentry-report-uri"]');
   if (metaTag) {
-    Raven
-      .config(metaTag.content, {
-        release: Version
-      })
-      .install();
+    Sentry.init({
+      dsn: metaTag.content,
+      release: Version
+    });
   }
 }
+
+window.ocServiceName = 'WebBrowser';
+window.traceparent = document.querySelector('meta[name="opencensus-traceparent"]').content;
+window.ocAgent = 'http://trace.technowizardry.net';
+
+import { exportRootSpanAfterLoadEvent } from '@opencensus/web-initial-load';
+
+exportRootSpanAfterLoadEvent();
 
 function HydrateComponent(className, props, targetElement) {
   const clazz = getComponentConstructor(className);

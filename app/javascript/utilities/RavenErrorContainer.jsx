@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Raven from 'raven-js';
+import { captureException } from '@sentry/browser';
 import React from 'react';
 
 /**
@@ -13,8 +13,8 @@ export default class RavenErrorContainer extends React.Component {
       error: false
     };
   }
-  componentDidCatch(error, errorInfo) {
-    Raven.captureException(error, { extra: errorInfo });
+  componentDidCatch(error) {
+    captureException(error);
   }
 
   render() {

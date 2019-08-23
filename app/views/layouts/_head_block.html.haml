@@ -14,4 +14,7 @@
     %link{ rel: 'search', type: 'application/opensearchdescription+xml', href: search_manifest_path(format: :xml), title: 'soteria' }
     = javascript_pack_tag 'application', defer: true
     = javascript_include_tag 'application', defer: true
+  - if Rails.configuration.tracing_enabled
+    %meta{ content: 'http://trace.technowizardry.net', name: 'trace-agent' }
+    %meta{ content: RequestStore.store[:web_trace], name: 'opencensus-traceparent' }
   = stylesheet_link_tag 'application', media: 'all'

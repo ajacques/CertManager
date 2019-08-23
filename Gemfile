@@ -34,7 +34,8 @@ gem 'logstash-logger'
 gem 'request_store'
 gem 'secure_headers'
 
-gem 'zipkin-tracer'
+# Tracing/Instrumentation
+gem 'opencensus'
 
 gem 'jwt'
 
