@@ -1,4 +1,5 @@
 /* globals require, process */
+import { exportRootSpanAfterLoadEvent } from '@opencensus/web-initial-load';
 import RavenErrorContainer from 'utilities/RavenErrorContainer';
 import React from "react";
 import ReactDOM from "react-dom";
@@ -26,13 +27,14 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
-window.ocServiceName = 'WebBrowser';
-window.traceparent = document.querySelector('meta[name="opencensus-traceparent"]').content;
-window.ocAgent = 'http://trace.technowizardry.net';
+const traceHost = document.querySelector('meta[name="trace-agent"]');
+if (traceHost) {
+  window.ocServiceName = 'WebBrowser';
+  window.traceparent = document.querySelector('meta[name="opencensus-traceparent"]').content;
+  window.ocAgent = traceHost.content;
 
-import { exportRootSpanAfterLoadEvent } from '@opencensus/web-initial-load';
-
-exportRootSpanAfterLoadEvent();
+  exportRootSpanAfterLoadEvent();
+}
 
 function HydrateComponent(className, props, targetElement) {
   const clazz = getComponentConstructor(className);
