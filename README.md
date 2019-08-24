@@ -2,7 +2,8 @@
 Web application designed to simplify SSL certificate management
 
 ## Production Setup
-Helm template is coming soon. The docker-compose should work.
+Helm template is available here:
+https://github.com/ajacques/helm-catalog
 
 ## Developer Setup
 
