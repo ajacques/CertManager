@@ -7,6 +7,7 @@ AllCops:
     - 'vendor/**/*'
     - 'db/schema.rb'
     - 'node_modules/**/*'
+    - config/spring.rb
 
 Rails:
   Enabled: true
