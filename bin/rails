@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+
+Encoding.default_external = 'UTF-8'
+
 APP_PATH = File.expand_path('../config/application', __dir__)
 require_relative '../config/boot'
 require 'rails/commands'

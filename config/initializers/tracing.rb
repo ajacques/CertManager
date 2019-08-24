@@ -106,12 +106,14 @@ class CensusExporter < OpenCensus::Trace::Exporters::Logger
   end
 end
 
-enabled = ENV.key? 'OPENCENSUS_REPORT_URL'
+enabled = ENV.key? 'OPENCENSUS_INTERNAL_REPORT_URL'
 Rails.configuration.tracing_enabled = enabled
 
-if enabled
-  OpenCensus::Trace.configure do |c|
+OpenCensus::Trace.configure do |c|
+  if enabled
     c.default_sampler = CompositeSampler.new
-    c.exporter = CensusExporter.new report_host: ENV['OPENCENSUS_REPORT_URL']
+  else
+    c.default_sampler = OpenCensus::Trace::Samplers::NeverSample.new
   end
+  c.exporter = CensusExporter.new report_host: ENV['OPENCENSUS_INTERNAL_REPORT_URL']
 end
