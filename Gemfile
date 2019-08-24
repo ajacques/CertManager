@@ -67,6 +67,7 @@ group :development do
   gem 'haml-lint', require: false
   gem 'reek', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
   gem 'scss_lint', require: false
 end
 
