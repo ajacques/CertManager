@@ -10,11 +10,11 @@ module RequestLogging
   def annotate_logs
     RequestStore.store[:request] = request
     RequestStore.store[:response] = response
-    web_trace = OpenCensus::Trace.span_context.trace_id
-    web_span = SecureRandom.hex(8)
-    trace = "00-#{web_trace}-#{web_span}-01"
-    RequestStore.store[:web_trace] = trace
     context = OpenCensus::Trace.span_context
+    web_trace = context.trace_id
+    web_span = SecureRandom.hex(8)
+    trace = "00-#{context.trace_id}-#{web_span}-#{context.trace_options.to_s.rjust(2, '0')}"
+    RequestStore.store[:web_trace] = trace
     context
       .instance_variable_get(:@trace_data)
       .span_map[context.span_id]
