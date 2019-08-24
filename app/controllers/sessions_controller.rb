@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     if current_user
       head :no_content
     else
-      render status: 403, plain: ''
+      render status: :forbidden, plain: ''
     end
   end
 end
