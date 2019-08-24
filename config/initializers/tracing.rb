@@ -111,6 +111,7 @@ Rails.configuration.tracing_enabled = enabled
 
 OpenCensus::Trace.configure do |c|
   if enabled
+    Rails.configuration.trace_endpoint = ENV['OPENCENSUS_REPORT_URL']
     c.default_sampler = CompositeSampler.new
   else
     c.default_sampler = OpenCensus::Trace::Samplers::NeverSample.new
