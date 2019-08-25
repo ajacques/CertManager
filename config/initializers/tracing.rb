@@ -1,11 +1,25 @@
 class CompositeSampler
+  SAMPLERS = OpenCensus::Trace::Samplers
+  RATE_LIMITED = SAMPLERS::RateLimiting.new
+
+  CUSTOM_SAMPLERS = {
+    '/ping' => SAMPLERS::NeverSample.new,
+    '/agents/sync' => RATE_LIMITED,
+    '/agents/report' => RATE_LIMITED
+  }
+
   def initialize
     probability = ENV['OPENCENSUS_SAMPLE_RATE'].to_f / 100
     @probability_sampler = OpenCensus::Trace::Samplers::Probability.new probability
   end
 
   def call(opts = {})
-    @probability_sampler.call(opts)
+    request_url = RequestStore.store[:request_url]
+    if CUSTOM_SAMPLERS.key? request_url
+      CUSTOM_SAMPLERS[request_url].call(opts)
+    else
+      @probability_sampler.call(opts)
+    end
   end
 end
 
@@ -106,6 +120,17 @@ class CensusExporter < OpenCensus::Trace::Exporters::Logger
   end
 end
 
+class RequestMiddleware
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    RequestStore.store[:request_url] = env['REQUEST_PATH']
+    @app.call(env)
+  end
+end
+
 enabled = ENV.key? 'OPENCENSUS_INTERNAL_REPORT_URL'
 Rails.configuration.tracing_enabled = enabled
 
@@ -118,3 +143,5 @@ OpenCensus::Trace.configure do |c|
   end
   c.exporter = CensusExporter.new report_host: ENV['OPENCENSUS_INTERNAL_REPORT_URL']
 end
+
+Rails.configuration.middleware.insert_before OpenCensus::Trace::Integrations::RackMiddleware, RequestMiddleware
