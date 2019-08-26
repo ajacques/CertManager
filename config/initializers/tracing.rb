@@ -1,11 +1,12 @@
 class CompositeSampler
   SAMPLERS = OpenCensus::Trace::Samplers
-  RATE_LIMITED = SAMPLERS::RateLimiting.new
+  NEVER = SAMPLERS::NeverSample.new
+  HIGH_RATE = SAMPLERS::Probability.new 0.0001
 
   CUSTOM_SAMPLERS = {
-    '/ping' => SAMPLERS::NeverSample.new,
-    '/agents/sync' => RATE_LIMITED,
-    '/agents/report' => RATE_LIMITED
+    '/ping' => NEVER,
+    '/agents/sync' => HIGH_RATE,
+    '/agents/report' => HIGH_RATE
   }
 
   def initialize
