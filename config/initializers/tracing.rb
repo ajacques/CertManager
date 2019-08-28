@@ -7,7 +7,7 @@ class CompositeSampler
     '/ping' => NEVER,
     '/agents/sync' => HIGH_RATE,
     '/agents/report' => HIGH_RATE
-  }
+  }.freeze
 
   def initialize
     probability = ENV['OPENCENSUS_SAMPLE_RATE'].to_f / 100
