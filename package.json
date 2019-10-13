@@ -3,10 +3,10 @@
     "@babel/plugin-transform-react-constant-elements": "^7.5.0",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "@opencensus/web-core": "^0.0.5",
-    "@opencensus/web-initial-load": "^0.0.5",
-    "@opencensus/web-instrumentation-perf": "^0.0.5",
-    "@opencensus/web-instrumentation-zone": "^0.0.5",
+    "@opencensus/web-core": "^0.0.6",
+    "@opencensus/web-initial-load": "^0.0.6",
+    "@opencensus/web-instrumentation-perf": "^0.0.6",
+    "@opencensus/web-instrumentation-zone": "^0.0.6",
     "@rails/webpacker": "^4.0.7",
     "@sentry/browser": "^5.6.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
@@ -20,7 +20,7 @@
     "react_ujs": "^2.4.3"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
+    "eslint": "^6.2.2",
     "eslint-plugin-react": "^7.5.1",
     "webpack-dev-server": "^3.7.1"
   },
